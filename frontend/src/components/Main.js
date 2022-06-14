@@ -24,7 +24,7 @@ const MenuProps = {
   },
 };
 
-const region = ['모든지역', '노량진', '가락', '강서', '마포', '서울', '구리', '수원', '평촌', '경기', '소래포구', '연안부두', '인천', '강원', '경상', '부산', '울산', '충청', '대전', '전라', '광주', '제주'];
+const region = ['노량진', '가락', '강서', '마포', '서울', '구리', '수원', '평촌', '경기', '소래포구', '연안부두', '인천', '강원', '경상', '부산', '울산', '충청', '대전', '전라', '광주', '제주'];
 
 
 const Main = () => {
@@ -33,25 +33,24 @@ const Main = () => {
 
     const [personNum, setPersonNum] = useState(1);
     const [money, setMoney] = useState(0);
-    const [area, setArea] = useState("모든지역");
-
+    const [area, setArea] = useState("노량진");
 
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
         if (e.target.value < 1) {
             alert('인원은 1 이상으로 해주세요');
             setPersonNum('1');
+        } else if (e.target.value > 10) {
+            alert('인원은 10 이하로 해주세요');
+            setPersonNum('10');
         }
     }
     console.log(personNum)
 
     const handleMoneyChange = (e) => {
         setMoney(e.target.value)
-        // if (e.target.value < 5000) {
-        //     alert('가격은 최소 5000원 이상으로 해주세요');
-        //     setMoney(5000);
-        // }
     }
+    
     console.log(money)
     console.log(area)
 
@@ -84,7 +83,7 @@ const Main = () => {
                         <TextField
                             id="outlined-basic"
                             label="예산" 
-                            type="text"
+                            type="number"
                             variant="outlined" 
                             value={money}
                             onChange={handleMoneyChange} 
@@ -97,7 +96,7 @@ const Main = () => {
                             <Select
                                 labelId="local"
                                 label="local"
-                                defaultValue={'모든지역'}
+                                defaultValue={'노량진'}
                                 value={area}
                                 onChange={(e) => {setArea(e.target.value)}}
                                 MenuProps={MenuProps}
