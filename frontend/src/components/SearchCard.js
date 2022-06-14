@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Stack, ListItem } from '@mui/material';
+import { Stack, ListItem, TextField } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography, Grid } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
 
@@ -34,32 +34,36 @@ function SearchCard() {
         id: "1",
         heading: ["광어"],
         // secondaryHeading: "this is panel 1",
-        details: ["10000"]
+        details: ["10000"],
+        total: ["10000"]
       },
       {
         id: "2",
         heading: ["광어", "우럭"],
         // secondaryHeading: "this is panel 2",
-        details: ["10000" , "20000"]
+        details: ["10000" , "20000"],
+        total: ["30000"]
       },
       {
         id: "3",
-        heading: ["광어", "우럭", "참돔"],
+        heading: ["광어", "우럭", "참돔", "우럭", "참돔", "우럭", "참돔"],
         // secondaryHeading: "this is panel 3",
-        details: ["10000" , "20000", "30000"]
+        details: ["10000" , "20000", "30000", "20000", "30000", "20000", "30000"],
+        total: ["160000"]
       },
       {
         id: "4",
         heading: ["광어", "참돔"],
         // secondaryHeading: "this is panel 4",
-        details: ["10000" , "30000"]
+        details: ["10000" , "30000"],
+        total: ["40000"]
       }
     ];
   
     return (
       <div>
         {data.map((accordion) => {
-          const { id, heading, secondaryHeading, details } = accordion;
+          const { id, heading, secondaryHeading, details, total } = accordion;
           return (
             <Accordion
               expanded={expanded === id}
@@ -71,13 +75,14 @@ function SearchCard() {
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
               >
-              <Typography>{heading.join(`+`)}</Typography>
+              <Typography>{heading.join(` + `)}</Typography>
                 {/* <Typography>
                   {secondaryHeading}
                 </Typography> */}
               </AccordionSummary>
               <AccordionDetails>
                 <DetailCard details={details} heading={heading} />
+                <span>총 가격:{total}</span>
               </AccordionDetails>
             </Accordion>
           );
