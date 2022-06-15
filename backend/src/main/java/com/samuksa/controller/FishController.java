@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class FishController {
 
@@ -14,7 +16,7 @@ public class FishController {
     FishService fishService;
 
     @GetMapping("/test")
-    public FishInfo test() {
+    public List<FishInfo> test() {
         return fishService.getAllFishInfo();
     }
 
