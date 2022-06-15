@@ -8,6 +8,7 @@ import Header from './Header';
 import { useNavigate } from 'react-router-dom';
 import { areaState } from '../store/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import * as authAPI from '../api/auth';
 
 const Background = styled.div`
     background-color: white;

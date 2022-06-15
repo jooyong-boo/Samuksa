@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Stack, ListItem, TextField } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Typography, Grid } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
 import { useRecoilValue } from 'recoil';
@@ -41,6 +40,7 @@ function SearchCard() {
               expanded={expanded === id}
               key={id}
               onChange={handleChange(id)}
+              style={{ marginTop: 1 , marginBottom: 1 }}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -52,7 +52,7 @@ function SearchCard() {
               <AccordionDetails>
                 <DetailCard details={details} heading={heading} total={total} />
               </AccordionDetails>
-              <Typography sx={{ mr: 5, fontSize: 20}} style={{ textAlign: 'end' }}>총 가격:{total}원</Typography>
+              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {total}원</Typography>
             </Accordion>
           );
         })}
