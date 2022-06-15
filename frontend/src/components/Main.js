@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -21,7 +21,7 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+      width: 100,
     },
   },
 };
@@ -33,13 +33,13 @@ const Main = () => {
 
     const navigate = useNavigate();
 
-    const [personNum, setPersonNum] = useState(1);
-    const [money, setMoney] = useState(0);
+    const [personNum, setPersonNum] = useState("");
+    const [money, setMoney] = useState(5000);
     const [area, setArea] = useRecoilState(areaState);
 
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
-        if (e.target.value < 1) {
+        if (e.target.value < 0) {
             alert('인원은 1 이상으로 해주세요');
             setPersonNum('1');
         } else if (e.target.value > 10) {
@@ -47,20 +47,22 @@ const Main = () => {
             setPersonNum('10');
         }
     }
-    console.log(personNum)
 
     const handleMoneyChange = (e) => {
         setMoney(e.target.value)
     }
-    
-    console.log(money)
-    console.log(area)
+
 
     const onSubmit = (e) => {
             e.preventDefault();
-            setPersonNum('');
-            setMoney('');
-            navigate('/search');
+            if (money < 5000) {
+                alert('가격은 5000이상으로 해주세요');
+                return;
+            } else {
+                setPersonNum('');
+                setMoney(0);
+                navigate('/search');
+            }
     }
 
   return (
