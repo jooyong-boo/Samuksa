@@ -14,7 +14,7 @@ export default function DetailCard({heading, details}) {
     <Grid container>
         {heading.map((heading, i) => {
             return (
-                <Grid item xs={4}>
+                <Grid item xs={4} key={i}>
                     <Card sx={{ minWidth: 100, mr: 2 }}>
                         <CardMedia
                             component="img"
@@ -31,9 +31,9 @@ export default function DetailCard({heading, details}) {
                             {details[i]}원
                             </Typography>
                         </CardContent>
-                        <CardActions>
+                        {/* <CardActions>
                             <Button size="small">Learn More</Button>
-                        </CardActions>
+                        </CardActions> */}
                     </Card>
                 </Grid>
             )
