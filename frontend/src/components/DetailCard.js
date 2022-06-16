@@ -29,9 +29,6 @@ export default function DetailCard({heading, details}) {
                             {details[i]}원
                             </Typography>
                         </CardContent>
-                        {/* <CardActions>
-                            <Button size="small">Learn More</Button>
-                        </CardActions> */}
                     </Card>
                 </Grid>
             )

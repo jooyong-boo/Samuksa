@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { fishDataState } from '../store/atom';
+import { useQuery } from 'react-query';
+import { getFishRecommendData } from '../api/auth';
 
 // const theme = createTheme({
 //     root: {
@@ -23,13 +25,18 @@ import { fishDataState } from '../store/atom';
 
 function SearchCard() {
     const [expanded, setExpanded] = useState(false);
-    const fishData = useRecoilValue(fishDataState);
+    const [fishData, setFishData] = useRecoilState(fishDataState);
   
     const handleChange = panel => (event, isExpanded) => {
       console.log(panel)
       console.log(isExpanded)
       setExpanded(isExpanded ? panel : false);
     };
+
+    const responseData = useQuery('fish', getFishRecommendData);
+    useEffect(() => {
+      setFishData(responseData)
+    }, [responseData])
 
     return (
       <div>

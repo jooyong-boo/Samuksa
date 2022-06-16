@@ -6,9 +6,10 @@ import styled from '@emotion/styled';
 import { Select, Button, InputLabel, Grid, FormControl } from '@mui/material';
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
-import { areaState } from '../store/atom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import * as authAPI from '../api/auth';
+import { areaState, fishDataState, moneyState, personNumState } from '../store/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { getFishRecommendData } from '../api/auth';
 
 const Background = styled.div`
     background-color: white;
@@ -34,9 +35,14 @@ const Main = () => {
 
     const navigate = useNavigate();
 
-    const [personNum, setPersonNum] = useState("");
-    const [money, setMoney] = useState(5000);
+    const [personNum, setPersonNum] = useRecoilState(personNumState);
+    const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
+    // const responseFishDate = useSetRecoilState(fishDataState);
+
+    // const responseData = useQuery('fish', getFishRecommendData);
+
+    // responseFishDate(responseData);
 
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
@@ -53,17 +59,18 @@ const Main = () => {
         setMoney(e.target.value)
     }
 
+    const onClick = (e) => {
+        if (money < 5000) {
+            e.preventDefault();
+            alert('가격은 5000이상으로 해주세요');
+            return;
+        }
+    }
+
 
     const onSubmit = (e) => {
             e.preventDefault();
-            if (money < 5000) {
-                alert('가격은 5000이상으로 해주세요');
-                return;
-            } else {
-                setPersonNum('');
-                setMoney(0);
-                navigate('/search');
-            }
+            navigate('/search');
     }
 
   return (
@@ -115,7 +122,7 @@ const Main = () => {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Button variant="contained" type='submit' sx={{ mt: 2 }} fullWidth>검색</Button>
+                <Button variant="contained" type='submit' sx={{ mt: 2 }} onClick={onClick} fullWidth>검색</Button>
             </form>
         </Container>
       </Background>
