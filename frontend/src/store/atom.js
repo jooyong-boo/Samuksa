@@ -1,5 +1,15 @@
 import { atom } from 'recoil';
 
+export const personNumState = atom ({
+  key: 'personNumState',
+  default: "",
+});
+
+export const moneyState = atom ({
+  key: 'moneyState',
+  default: 5000,
+});
+
 export const areaState = atom({
     key: 'areaState',
     default: '노량진',
@@ -34,3 +44,4 @@ export const fishDataState = atom({
         }
       ],
 });
+
