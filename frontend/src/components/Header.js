@@ -76,7 +76,6 @@ const Header = () => {
                 variant="h5"
                 noWrap
                 component="a"
-                // href="/"
                 onClick={goMain}
                 sx={{
                 mr: 2,
