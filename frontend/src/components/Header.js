@@ -9,13 +9,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const Header = () => {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = useState(null);
 
@@ -25,6 +25,10 @@ const Header = () => {
     
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
+    };
+
+    const goMain = () => {
+        navigate('/');
     };
 
     return (
@@ -72,7 +76,7 @@ const Header = () => {
                 variant="h5"
                 noWrap
                 component="a"
-                href="/"
+                onClick={goMain}
                 sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -82,6 +86,7 @@ const Header = () => {
                 letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
+                cursor: 'pointer',
                 }}
             >
                 Samuksa

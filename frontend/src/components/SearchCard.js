@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { Stack, ListItem, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Typography, Grid } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { fishDataState } from '../store/atom';
+import { useQuery } from 'react-query';
+import { getFishRecommendData } from '../api/auth';
 
 // const theme = createTheme({
 //     root: {
@@ -22,53 +25,46 @@ import DetailCard from './DetailCard';
 
 function SearchCard() {
     const [expanded, setExpanded] = useState(false);
+    const [fishData, setFishData] = useRecoilState(fishDataState);
   
     const handleChange = panel => (event, isExpanded) => {
       console.log(panel)
       console.log(isExpanded)
       setExpanded(isExpanded ? panel : false);
     };
-  
-    const data = [
-      {
-        id: "1",
-        heading: ["광어"],
-        // secondaryHeading: "this is panel 1",
-        details: ["10000"],
-        total: ["10000"]
+
+    const { isLoading, isError, data, error } = useQuery('fish', getFishRecommendData, {
+      refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
+      retry: 0, // 실패시 재호출 몇번 할지
+      onSuccess: data => {
+        // 성공시 호출
+        console.log(data)
+        setFishData(data)
       },
-      {
-        id: "2",
-        heading: ["광어", "우럭"],
-        // secondaryHeading: "this is panel 2",
-        details: ["10000" , "20000"],
-        total: ["30000"]
-      },
-      {
-        id: "3",
-        heading: ["광어", "우럭", "참돔", "우럭", "참돔", "우럭", "참돔"],
-        // secondaryHeading: "this is panel 3",
-        details: ["10000" , "20000", "30000", "20000", "30000", "20000", "30000"],
-        total: ["160000"]
-      },
-      {
-        id: "4",
-        heading: ["광어", "참돔"],
-        // secondaryHeading: "this is panel 4",
-        details: ["10000" , "30000"],
-        total: ["40000"]
+      onError: e => {
+        // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
+        // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
+        console.log(e.message);
       }
-    ];
-  
+    });
+    // useEffect(() => {
+    //   if (fishData !== data) {
+    //     setFishData(data)
+    //   }
+    //   console.log(fishData)
+    // }, [fishData]);
+    console.log(data)
+
     return (
       <div>
-        {data.map((accordion) => {
-          const { id, heading, secondaryHeading, details, total } = accordion;
+        {fishData.map((fishdata, i) => {
+          const { id, heading, details, total } = fishdata;
           return (
             <Accordion
               expanded={expanded === id}
               key={id}
               onChange={handleChange(id)}
+              style={{ marginTop: 1 , marginBottom: 1 }}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -76,14 +72,11 @@ function SearchCard() {
                 id="panel1bh-header"
               >
               <Typography>{heading.join(` + `)}</Typography>
-                {/* <Typography>
-                  {secondaryHeading}
-                </Typography> */}
               </AccordionSummary>
               <AccordionDetails>
-                <DetailCard details={details} heading={heading} />
-                <span>총 가격:{total}</span>
+                <DetailCard details={details} heading={heading} total={total} />
               </AccordionDetails>
+              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {total}원</Typography>
             </Accordion>
           );
         })}

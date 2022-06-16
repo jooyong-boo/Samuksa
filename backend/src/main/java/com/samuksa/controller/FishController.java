@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 @RestController
 public class FishController {
@@ -25,7 +25,7 @@ public class FishController {
     FishService fishService;
 
     @GetMapping("/test")
-    public FishInfo test() {
+    public List<FishInfo> test() {
         return fishService.getAllFishInfo();
     }
     @GetMapping("/dummy")
