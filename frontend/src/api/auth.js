@@ -20,5 +20,5 @@ export const queryClient = new QueryClient();
 export const getFishRecommendData = async () => {
   const { data } = await axios.get('http://localhost:8080/test')
   console.log(data)
-  return JSON.parse(data);
+  return data;
 };

@@ -6,10 +6,8 @@ import styled from '@emotion/styled';
 import { Select, Button, InputLabel, Grid, FormControl } from '@mui/material';
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
-import { areaState, fishDataState, moneyState, personNumState } from '../store/atom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getFishRecommendData } from '../api/auth';
+import { areaState, moneyState, personNumState } from '../store/atom';
+import { useRecoilState } from 'recoil';
 
 const Background = styled.div`
     background-color: white;
