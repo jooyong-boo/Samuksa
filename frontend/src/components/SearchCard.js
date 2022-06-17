@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -62,23 +62,27 @@ function SearchCard() {
               key={i}
               onChange={handleChange(i)}
               style={{ marginTop: 0 , marginBottom: 0, borderTop: '1px solid black' }}
+              variant="contained"
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
+                sx={{ backgroundColor: '#DFF6FF' }}
               >
-              <Typography>{combinationName}</Typography>
+              <Typography>{i + 1}. {combinationName}</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <DetailCard 
                   fishReList={fishReList} 
                 />
               </AccordionDetails>
-              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {totalPrice}원</Typography>
+              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {totalPrice.toLocaleString()}원</Typography>
             </Accordion>
           );
         })}
+        <Button variant="contained" sx={{ margin: 'auto', display: 'block', marginTop: '1rem' }}>Contained</Button>
+
       </div>
     );
   }
