@@ -4,7 +4,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Typography } from '@mui/
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { fishDataState } from '../store/atom';
+import { fishDataSelector, fishDataState } from '../store/atom';
 import { useQuery } from 'react-query';
 import { getFishRecommendData } from '../api/auth';
 
@@ -25,58 +25,57 @@ import { getFishRecommendData } from '../api/auth';
 
 function SearchCard() {
     const [expanded, setExpanded] = useState(false);
-    const [fishData, setFishData] = useRecoilState(fishDataState);
+    const fishData = useRecoilValue(fishDataSelector)
+    // const [fish, setFish] = useRecoilState(fishDataState);
+    console.log(fishData)
   
     const handleChange = panel => (event, isExpanded) => {
       console.log(panel)
       console.log(isExpanded)
       setExpanded(isExpanded ? panel : false);
     };
-
-    const { isLoading, isError, data, error } = useQuery('fish', getFishRecommendData, {
-      refetchOnWindowFocus: false, // react-query는 사용자가 사용하는 윈도우가 다른 곳을 갔다가 다시 화면으로 돌아오면 이 함수를 재실행합니다. 그 재실행 여부 옵션 입니다.
-      retry: 0, // 실패시 재호출 몇번 할지
-      onSuccess: data => {
-        // 성공시 호출
-        console.log(data)
-        setFishData(data)
-      },
-      onError: e => {
-        // 실패시 호출 (401, 404 같은 error가 아니라 정말 api 호출이 실패한 경우만 호출됩니다.)
-        // 강제로 에러 발생시키려면 api단에서 throw Error 날립니다. (참조: https://react-query.tanstack.com/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default)
-        console.log(e.message);
-      }
-    });
+    
     // useEffect(() => {
-    //   if (fishData !== data) {
-    //     setFishData(data)
+    //   if (fishData) {
+    //     setFish(fishData)
     //   }
-    //   console.log(fishData)
-    // }, [fishData]);
-    console.log(data)
+    //   console.log(fish)
+    // }, []);
+    
+    const total = fishData.recommendCount; // recommendCount
+    const fishList = fishData.fishRecommendCombination; //fishRecommendCombination
+
+    console.log(total)
+    console.log(fishList)
+
+
 
     return (
       <div>
-        {fishData.map((fishdata, i) => {
-          const { id, heading, details, total } = fishdata;
+          <Typography sx={{ textAlign: 'center' }}>{total}개의 조합이 있어요.</Typography>
+        {fishList.map((fishList, i) => {
+          const { combinationName, totalPrice } = fishList;
+          const  fishReList = fishList.fishRecommendLists;
           return (
             <Accordion
-              expanded={expanded === id}
-              key={id}
-              onChange={handleChange(id)}
-              style={{ marginTop: 1 , marginBottom: 1 }}
+              expanded={expanded === i}
+              key={i}
+              onChange={handleChange(i)}
+              style={{ marginTop: 0 , marginBottom: 0, borderTop: '1px solid black' }}
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
               >
-              <Typography>{heading.join(` + `)}</Typography>
+              <Typography>{combinationName}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <DetailCard details={details} heading={heading} total={total} />
+                <DetailCard 
+                  fishReList={fishReList} 
+                />
               </AccordionDetails>
-              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {total}원</Typography>
+              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {totalPrice}원</Typography>
             </Accordion>
           );
         })}

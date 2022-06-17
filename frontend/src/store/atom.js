@@ -1,8 +1,9 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
+import axios from 'axios';
 
 export const personNumState = atom ({
   key: 'personNumState',
-  default: "",
+  default: 1,
 });
 
 export const moneyState = atom ({
@@ -16,32 +17,23 @@ export const areaState = atom({
   });
 
 export const fishDataState = atom({
-    key: 'fishDataState',
-    default: [
-        // {
-        //   id: "1",
-        //   heading: ["광어"],
-        //   details: ["10000"],
-        //   total: ["10000"]
-        // },
-        // {
-        //   id: "2",
-        //   heading: ["광어", "우럭"],
-        //   details: ["10000" , "20000"],
-        //   total: ["30000"]
-        // },
-        // {
-        //   id: "3",
-        //   heading: ["광어", "우럭", "참돔", "우럭", "참돔", "우럭", "참돔"],
-        //   details: ["10000" , "20000", "30000", "20000", "30000", "20000", "30000"],
-        //   total: ["160000"]
-        // },
-        // {
-        //   id: "4",
-        //   heading: ["광어", "참돔"],
-        //   details: ["10000" , "30000"],
-        //   total: ["40000"]
-        // }
-      ],
+  key: 'fishDataState',
+  default: [],
+});
+
+export const fishDataSelector = selector({
+    key: 'fishData/get',
+    get: async ({ get }) => {
+      const personNum = get(personNumState);
+      const money = get(moneyState);
+      const area = get(areaState);
+      try {
+        const { data } = await axios.get('http://localhost:8080/dummy', { params: { person_number : personNum, money: money, area: area }})
+        console.log(data)
+        return data;
+      } catch (err) {
+        console.log(err.response);
+      }
+    },
 });
 

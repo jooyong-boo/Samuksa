@@ -13,15 +13,20 @@ export const queryClient = new QueryClient();
 // };
 
 // export const getFishRecommendData = async ({ personNum, money, area }) => {
-//     const { data } = await axios.get('http://localhost:8080/', { params: { personNum, money, area }})
+//   console.log(personNum, money, area)
+//   try {
+//     const { data } = await axios.get('http://localhost:8080/dummy', { params: { Person_number : personNum, money: money, area: area }})
 //     return data;
+//   } catch (err) {
+//     console.log(err.response);
+//   }
 // };
 
-export const getFishRecommendData = async () => {
-  try {
-    const { data } = await axios.get('http://localhost:8080/test')
-    return data;
-  } catch (err) {
-    console.log(err.response);
-  }
-};
+// export const getFishRecommendData = async () => {
+//   try {
+//     const { data } = await axios.get('http://localhost:8080/test')
+//     return data;
+//   } catch (err) {
+//     console.log(err.response);
+//   }
+// };
