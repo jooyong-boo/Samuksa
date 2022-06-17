@@ -31,19 +31,22 @@ export default function DetailCard({ fishReList }) {
                             alt={fishName}
                         />
                         <CardContent>
-                            <Typography variant="h5" component="div">
-                            {fishName}({size})
+                            <Typography variant="h5" component="div" display={"flex"}>
+                                {fishName}
+                                    <Typography sx={{ color: 'blue'}}>
+                                        ({size})
+                                    </Typography>
                             </Typography>
                             <Typography>
                                 수율: {fishYeild}%
                                 <br/>
-                                최대중량: {maxWeight}g
+                                최대중량: {maxWeight.toLocaleString()}g
                                 <br/>
-                                최소중량: {minWeight}g 
+                                최소중량: {minWeight.toLocaleString()}g 
                             </Typography>
                             <Typography variant="body2">
                             <br />
-                            {price}원
+                            {price.toLocaleString()}원
                             </Typography>
                         </CardContent>
                     </Card>

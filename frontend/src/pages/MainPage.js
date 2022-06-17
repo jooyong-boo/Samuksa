@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 const Background = styled.div`
     background-color: white;
     width: 100vw;
-    height: 100vw;
+    height: 100vh;
 `
 
 const MainPage = () => {
