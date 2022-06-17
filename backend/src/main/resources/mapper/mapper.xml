@@ -2,9 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.samuksa.mapper.FishMapper">
 
-    <select id="getAllFishInfo" resultType="com.samuksa.dto.FishInfo">
+    <select id="selectAllFishInfo" resultType="com.samuksa.dto.FishInfo">
         SELECT *
           FROM FISH_INFO;
     </select>
+
+    <insert id="insertFishMarketPrices">
+        INSERT INTO FISH_MARKET_PRICE
+        (FISH_NAME, SALE_AREA, SALE_DTM, FISH_SIZE, FISHERY_AREA, FARM_TYPE, MIN_WEIGHT, MAX_WEIGHT, PRICE)
+        SELECT #{fishName}, #{saleArea}, #{saleDtm}, #{fishSize}, #{fisheryArea}, #{farmType}, #{minWeight}, #{maxWeight}, #{price}
+        WHERE NOT EXISTS(SELECT *
+                           FROM FISH_MARKET_PRICE
+                          WHERE FISH_NAME = #{fishName}
+                            AND SALE_AREA = #{saleArea}
+                            AND SALE_DTM = #{saleDtm}
+                            AND FISH_SIZE = #{fishSize}
+                            AND FISHERY_AREA = #{fisheryArea}
+                            AND FARM_TYPE = #{farmType})
+    </insert>
 
 </mapper>

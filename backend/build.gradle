@@ -28,6 +28,7 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java:8.0.25'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 }
 
 tasks.named('test') {
