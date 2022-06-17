@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { Select, Button, InputLabel, Grid, FormControl } from '@mui/material';
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
-import { areaState, moneyState, personNumState } from '../store/atom';
+import { areaState, fishDataSelector, moneyState, personNumState } from '../store/atom';
 import { useRecoilState } from 'recoil';
 
 const Background = styled.div`
@@ -41,6 +41,8 @@ const Main = () => {
     // const responseData = useQuery('fish', getFishRecommendData);
 
     // responseFishDate(responseData);
+
+    console.log(personNum, typeof(personNum) ,money, typeof(money), area, typeof(area))
 
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);

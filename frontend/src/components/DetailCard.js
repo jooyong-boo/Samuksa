@@ -7,10 +7,20 @@ import image from '../img/contemplative-reptile.jpeg';
 
 
 
-export default function DetailCard({heading, details}) {
+
+// fishName: "광어"
+// fishYeild: 33
+// maxWeight: 1000
+// minWeight: 500
+// price: 10000
+// serving: 0
+// size: "소"
+
+export default function DetailCard({ fishReList }) {
   return (
     <Grid container>
-        {heading.map((heading, i) => {
+        {fishReList.map((fishReList, i) => {
+            const { fishName, size, price, fishYeild, maxWeight, minWeight, serving} = fishReList;
             return (
                 <Grid item xs={4} key={i}>
                     <Card sx={{ minWidth: 100, mr: 2, mt: 2 }}>
@@ -18,15 +28,22 @@ export default function DetailCard({heading, details}) {
                             component="img"
                             height="80"
                             image={image}
-                            alt={heading}
+                            alt={fishName}
                         />
                         <CardContent>
                             <Typography variant="h5" component="div">
-                            {heading}
+                            {fishName}({size})
+                            </Typography>
+                            <Typography>
+                                수율: {fishYeild}%
+                                <br/>
+                                최대중량: {maxWeight}g
+                                <br/>
+                                최소중량: {minWeight}g 
                             </Typography>
                             <Typography variant="body2">
                             <br />
-                            {details[i]}원
+                            {price}원
                             </Typography>
                         </CardContent>
                     </Card>
@@ -36,3 +53,5 @@ export default function DetailCard({heading, details}) {
     </Grid>
   );
 }
+
+
