@@ -35,7 +35,7 @@ const Header = () => {
         <AppBar position="sticky">
         <Container maxWidth="xl">
             <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
                 <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -71,7 +71,7 @@ const Header = () => {
                 ))}
                 </Menu>
             </Box>
-            <SetMealIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+            <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1 }} />
             <Typography
                 variant="h5"
                 noWrap
@@ -79,7 +79,7 @@ const Header = () => {
                 onClick={goMain}
                 sx={{
                 mr: 2,
-                display: { xs: 'flex', md: 'none' },
+                display: { xs: 'flex' },
                 flexGrow: 1,
                 fontFamily: 'monospace',
                 fontWeight: 700,
