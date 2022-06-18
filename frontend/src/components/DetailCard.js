@@ -23,14 +23,14 @@ export default function DetailCard({ fishReList }) {
             const { fishName, size, price, fishYeild, maxWeight, minWeight, serving} = fishReList;
             return (
                 <Grid item xs={4} key={i}>
-                    <Card sx={{ minWidth: 100, mr: 2, mt: 2 }}>
+                    <Card sx={{ minWidth: 100, mr: 1, mt: 2 }}>
                         <CardMedia
                             component="img"
                             height="80"
                             image={image}
                             alt={fishName}
                         />
-                        <CardContent>
+                        <CardContent sx={{ display: 'flex', flexDirection: 'column'}}>
                             <Typography variant="h5" component="div" display={"flex"}>
                                 {fishName}
                                     <Typography sx={{ color: 'blue'}}>
@@ -39,9 +39,11 @@ export default function DetailCard({ fishReList }) {
                             </Typography>
                             <Typography>
                                 수율: {fishYeild}%
-                                <br/>
+                            </Typography>
+                            <Typography>
                                 최대중량: {maxWeight.toLocaleString()}g
-                                <br/>
+                            </Typography>
+                            <Typography>
                                 최소중량: {minWeight.toLocaleString()}g 
                             </Typography>
                             <Typography variant="body2">

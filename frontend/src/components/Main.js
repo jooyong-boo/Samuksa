@@ -74,11 +74,6 @@ const Main = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
-    // const responseFishDate = useSetRecoilState(fishDataState);
-
-    // const responseData = useQuery('fish', getFishRecommendData);
-
-    // responseFishDate(responseData);
 
     console.log(personNum, typeof(personNum) ,money, typeof(money), area, typeof(area))
 
@@ -101,6 +96,13 @@ const Main = () => {
         if (money < 5000) {
             e.preventDefault();
             alert('가격은 5000이상으로 해주세요');
+            setMoney(5000)
+            return;
+        }
+        if (personNum <= 0) {
+            e.preventDefault();
+            alert('인원은 1 이상으로 해주세요');
+            setPersonNum('1');
             return;
         }
     }
