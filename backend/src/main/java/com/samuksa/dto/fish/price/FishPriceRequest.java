@@ -1,12 +1,12 @@
 package com.samuksa.dto.fish.price;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class FishPriceRequest {
 
     private String fishName;

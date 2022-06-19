@@ -1,4 +1,4 @@
-package com.samuksa.dto;
+package com.samuksa.dto.fish.info;
 
 public class FishInfo {
     private int fishInfoId;

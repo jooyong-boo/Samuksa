@@ -1,12 +1,11 @@
 package com.samuksa.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.samuksa.dto.FishInfo;
+import com.samuksa.dto.fish.info.FishInfo;
 import com.samuksa.dto.fish.api.FishApiResponse;
 import com.samuksa.dto.fish.price.FishPrice;
 import com.samuksa.dto.fish.price.FishPriceRequest;
 import com.samuksa.mapper.FishMapper;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,6 +45,8 @@ public class FishService {
             String response = restTemplate.getForObject(url, String.class);
             ObjectMapper objectMapper = new ObjectMapper();
             FishApiResponse apiResponse = objectMapper.readValue(response, FishApiResponse.class);
+
+            System.out.println("API 호출 response: " + apiResponse);
 
             List<String> priceList = apiResponse.getPrice();
             List<String> dateList = apiResponse.getDate();
