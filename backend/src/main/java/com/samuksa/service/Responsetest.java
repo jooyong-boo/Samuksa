@@ -1,12 +1,11 @@
 package com.samuksa.service;
 
-import com.samuksa.dto.request.fishrecommend.FishRecommendRequest;
-import com.samuksa.dto.response.fishrecommend.FishRecommendCombination;
-import com.samuksa.dto.response.fishrecommend.FishRecommendList;
-import com.samuksa.dto.response.fishrecommend.FishRecommendResponse;
-import com.samuksa.dto.testDto.FishMarketPriceRefine;
-import com.samuksa.dto.testDto.FishRecommendResultInfo;
-import com.samuksa.service.fishrecommend.FishRecommendRefineTable;
+import com.samuksa.dto.fish.recommend.recommendRequest.FishRecommendRequest;
+import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendCombination;
+import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendInfo;
+import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendResponse;
+import com.samuksa.dto.fish.recommend.recommendService.FishRecommendBtDto;
+import com.samuksa.service.fishrecommend.FishRecommendService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,56 +19,19 @@ public class Responsetest {
 
     public FishRecommendResponse get()
     {
-        FishMarketPriceRefine fishMarketPriceRefine1 = new FishMarketPriceRefine(1,10000,this.fishRecommendRequest.getMoney(),250,0);
-        FishMarketPriceRefine fishMarketPriceRefine2 = new FishMarketPriceRefine(2,15000,this.fishRecommendRequest.getMoney(),600,0);
-        FishMarketPriceRefine fishMarketPriceRefine3 = new FishMarketPriceRefine(3,20000,this.fishRecommendRequest.getMoney(),400,0);
-        List<FishMarketPriceRefine> fishMarketPriceRefines = new ArrayList<FishMarketPriceRefine>();
-        fishMarketPriceRefines.add(fishMarketPriceRefine1);
-        fishMarketPriceRefines.add(fishMarketPriceRefine2);
-        fishMarketPriceRefines.add(fishMarketPriceRefine3);
-        FishRecommendRefineTable fishRecommendRefineTable = new FishRecommendRefineTable(fishMarketPriceRefines, 250 * this.fishRecommendRequest.getPersonNum());
-        List<List<FishRecommendResultInfo>> test = fishRecommendRefineTable.getFishRecommendResultInfos();
-        return RefineTableToResponse(test);
+        FishRecommendInfo fishRecommendInfo1 = new FishRecommendInfo("광어", "노량진", "제주","자연", "중", 20000,1000,2000,0);
+        FishRecommendInfo fishRecommendInfo2 = new FishRecommendInfo("연어", "노량진", "국산","양식", "대", 30000,2000,3000,0);
+        FishRecommendInfo fishRecommendInfo3 = new FishRecommendInfo("숭어", "노량진", "해외","양식", "특대", 40000,3000,4000,0);
+        FishRecommendBtDto fishRecommendBtDto1 = new FishRecommendBtDto(0, 35, 0,fishRecommendInfo1);
+        FishRecommendBtDto fishRecommendBtDto2 = new FishRecommendBtDto(0, 40, 0,fishRecommendInfo2);
+        FishRecommendBtDto fishRecommendBtDto3 = new FishRecommendBtDto(0, 20, 0,fishRecommendInfo3);
+        List<FishRecommendBtDto> fishRecommendBtDtos = new ArrayList<>();
+        fishRecommendBtDtos.add(fishRecommendBtDto1);
+        fishRecommendBtDtos.add(fishRecommendBtDto2);
+        fishRecommendBtDtos.add(fishRecommendBtDto3);
+        FishRecommendService fishRecommendService = new FishRecommendService(fishRecommendRequest,fishRecommendBtDtos);
+
+        return fishRecommendService.getFishRecommendResponse();
     }
-    private FishRecommendResponse RefineTableToResponse(List<List<FishRecommendResultInfo>> fishRecommendResultInfoList)
-    {
-        List<FishRecommendCombination> fishRecommendCombinations = new ArrayList<FishRecommendCombination>();
-        List<FishRecommendResultInfo> fishRecommendResultInfos;
-        FishRecommendList fishRecommendList;
-        List<FishRecommendList> fishRecommendLists;
-        FishRecommendCombination fishRecommendCombination;
-        StringBuilder str = new StringBuilder();
-        for(int i = 0; i < fishRecommendResultInfoList.size(); i++)
-        {
-            fishRecommendResultInfos = fishRecommendResultInfoList.get(i);
-            fishRecommendLists = new ArrayList<FishRecommendList>();
-            for(int j = 0; j < fishRecommendResultInfos.size(); j++)
-            {
-                FishRecommendResultInfo fishRecommendResultInfo = fishRecommendResultInfos.get(j);
-                if (fishRecommendResultInfo.getFishMarketPriceId() == 1)
-                    fishRecommendList = new FishRecommendList("광어", 10000,"소",33,500, 1000,fishRecommendResultInfo.getServing());
-                else if (fishRecommendResultInfo.getFishMarketPriceId() == 2)
-                    fishRecommendList = new FishRecommendList("연어", 15000,"중",40,1000, 2000,fishRecommendResultInfo.getServing());
-                else if (fishRecommendResultInfo.getFishMarketPriceId() == 3)
-                    fishRecommendList = new FishRecommendList("숭어", 20000,"대",20,2000, 3000,fishRecommendResultInfo.getServing());
-                else
-                    break;
-                fishRecommendLists.add(fishRecommendList);
-            }
-            int totalPrice = 0;
-            for(int j = 0; j < fishRecommendLists.size(); j++)
-            {
-                if (fishRecommendLists.get(j).getServing() > 0)
-                {
-                    str.append(fishRecommendLists.get(j).getFishName());
-                    str.append(" ");
-                    totalPrice += fishRecommendLists.get(j).getPrice() * fishRecommendLists.get(j).getServing();
-                }
-            }
-            fishRecommendCombination = new FishRecommendCombination(totalPrice, str.toString(), fishRecommendLists);
-            fishRecommendCombinations.add(fishRecommendCombination);
-        }
-        FishRecommendResponse fishRecommendResponse = new FishRecommendResponse(fishRecommendCombinations.size(), fishRecommendCombinations);
-        return fishRecommendResponse;
-    }
+
 }

@@ -2,8 +2,8 @@ package com.samuksa.controller;
 
 import com.samuksa.dto.fish.info.FishInfo;
 import com.samuksa.dto.fish.price.FishPriceRequest;
-import com.samuksa.dto.request.fishrecommend.FishRecommendRequest;
-import com.samuksa.dto.response.fishrecommend.FishRecommendResponse;
+import com.samuksa.dto.fish.recommend.recommendRequest.FishRecommendRequest;
+import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendResponse;
 import com.samuksa.service.FishService;
 import com.samuksa.service.Responsetest;
 import com.samuksa.service.SchedulerService;
@@ -27,7 +27,7 @@ public class FishController {
         return fishService.getAllFishInfo();
     }
     @GetMapping("/dummy")
-    public FishRecommendResponse getDummy(@RequestParam(name = "person_number") int personNum,@RequestParam(name = "money") int money,@RequestParam(name = "area") String area) {
+    public FishRecommendResponse getDummy(@RequestParam(name = "person_number") int personNum, @RequestParam(name = "money") int money, @RequestParam(name = "area") String area) {
         FishRecommendRequest fishRecommendRequest = new FishRecommendRequest(personNum, money, area);
         Responsetest responsetest = new Responsetest(fishRecommendRequest);
 
