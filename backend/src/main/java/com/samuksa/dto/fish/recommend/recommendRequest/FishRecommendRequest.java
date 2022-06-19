@@ -1,4 +1,4 @@
-package com.samuksa.dto.request.fishrecommend;
+package com.samuksa.dto.fish.recommend.recommendRequest;
 
 public class FishRecommendRequest {
     private int personNum;
