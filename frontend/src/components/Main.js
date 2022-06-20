@@ -75,8 +75,6 @@ const Main = () => {
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
 
-    console.log(personNum, typeof(personNum) ,money, typeof(money), area, typeof(area))
-
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
         if (e.target.value < 0) {
