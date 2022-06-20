@@ -1,12 +1,12 @@
 package com.samuksa.dto.fish.price;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class FishPrice {
 
     private String fishName;
@@ -18,6 +18,8 @@ public class FishPrice {
     private int minWeight;
     private int maxWeight;
     private int price;
+
+    private int yield;
 
     public FishPrice(FishPriceRequest fishPriceRequest, String priceStr, String pSaleDtm) {
         fishName = fishPriceRequest.getFishName();

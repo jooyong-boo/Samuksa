@@ -14,4 +14,6 @@ public interface FishMapper {
     public void insertFishMarketPrices(FishPrice fishPrice);
 
     public List<FishPriceRequest> selectFishPriceRequest();
+
+    public List<FishPrice> selectAllTodayFishPrice();
 }

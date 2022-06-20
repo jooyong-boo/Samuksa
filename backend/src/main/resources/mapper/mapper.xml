@@ -45,4 +45,26 @@
              , FISH_SALE_AREA FSA
          WHERE FSI.FISH_INFO_ID = FI.FISH_INFO_ID
     </select>
+
+    <select id="selectAllTodayFishPrice" resultType="com.samuksa.dto.fish.price.FishPrice">
+        SELECT FSA.ZONE_NAME AS SALE_AREA
+             , FMP.PRICE
+             , FSI.FISHERY_AREA
+             , FSI.FARM_TYPE
+             , FSI.FISH_SIZE
+             , FSI.MIN_WEIGHT
+             , FSI.MAX_WEIGHT
+             , FI.FISH_NAME
+             , FI.YIELD
+             , DATE_FORMAT(FMP.SALE_DTM, '%Y-%m-%d') AS SALE_DTM
+          FROM FISH_MARKET_PRICE FMP
+             , FISH_SALE_INFO FSI
+             , FISH_SALE_AREA FSA
+             , FISH_INFO FI
+         WHERE FMP.FISH_SALE_INFO_ID = FSI.FISH_SALE_INFO_ID
+           AND FMP.FISH_SALE_AREA_ID = FSA.FISH_SALE_AREA_ID
+           AND DATE(FMP.SALE_DTM) = DATE('2022-06-19')
+           -- AND DATE(FMP.SALE_DTM) = DATE(NOW())
+           AND FI.FISH_INFO_ID = FSI.FISH_INFO_ID;
+    </select>
 </mapper>
