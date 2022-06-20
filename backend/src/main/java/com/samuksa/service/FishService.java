@@ -62,4 +62,7 @@ public class FishService {
         return "S";
     }
 
+    public List<FishPrice> selectAllTodayFishPrice() {
+        return fishMapper.selectAllTodayFishPrice();
+    }
 }
