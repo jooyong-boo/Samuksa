@@ -1,28 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { createTheme } from '@mui/material/styles';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { fishDataSelector, fishDataState } from '../store/atom';
-import { useQuery } from 'react-query';
-import { getFishRecommendData } from '../api/auth';
+import { useRecoilValue } from 'recoil';
+import { fishDataSelector } from '../store/atom';
 import styled from 'styled-components';
-
-// const theme = createTheme({
-//     root: {
-//       width: "100%"
-//     },
-//     heading: {
-//       fontSize: theme.typography.pxToRem(15),
-//       flexBasis: "33.33%",
-//       flexShrink: 0
-//     },
-//     secondaryHeading: {
-//       fontSize: theme.typography.pxToRem(15),
-//       color: theme.palette.text.secondary
-//     }
-//   });
 
 const SearchTopBanner = styled.div`
   display: flex;
@@ -39,8 +21,6 @@ const SearchTopBanner = styled.div`
 function SearchCard() {
     const [expanded, setExpanded] = useState(false);
     const fishData = useRecoilValue(fishDataSelector)
-    // const [fish, setFish] = useRecoilState(fishDataState);
-    console.log(fishData)
   
     const handleChange = panel => (event, isExpanded) => {
       console.log(panel)
@@ -55,21 +35,24 @@ function SearchCard() {
     //   console.log(fish)
     // }, []);
     
-    const total = fishData.recommendCount; // recommendCount
-    const fishList = fishData.fishRecommendCombination; //fishRecommendCombination
+    // const total = fishData.recommendTotalCount; // recommendCount
+    const fishList = fishData.fishRecommendUnions; //fishRecommendCombination
+    const recommendUnionCount = fishData.recommendUnionCount;
+    const recommendTotalCount = fishData.recommendTotalCount;
 
-    console.log(total)
+    console.log(fishData)
     console.log(fishList)
 
 
 
     return (
       <div>
-          <SearchTopBanner>{total}개의 조합이 있어요.</SearchTopBanner>
-          <Typography sx={{ textAlign: 'center' }}>{total}개의 조합이 있어요.</Typography>
+          <SearchTopBanner>{recommendUnionCount}개의 추천 목록이 있고 총 {recommendTotalCount}개의 조합이 있어요 </SearchTopBanner>
+          <Typography sx={{ textAlign: 'center' }}>{recommendTotalCount}개의 조합이 있어요.</Typography>
         {fishList.map((fishList, i) => {
-          const { combinationName, totalPrice } = fishList;
-          const  fishReList = fishList.fishRecommendLists;
+          const { combinationName, combinationSize, fishRecommendCombinations } = fishList;
+          const fishDetailList = fishRecommendCombinations;
+          console.log(fishDetailList);
           return (
             <Accordion
               expanded={expanded === i}
@@ -88,8 +71,9 @@ function SearchCard() {
               </AccordionSummary>
               <AccordionDetails sx={{ backgroundColor: 'white', borderTop: '1px solid black', borderRadius: '4px'}}>
                 <DetailCard 
-                  fishReList={fishReList} 
-                  totalPrice={totalPrice}
+                  fishDetailList={fishDetailList} 
+                  // totalPrice={totalPrice}
+                  combinationSize={combinationSize}
                 />
               </AccordionDetails>
             </Accordion>
