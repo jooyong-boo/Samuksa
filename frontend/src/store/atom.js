@@ -28,8 +28,8 @@ export const fishDataSelector = selector({
       const money = get(moneyState);
       const area = get(areaState);
       try {
-        const { data } = await axios.get('http://localhost:8080/fish/dummy', { params: { person_number : personNum, money: money, area: area }})
-        console.log(data)
+        const { data } = await axios.get('http://localhost:8080/fish/dummy', { params: { person_number : personNum, money: money, area: area }});
+        console.log(data);
         return data;
       } catch (err) {
         console.log(err.response);

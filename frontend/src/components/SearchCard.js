@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme } from '@mui/material/styles';
-import { Accordion, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { fishDataSelector, fishDataState } from '../store/atom';
 import { useQuery } from 'react-query';
 import { getFishRecommendData } from '../api/auth';
+import styled from 'styled-components';
 
 // const theme = createTheme({
 //     root: {
@@ -22,6 +23,18 @@ import { getFishRecommendData } from '../api/auth';
 //       color: theme.palette.text.secondary
 //     }
 //   });
+
+const SearchTopBanner = styled.div`
+  display: flex;
+  background-color: #DFF6FF;
+  width: 100%;
+  height: 5vh;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+  color: red;
+  border: 1px solid black;
+`;
 
 function SearchCard() {
     const [expanded, setExpanded] = useState(false);
@@ -52,6 +65,7 @@ function SearchCard() {
 
     return (
       <div>
+          <SearchTopBanner>{total}개의 조합이 있어요.</SearchTopBanner>
           <Typography sx={{ textAlign: 'center' }}>{total}개의 조합이 있어요.</Typography>
         {fishList.map((fishList, i) => {
           const { combinationName, totalPrice } = fishList;
@@ -61,23 +75,23 @@ function SearchCard() {
               expanded={expanded === i}
               key={i}
               onChange={handleChange(i)}
-              style={{ marginTop: 0 , marginBottom: 0, borderTop: '1px solid black' }}
+              style={{ marginTop: 0 , marginBottom: 10, marginRight: 10, marginLeft: 10, border: '1px solid black', borderRadius: '5px', backgroundColor: '#47B5FF' }}
               variant="contained"
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
-                sx={{ backgroundColor: '#DFF6FF' }}
+                // sx={{ height: '48px' }}
               >
               <Typography>{i + 1}. {combinationName}</Typography>
               </AccordionSummary>
-              <AccordionDetails>
+              <AccordionDetails sx={{ backgroundColor: 'white', borderTop: '1px solid black', borderRadius: '4px'}}>
                 <DetailCard 
                   fishReList={fishReList} 
+                  totalPrice={totalPrice}
                 />
               </AccordionDetails>
-              <Typography variant='h6' sx={{ mr: 5}} style={{ textAlign: 'end' }}>Total: {totalPrice.toLocaleString()}원</Typography>
             </Accordion>
           );
         })}
