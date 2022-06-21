@@ -12,21 +12,12 @@ export const queryClient = new QueryClient();
 //   }
 // };
 
-// export const getFishRecommendData = async ({ personNum, money, area }) => {
-//   console.log(personNum, money, area)
-//   try {
-//     const { data } = await axios.get('http://localhost:8080/dummy', { params: { Person_number : personNum, money: money, area: area }})
-//     return data;
-//   } catch (err) {
-//     console.log(err.response);
-//   }
-// };
-
-// export const getFishRecommendData = async () => {
-//   try {
-//     const { data } = await axios.get('http://localhost:8080/test')
-//     return data;
-//   } catch (err) {
-//     console.log(err.response);
-//   }
-// };
+export const getFishRecommendData = async ({ personNum, money, area }) => {
+  try {
+    const { data } = await axios.get('http://localhost:8080/fish/dummy', { params: { person_number : personNum, money: money, area: area }});
+    console.log(data)
+    return data;
+  } catch (err) {
+    console.log(err.response);
+  }
+};
