@@ -22,7 +22,8 @@ const DetailPaper = () => {
                 flexGrow: 1,
                 // backgroundColor: (theme) =>
                 // theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-                marginBottom: '10px'
+                marginBottom: '10px',
+                backgroundColor: '#F8F8F8',
             }}
             >
                 <Grid container spacing={6}>
@@ -56,7 +57,6 @@ const DetailPaper = () => {
                     </Grid>
                 </Grid>
             </Paper>
-            <DetailAccordion />
         </div>
     );
 };

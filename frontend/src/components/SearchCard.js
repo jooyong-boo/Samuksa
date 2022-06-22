@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Chip, Typography } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DetailCard from './DetailCard';
-import { useRecoilValue } from 'recoil';
-import { fishDataState } from '../store/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { fishDataState, fishRecommendUnions } from '../store/atom';
 import styled from 'styled-components';
 
 const SearchTopBanner = styled.div`
@@ -23,34 +23,27 @@ function SearchCard() {
     const fishData = useRecoilValue(fishDataState)
   
     const handleChange = panel => (event, isExpanded) => {
-      console.log(panel)
-      console.log(isExpanded)
+      // console.log(panel)
+      // console.log(isExpanded)
       setExpanded(isExpanded ? panel : false);
     };
-    
-    // useEffect(() => {
-    //   if (fishData) {
-    //     setFish(fishData)
-    //   }
-    //   console.log(fish)
-    // }, []);
     
     // const total = fishData.recommendTotalCount; // recommendCount
 
     const fishList = fishData.fishRecommendUnions; //fishRecommendCombination
     const recommendUnionCount = fishData.recommendUnionCount;
     const recommendTotalCount = fishData.recommendTotalCount;
-
-    console.log(fishList)
-
+    
+    console.log(fishData)
+    
     return (
       <div>
         <SearchTopBanner>{recommendUnionCount}개의 추천 목록이 있고 총 {recommendTotalCount}개의 조합이 있어요 </SearchTopBanner>
         <Typography sx={{ textAlign: 'center' }}>{recommendTotalCount}개의 조합이 있어요.</Typography>
         {fishList.map((fishList, i) => {
           const { combinationName, combinationSize, fishRecommendCombinations } = fishList;
+          {/* console.log(fishRecommendCombinations); */}
           const fishDetailList = fishRecommendCombinations;
-          console.log(fishDetailList);
           return (
             <Accordion
               expanded={expanded === i}

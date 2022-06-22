@@ -5,12 +5,12 @@ import { getFishRecommendData } from '../api/auth';
 // 메인페이지 입력값들 =============
 export const personNumState = atom ({
   key: 'personNumState',
-  default: 1,
+  default: 5,
 });
 
 export const moneyState = atom ({
   key: 'moneyState',
-  default: 5000,
+  default: 500000,
 });
 
 export const areaState = atom({
@@ -18,6 +18,11 @@ export const areaState = atom({
     default: '노량진',
   });
 // ==========================
+
+export const fishRecommendUnions = atom({
+  key: 'fishRecommendUnions',
+  default: [],
+});
 
 export const fishDataState = selector({
     key: 'fishData/get',

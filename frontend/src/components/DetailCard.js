@@ -1,33 +1,9 @@
-import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
-import { CardMedia, Grid } from '../../node_modules/@mui/material/index';
-import image from '../img/contemplative-reptile.jpeg';
-
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-
-// complex Grid ---------
-import { styled } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
-
-//-----------------------
-
-// table UI ---------------------------------------------------------------
-
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { useState } from 'react';
-
-import DetailPaper from './DetailPaper';
 import DetailAccordion from './DetailAccordion';
-
-// ------------------------------------------------------------------------
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { fishRecommendUnions } from '../store/atom';
 
 
 export default function DetailCard({ fishDetailList }) {
@@ -39,12 +15,27 @@ export default function DetailCard({ fishDetailList }) {
       console.log(isExpanded)
       setExpanded(isExpanded ? panel : false);
     };
-    
 
-        console.log(fishDetailList)
-        const totalPrice = fishDetailList[0].totalPrice;
+    // console.log(fishDetailList);
+
+    // const [fishUnions, setFishUnions] = useRecoilState(fishRecommendUnions);
+
+    // useEffect(() => {
+    //   setFishUnions(fishDetailList);
+    // }, [fishDetailList]);
+
+    // console.log(fishUnions);
+
+    
+        // const totalPrice = fishDetailList[0].totalPrice;
     return (
         <div>
+            <DetailAccordion fishDetailList={fishDetailList} />
+        </div>
+  );
+}
+
+
         {/* <Grid container direction="row" justifyContent="center" alignItems="stretch">
                 {fishDetailList.map((fishDetailList, i) => {
                     const { area, areaFrom, farmType, fishName, maxWeight, minWeight, price, serving, size } = fishDetailList.fishRecommendInfos[i];
@@ -91,11 +82,6 @@ export default function DetailCard({ fishDetailList }) {
                     )
                 })}
         </Grid> */}
-            <DetailPaper />
-                <Typography variant='h6' sx={{ mr: 5, mt: 3}} style={{ textAlign: 'end' }}>Total: {totalPrice}원</Typography>
-            {/* <DetailAccordion /> */}
-    </div>
-  );
-}
+            {/* <DetailPaper /> */}
 
 
