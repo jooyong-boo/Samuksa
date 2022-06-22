@@ -77,16 +77,16 @@ const DetailAccordion = ({fishDetailList}) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.map((row) => (
+                                {fishRecommendInfos.map((fishRecommendInfo, i) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={i}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >   
-                                    <TableCell component="th" scope="row">{row.name}<Img alt="complex" src={image} /></TableCell>
-                                    <TableCell>{row.calories}</TableCell>
-                                    <TableCell>{row.fat}</TableCell>
-                                    <TableCell>{row.carbs}</TableCell>
-                                    <TableCell>{row.protein}</TableCell>
+                                    <TableCell component="th" scope="row">{fishRecommendInfo.fishName}<Img alt="complex" src={image} /></TableCell>
+                                    <TableCell>{fishRecommendInfo.serving}</TableCell>
+                                    <TableCell>{fishRecommendInfo.minWeight}~{fishRecommendInfo.maxWeight}</TableCell>
+                                    <TableCell>{fishRecommendInfo.areaFrom}</TableCell>
+                                    <TableCell>{fishRecommendInfo.price}</TableCell>
                                 </TableRow>
                                 ))}
                             </TableBody>
