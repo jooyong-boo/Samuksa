@@ -5,21 +5,6 @@ import Paper from '@mui/material/Paper';
 import image from '../img/contemplative-reptile.jpeg';
 import styled from 'styled-components';
 import DetailPaper from './DetailPaper';
-import { useRecoilValue } from 'recoil';
-import { fishDataState, fishRecommendUnions } from '../store/atom';
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-
-const rows = [
-    createData('광어', 2, '2~3', '국산(양식)', 20000),
-    createData('우럭', 1, '1~1.5', '국산(양식)', 20000),
-    createData('참돔', 2, '2~3', '국산(양식)', 20000),
-    createData('숭어', 1, '1~2', '국산(양식)', 20000),
-    createData('연어', 1, '1~3', '유럽산(자연)', 20000),
-];
 
 const Img = styled('img')({
     margin: '0',
@@ -29,7 +14,7 @@ const Img = styled('img')({
 });
 
 
-const DetailAccordion = ({fishDetailList}) => {
+const DetailAccordion = ({ fishDetailList }) => {
     const [expanded, setExpanded] = useState(false);
   
     const handleChange = panel => (event, isExpanded) => {
@@ -38,22 +23,20 @@ const DetailAccordion = ({fishDetailList}) => {
       setExpanded(isExpanded ? panel : false);
     };
 
-    console.log(fishDetailList);
+    // console.log(fishDetailList);
 
     return (
       <div>
-        <DetailPaper />
           {fishDetailList.map((fishDetail, i) => {
             const {combinationName, fishRecommendInfos, totalPrice} = fishDetail;
-            console.log(combinationName, fishRecommendInfos, totalPrice)
             return (
-              <div>
+              <div key={i}>
+                <DetailPaper fishRecommendInfos={fishRecommendInfos} />
                 <Accordion
                   expanded={expanded === i}
-                  key={i}
                   onChange={handleChange(i)}
-                  style={{ marginTop: 0 , marginBottom: 10, marginRight: 10, marginLeft: 10, border: '1px solid black', borderRadius: '5px', backgroundColor: '#47B5FF' }}
-                  variant="contained"
+                  style={{ marginTop: 0 , marginBottom: 10, border: '1px solid black', borderRadius: '5px', backgroundColor: '#47B5FF' }}
+                  // variant="contained"
                 >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
@@ -77,22 +60,25 @@ const DetailAccordion = ({fishDetailList}) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {fishRecommendInfos.map((fishRecommendInfo, i) => (
-                                <TableRow
-                                    key={i}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >   
-                                    <TableCell component="th" scope="row">{fishRecommendInfo.fishName}<Img alt="complex" src={image} /></TableCell>
-                                    <TableCell>{fishRecommendInfo.serving}</TableCell>
-                                    <TableCell>{fishRecommendInfo.minWeight}~{fishRecommendInfo.maxWeight}</TableCell>
-                                    <TableCell>{fishRecommendInfo.areaFrom}</TableCell>
-                                    <TableCell>{fishRecommendInfo.price}</TableCell>
-                                </TableRow>
-                                ))}
+                                {fishRecommendInfos.map((fishRecommendInfo, i) => {
+                                  const { fishName, serving, minWeight, maxWeight, areaFrom, price } = fishRecommendInfo;
+                                  return (
+                                    <TableRow
+                                        key={i}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >   
+                                        <TableCell component="th" scope="row">{fishName}<Img alt="complex" src={image} /></TableCell>
+                                        <TableCell>{serving}</TableCell>
+                                        <TableCell>{minWeight/1000}~{maxWeight/1000}kg</TableCell>
+                                        <TableCell>{areaFrom}</TableCell>
+                                        <TableCell>{price.toLocaleString('ko-KR')}원</TableCell>
+                                    </TableRow>
+                                  )
+                                })}
                             </TableBody>
                             </Table>
                         </TableContainer>
-                          <Typography variant='h6' sx={{ mr: 5, mt: 3}} style={{ textAlign: 'end' }}>Total: {totalPrice}원</Typography>
+                          <Typography variant='h6' sx={{ mr: 5, mt: 3}} style={{ textAlign: 'end' }}>Total: {totalPrice.toLocaleString('ko-KR')}원</Typography>
                     </div>
                   </AccordionDetails>
                 </Accordion>

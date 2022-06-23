@@ -2,7 +2,6 @@ import React from 'react';
 import { Paper, Grid, ButtonBase, Typography } from '@mui/material';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
-import DetailAccordion from './DetailAccordion';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -11,54 +10,60 @@ const Img = styled('img')({
     maxHeight: '100%',
   });
 
-const DetailPaper = () => {
+const DetailPaper = ({ fishRecommendInfos }) => {
     return (
         <div>
-            <Paper
-            sx={{
-                p: 2,
-                margin: 'auto',
-                maxWidth: 800,
-                flexGrow: 1,
-                // backgroundColor: (theme) =>
-                // theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-                marginBottom: '10px',
-                backgroundColor: '#F8F8F8',
-            }}
-            >
-                <Grid container spacing={6}>
-                    <Grid item>
-                    <ButtonBase sx={{ width: 128, height: 128 }}>
-                        <Img alt="complex" src={image} />
-                    </ButtonBase>
-                    </Grid>
-                    <Grid item xs={6} sm container>
-                    <Grid item xs container direction="column" spacing={2}>
-                        <Grid item xs>
-                        <Typography gutterBottom variant="subtitle1" component="div">
-                            Standard license
-                        </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            Full resolution 1920x1080 • JPEG
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            ID: 1030114
-                        </Typography>
+            {fishRecommendInfos.map((fishRecommendInfo, i) => {
+                const { area, areaFrom, farmType, fishName, price, size, minWeight, maxWeight } = fishRecommendInfo;
+                return (
+                    <Paper
+                        key={i}
+                        sx={{
+                            p: 2,
+                            margin: 'auto',
+                            maxWidth: 1200,
+                            flexGrow: 1,
+                            // backgroundColor: (theme) =>
+                            // theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                            marginBottom: '10px',
+                            backgroundColor: '#F8F8F8',
+                        }}
+                    >
+                        <Grid container spacing={6}>
+                            <Grid item>
+                            <ButtonBase sx={{ width: 128, height: 128 }}>
+                                <Img alt="complex" src={image} />
+                            </ButtonBase>
+                            </Grid>
+                            <Grid item xs={6} sm container>
+                            <Grid item xs container direction="column" spacing={2}>
+                                <Grid item xs>
+                                <Typography gutterBottom variant="subtitle1" component="div">
+                                    {fishName}({size})
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                    {areaFrom}({farmType})
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    {area}
+                                </Typography>
+                                </Grid>
+                                <Grid item>
+                                <Typography sx={{ cursor: 'pointer' }} variant="body2">
+                                    중량: {minWeight/ 1000}~{maxWeight/1000}kg
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                {price.toLocaleString('ko-KR')}원
+                                </Typography>
+                                </Grid>
+                            </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                        <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                            Remove
-                        </Typography>
-                        <Typography variant="subtitle1">
-                        $19.00
-                        </Typography>
-                        </Grid>
-                    </Grid>
-                    </Grid>
-                </Grid>
-            </Paper>
+                    </Paper>
+                )   
+            })}
         </div>
-    );
+    )
 };
 
 export default DetailPaper;

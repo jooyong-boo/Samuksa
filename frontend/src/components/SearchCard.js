@@ -37,7 +37,7 @@ function SearchCard() {
     console.log(fishData)
     
     return (
-      <div>
+      <div style={{ height: '100vw' }}>
         <SearchTopBanner>{recommendUnionCount}개의 추천 목록이 있고 총 {recommendTotalCount}개의 조합이 있어요 </SearchTopBanner>
         <Typography sx={{ textAlign: 'center' }}>{recommendTotalCount}개의 조합이 있어요.</Typography>
         {fishList.map((fishList, i) => {
@@ -49,7 +49,7 @@ function SearchCard() {
               expanded={expanded === i}
               key={i}
               onChange={handleChange(i)}
-              style={{ marginTop: 0 , marginBottom: 10, marginRight: 10, marginLeft: 10, border: '1px solid black', borderRadius: '5px', backgroundColor: '#47B5FF' }}
+              style={{ marginTop: 0 , marginBottom: 10, marginRight: 10, marginLeft: 10, border: '1px solid black', borderRadius: '5px', backgroundColor: '#DFF6FF' }}
               variant="contained"
             >
               <AccordionSummary
