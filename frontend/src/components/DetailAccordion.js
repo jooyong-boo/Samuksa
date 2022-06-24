@@ -31,7 +31,6 @@ const DetailAccordion = ({ fishDetailList }) => {
             const {combinationName, fishRecommendInfos, totalPrice} = fishDetail;
             return (
               <div key={i}>
-                <DetailPaper fishRecommendInfos={fishRecommendInfos} />
                 <Accordion
                   expanded={expanded === i}
                   onChange={handleChange(i)}
@@ -82,6 +81,7 @@ const DetailAccordion = ({ fishDetailList }) => {
                     </div>
                   </AccordionDetails>
                 </Accordion>
+                <DetailPaper fishRecommendInfos={fishRecommendInfos} />
               </div>
             )
           })}

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Paper, Grid, ButtonBase, Typography } from '@mui/material';
+import { Paper, Grid, ButtonBase, Typography, Button } from '@mui/material';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
+import { useNavigate } from 'react-router-dom';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -11,6 +12,13 @@ const Img = styled('img')({
   });
 
 const DetailPaper = ({ fishRecommendInfos }) => {
+    const navigate = useNavigate();
+
+    const onClick = (e) => {
+        e.preventDefault();
+        navigate('/detail');
+    };
+
     return (
         <div>
             {fishRecommendInfos.map((fishRecommendInfo, i) => {
@@ -62,6 +70,7 @@ const DetailPaper = ({ fishRecommendInfos }) => {
                     </Paper>
                 )   
             })}
+            <Button variant='contained' onClick={onClick}>자세히 보기</Button>
         </div>
     )
 };

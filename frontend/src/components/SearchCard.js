@@ -15,7 +15,7 @@ const SearchTopBanner = styled.div`
   justify-content: center;
   flex-direction: column;
   color: red;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 
 function SearchCard() {
