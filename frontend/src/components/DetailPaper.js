@@ -3,6 +3,8 @@ import { Paper, Grid, ButtonBase, Typography, Button } from '@mui/material';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { fishDetailRecommendInfo } from '../store/atom';
 
 const Img = styled('img')({
     margin: 'auto',
@@ -12,17 +14,21 @@ const Img = styled('img')({
   });
 
 const DetailPaper = ({ fishRecommendInfos }) => {
+    const setFishRecommendInfos = useSetRecoilState(fishDetailRecommendInfo);
     const navigate = useNavigate();
 
     const onClick = (e) => {
         e.preventDefault();
+        setFishRecommendInfos(fishRecommendInfos);
         navigate('/detail');
     };
+
 
     return (
         <div>
             {fishRecommendInfos.map((fishRecommendInfo, i) => {
                 const { area, areaFrom, farmType, fishName, price, size, minWeight, maxWeight } = fishRecommendInfo;
+                {/* setFishRecommendInfos(fishRecommendInfo); */}
                 return (
                     <Paper
                         key={i}

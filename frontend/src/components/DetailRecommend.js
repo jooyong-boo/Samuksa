@@ -1,21 +1,36 @@
-import { Accordion, AccordionSummary, AccordionDetails, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button } from '@mui/material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { fishDetailRecommendInfo } from '../store/atom';
 
 const DetailRecommend = () => {
+    const navigate = useNavigate();
+
+    const onClick = (e) => {
+        e.preventDefault();
+        navigate('/search');
+    };
+
+    const DetailRecommend = useRecoilValue(fishDetailRecommendInfo);
+    console.log(DetailRecommend);
     return (
         <div>
             <TableContainer component={Paper}>
                 <Table>
-                    <TableRow>
-                        <TableCell variant="head">Header 1</TableCell>
-                        <TableCell>Cell 1</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell variant="head">Header 1</TableCell>
-                        <TableCell>Cell 2</TableCell>
-                    </TableRow>
+                    <TableBody>
+                        <TableRow>
+                            <TableCell variant="head">Header 1</TableCell>
+                            <TableCell>Cell 1</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell variant="head">Header 1</TableCell>
+                            <TableCell>Cell 2</TableCell>
+                        </TableRow>
+                    </TableBody>
                 </Table>
             </TableContainer>
+            <Button variant='contained' onClick={onClick}>뒤로가기</Button>
         </div>
     );
 };
