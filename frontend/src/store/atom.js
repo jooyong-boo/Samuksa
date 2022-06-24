@@ -19,8 +19,8 @@ export const areaState = atom({
   });
 // ==========================
 
-export const fishRecommendUnions = atom({
-  key: 'fishRecommendUnions',
+export const fishDetailRecommendInfo = atom({
+  key: 'fishDetailRecommendInfo',
   default: [],
 });
 
