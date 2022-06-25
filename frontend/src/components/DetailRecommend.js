@@ -7,30 +7,55 @@ import { fishDetailRecommendInfo } from '../store/atom';
 const DetailRecommend = () => {
     const navigate = useNavigate();
 
-    const onClick = (e) => {
+    const onBack = (e) => {
         e.preventDefault();
         navigate('/search');
     };
 
-    const DetailRecommend = useRecoilValue(fishDetailRecommendInfo);
-    console.log(DetailRecommend);
+    const detailRecommends = useRecoilValue(fishDetailRecommendInfo);
+    console.log(detailRecommends);
     return (
         <div>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableBody>
-                        <TableRow>
-                            <TableCell variant="head">Header 1</TableCell>
-                            <TableCell>Cell 1</TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell variant="head">Header 1</TableCell>
-                            <TableCell>Cell 2</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Button variant='contained' onClick={onClick}>뒤로가기</Button>
+            {detailRecommends.map((detailRecommend, i) =>{
+                const { fishName, area, areaFrom, farmType, size, maxWeight, minWeight, serving, price } = detailRecommend;
+                console.log(detailRecommend);
+                return (
+                    <div>
+                    <Typography>{i + 1}번째</Typography>
+                    <TableContainer component={Paper} key={i} sx={{ border: '1px solid black', marginBottom: '3rem' }}>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell variant="head">이름</TableCell>
+                                    <TableCell>{fishName}({size})</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">가격</TableCell>
+                                    <TableCell>{price}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">수량</TableCell>
+                                    <TableCell>{serving}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">원산지</TableCell>
+                                    <TableCell>{areaFrom}({farmType})</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">중량</TableCell>
+                                    <TableCell>{minWeight/1000}~{maxWeight/1000}kg</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell variant="head">위치</TableCell>
+                                    <TableCell>{area}</TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    </div>
+                )
+            })}
+            <Button variant='contained' onClick={onBack}>뒤로가기</Button>
         </div>
     );
 };

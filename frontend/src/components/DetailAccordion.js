@@ -43,7 +43,7 @@ const DetailAccordion = ({ fishDetailList }) => {
                     id="panel1bh-header"
                     // sx={{ height: '48px' }}
                   >
-                    <Typography>{i + 1}순위 {Object.keys(combinationName)}</Typography>
+                    <Typography>{i + 1}순위 {combinationName}</Typography>
                   </AccordionSummary>
                   <AccordionDetails sx={{ backgroundColor: 'white', borderTop: '1px solid black', borderRadius: '4px'}}>
                     <div>

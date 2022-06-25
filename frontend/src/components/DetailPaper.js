@@ -28,7 +28,6 @@ const DetailPaper = ({ fishRecommendInfos }) => {
         <div>
             {fishRecommendInfos.map((fishRecommendInfo, i) => {
                 const { area, areaFrom, farmType, fishName, price, size, minWeight, maxWeight } = fishRecommendInfo;
-                {/* setFishRecommendInfos(fishRecommendInfo); */}
                 return (
                     <Paper
                         key={i}
