@@ -10,22 +10,23 @@ import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { useNavigate } from 'react-router-dom';
+import Logo from '../img/SAMUKSA.png';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+// const pages = ['Products', 'Pricing', 'Blog'];
 
 const Header = () => {
 
     const navigate = useNavigate();
 
-    const [anchorElNav, setAnchorElNav] = useState(null);
+    // const [anchorElNav, setAnchorElNav] = useState(null);
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-        };
+    // const handleOpenNavMenu = (event) => {
+    //     setAnchorElNav(event.currentTarget);
+    //     };
     
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
+    // const handleCloseNavMenu = () => {
+    //     setAnchorElNav(null);
+    // };
 
     const goMain = () => {
         navigate('/');
@@ -33,66 +34,33 @@ const Header = () => {
 
     return (
         <AppBar position="sticky">
-        <Container maxWidth="xl">
-            <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex' } }}>
-                <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-                >
-                <MenuIcon />
-                </IconButton>
-                <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
-                sx={{
-                    display: { xs: 'block', md: 'none' },
-                }}
-                >
-                {pages.map((page) => (
-                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                    </MenuItem>
-                ))}
-                </Menu>
-            </Box>
-            <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1 }} />
-            <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                onClick={goMain}
-                sx={{
-                mr: 2,
-                display: { xs: 'flex' },
-                flexGrow: 1,
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                }}
-            >
-                Samuksa
-            </Typography>
-            </Toolbar>
-        </Container>
+            <Container maxWidth="xl" sx={{ backgroundColor: 'white', maxWidth: '1200px' }}>
+                <Toolbar disableGutters>
+                    <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2rem' }} />
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        component="a"
+                        onClick={goMain}
+                        sx={{
+                        mr: 2,
+                        display: { xs: 'flex' },
+                        flexGrow: 1,
+                        fontFamily: 'sans-serif',
+                        fontWeight: 900,
+                        color: '#6EA5F8',
+                        textDecoration: 'none',
+                        cursor: 'pointer',
+                        fontSize: '2rem'
+                        }}
+                    >
+                        Samuksa
+                    </Typography>
+                    {/* <img src={Logo} alt="logo" style={{ display: 'flex', cursor: 'pointer', flexWrap: 'nowrap'}}/> */}
+                    <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2 }}>수산물 계산기</Typography>
+                    <Typography variant='button' sx={{ color: '#7a7a7a' }}>시세 검색</Typography>
+                </Toolbar>
+            </Container>
         </AppBar>
     )
 }

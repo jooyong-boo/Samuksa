@@ -63,7 +63,7 @@ const DetailPaper = ({ fishRecommendInfos }) => {
                                 </Grid>
                                 <Grid item>
                                 <Typography sx={{ cursor: 'pointer' }} variant="body2">
-                                    중량: {minWeight/ 1000}~{maxWeight/1000}kg
+                                    중량: {minWeight / 1000}~{maxWeight / 1000}kg
                                 </Typography>
                                 <Typography variant="subtitle1">
                                 {price.toLocaleString('ko-KR')}원
