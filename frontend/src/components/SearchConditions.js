@@ -1,0 +1,170 @@
+import React from 'react';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import styled from 'styled-components';
+import { Container } from '@mui/system';
+import { useRecoilState } from 'recoil';
+import { areaState, moneyState, personNumState } from '../store/atom';
+import { useNavigate } from 'react-router-dom';
+
+const Card = styled.div`
+    background-color: white;
+    width: 300px;
+    height: 500px;
+    border-radius: 5px;
+    /* border: 1px solid black; */
+`
+
+const Background = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #ebecee;
+    padding: 30px 100px;
+    /* box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
+    transform: translate3d(0, 0, 0); */
+`;
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 100,
+    },
+  },
+};
+
+const Area = ['노량진', '가락', '강서', '마포', '서울', '구리', '수원', '평촌', '경기', '소래포구', '연안부두', '인천', '강원', '경상', '부산', '울산', '충청', '대전', '전라', '광주', '제주'];
+
+const SearchConditions = () => {
+
+    const navigate = useNavigate();
+
+    const [personNum, setPersonNum] = useRecoilState(personNumState);
+    const [money, setMoney] = useRecoilState(moneyState);
+    const [area, setArea] = useRecoilState(areaState);
+
+    const handlePersonNumChange = (e) => {
+        setPersonNum(e.target.value);
+        if (e.target.value < 0) {
+            alert('인원은 1 이상으로 해주세요');
+            setPersonNum('1');
+        } else if (e.target.value > 3) {
+            alert('인원은 10 이하로 해주세요');
+            setPersonNum('10');
+        }
+    }
+
+    const handleMoneyChange = (e) => {
+        setMoney(e.target.value)
+    }
+
+    const onClick = (e) => {
+        if (money < 5000) {
+            e.preventDefault();
+            alert('가격은 5000이상으로 해주세요');
+            // setMoney(5000)
+            return;
+        }
+        if (personNum <= 0) {
+            e.preventDefault();
+            alert('인원은 1 이상으로 해주세요');
+            // setPersonNum('1');
+            return;
+        }
+    }
+
+    const onInit = (e) => {
+        e.preventDefault();
+        setMoney(5000);
+        setPersonNum(1);
+    }
+    console.log(area)
+
+
+    const onSubmit = (e) => {
+            e.preventDefault();
+            // navigate('/search');
+    }
+
+    return (
+        // <Paper
+        //     sx={{
+        //         p: 2,
+        //         margin: 'auto',
+        //         maxWidth: 1200,
+        //         maxHeight: 500,
+        //         flexGrow: 1,
+        //         // backgroundColor: (theme) =>
+        //         // theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+        //         marginBottom: '10px',
+        //         backgroundColor: 'skyblue',
+        //     }}
+        // >
+            
+        // </Paper>
+        <Background>
+            <Card>
+                <Typography sx={{ padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
+                <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
+                <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <Grid container spacing={5} justifyContent="center" alignItems="center">
+                        <Grid item xs={12}>
+                            <TextField 
+                                id="outlined-basic" 
+                                label="인원수" 
+                                type="number"
+                                variant="outlined" 
+                                value={personNum}
+                                onChange={handlePersonNumChange} 
+                                // required 
+                                autoFocus    
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                id="outlined-basic"
+                                label="예산" 
+                                type="number"
+                                variant="outlined" 
+                                value={money}
+                                onChange={handleMoneyChange} 
+                                // required
+                                fullWidth
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id="local">지역</InputLabel>
+                                <Select
+                                    labelId="local"
+                                    label="local"
+                                    defaultValue={'노량진'}
+                                    value={area}
+                                    onChange={(e) => {setArea(e.target.value)}}
+                                    MenuProps={MenuProps}
+                                    fullWidth
+                                    // required
+                                >
+                                    {Area.map((a, i) => (
+                                        <MenuItem key={i} value={a}>{a}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                        <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%'}} onClick={onClick}>검색</Button>
+                        <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px' }}>초기화</Button>
+                    </div>
+                </form>
+            </Container>
+            </Card>
+        </Background>
+    );
+};
+
+export default SearchConditions;

@@ -5,6 +5,7 @@ import DetailCard from './DetailCard';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { fishDataState, fishRecommendUnions } from '../store/atom';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const SearchTopBanner = styled.div`
   display: flex;
@@ -21,11 +22,17 @@ const SearchTopBanner = styled.div`
 function SearchCard() {
     const [expanded, setExpanded] = useState(false);
     const fishData = useRecoilValue(fishDataState)
+    const navigate = useNavigate();
   
     const handleChange = panel => (event, isExpanded) => {
       // console.log(panel)
       // console.log(isExpanded)
       setExpanded(isExpanded ? panel : false);
+    };
+
+    const goBack = (e) => {
+      e.preventDefault();
+      navigate('/');
     };
     
     // const total = fishData.recommendTotalCount; // recommendCount
@@ -42,7 +49,6 @@ function SearchCard() {
         <Typography sx={{ textAlign: 'center' }}>{recommendTotalCount}개의 조합이 있어요.</Typography>
         {fishList.map((fishList, i) => {
           const { combinationName, combinationSize, fishRecommendCombinations } = fishList;
-          {/* console.log(fishRecommendCombinations); */}
           const fishDetailList = fishRecommendCombinations;
           return (
             <Accordion
@@ -71,6 +77,7 @@ function SearchCard() {
         })}
         {/* <Button variant="contained" sx={{ margin: 'auto', display: 'block', marginTop: '1rem' }}>더보기(예정)</Button> */}
         {fishList.length > 5 ? <Button variant="contained" sx={{ margin: 'auto', display: 'block', marginTop: '1rem' }}>더보기(예정)</Button> : null }
+        {fishList.length > 5 ? <Button variant="contained" sx={{ margin: 'auto', display: 'block', marginTop: '1rem' }} onClick={goBack}>뒤로가기</Button> : null }
       </div>
     );
   }

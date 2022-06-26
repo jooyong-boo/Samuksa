@@ -14,7 +14,7 @@ const Background = styled.div`
     height: 100%;
     position: relative;
     overflow: hidden;
-    background-color: white;
+    background-color: #ebecee;
     box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
     transform: translate3d(0, 0, 0);
 `;
@@ -43,13 +43,13 @@ const Wave1 = styled.div`
   top: 80%;
   width: 6500px;
   height: 198px;
-  animation: ${Wave} 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
+  animation: ${Wave} 6s cubic-bezier( 0.36, 0.45, 0.63, 0.53) infinite;
   transform: translate3d(0, 0, 0);
 `;
 
 const Wave2 = styled(Wave1)`
     top: 85%;
-    animation: ${Wave} 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, ${Swell} 7s ease -1.25s infinite;
+    animation: ${Wave} 6s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, ${Swell} 7s ease -1.25s infinite;
     opacity: 1;
 `;
 
@@ -80,7 +80,7 @@ const Main = () => {
         if (e.target.value < 0) {
             alert('인원은 1 이상으로 해주세요');
             setPersonNum('1');
-        } else if (e.target.value > 10) {
+        } else if (e.target.value > 4) {
             alert('인원은 10 이하로 해주세요');
             setPersonNum('10');
         }
@@ -104,6 +104,7 @@ const Main = () => {
             return;
         }
     }
+    console.log(area)
 
 
     const onSubmit = (e) => {
