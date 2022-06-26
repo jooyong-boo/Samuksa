@@ -2,12 +2,11 @@ package com.samuksa.controller;
 
 import com.samuksa.dto.fish.info.FishInfo;
 import com.samuksa.dto.fish.price.FishPrice;
-import com.samuksa.dto.fish.price.FishPriceRequest;
 import com.samuksa.dto.fish.recommend.recommendRequest.FishRecommendRequest;
 import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendResponse;
 import com.samuksa.service.FishService;
-import com.samuksa.service.Responsetest;
 import com.samuksa.service.SchedulerService;
+import com.samuksa.service.fishrecommend.FishRecommendService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +35,13 @@ public class FishController {
             @ApiImplicitParam(name = "money", value = "money", required = true, dataType = "int", paramType = "query", defaultValue = "600000"),
             @ApiImplicitParam(name = "person_number", value = "person_number", required = true, dataType = "int", paramType = "query", defaultValue = "12")
     })
+
     @ApiOperation(value = "테스트용 더미 데이터 조회", response = FishRecommendResponse.class)
     public FishRecommendResponse getDummy(@RequestParam(name = "person_number") int personNum, @RequestParam(name = "money") int money, @RequestParam(name = "area") String area) {
+        List<FishPrice> fishPrices = fishService.selectAllTodayFishPrice();
         FishRecommendRequest fishRecommendRequest = new FishRecommendRequest(personNum, money, area);
-        Responsetest responsetest = new Responsetest(fishRecommendRequest);
-
-        return responsetest.get();
+        FishRecommendService fishRecommendService = new FishRecommendService(fishPrices,fishRecommendRequest);
+        return fishRecommendService.getFishRecommendResponse();
     }
 
     @PostMapping("/data")
