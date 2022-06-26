@@ -34,7 +34,7 @@ const Header = () => {
 
     return (
         <AppBar position="sticky">
-            <Container maxWidth="xl" sx={{ backgroundColor: 'white', maxWidth: '1200px' }}>
+            <Container maxWidth="xl" sx={{ backgroundColor: 'white', maxWidth: '3000px' }}>
                 <Toolbar disableGutters>
                     <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2rem' }} />
                     <Typography

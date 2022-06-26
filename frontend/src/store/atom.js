@@ -5,7 +5,7 @@ import { getFishRecommendData } from '../api/auth';
 // 메인페이지 입력값들 =============
 export const personNumState = atom ({
   key: 'personNumState',
-  default: 5,
+  default: 1,
 });
 
 export const moneyState = atom ({

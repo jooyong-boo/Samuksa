@@ -1,4 +1,4 @@
-import { ButtonBase, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, ButtonBase, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
@@ -9,6 +9,7 @@ const Card = styled.div`
     width: 560px;
     height: 460px;
     border-radius: 5px;
+    margin: 30px 100px;
     /* border-bottom: '1px solid #EAEAEA'; */
     /* border: 1px solid black; */
 `
@@ -19,7 +20,7 @@ const Background = styled.div`
     position: relative;
     overflow: hidden;
     background-color: #ebecee;
-    padding: 30px 100px;
+    /* padding: 30px 100px; */
     /* box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
     transform: translate3d(0, 0, 0); */
 `;
@@ -54,6 +55,7 @@ const DetailedSearchConditions = () => {
                                 p: 2,
                                 margin: 'auto',
                                 maxWidth: 1200,
+                                maxHeight: 700,
                                 flexGrow: 1,
                                 backgroundColor: '#F8F8F8',
                                 padding: 0,
@@ -66,14 +68,23 @@ const DetailedSearchConditions = () => {
                                     bgcolor: 'background.paper',
                                     // position: 'relative',
                                     overflow: 'auto',
-                                    maxHeight: 300,
+                                    maxHeight: 374,
                                 }}
                                 subheader={<li />}
                                 >
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 22].map((item, i) => (
-                                <ListItem key={i}>
-                                    <ListItemText primary={`Item ${item}`} />
-                                </ListItem>
+                                {[0, 1, 2, 3, 4, 5].map((item, i) => (
+                                <div style={{ display: 'flex', backgroundColor: '#F4F4F4' }} key={i}>
+                                    <ListItemAvatar sx={{ marginTop: '15px', marginLeft: '15px' }}>
+                                        <Avatar
+                                        // alt={`Avatar n°${value + 1}`}
+                                        src={image}
+                                        variant= 'square'
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItem key={i}>
+                                        <ListItemText primary={`광어`} secondary={`수율(30%)`} />
+                                    </ListItem>
+                                </div>
                                 ))}
                             </List>
                             {/* <Grid container spacing={6}>
