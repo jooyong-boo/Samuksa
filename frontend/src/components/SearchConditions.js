@@ -11,16 +11,17 @@ const Card = styled.div`
     width: 300px;
     height: 500px;
     border-radius: 5px;
+    margin: 30px 100px;
     /* border: 1px solid black; */
 `
 
 const Background = styled.div`
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     position: relative;
     overflow: hidden;
     background-color: #ebecee;
-    padding: 30px 100px;
+    /* padding: 30px 100px; */
     /* box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
     transform: translate3d(0, 0, 0); */
 `;
@@ -52,8 +53,8 @@ const SearchConditions = () => {
             alert('인원은 1 이상으로 해주세요');
             setPersonNum('1');
         } else if (e.target.value > 3) {
-            alert('인원은 10 이하로 해주세요');
-            setPersonNum('10');
+            alert('인원은 3 이하로 해주세요');
+            setPersonNum('3');
         }
     }
 

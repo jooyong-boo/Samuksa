@@ -81,8 +81,8 @@ const Main = () => {
             alert('인원은 1 이상으로 해주세요');
             setPersonNum('1');
         } else if (e.target.value > 4) {
-            alert('인원은 10 이하로 해주세요');
-            setPersonNum('10');
+            alert('인원은 3 이하로 해주세요');
+            setPersonNum('3');
         }
     }
 
