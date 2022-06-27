@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import DetailedSearchConditions from '../components/DetailedSearchConditions';
 import Header from '../components/Header';
 import SearchConditions from '../components/SearchConditions';
+import SelectedConditionList from '../components/SelectedConditionList';
 
 const Background = styled.div`
     background-color: white;
@@ -16,6 +17,7 @@ const TestPage = () => {
             <Header />
             <SearchConditions />
             <DetailedSearchConditions />
+            <SelectedConditionList />
         </Background>
     );
 };
