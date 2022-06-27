@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Card = styled.div`
     background-color: white;
-    width: 300px;
-    height: 500px;
+    width: 295px;
+    height: 464px;
     border-radius: 5px;
     margin: 30px 100px;
     /* border: 1px solid black; */
@@ -108,61 +108,58 @@ const SearchConditions = () => {
         // </Paper>
         <Background>
             <Card>
-                <Typography sx={{ padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
+                <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
                 <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
-                <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Grid container spacing={5} justifyContent="center" alignItems="center">
-                        <Grid item xs={12}>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="인원수" 
-                                type="number"
-                                variant="outlined" 
-                                value={personNum}
-                                onChange={handlePersonNumChange} 
-                                // required 
-                                autoFocus    
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-basic"
-                                label="예산" 
-                                type="number"
-                                variant="outlined" 
-                                value={money}
-                                onChange={handleMoneyChange} 
-                                // required
-                                fullWidth
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl fullWidth>
-                                <InputLabel id="local">지역</InputLabel>
-                                <Select
-                                    labelId="local"
-                                    label="local"
-                                    defaultValue={'노량진'}
-                                    value={area}
-                                    onChange={(e) => {setArea(e.target.value)}}
-                                    MenuProps={MenuProps}
+                    <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <Grid container spacing={5} justifyContent="center" alignItems="center">
+                            <Grid item xs={11}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="인원수" 
+                                    type="number"
+                                    variant="outlined" 
+                                    value={personNum}
+                                    onChange={handlePersonNumChange} 
+                                    autoFocus    
                                     fullWidth
-                                    // required
-                                >
-                                    {Area.map((a, i) => (
-                                        <MenuItem key={i} value={a}>{a}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                />
+                            </Grid>
+                            <Grid item xs={11}>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="예산" 
+                                    type="number"
+                                    variant="outlined" 
+                                    value={money}
+                                    onChange={handleMoneyChange} 
+                                    fullWidth
+                                />
+                            </Grid>
+                            <Grid item xs={11}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="local">지역</InputLabel>
+                                    <Select
+                                        labelId="local"
+                                        label="local"
+                                        defaultValue={'노량진'}
+                                        value={area}
+                                        onChange={(e) => {setArea(e.target.value)}}
+                                        MenuProps={MenuProps}
+                                        fullWidth
+                                    >
+                                        {Area.map((a, i) => (
+                                            <MenuItem key={i} value={a}>{a}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                        <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%'}} onClick={onClick}>검색</Button>
-                        <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px' }}>초기화</Button>
-                    </div>
-                </form>
-            </Container>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%'}} onClick={onClick}>검색</Button>
+                            <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px' }}>초기화</Button>
+                        </div>
+                    </form>
+                </Container>
             </Card>
         </Background>
     );

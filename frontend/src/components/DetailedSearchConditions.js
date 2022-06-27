@@ -1,4 +1,4 @@
-import { Avatar, ButtonBase, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, Button, ButtonBase, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,10 +6,11 @@ import image from '../img/contemplative-reptile.jpeg';
 
 const Card = styled.div`
     background-color: white;
-    width: 560px;
-    height: 460px;
+    width: 570px;
+    height: 464px;
     border-radius: 5px;
     margin: 30px 100px;
+    border: 1px solid black;
     /* border-bottom: '1px solid #EAEAEA'; */
     /* border: 1px solid black; */
 `
@@ -32,24 +33,51 @@ const Img = styled('img')({
     maxHeight: '50px',
   });
 
+const serving = [
+    {
+        value: 1,
+        label: '1',
+    },
+    {
+        value: 33,
+        label: '2',
+    },
+    {
+        value: 66,
+        label: '3',
+    },
+    {
+        value: 100,
+        label: '무제한',
+    },
+];
+
+function valuetext(value) {
+    return `${value}인분`;
+}
+
+function valueLabelFormat(value) {
+    return serving.findIndex((serv) => serv.value === value) + 1;
+}
+
 const DetailedSearchConditions = () => {
     return (
         <Background>
             <Card>
-            <Typography sx={{ padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
+            <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex' }}>
-                <div style={{ width: '40%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA' }}>
-                    <FormControl fullWidth> 
+                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA' }}>
+                    <FormControl fullWidth sx={{ height: '46px' }}> 
                         <Input 
                             id="input-with-icon-adornment"
                             startAdornment={
-                                <InputAdornment position="start">
+                                // <InputAdornment position="start">
                                     <SearchIcon/>
-                                </InputAdornment>
+                                // </InputAdornment>
                             }
                         />
                     </FormControl>
-                    <div>
+                    <>
                         <Paper
                             sx={{
                                 p: 2,
@@ -66,27 +94,62 @@ const DetailedSearchConditions = () => {
                                     width: '100%',
                                     // maxWidth: 500,
                                     bgcolor: 'background.paper',
-                                    // position: 'relative',
-                                    overflow: 'auto',
-                                    maxHeight: 374,
+                                    position: 'relative',
+                                    overflow: 'scroll',
+                                    maxHeight: '300px',
                                 }}
                                 subheader={<li />}
                                 >
                                 {[0, 1, 2, 3, 4, 5].map((item, i) => (
-                                <div style={{ display: 'flex', backgroundColor: '#F4F4F4' }} key={i}>
-                                    <ListItemAvatar sx={{ marginTop: '15px', marginLeft: '15px' }}>
+                                <div style={{ display: 'flex', backgroundColor: 'white' }} key={i}>
+                                    <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                         <Avatar
                                         // alt={`Avatar n°${value + 1}`}
                                         src={image}
                                         variant= 'square'
+                                        style={{ height: '50px', width: '50px' }}
                                         />
                                     </ListItemAvatar>
-                                    <ListItem key={i}>
+                                    <ListItem key={i} sx={{ paddingLeft: 0 }}>
                                         <ListItemText primary={`광어`} secondary={`수율(30%)`} />
                                     </ListItem>
                                 </div>
                                 ))}
                             </List>
+                        </Paper>
+                    </>
+                </div>
+                <div style={{ width: '55%' }}>
+                    <div style={{ width: '70%', margin: 'auto', marginTop: '10%' }}>
+                        <Typography sx={{ textAlign: 'center' }}>분량</Typography>            
+                        <Slider
+                            aria-label="Custom marks"
+                            defaultValue={20}
+                            valueLabelFormat={valueLabelFormat}
+                            getAriaValueText={valuetext}
+                            step={null}
+                            valueLabelDisplay="auto"
+                            marks={serving}
+                        />
+                    </div>
+                    <div style={{ width: '80%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px' }}>
+                        <Typography variant='subtitle1'>양식 여부</Typography>
+                        <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
+
+                        <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>자연산</Typography>
+                        <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>양식</Typography>
+
+                        <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px'  }}>조건 추가하기</Button>
+                    </div>
+                </div>
+            </div>
+            </Card>
+        </Background>
+    );
+};
+
+export default DetailedSearchConditions;
+
                             {/* <Grid container spacing={6}>
                                 <Grid item>
                                 <ButtonBase sx={{ width: 50, height: 50 }}>
@@ -106,16 +169,3 @@ const DetailedSearchConditions = () => {
                                 </Grid>
                                 </Grid>
                             </Grid> */}
-                        </Paper>
-                    </div>
-                </div>
-                <div style={{ width: '60%' }}>
-                    123
-                </div>
-            </div>
-            </Card>
-        </Background>
-    );
-};
-
-export default DetailedSearchConditions;
