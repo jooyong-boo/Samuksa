@@ -32,8 +32,12 @@ const Header = () => {
         navigate('/');
     };
 
+    const goFishCal = () => {
+        navigate('/test');
+    }
+
     return (
-        <AppBar position="sticky">
+        <AppBar position="sticky" sx={{ boxShadow: 'none', border: '1px solid #D8D8D8' }}>
             <Container maxWidth="xl" sx={{ backgroundColor: 'white', maxWidth: '3000px' }}>
                 <Toolbar disableGutters>
                     <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2rem' }} />
@@ -57,7 +61,7 @@ const Header = () => {
                         Samuksa
                     </Typography>
                     {/* <img src={Logo} alt="logo" style={{ display: 'flex', cursor: 'pointer', flexWrap: 'nowrap'}}/> */}
-                    <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2 }}>수산물 계산기</Typography>
+                    <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2, cursor: 'pointer' }} onClick={goFishCal}>수산물 계산기</Typography>
                     <Typography variant='button' sx={{ color: '#7a7a7a' }}>시세 검색</Typography>
                 </Toolbar>
             </Container>

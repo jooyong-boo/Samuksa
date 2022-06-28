@@ -7,7 +7,7 @@ import image from '../img/contemplative-reptile.jpeg';
 const Card = styled.div`
     background-color: white;
     width: 570px;
-    height: 464px;
+    height: 500px;
     border-radius: 5px;
     margin: 30px 100px;
     border: 1px solid black;
@@ -67,7 +67,7 @@ const DetailedSearchConditions = () => {
             <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex' }}>
                 <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA' }}>
-                    <FormControl fullWidth sx={{ height: '46px' }}> 
+                    <FormControl fullWidth sx={{}}> 
                         <Input 
                             id="input-with-icon-adornment"
                             startAdornment={
@@ -96,12 +96,13 @@ const DetailedSearchConditions = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'scroll',
-                                    maxHeight: '300px',
+                                    maxHeight: 415,
+                                    borderBottom: '1px solid black'
                                 }}
                                 subheader={<li />}
                                 >
-                                {[0, 1, 2, 3, 4, 5].map((item, i) => (
-                                <div style={{ display: 'flex', backgroundColor: 'white' }} key={i}>
+                                {[0, 1, 2, 3, 4, 5, 6, 7].map((item, i) => (
+                                <div style={{ display: 'flex', backgroundColor: 'white', height: '100%' }} key={i}>
                                     <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                         <Avatar
                                         // alt={`Avatar n°${value + 1}`}
@@ -124,7 +125,7 @@ const DetailedSearchConditions = () => {
                         <Typography sx={{ textAlign: 'center' }}>분량</Typography>            
                         <Slider
                             aria-label="Custom marks"
-                            defaultValue={20}
+                            defaultValue={1}
                             valueLabelFormat={valueLabelFormat}
                             getAriaValueText={valuetext}
                             step={null}

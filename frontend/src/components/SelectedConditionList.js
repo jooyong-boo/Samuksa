@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonBase, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import { Avatar, Button, ButtonBase, CardActions, CardContent, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
@@ -9,9 +9,7 @@ const Card = styled.div`
     height: 464px;
     border-radius: 5px;
     margin: 30px 100px;
-    /* border: 1px solid black; */
-    /* border-bottom: '1px solid #EAEAEA'; */
-    /* border: 1px solid black; */
+    position: relative;
 `
 
 const Background = styled.div`
@@ -20,16 +18,15 @@ const Background = styled.div`
     position: relative;
     overflow: hidden;
     background-color: #ebecee;
-    /* padding: 30px 100px; */
-    /* box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
-    transform: translate3d(0, 0, 0); */
 `;
 
 const Img = styled('img')({
-    margin: 'auto',
+    // margin: '13px 13px 12px 16px ',
     display: 'block',
-    maxWidth: '50px',
-    maxHeight: '50px',
+    width: '50px',
+    height: '50px',
+    objectFit: 'cover',
+    padding: '9px 13px 11px 16px',
   });
 
 const SelectedConditionList = () => {
@@ -37,6 +34,24 @@ const SelectedConditionList = () => {
         <Background>
             <Card>
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F6F6F6'}}>
+                        <Img alt="complex" src={image} />
+                    <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: '9px 18px 16px 0' }}>
+                        <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
+                            우럭
+                            <Typography sx={{ fontSize: 13, color: '#A5A5A5' }}>
+                                (2~3인)
+                            </Typography>
+                        </Typography>
+                        <Typography sx={{ fontSize: 14, color: '#A5A5A5' }} color="text.secondary" gutterBottom>
+                            자연산, 양식
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8'}}>조건 삭제</Button>
+                    </CardActions>
+                </div>
+                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 12 , fontWeight: 900, width: '274px', bottom: '9px', left: '10px' }} >조합 검색</Button>
             </Card>
         </Background>
     );

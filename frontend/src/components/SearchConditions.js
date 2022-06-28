@@ -16,8 +16,8 @@ const Card = styled.div`
 `
 
 const Background = styled.div`
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     position: relative;
     overflow: hidden;
     background-color: #ebecee;
@@ -155,8 +155,8 @@ const SearchConditions = () => {
                             </Grid>
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%'}} onClick={onClick}>검색</Button>
-                            <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px' }}>초기화</Button>
+                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%', backgroundColor: '#0098EE', fontWeight: 900}} onClick={onClick}>검색</Button>
+                            <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                         </div>
                     </form>
                 </Container>
