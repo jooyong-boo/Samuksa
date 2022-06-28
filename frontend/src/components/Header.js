@@ -18,16 +18,6 @@ const Header = () => {
 
     const navigate = useNavigate();
 
-    // const [anchorElNav, setAnchorElNav] = useState(null);
-
-    // const handleOpenNavMenu = (event) => {
-    //     setAnchorElNav(event.currentTarget);
-    //     };
-    
-    // const handleCloseNavMenu = () => {
-    //     setAnchorElNav(null);
-    // };
-
     const goMain = () => {
         navigate('/');
     };
