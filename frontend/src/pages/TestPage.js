@@ -7,8 +7,8 @@ import SelectedConditionList from '../components/SelectedConditionList';
 
 const Background = styled.div`
     background-color: white;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 `
 
 const TestPage = () => {
