@@ -96,8 +96,9 @@ const DetailedSearchConditions = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'scroll',
-                                    maxHeight: 415,
-                                    borderBottom: '1px solid black'
+                                    maxHeight: 414,
+                                    // borderBottom: '1px solid black'
+                                    // border: 0,
                                 }}
                                 subheader={<li />}
                                 >
@@ -133,14 +134,14 @@ const DetailedSearchConditions = () => {
                             marks={serving}
                         />
                     </div>
-                    <div style={{ width: '80%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px' }}>
+                    <div style={{ width: '80%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
 
                         <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>자연산</Typography>
                         <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>양식</Typography>
 
-                        <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px'  }}>조건 추가하기</Button>
+                        <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -150  }}>조건 추가하기</Button>
                     </div>
                 </div>
             </div>
