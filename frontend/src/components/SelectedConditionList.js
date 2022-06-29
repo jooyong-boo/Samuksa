@@ -37,12 +37,14 @@ const SelectedConditionList = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F6F6F6'}}>
                         <Img alt="complex" src={image} />
                     <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: '9px 18px 16px 0' }}>
-                        <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
-                            우럭
+                        <div style={{ display: 'flex' }}>
+                            <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
+                                우럭
+                            </Typography>
                             <Typography sx={{ fontSize: 13, color: '#A5A5A5' }}>
                                 (2~3인)
                             </Typography>
-                        </Typography>
+                        </div>
                         <Typography sx={{ fontSize: 14, color: '#A5A5A5' }} color="text.secondary" gutterBottom>
                             자연산, 양식
                         </Typography>
