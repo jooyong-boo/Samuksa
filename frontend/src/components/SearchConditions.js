@@ -122,6 +122,7 @@ const SearchConditions = () => {
                                     onChange={handlePersonNumChange} 
                                     autoFocus    
                                     fullWidth
+                                    // size="small"
                                 />
                             </Grid>
                             <Grid item xs={11}>
@@ -133,6 +134,7 @@ const SearchConditions = () => {
                                     value={money}
                                     onChange={handleMoneyChange} 
                                     fullWidth
+                                    // size="small"
                                 />
                             </Grid>
                             <Grid item xs={11}>
@@ -146,6 +148,7 @@ const SearchConditions = () => {
                                         onChange={(e) => {setArea(e.target.value)}}
                                         MenuProps={MenuProps}
                                         fullWidth
+                                        // size="small"
                                     >
                                         {Area.map((a, i) => (
                                             <MenuItem key={i} value={a}>{a}</MenuItem>

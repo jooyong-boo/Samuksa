@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import image from '../img/contemplative-reptile.jpeg';
+import { useState } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -26,6 +27,17 @@ const Background = styled.div`
     /* padding: 30px 100px; */
     /* box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
     transform: translate3d(0, 0, 0); */
+`;
+
+const ListItemStyled = styled.div`
+    /* style={{ display: 'flex', backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }} */
+    display: flex;
+    background-color: white;
+    height: 100%;
+    border-bottom: 1px solid #F6F6F6;
+    &:hover {
+        background-color: #F4F4F4;
+    }
 `;
 
 const Img = styled('img')({
@@ -54,6 +66,20 @@ const serving = [
     },
 ];
 
+const dummy = 
+    [   { fishName: '광어', yield1: 50 },
+        { fishName: '숭어', yield1: 33 },
+        { fishName: '참돔', yield1: 22 }, 
+        { fishName: '우럭', yield1: 44 },
+        { fishName: '숭어', yield1: 33 },
+        { fishName: '참돔', yield1: 22 }, 
+        { fishName: '우럭', yield1: 44 },
+        { fishName: '숭어', yield1: 33 },
+        { fishName: '참돔', yield1: 22 }, 
+        { fishName: '우럭', yield1: 44 },
+    ]
+
+
 function valuetext(value) {
     return `${value}인분`;
 }
@@ -63,6 +89,29 @@ function valueLabelFormat(value) {
 }
 
 const DetailedSearchConditions = () => {
+    // console.log(dummy)
+
+    const [fish, setFish] = useState(dummy)
+
+    console.log(fish)
+
+    const onSearch = (e) => {
+        e.preventDefault()
+        let searchName = e.target.value;
+        console.log(searchName);
+        if (!searchName) {
+            setFish(dummy);
+        } else {
+            let result = dummy.filter(name => name.fishName === searchName);
+            setFish(result);
+        }
+        return;
+    }
+
+    //찾는 어종을 입력한다
+    //결과값을 변수에 할당한다
+    //결과값을 기준으로 map을 돌린다
+
     return (
         // <Background>
             <Card>
@@ -77,6 +126,10 @@ const DetailedSearchConditions = () => {
                                     <SearchIcon/>
                                 // </InputAdornment>
                             }
+                            type="string"
+                            defaultValue=""
+                            placeholder='찾는 어종을 입력하세요'
+                            onChange={onSearch}
                         />
                     </FormControl>
                     <>
@@ -104,21 +157,24 @@ const DetailedSearchConditions = () => {
                                 }}
                                 subheader={<li />}
                                 >
-                                {[0, 1, 2, 3, 4, 5, 6, 7].map((item, i) => (
-                                <div style={{ display: 'flex', backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }} key={i}>
-                                    <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
-                                        <Avatar
-                                        // alt={`Avatar n°${value + 1}`}
-                                        src={image}
-                                        variant= 'square'
-                                        style={{ height: '50px', width: '50px' }}
-                                        />
-                                    </ListItemAvatar>
-                                    <ListItem key={i} sx={{ paddingLeft: 0 }}>
-                                        <ListItemText primary={`광어`} secondary={`수율(30%)`} />
-                                    </ListItem>
-                                </div>
-                                ))}
+                                {fish.map((item, i) => {
+                                    const { fishName, yield1 } = item;
+                                    return (
+                                        <ListItemStyled key={i}>
+                                            <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
+                                                <Avatar
+                                                // alt={`Avatar n°${value + 1}`}
+                                                src={image}
+                                                variant= 'square'
+                                                style={{ height: '50px', width: '50px' }}
+                                                />
+                                            </ListItemAvatar>
+                                            <ListItem key={i} sx={{ paddingLeft: 0 }}>
+                                                <ListItemText primary={fishName} secondary={`(수율: ${yield1}%)`} />
+                                            </ListItem>
+                                        </ListItemStyled>
+                                    )
+                                })}
                             </List>
                         </Paper>
                     </>
