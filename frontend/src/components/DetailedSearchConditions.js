@@ -67,16 +67,17 @@ const serving = [
 ];
 
 const dummy = 
-    [   { fishName: '광어', yield1: 50 },
-        { fishName: '숭어', yield1: 33 },
-        { fishName: '참돔', yield1: 22 }, 
-        { fishName: '우럭', yield1: 44 },
-        { fishName: '숭어', yield1: 33 },
-        { fishName: '참돔', yield1: 22 }, 
-        { fishName: '우럭', yield1: 44 },
-        { fishName: '숭어', yield1: 33 },
-        { fishName: '참돔', yield1: 22 }, 
-        { fishName: '우럭', yield1: 44 },
+    [   
+        { key: 1, fishName: '광어', yield1: 50, active: false },
+        { key: 2, fishName: '숭어', yield1: 33, active: false },
+        { key: 3, fishName: '참돔', yield1: 22, active: false }, 
+        { key: 4, fishName: '우럭', yield1: 44, active: false },
+        { key: 5, fishName: '숭어', yield1: 33, active: false },
+        { key: 6, fishName: '참돔', yield1: 22, active: false }, 
+        { key: 7, fishName: '우럭', yield1: 44, active: false },
+        { key: 8, fishName: '숭어', yield1: 33, active: false },
+        { key: 9, fishName: '참돔', yield1: 22, active: false }, 
+        { key: 10, fishName: '우럭', yield1: 44, active: false },
     ]
 
 
@@ -89,7 +90,6 @@ function valueLabelFormat(value) {
 }
 
 const DetailedSearchConditions = () => {
-    // console.log(dummy)
 
     const [fish, setFish] = useState(dummy)
 
@@ -105,12 +105,33 @@ const DetailedSearchConditions = () => {
             let result = dummy.filter(name => name.fishName === searchName);
             setFish(result);
         }
-        return;
     }
 
-    //찾는 어종을 입력한다
-    //결과값을 변수에 할당한다
-    //결과값을 기준으로 map을 돌린다
+    const onToggle = id => {
+        setFish(
+            fish.map(fish =>
+              fish.active = false
+            )
+          );
+        setFish(
+          fish.map(fish =>
+            fish.key === id ? { ...fish, active: !fish.active } : fish
+          )
+        );
+      };
+
+    // const [color, setColor] = useState('white');
+    // const [isColor, setIsColor] = useState(true);
+
+    // const handleChangeColor = (i) => {
+    //     console.log(i)
+    //     // const newFish = [...fish];
+    //     // console.log(newFish)
+    //     setIsColor(!isColor);
+    //     setColor(isColor ? '#F4F4F4' : 'white ');
+    // };
+
+    // console.log(color, isColor);
 
     return (
         // <Background>
@@ -150,17 +171,17 @@ const DetailedSearchConditions = () => {
                                     // maxWidth: 500,
                                     bgcolor: 'background.paper',
                                     position: 'relative',
-                                    overflow: 'scroll',
-                                    maxHeight: 379,
+                                    overflow: 'auto',
+                                    maxHeight: 385,
                                     // borderBottom: '1px solid black'
                                     // border: 0,
                                 }}
                                 subheader={<li />}
                                 >
                                 {fish.map((item, i) => {
-                                    const { fishName, yield1 } = item;
+                                    const { fishName, yield1, key, active} = item;
                                     return (
-                                        <ListItemStyled key={i}>
+                                        <ListItemStyled key={key} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(key)}>
                                             <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                                 <Avatar
                                                 // alt={`Avatar n°${value + 1}`}
