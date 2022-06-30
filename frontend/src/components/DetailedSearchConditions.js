@@ -7,10 +7,12 @@ import image from '../img/contemplative-reptile.jpeg';
 const Card = styled.div`
     background-color: white;
     width: 570px;
-    height: 500px;
+    height: 464px;
     border-radius: 5px;
-    margin: 30px 100px;
+    /* margin-left: 20px;
+    margin-right: 20px; */
     border: 1px solid black;
+    margin: 1rem;
     /* border-bottom: '1px solid #EAEAEA'; */
     /* border: 1px solid black; */
 `
@@ -62,7 +64,7 @@ function valueLabelFormat(value) {
 
 const DetailedSearchConditions = () => {
     return (
-        <Background>
+        // <Background>
             <Card>
             <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex' }}>
@@ -96,14 +98,14 @@ const DetailedSearchConditions = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'scroll',
-                                    maxHeight: 414,
+                                    maxHeight: 379,
                                     // borderBottom: '1px solid black'
                                     // border: 0,
                                 }}
                                 subheader={<li />}
                                 >
                                 {[0, 1, 2, 3, 4, 5, 6, 7].map((item, i) => (
-                                <div style={{ display: 'flex', backgroundColor: 'white', height: '100%' }} key={i}>
+                                <div style={{ display: 'flex', backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }} key={i}>
                                     <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                         <Avatar
                                         // alt={`Avatar n°${value + 1}`}
@@ -134,19 +136,19 @@ const DetailedSearchConditions = () => {
                             marks={serving}
                         />
                     </div>
-                    <div style={{ width: '80%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
+                    <div style={{ width: '90%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
 
                         <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>자연산</Typography>
                         <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>양식</Typography>
 
-                        <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -150  }}>조건 추가하기</Button>
+                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -130, }} style={{  }}>조건 추가하기</Button>
                     </div>
                 </div>
             </div>
             </Card>
-        </Background>
+        // </Background>
     );
 };
 
