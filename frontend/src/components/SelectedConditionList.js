@@ -8,7 +8,7 @@ const Card = styled.div`
     width: 295px;
     height: 464px;
     border-radius: 5px;
-    margin: 30px 100px;
+    /* margin: 30px 100px; */
     position: relative;
 `
 
@@ -31,11 +31,11 @@ const Img = styled('img')({
 
 const SelectedConditionList = () => {
     return (
-        <Background>
+        // <Background>
             <Card>
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
-                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F6F6F6'}}>
-                        <Img alt="complex" src={image} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F6F6F6' }}>
+                    <Img alt="complex" src={image} />
                     <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: '9px 18px 16px 0' }}>
                         <div style={{ display: 'flex' }}>
                             <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
@@ -53,9 +53,9 @@ const SelectedConditionList = () => {
                         <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8'}}>조건 삭제</Button>
                     </CardActions>
                 </div>
-                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 12 , fontWeight: 900, width: '274px', bottom: '9px', left: '10px' }} >조합 검색</Button>
+                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 12 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} >조합 검색</Button>
             </Card>
-        </Background>
+        // </Background>
     );
 };
 

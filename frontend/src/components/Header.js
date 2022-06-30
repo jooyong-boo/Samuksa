@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../img/SAMUKSA.png';
+import { Button } from '@mui/material';
 
 // const pages = ['Products', 'Pricing', 'Blog'];
 
@@ -27,36 +28,23 @@ const Header = () => {
     }
 
     return (
-        <AppBar position="sticky" sx={{ boxShadow: 'none', border: '1px solid #D8D8D8' }}>
-            <Container maxWidth="xl" sx={{ backgroundColor: 'white', margin: 0 }}>
-                <Toolbar disableGutters>
-                    <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2rem' }} />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        onClick={goMain}
-                        sx={{
-                        mr: 2,
-                        display: { xs: 'flex' },
-                        flexGrow: 1,
-                        fontFamily: 'sans-serif',
-                        fontWeight: 900,
-                        color: '#6EA5F8',
-                        textDecoration: 'none',
-                        cursor: 'pointer',
-                        fontSize: '2rem'
-                        }}
-                    >
-                        Samuksa
-                    </Typography>
-                    {/* <img src={Logo} alt="logo" style={{ display: 'flex', cursor: 'pointer', flexWrap: 'nowrap'}}/> */}
-                    <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2, cursor: 'pointer' }} onClick={goFishCal}>수산물 계산기</Typography>
-                    <Typography variant='button' sx={{ color: '#7a7a7a' }}>시세 검색</Typography>
-                </Toolbar>
-            </Container>
+        <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" sx={{ backgroundColor: '#FFFFFF' }} style={{ width: '100vw' }}>
+          <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }} style={{ width: '90vw' }}>
+            <div style={{ display: 'flex' }}>
+                <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2.5rem' }} />
+                <Typography variant="h6" component="a" onClick={goMain} sx={{ color: '#6EA5F8', fontWeight: '900', fontSize: '1.7rem', cursor: 'pointer', fontFamily: 'sans-serif' }}>
+                    Samuksa
+                </Typography>
+            </div>
+            <div>
+                <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2, cursor: 'pointer', ":hover": { color: '#A7A7A7', borderBottom: '1px solid #A7A7A7' }, ":active": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7' } }} onClick={goFishCal}>수산물 계산기</Typography>
+                <Typography variant='button' sx={{ color: '#7a7a7a', ":hover": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7'} }}>시세 검색</Typography>
+            </div>
+          </Toolbar>
         </AppBar>
-    )
+      </Box>
+    );
 }
 
 export default Header;

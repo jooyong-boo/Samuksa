@@ -11,13 +11,13 @@ const Card = styled.div`
     width: 295px;
     height: 464px;
     border-radius: 5px;
-    margin: 30px 100px;
+    /* margin: 30px 100px; */
     /* border: 1px solid black; */
 `
 
 const Background = styled.div`
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     position: relative;
     overflow: hidden;
     background-color: #ebecee;
@@ -106,7 +106,7 @@ const SearchConditions = () => {
         // >
             
         // </Paper>
-        <Background>
+        // <Background>
             <Card>
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
                 <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
@@ -155,13 +155,13 @@ const SearchConditions = () => {
                             </Grid>
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '100%', backgroundColor: '#0098EE', fontWeight: 900}} onClick={onClick}>검색</Button>
+                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900}} onClick={onClick}>검색</Button>
                             <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                         </div>
                     </form>
                 </Container>
             </Card>
-        </Background>
+        // </Background>
     );
 };
 

@@ -17,6 +17,7 @@ const Background = styled.div`
     background-color: #ebecee;
     box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
     transform: translate3d(0, 0, 0);
+    margin-top: '10%';
 `;
 
 const Wave = keyframes`
