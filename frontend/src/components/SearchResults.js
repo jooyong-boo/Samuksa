@@ -10,6 +10,7 @@ const Card = styled.div`
     height: 550px;
     border-radius: 5px;
     margin: auto;
+    margin-bottom: 3%;
 `
 
 const Background = styled.div`
@@ -36,10 +37,10 @@ const SearchResults = () => {
                 <Card>
                     <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
                     <div style={{ display: 'flex' }}>
-                        <div style={{ borderBottom: '1px solid #F6F6F6', borderRight: '1px solid #EAEAEA' , width: '20%', height: '70vh' }}>
-                            <CardContent sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 0'}}>
+                        <div style={{ borderBottom: '1px solid #F6F6F6', borderRight: '1px solid #EAEAEA' , width: '20%' }}>
+                            <CardContent sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 0', ':hover': {backgroundColor: '#F4F4F4'}}}>
                                 <Img alt="complex" src={image} />
-                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '100%' }}>
                                     <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
                                         우럭+광어+참돔
                                     </Typography>
@@ -49,7 +50,7 @@ const SearchResults = () => {
                                 </div>
                             </CardContent>
                         </div>
-                        <div style={{ width: '12%', height: '505px' , borderRight: '1px solid #EAEAEA' }}>
+                        <div style={{ width: '12%', height: '100%' , borderRight: '1px solid #EAEAEA' }}>
                             <Paper
                                 sx={{
                                     p: 2,
@@ -64,7 +65,7 @@ const SearchResults = () => {
                                 <List
                                     sx={{
                                         width: '100%',
-                                        // maxWidth: 500,
+                                        height: 500,
                                         bgcolor: 'background.paper',
                                         position: 'relative',
                                         overflow: 'scroll',

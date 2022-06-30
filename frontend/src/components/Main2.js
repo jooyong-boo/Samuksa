@@ -5,6 +5,7 @@ import DetailedSearchConditions from './DetailedSearchConditions';
 import SelectedConditionList from './SelectedConditionList';
 import SearchResults from './SearchResults';
 import styled from 'styled-components';
+import TopStepper from './TopStepper';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -22,6 +23,7 @@ const Main2 = () => {
         <>
             <Header />
             <Background>
+                <TopStepper />
                 <SearchConditions />
                 <DetailedSearchConditions />
                 <SelectedConditionList />
