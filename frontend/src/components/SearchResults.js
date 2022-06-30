@@ -27,7 +27,8 @@ const Img = styled('img')({
     width: '50px',
     height: '50px',
     objectFit: 'cover',
-    padding: '9px 13px',
+    margin: 'auto',
+    // padding: '9px 13px',
   });
 
 const SearchResults = () => {
@@ -38,9 +39,9 @@ const SearchResults = () => {
                     <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
                     <div style={{ display: 'flex' }}>
                         <div style={{ borderBottom: '1px solid #F6F6F6', borderRight: '1px solid #EAEAEA' , width: '20%' }}>
-                            <CardContent sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 0', ':hover': {backgroundColor: '#F4F4F4'}}}>
+                            <CardContent sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
                                 <Img alt="complex" src={image} />
-                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '100%' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '100%', paddingLeft: '10px' }}>
                                     <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
                                         우럭+광어+참돔
                                     </Typography>
@@ -60,6 +61,8 @@ const SearchResults = () => {
                                     flexGrow: 1,
                                     backgroundColor: '#F8F8F8',
                                     padding: 0,
+                                    boxShadow: 'none',
+                                    borderBottom: '1px solid #EAEAEA'
                                 }}
                             >
                                 <List
@@ -69,7 +72,7 @@ const SearchResults = () => {
                                         bgcolor: 'background.paper',
                                         position: 'relative',
                                         overflow: 'scroll',
-                                        maxHeight: 495,
+                                        maxHeight: 500,
                                         // borderBottom: '1px solid black'
                                         // border: 0,
                                     }}

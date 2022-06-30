@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
@@ -47,6 +47,8 @@ const SearchConditions = () => {
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
 
+    const personNumInput = useRef();
+
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
         if (e.target.value < 0) {
@@ -77,10 +79,12 @@ const SearchConditions = () => {
         }
     }
 
-    const onInit = (e) => {
+    const onReset = (e) => {
         e.preventDefault();
-        setMoney(5000);
         setPersonNum(1);
+        setMoney(5000);
+        setArea('노량진');
+        personNumInput.current.focus();
     }
     console.log(area)
 
@@ -122,6 +126,7 @@ const SearchConditions = () => {
                                     onChange={handlePersonNumChange} 
                                     autoFocus    
                                     fullWidth
+                                    ref={personNumInput}
                                     // size="small"
                                 />
                             </Grid>
@@ -159,7 +164,7 @@ const SearchConditions = () => {
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                             <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900}} onClick={onClick}>검색</Button>
-                            <Button variant='outlined' onClick={onInit} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
+                            <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                         </div>
                     </form>
                 </Container>

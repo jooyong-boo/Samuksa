@@ -26,7 +26,8 @@ const Img = styled('img')({
     width: '50px',
     height: '50px',
     objectFit: 'cover',
-    padding: '9px 13px 11px 16px',
+    margin: 13,
+    // padding: '9px 13px 11px 16px',
   });
 
 const SelectedConditionList = () => {
@@ -36,7 +37,7 @@ const SelectedConditionList = () => {
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
                 <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #F6F6F6' }}>
                     <Img alt="complex" src={image} />
-                    <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: '9px 18px 16px 0' }}>
+                    <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: '16px 0px' }}>
                         <div style={{ display: 'flex' }}>
                             <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
                                 우럭

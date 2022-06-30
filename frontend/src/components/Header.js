@@ -29,7 +29,7 @@ const Header = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ backgroundColor: '#FFFFFF' }} style={{ width: '100vw' }}>
+        <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }} style={{ width: '100vw' }}>
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }} style={{ width: '90vw' }}>
             <div style={{ display: 'flex' }}>
                 <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2.5rem' }} />
