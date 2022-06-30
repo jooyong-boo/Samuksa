@@ -1,6 +1,7 @@
 package com.samuksa.service;
 
 import com.samuksa.dto.fish.price.FishPriceRequest;
+import com.samuksa.entity.fish.price.FishPriceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class SchedulerService {
     private List<FishPriceRequest> fishPriceRequestList;
 
     @Autowired
-    private FishService fishService;
+    private FishPriceEntity fishPriceEntity;
 
     public void register() {
         count = 0;
@@ -35,7 +36,7 @@ public class SchedulerService {
                     remove();
                 } else {
                     System.out.println(fishPriceRequestList.get(count));
-                    fishService.setFishPrice(fishPriceRequestList.get(count++));
+                    fishPriceEntity.setFishPrice(fishPriceRequestList.get(count++));
                 }
             }
         }, 1000);
