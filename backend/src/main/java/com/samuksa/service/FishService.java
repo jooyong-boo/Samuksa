@@ -3,8 +3,12 @@ package com.samuksa.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samuksa.dto.fish.info.FishInfo;
 import com.samuksa.dto.fish.api.FishApiResponse;
+import com.samuksa.dto.fish.info.FishInfoResponse;
 import com.samuksa.dto.fish.price.FishPrice;
 import com.samuksa.dto.fish.price.FishPriceRequest;
+import com.samuksa.entity.fish.info.FishInfoEntity;
+import com.samuksa.entity.fish.price.FishPriceEntity;
+import com.samuksa.entity.fish.saleArea.FishSaleAreaEntity;
 import com.samuksa.mapper.FishMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,53 +20,30 @@ import java.util.List;
 
 @Service
 public class FishService {
-    @Autowired
-    FishMapper fishMapper;
 
     @Autowired
-    RestTemplate restTemplate;
+    FishInfoEntity fishInfoEntity;
 
-    @Value("${fish.api.url}")
-    public String fishApiUrl;
+    @Autowired
+    FishPriceEntity fishPriceEntity;
 
-    @Value("${fish.api.path}")
-    public String fishApiPath;
+    @Autowired
+    FishSaleAreaEntity fishSaleAreaEntity;
 
-    public List<FishInfo> getAllFishInfo() {
-        return fishMapper.selectAllFishInfo();
+    public List<FishInfoResponse> getAllFishInfo() {
+        List<FishInfo> fishInfoList = fishInfoEntity.getAllFishInfo();
+        return fishInfoEntity.convertResponse(fishInfoList);
     }
 
-    public String setFishPrice(FishPriceRequest fishPriceRequest) {
-        String url = UriComponentsBuilder.fromHttpUrl(fishApiUrl)
-                .path(fishApiPath)
-                .queryParam("id", fishPriceRequest.getNameCode())
-                .queryParam("itemGroupCode", fishPriceRequest.getSizeCode())
-                .queryParam("zoneCode", fishPriceRequest.getSaleAreaCode())
-                .encode()
-                .toUriString();
-
-        try {
-            String response = restTemplate.getForObject(url, String.class);
-            ObjectMapper objectMapper = new ObjectMapper();
-            FishApiResponse apiResponse = objectMapper.readValue(response, FishApiResponse.class);
-
-            System.out.println("API 호출 response: " + apiResponse);
-
-            List<String> priceList = apiResponse.getPrice();
-            List<String> dateList = apiResponse.getDate();
-
-            for(int i = 0; i < priceList.size(); i++) {
-                FishPrice fishPrice = new FishPrice(fishPriceRequest, priceList.get(i), dateList.get(i));
-                fishMapper.insertFishMarketPrices(fishPrice);
-            }
-
-        } catch(Exception e) {
-            System.out.println(e);
-        }
-        return "S";
+    public List<FishPrice> getAllTodayFishPrice() {
+        return fishPriceEntity.getAllTodayFishPrice();
     }
 
-    public List<FishPrice> selectAllTodayFishPrice() {
-        return fishMapper.selectAllTodayFishPrice();
+    public List<FishPrice> getTodayFishPrice(String saleArea) {
+        return fishPriceEntity.getTodayFishPrice(saleArea);
+    }
+
+    public List<String> getAllSaleArea() {
+        return fishSaleAreaEntity.getAllSaleArea();
     }
 }

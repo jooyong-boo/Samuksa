@@ -11,9 +11,13 @@ import java.util.List;
 public interface FishMapper {
     public List<FishInfo> selectAllFishInfo();
 
-    public void insertFishMarketPrices(FishPrice fishPrice);
+    public void insertFishPrice(FishPrice fishPrice);
 
     public List<FishPriceRequest> selectFishPriceRequest();
 
     public List<FishPrice> selectAllTodayFishPrice();
+
+    public List<FishPrice> selectTodayFishPriceBySaleArea(String saleArea);
+
+    public List<String> selectAllSaleArea();
 }

@@ -1,6 +1,7 @@
 package com.samuksa.controller;
 
 import com.samuksa.dto.fish.info.FishInfo;
+import com.samuksa.dto.fish.info.FishInfoResponse;
 import com.samuksa.dto.fish.price.FishPrice;
 import com.samuksa.dto.fish.recommend.recommendRequest.FishRecommendRequest;
 import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendResponse;
@@ -26,35 +27,49 @@ public class FishController {
 
     @GetMapping("/info")
     @ApiOperation(value = "모든 수산물 정보 조회", response = FishInfo.class)
-    public List<FishInfo> test() {
+    public List<FishInfoResponse> getAllFishInfo() {
         return fishService.getAllFishInfo();
     }
-    @GetMapping("/dummy")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "area", value = "area", required = true, dataType = "string", paramType = "query", defaultValue = "노량진"),
-            @ApiImplicitParam(name = "money", value = "money", required = true, dataType = "int", paramType = "query", defaultValue = "600000"),
-            @ApiImplicitParam(name = "person_number", value = "person_number", required = true, dataType = "int", paramType = "query", defaultValue = "12")
-    })
 
-    @ApiOperation(value = "테스트용 더미 데이터 조회", response = FishRecommendResponse.class)
-    public FishRecommendResponse getDummy(@RequestParam(name = "person_number") int personNum, @RequestParam(name = "money") int money, @RequestParam(name = "area") String area) {
-        List<FishPrice> fishPrices = fishService.selectAllTodayFishPrice();
-        FishRecommendRequest fishRecommendRequest = new FishRecommendRequest(personNum, money, area);
+    @GetMapping("/recommend")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "saleArea", value = "saleArea", required = true, dataType = "string", paramType = "query", example = "노량진"),
+            @ApiImplicitParam(name = "money", value = "money", required = true, dataType = "int", paramType = "query", example = "100000"),
+            @ApiImplicitParam(name = "personNumber", value = "personNumber", required = true, dataType = "int", paramType = "query", example = "3")
+    })
+    @ApiOperation(value = "수산물 추천", response = FishRecommendResponse.class)
+    public FishRecommendResponse getRecommend(@RequestParam(name = "personNumber") int personNumber, @RequestParam(name = "money") int money, @RequestParam(name = "saleArea") String saleArea) {
+        List<FishPrice> fishPrices = fishService.getAllTodayFishPrice();
+        FishRecommendRequest fishRecommendRequest = new FishRecommendRequest(personNumber, money, saleArea);
         FishRecommendService fishRecommendService = new FishRecommendService(fishPrices,fishRecommendRequest);
         return fishRecommendService.getFishRecommendResponse();
     }
 
-    @PostMapping("/data")
+    @PostMapping("/api")
     @ApiOperation(value = "수산물 시가 API 호출 강제 트리거 (*주의)", response = FishRecommendResponse.class)
     public String postPrice() {
         schedulerService.register();
         return "S";
     }
 
-    @GetMapping("/price/today")
-    @ApiOperation(value = "오늘 수산물 시가 조회", response = FishRecommendResponse.class)
+    @GetMapping("/price/all")
+    @ApiOperation(value = "오늘 수산물 시가 전체 조회", response = FishPrice.class)
     public List<FishPrice> getTodayPrices() {
-        return fishService.selectAllTodayFishPrice();
+        return fishService.getAllTodayFishPrice();
     }
 
+    @GetMapping("/price/area")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "saleArea", value = "saleArea", required = true, dataType = "string", paramType = "query", example = "노량진"),
+    })
+    @ApiOperation(value = "오늘 수산물 시가 지역 조회", response = FishPrice.class)
+    public List<FishPrice> getTodayFishPrice(@RequestParam(name = "saleArea") String saleArea) {
+        return fishService.getTodayFishPrice(saleArea);
+    }
+
+    @GetMapping("/area")
+    @ApiOperation(value = "수산물 판매지역 목록 조회", response = String.class)
+    public List<String> getAllSaleArea() {
+        return fishService.getAllSaleArea();
+    }
 }
