@@ -1,6 +1,10 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+
 body {
   margin: 0;
-  /* margin-top: 100px; */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -12,3 +16,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* ::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background-color: #9F9F9F;
+}
+::-webkit-scrollbar-thumb {
+  box-shadow: white;
+} */
