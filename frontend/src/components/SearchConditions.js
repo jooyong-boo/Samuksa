@@ -5,6 +5,7 @@ import { Container } from '@mui/system';
 import { useRecoilState } from 'recoil';
 import { areaState, moneyState, personNumState } from '../store/atom';
 import { useNavigate } from 'react-router-dom';
+import DetailedSearchConditions from './DetailedSearchConditions';
 
 const Card = styled.div`
     background-color: white;
@@ -91,26 +92,11 @@ const SearchConditions = () => {
 
     const onSubmit = (e) => {
             e.preventDefault();
-            // navigate('/search');
+            // 상세 검색조건 어종 불러오기
     }
 
     return (
-        // <Paper
-        //     sx={{
-        //         p: 2,
-        //         margin: 'auto',
-        //         maxWidth: 1200,
-        //         maxHeight: 500,
-        //         flexGrow: 1,
-        //         // backgroundColor: (theme) =>
-        //         // theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        //         marginBottom: '10px',
-        //         backgroundColor: 'skyblue',
-        //     }}
-        // >
-            
-        // </Paper>
-        // <Background>
+        <>
             <Card>
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
                 <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
@@ -169,8 +155,9 @@ const SearchConditions = () => {
                     </form>
                 </Container>
             </Card>
-        // </Background>
-    );
+            <DetailedSearchConditions />
+        </>
+        );
 };
 
 export default SearchConditions;

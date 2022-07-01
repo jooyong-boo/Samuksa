@@ -1,8 +1,6 @@
 import { atom, selector } from 'recoil';
-// import axios from 'axios';
-import { getFishRecommendData } from '../api/auth';
+import { getAreaTotalFishData, getFishRecommendData } from '../api/auth';
 
-// 메인페이지 입력값들 =============
 export const personNumState = atom ({
   key: 'personNumState',
   default: 1,
@@ -16,12 +14,33 @@ export const moneyState = atom ({
 export const areaState = atom({
     key: 'areaState',
     default: '노량진',
-  });
-// ==========================
+});
 
+// 선택 어종
+
+// 분량
+
+// 양식여
+
+// 선택 조건목록
+export const selectConditions = atom({
+  key: 'selectConditions',
+  default: [],
+});
+
+// 전체 어종
 export const fishDetailRecommendInfo = atom({
   key: 'fishDetailRecommendInfo',
   default: [],
+});
+
+export const fishPriceAll = selector({
+  key: 'fishPriceAll',
+  get: async ({ get }) => {
+    const area = get(areaState);
+    const response = await getAreaTotalFishData({area});
+    return response;
+  },
 });
 
 export const fishDataState = selector({

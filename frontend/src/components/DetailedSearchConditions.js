@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
+import SelectedConditionList from './SelectedConditionList';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { fishPriceAll, selectConditions } from '../store/atom';
 
 const Card = styled.div`
     background-color: white;
@@ -25,57 +28,30 @@ const ListItemStyled = styled.div`
     }
 `;
 
-// const serving = [
-//     {
-//         value: 1,
-//         label: '1인분',
-//     },
-//     {
-//         value: 2,
-//         label: '2인분',
-//     },
-//     {
-//         value: 3,
-//         label: '3인분',
-//     },
-//     {
-//         value: 4,
-//         label: '4인분',
-//     },
-// ];
-
 const dummy = 
     [   
         { id: 1, fishName: '광어', yield1: 50, active: false },
         { id: 2, fishName: '숭어', yield1: 33, active: false },
         { id: 3, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 4, fishName: '우럭', yield1: 44, active: false },
+        { id: 4, fishName: '광어', yield1: 50, active: false },
         { id: 5, fishName: '숭어', yield1: 33, active: false },
         { id: 6, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 7, fishName: '우럭', yield1: 44, active: false },
+        { id: 7, fishName: '광어', yield1: 50, active: false },
         { id: 8, fishName: '숭어', yield1: 33, active: false },
         { id: 9, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 10, fishName: '우럭', yield1: 44, active: false },
-    ]
-
-
-function valuetext(value) {
-    return `${value}인분`;
-}
-
-// function valueLabelFormat(value) {
-//     return serving.findIndex((serv) => serv.value === value) + 1;
-// }
-
-// function valueLabelFormat(value) {
-//     return `${value}인분`;
-// }
+    ];
 
 const DetailedSearchConditions = () => {
 
+    const areaFishPrice = useRecoilValue(fishPriceAll);
+    console.log(areaFishPrice);
+
     const [fish, setFish] = useState(dummy);
+    const [selectFish, setSelectFish] = useState();
     const [amount, setAmount] = useState(4);
     const [formStatus, setFormStatus] = useState([]);
+
+    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
 
     console.log(fish)
 
@@ -107,14 +83,14 @@ const DetailedSearchConditions = () => {
             fish.id === id ? { ...fish, active: !fish.active } : fish
           )
         );
-      };
+        setSelectFish(fish.filter(fish =>  fish.id === id));
+    };
 
     const changeAmount = (event, newAmount) => {
         setAmount(newAmount)
         console.log(amount)
-    }
+    };
 
-    console.log(formStatus)
     const changeHandler = (checked, id) => {
         if (checked) {
             setFormStatus([...formStatus, id]);
@@ -125,16 +101,25 @@ const DetailedSearchConditions = () => {
       };
 
     const addCondition = () => {
-        if (formStatus.length === 0) {
-            alert('양식 여부를 체크해주세요');
+        if (selectFish.length > 1) {
+            return alert('어종을 선택해주세요');
         }
-    }
+        if (formStatus.length === 0) {
+            return alert('양식 여부를 체크해주세요');
+        }
+        setSelectCondition([{ id: selectFish[0].id, selectFish: selectFish[0].fishName, amount: amount, formStatus: formStatus }]);
+        // setSelectCondition([...selectCondition, { id: selectFish[0].id, selectFish: selectFish[0].fishName, amount: amount, formStatus: formStatus }]);
+    };
+
+    console.log(selectFish)
+    console.log(selectCondition);
 
     return (
+        <>
         <Card>
             <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
-            <div style={{ display: 'flex' }}>
-                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA' }}>
+            <div style={{ display: 'flex', height: '100%' }}>
+                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA', height: '100%' }}>
                     <FormControl fullWidth sx={{}}> 
                         <Input 
                             id="input-with-icon-adornment"
@@ -211,39 +196,21 @@ const DetailedSearchConditions = () => {
                             onChange={changeAmount}
                         />
                     </div>
-                    <div style={{ width: '90%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
+                    <div style={{ width: '90%',height: '100%' , margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
 
                         <Typography><Checkbox id={'자연산'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '자연산')}} checked={formStatus.includes('자연산') ? true : false} />자연산</Typography>
                         <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography>
 
-                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -100, }} onClick={addCondition} >조건 추가하기</Button>
+                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 160, }} onClick={addCondition} >조건 추가하기</Button>
                     </div>
                 </div>
             </div>
         </Card>
+        <SelectedConditionList />
+        </>
     );
 };
 
 export default DetailedSearchConditions;
-
-                            {/* <Grid container spacing={6}>
-                                <Grid item>
-                                <ButtonBase sx={{ width: 50, height: 50 }}>
-                                    <Img alt="complex" src={image} />
-                                </ButtonBase>
-                                </Grid>
-                                <Grid item xs={12} sm container>
-                                <Grid item xs container direction="column" spacing={1}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle2" component="div">
-                                            광어
-                                        </Typography>
-                                        <Typography gutterBottom variant="caption" component="div">
-                                            수율(35%)
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                </Grid>
-                            </Grid> */}
