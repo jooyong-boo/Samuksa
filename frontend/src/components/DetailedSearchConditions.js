@@ -10,24 +10,9 @@ const Card = styled.div`
     width: 570px;
     height: 464px;
     border-radius: 5px;
-    /* margin-left: 20px;
-    margin-right: 20px; */
     border: 1px solid black;
     margin: 1rem;
-    /* border-bottom: '1px solid #EAEAEA'; */
-    /* border: 1px solid black; */
 `
-
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    background-color: #ebecee;
-    /* padding: 30px 100px; */
-    /* box-shadow: 4px 8px 16px 0 rgba(0,0,0,0.1);
-    transform: translate3d(0, 0, 0); */
-`;
 
 const ListItemStyled = styled.div`
     /* style={{ display: 'flex', backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }} */
@@ -40,44 +25,37 @@ const ListItemStyled = styled.div`
     }
 `;
 
-const Img = styled('img')({
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '50px',
-    maxHeight: '50px',
-  });
-
-const serving = [
-    {
-        value: 1,
-        label: '1',
-    },
-    {
-        value: 33,
-        label: '2',
-    },
-    {
-        value: 66,
-        label: '3',
-    },
-    {
-        value: 100,
-        label: '무제한',
-    },
-];
+// const serving = [
+//     {
+//         value: 1,
+//         label: '1인분',
+//     },
+//     {
+//         value: 2,
+//         label: '2인분',
+//     },
+//     {
+//         value: 3,
+//         label: '3인분',
+//     },
+//     {
+//         value: 4,
+//         label: '4인분',
+//     },
+// ];
 
 const dummy = 
     [   
-        { key: 1, fishName: '광어', yield1: 50, active: false },
-        { key: 2, fishName: '숭어', yield1: 33, active: false },
-        { key: 3, fishName: '참돔', yield1: 22, active: false }, 
-        { key: 4, fishName: '우럭', yield1: 44, active: false },
-        { key: 5, fishName: '숭어', yield1: 33, active: false },
-        { key: 6, fishName: '참돔', yield1: 22, active: false }, 
-        { key: 7, fishName: '우럭', yield1: 44, active: false },
-        { key: 8, fishName: '숭어', yield1: 33, active: false },
-        { key: 9, fishName: '참돔', yield1: 22, active: false }, 
-        { key: 10, fishName: '우럭', yield1: 44, active: false },
+        { id: 1, fishName: '광어', yield1: 50, active: false },
+        { id: 2, fishName: '숭어', yield1: 33, active: false },
+        { id: 3, fishName: '참돔', yield1: 22, active: false }, 
+        { id: 4, fishName: '우럭', yield1: 44, active: false },
+        { id: 5, fishName: '숭어', yield1: 33, active: false },
+        { id: 6, fishName: '참돔', yield1: 22, active: false }, 
+        { id: 7, fishName: '우럭', yield1: 44, active: false },
+        { id: 8, fishName: '숭어', yield1: 33, active: false },
+        { id: 9, fishName: '참돔', yield1: 22, active: false }, 
+        { id: 10, fishName: '우럭', yield1: 44, active: false },
     ]
 
 
@@ -85,13 +63,19 @@ function valuetext(value) {
     return `${value}인분`;
 }
 
-function valueLabelFormat(value) {
-    return serving.findIndex((serv) => serv.value === value) + 1;
-}
+// function valueLabelFormat(value) {
+//     return serving.findIndex((serv) => serv.value === value) + 1;
+// }
+
+// function valueLabelFormat(value) {
+//     return `${value}인분`;
+// }
 
 const DetailedSearchConditions = () => {
 
-    const [fish, setFish] = useState(dummy)
+    const [fish, setFish] = useState(dummy);
+    const [amount, setAmount] = useState(4);
+    const [formStatus, setFormStatus] = useState([]);
 
     console.log(fish)
 
@@ -113,29 +97,41 @@ const DetailedSearchConditions = () => {
               fish.active = false
             )
           );
+        // setFish(
+        //     fish.map(fish =>
+        //       fish.id !== id ? { ...fish, active: false } : fish
+        //     )
+        //   );
         setFish(
           fish.map(fish =>
-            fish.key === id ? { ...fish, active: !fish.active } : fish
+            fish.id === id ? { ...fish, active: !fish.active } : fish
           )
         );
       };
 
-    // const [color, setColor] = useState('white');
-    // const [isColor, setIsColor] = useState(true);
+    const changeAmount = (event, newAmount) => {
+        setAmount(newAmount)
+        console.log(amount)
+    }
 
-    // const handleChangeColor = (i) => {
-    //     console.log(i)
-    //     // const newFish = [...fish];
-    //     // console.log(newFish)
-    //     setIsColor(!isColor);
-    //     setColor(isColor ? '#F4F4F4' : 'white ');
-    // };
+    console.log(formStatus)
+    const changeHandler = (checked, id) => {
+        if (checked) {
+            setFormStatus([...formStatus, id]);
+        } else {
+          // 체크 해제
+          setFormStatus(formStatus.filter((el) => el !== id));
+        }
+      };
 
-    // console.log(color, isColor);
+    const addCondition = () => {
+        if (formStatus.length === 0) {
+            alert('양식 여부를 체크해주세요');
+        }
+    }
 
     return (
-        // <Background>
-            <Card>
+        <Card>
             <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex' }}>
                 <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA' }}>
@@ -179,9 +175,9 @@ const DetailedSearchConditions = () => {
                                 subheader={<li />}
                                 >
                                 {fish.map((item, i) => {
-                                    const { fishName, yield1, key, active} = item;
+                                    const { fishName, yield1, id, active} = item;
                                     return (
-                                        <ListItemStyled key={key} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(key)}>
+                                        <ListItemStyled key={id} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(id)}>
                                             <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                                 <Avatar
                                                 // alt={`Avatar n°${value + 1}`}
@@ -204,28 +200,29 @@ const DetailedSearchConditions = () => {
                     <div style={{ width: '70%', margin: 'auto', marginTop: '10%' }}>
                         <Typography sx={{ textAlign: 'center' }}>분량</Typography>            
                         <Slider
-                            aria-label="Custom marks"
-                            defaultValue={1}
-                            valueLabelFormat={valueLabelFormat}
-                            getAriaValueText={valuetext}
-                            step={null}
+                            aria-labelledby="range-slider"
+                            value={amount}
+                            // getAriaValueText={valuetext}
                             valueLabelDisplay="auto"
-                            marks={serving}
+                            step={1}
+                            marks
+                            min={1}
+                            max={4}
+                            onChange={changeAmount}
                         />
                     </div>
                     <div style={{ width: '90%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
 
-                        <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>자연산</Typography>
-                        <Typography><Checkbox sx={{ color: '#E1E1E1' }}/>양식</Typography>
+                        <Typography><Checkbox id={'자연산'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '자연산')}} checked={formStatus.includes('자연산') ? true : false} />자연산</Typography>
+                        <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography>
 
-                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -130, }} style={{  }}>조건 추가하기</Button>
+                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -100, }} onClick={addCondition} >조건 추가하기</Button>
                     </div>
                 </div>
             </div>
-            </Card>
-        // </Background>
+        </Card>
     );
 };
 
