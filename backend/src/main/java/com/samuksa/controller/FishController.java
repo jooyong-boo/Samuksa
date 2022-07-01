@@ -1,7 +1,6 @@
 package com.samuksa.controller;
 
 import com.samuksa.dto.fish.info.FishInfo;
-import com.samuksa.dto.fish.info.FishInfoResponse;
 import com.samuksa.dto.fish.price.FishPrice;
 import com.samuksa.dto.fish.recommend.recommendRequest.FishRecommendRequest;
 import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendResponse;
@@ -27,7 +26,7 @@ public class FishController {
 
     @GetMapping("/info")
     @ApiOperation(value = "모든 수산물 정보 조회", response = FishInfo.class)
-    public List<FishInfoResponse> getAllFishInfo() {
+    public List<FishInfo> getAllFishInfo() {
         return fishService.getAllFishInfo();
     }
 
@@ -71,5 +70,14 @@ public class FishController {
     @ApiOperation(value = "수산물 판매지역 목록 조회", response = String.class)
     public List<String> getAllSaleArea() {
         return fishService.getAllSaleArea();
+    }
+
+    @GetMapping("/farmType")
+    @ApiOperation(value = "수산물 이름으로 양식방법 목록 조회", response = String.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "fishName", value = "fishName", required = true, dataType = "string", paramType = "query", example = "광어"),
+    })
+    public List<String> getFishFarmTypeByName(@RequestParam(name = "fishName") String fishName) {
+        return fishService.getFishFarmTypeByName(fishName);
     }
 }

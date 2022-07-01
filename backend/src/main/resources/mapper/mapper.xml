@@ -3,17 +3,10 @@
 <mapper namespace="com.samuksa.mapper.FishMapper">
 
     <select id="selectAllFishInfo" resultType="com.samuksa.dto.fish.info.FishInfo">
-        SELECT FI.FISH_NAME
-             , FI.YIELD
-             , AA.FARM_TYPES
+        SELECT FI.FISH_INFO_ID
+             , FI.FISH_NAME
+             , FI.YIELD AS FISH_YIELD
         FROM FISH_INFO FI
-           , (SELECT A.FISH_INFO_ID
-                   , GROUP_CONCAT(A.FARM_TYPE) AS FARM_TYPES
-              FROM (SELECT FISH_INFO_ID, FARM_TYPE
-                    FROM FISH_SALE_INFO FSI
-                    GROUP BY FISH_INFO_ID, FARM_TYPE) A
-              GROUP BY A.FISH_INFO_ID) AA
-        WHERE FI.FISH_INFO_ID = AA.FISH_INFO_ID;;
     </select>
 
     <insert id="insertFishPrice">
@@ -104,4 +97,13 @@
         SELECT ZONE_NAME AS SALE_AREA
           FROM FISH_SALE_AREA
     </select>
+
+    <select id="selectFishFarmTypeByName" resultType="String">
+        SELECT DISTINCT(FARM_TYPE) AS FARM_TYPE
+        FROM FISH_INFO FI
+           , FISH_SALE_INFO FSI
+        WHERE FI.FISH_INFO_ID = FSI.FISH_INFO_ID
+          AND FI.FISH_NAME = #{fishName}
+    </select>
+
 </mapper>

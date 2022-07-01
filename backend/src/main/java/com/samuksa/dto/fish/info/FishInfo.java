@@ -8,7 +8,6 @@ import java.util.List;
 public class FishInfo {
     private int fishInfoId;
     private String fishName;
-    private int yield;
+    private int fishYield;
     private String imgUrl;
-    private String farmTypes;
 }
