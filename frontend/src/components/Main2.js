@@ -25,8 +25,8 @@ const Main2 = () => {
             <Background>
                 <TopStepper />
                 <SearchConditions />
-                <DetailedSearchConditions />
-                <SelectedConditionList />
+                {/* <DetailedSearchConditions /> */}
+                {/* <SelectedConditionList /> */}
                 <SearchResults />
             </Background>
         </>

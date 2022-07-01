@@ -21,3 +21,13 @@ export const getFishRecommendData = async ({ personNum, money, area }) => {
     console.log(err.response);
   }
 };
+
+export const getAreaTotalFishData = async ({ area }) => {
+  try {
+    // await axios.post('http://localhost:8080//fish/api');
+    const { data } = await axios.get('http://localhost:8080/fish/price/area', { params: { saleArea : area } });
+    return data;
+  } catch (err) {
+    console.log(err.response);
+  }
+}
