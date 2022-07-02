@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
-import { useRecoilState } from 'recoil';
-import { areaState, moneyState, personNumState } from '../store/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { areaState, getAreaState, moneyState, personNumState } from '../store/atom';
 import { useNavigate } from 'react-router-dom';
 import DetailedSearchConditions from './DetailedSearchConditions';
 
@@ -47,6 +47,8 @@ const SearchConditions = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
+
+    const getArea = useRecoilValue(getAreaState);
 
     const personNumInput = useRef();
 
@@ -141,7 +143,7 @@ const SearchConditions = () => {
                                         fullWidth
                                         // size="small"
                                     >
-                                        {Area.map((a, i) => (
+                                        {getArea.map((a, i) => (
                                             <MenuItem key={i} value={a}>{a}</MenuItem>
                                         ))}
                                     </Select>
