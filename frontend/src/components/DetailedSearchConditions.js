@@ -6,8 +6,9 @@ import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { fishPriceAllState, selectConditions } from '../store/atom';
-import { useCallback } from 'react';
+import { fishPriceAllState, getFramTypeState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
+import { getFarmType } from '../api/auth';
+import { useEffect } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -29,58 +30,63 @@ const ListItemStyled = styled.div`
     }
 `;
 
-const dummy = 
-    [   
-        { id: 1, fishName: '광어', yield1: 50, active: false },
-        { id: 2, fishName: '숭어', yield1: 33, active: false },
-        { id: 3, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 4, fishName: '광어', yield1: 50, active: false },
-        { id: 5, fishName: '숭어', yield1: 33, active: false },
-        { id: 6, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 7, fishName: '광어', yield1: 50, active: false },
-        { id: 8, fishName: '숭어', yield1: 33, active: false },
-        { id: 9, fishName: '참돔', yield1: 22, active: false }, 
-    ];
-
 const DetailedSearchConditions = () => {
 
     const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
+    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
+    const [selectFish, setSelectFish] = useRecoilState(selectFishState)
+    const [selectFishName, setSelectFishName] = useRecoilState(selectFishNameState);
+    // console.log(selectCondition);
 
-    
-    console.log(areaFishPrice);
+    const farmType = useRecoilValue(getFramTypeState)
+    console.log(farmType);
+
+    // console.log(areaFishPrice);
     
     const [fish, setFish] = useState(areaFishPrice)
-    const [selectFish, setSelectFish] = useState();
     const [amount, setAmount] = useState(4);
     const [formStatus, setFormStatus] = useState([]);
-    
-    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
-    
+    const [farm, setFarm] = useState([]);
+
+    console.log(fish);
+
+    console.log(formStatus);
     const onSearch = (e) => {
         e.preventDefault()
         let searchName = e.target.value;
         console.log(searchName);
         if (!searchName) {
-            setFish(fish);
+            setFish(areaFishPrice);
         } else {
-            let result = fish.filter(name => name.fishName === searchName);
+            let result = areaFishPrice.filter(name => name.fishName === searchName);
             setFish(result);
         }
     }
-    
+
     const onToggle = id => {
+        // setFish(
+        //     fish.map(fish =>
+        //         fish.fishInfoId !== id ? { ...fish, active: false } : fish
+        //     )
+        // );
+        // setFish(fish ? [] : fish)
         setFish(
             fish.map(fish =>
-                fish.fishInfoId ? { ...fish, active: false } : fish
-            )
-        );
-        setFish(
-            fish.map(fish =>
-                fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false}
+                fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false }
             )
         );
         setSelectFish(fish.filter(fish =>  fish.fishInfoId === id));
     };
+
+    // const getFarmType = () => {
+    //     let getFishName = selectFish[0].fishName;
+    //     setSelectFishName(getFishName);
+    // }
+
+    // useEffect(() => {
+    //     setSelectFishName(selectFish.fishName)
+    // }, [selectFish])
+    // console.log(selectFishName)
 
     const changeAmount = (event, newAmount) => {
         setAmount(newAmount)
@@ -97,18 +103,18 @@ const DetailedSearchConditions = () => {
       };
 
     const addCondition = () => {
-        if (selectFish.length > 1) {
+        if (selectFish === '') {
             return alert('어종을 선택해주세요');
         }
         if (formStatus.length === 0) {
             return alert('양식 여부를 체크해주세요');
         }
-        setSelectCondition([{ id: selectFish[0].id, selectFish: selectFish[0].fishName, amount: amount, formStatus: formStatus }]);
+        setSelectCondition([{ id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount: amount, formStatus: formStatus }]);
         // setSelectCondition([...selectCondition, { id: selectFish[0].id, selectFish: selectFish[0].fishName, amount: amount, formStatus: formStatus }]);
     };
 
     console.log(selectFish)
-    console.log(selectCondition);
+    // console.log(selectCondition);
 
     return (
         <>
@@ -159,7 +165,7 @@ const DetailedSearchConditions = () => {
                                     const { fishName, fishYield, fishInfoId, active} = item;
                                     {/* console.log(item); */}
                                     return (
-                                        <ListItemStyled key={fishInfoId} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(fishInfoId)}>
+                                        <ListItemStyled key={fishInfoId} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => {onToggle(fishInfoId)}}>
                                             <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                                 <Avatar
                                                 // alt={`Avatar n°${value + 1}`}
@@ -196,8 +202,15 @@ const DetailedSearchConditions = () => {
                     <div style={{ width: '90%',height: '100%' , margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
-
-                        <Typography><Checkbox id={'자연산'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '자연산')}} checked={formStatus.includes('자연산') ? true : false} />자연산</Typography>
+                        {/* {
+                            farmType ? 
+                                farmType.map((item, i) => (
+                                    <Typography key={i}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={formStatus.includes(`${item}`) ? true : false} />{item}</Typography>
+                                )) : null
+                        } */}
+                        {/* {farmType.map((item, i) => (
+                            <Typography key={i}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={formStatus.includes(`${item}`) ? true : false} />{item}</Typography>
+                        ))} */}
                         <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography>
 
                         <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 160, }} onClick={addCondition} >조건 추가하기</Button>
