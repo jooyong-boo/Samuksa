@@ -38,17 +38,15 @@ const MenuProps = {
   },
 };
 
-const Area = ['노량진', '가락', '강서', '마포', '서울', '구리', '수원', '평촌', '경기', '소래포구', '연안부두', '인천', '강원', '경상', '부산', '울산', '충청', '대전', '전라', '광주', '제주'];
-
 const SearchConditions = () => {
 
     const navigate = useNavigate();
+    const getArea = useRecoilValue(getAreaState);
 
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
 
-    const getArea = useRecoilValue(getAreaState);
 
     const personNumInput = useRef();
 

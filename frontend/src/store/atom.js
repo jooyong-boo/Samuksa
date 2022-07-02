@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getAreaTotalFishData, getFishRecommendData, getArea } from '../api/auth';
+import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/auth';
 
 export const personNumState = atom ({
   key: 'personNumState',
@@ -16,12 +16,6 @@ export const areaState = atom({
     default: '노량진',
 });
 
-// 선택 어종
-
-// 분량
-
-// 양식여
-
 // 선택 조건목록
 export const selectConditions = atom({
   key: 'selectConditions',
@@ -34,6 +28,30 @@ export const fishDetailRecommendInfo = atom({
   default: [],
 });
 
+// 선택한 어종
+export const selectFishState = atom({
+  key: 'selectFishState',
+  default: [],
+});
+
+// 선택한 어종이름
+export const selectFishNameState = atom({
+  key: 'selectFishNameState',
+  default: '',
+});
+
+// 양식 여부
+export const getFramTypeState = selector({
+  key: 'getFramTypeState',
+  get: async ({ get }) => {
+      const selectFish = get(selectFishNameState);
+      const response = await getFarmType({ fishName: selectFish });
+      // console.log(response);
+      return response;
+  }
+});
+
+// 수산물 판매지역
 export const getAreaState = selector({
   key: 'getAreaState',
   get: async ({ get }) => {
@@ -43,6 +61,7 @@ export const getAreaState = selector({
   },
 });
 
+// 수산물 정보
 export const fishPriceAllState = selector({
   key: 'fishPriceAllState',
   get: async ({ get }) => {
@@ -52,6 +71,7 @@ export const fishPriceAllState = selector({
   },
 });
 
+// 수산물 추천
 export const fishDataState = selector({
     key: 'fishData/get',
     get: async ({ get }) => {
