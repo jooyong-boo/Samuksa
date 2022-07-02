@@ -6,7 +6,8 @@ import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { fishPriceAll, selectConditions } from '../store/atom';
+import { fishPriceAllState, selectConditions } from '../store/atom';
+import { useCallback } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -43,47 +44,42 @@ const dummy =
 
 const DetailedSearchConditions = () => {
 
-    const areaFishPrice = useRecoilValue(fishPriceAll);
-    console.log(areaFishPrice);
+    const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
 
-    const [fish, setFish] = useState(dummy);
+    
+    console.log(areaFishPrice);
+    
+    const [fish, setFish] = useState(areaFishPrice)
     const [selectFish, setSelectFish] = useState();
     const [amount, setAmount] = useState(4);
     const [formStatus, setFormStatus] = useState([]);
-
+    
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
-
-    console.log(fish)
-
+    
     const onSearch = (e) => {
         e.preventDefault()
         let searchName = e.target.value;
         console.log(searchName);
         if (!searchName) {
-            setFish(dummy);
+            setFish(fish);
         } else {
-            let result = dummy.filter(name => name.fishName === searchName);
+            let result = fish.filter(name => name.fishName === searchName);
             setFish(result);
         }
     }
-
+    
     const onToggle = id => {
         setFish(
             fish.map(fish =>
-              fish.active = false
+                fish.fishInfoId ? { ...fish, active: false } : fish
             )
-          );
-        // setFish(
-        //     fish.map(fish =>
-        //       fish.id !== id ? { ...fish, active: false } : fish
-        //     )
-        //   );
-        setFish(
-          fish.map(fish =>
-            fish.id === id ? { ...fish, active: !fish.active } : fish
-          )
         );
-        setSelectFish(fish.filter(fish =>  fish.id === id));
+        setFish(
+            fish.map(fish =>
+                fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false}
+            )
+        );
+        setSelectFish(fish.filter(fish =>  fish.fishInfoId === id));
     };
 
     const changeAmount = (event, newAmount) => {
@@ -160,9 +156,10 @@ const DetailedSearchConditions = () => {
                                 subheader={<li />}
                                 >
                                 {fish.map((item, i) => {
-                                    const { fishName, yield1, id, active} = item;
+                                    const { fishName, fishYield, fishInfoId, active} = item;
+                                    {/* console.log(item); */}
                                     return (
-                                        <ListItemStyled key={id} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(id)}>
+                                        <ListItemStyled key={fishInfoId} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(fishInfoId)}>
                                             <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
                                                 <Avatar
                                                 // alt={`Avatar n°${value + 1}`}
@@ -172,7 +169,7 @@ const DetailedSearchConditions = () => {
                                                 />
                                             </ListItemAvatar>
                                             <ListItem key={i} sx={{ paddingLeft: 0 }}>
-                                                <ListItemText primary={fishName} secondary={`(수율: ${yield1}%)`} />
+                                                <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
                                             </ListItem>
                                         </ListItemStyled>
                                     )

@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getAreaTotalFishData, getFishRecommendData } from '../api/auth';
+import { getAreaTotalFishData, getFishRecommendData, getArea } from '../api/auth';
 
 export const personNumState = atom ({
   key: 'personNumState',
@@ -34,11 +34,20 @@ export const fishDetailRecommendInfo = atom({
   default: [],
 });
 
-export const fishPriceAll = selector({
-  key: 'fishPriceAll',
+export const getAreaState = selector({
+  key: 'getAreaState',
   get: async ({ get }) => {
-    const area = get(areaState);
-    const response = await getAreaTotalFishData({area});
+    const response = await getArea();
+    // console.log(response)
+    return response;
+  },
+});
+
+export const fishPriceAllState = selector({
+  key: 'fishPriceAllState',
+  get: async ({ get }) => {
+    // const area = get(areaState);
+    const response = await getAreaTotalFishData();
     return response;
   },
 });

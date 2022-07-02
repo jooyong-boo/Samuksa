@@ -12,6 +12,8 @@ export const queryClient = new QueryClient();
 //   }
 // };
 
+
+//수산물 추천
 export const getFishRecommendData = async ({ personNum, money, area }) => {
   try {
     const { data } = await axios.get('http://localhost:8080/fish/recommend', { params: { personNumber : personNum, money: money, saleArea: area }});
@@ -22,10 +24,21 @@ export const getFishRecommendData = async ({ personNum, money, area }) => {
   }
 };
 
-export const getAreaTotalFishData = async ({ area }) => {
+//
+export const getAreaTotalFishData = async () => {
   try {
     // await axios.post('http://localhost:8080//fish/api');
-    const { data } = await axios.get('http://localhost:8080/fish/price/area', { params: { saleArea : area } });
+    const { data } = await axios.get('http://localhost:8080/fish/info');
+    // console.log(data)
+    return data;
+  } catch (err) {
+    console.log(err.response);
+  }
+}
+
+export const getArea = async () => {
+  try {
+    const { data } = await axios.get('http://localhost:8080/fish/area');
     return data;
   } catch (err) {
     console.log(err.response);
