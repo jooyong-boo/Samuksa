@@ -35,21 +35,21 @@ export const selectFishState = atom({
 });
 
 // 선택한 어종이름
-export const selectFishNameState = atom({
-  key: 'selectFishNameState',
-  default: '',
-});
+// export const selectFishNameState = atom({
+//   key: 'selectFishNameState',
+//   default: '',
+// });
 
 // 양식 여부
-export const getFramTypeState = selector({
-  key: 'getFramTypeState',
-  get: async ({ get }) => {
-      const selectFish = get(selectFishNameState);
-      const response = await getFarmType({ fishName: selectFish });
-      // console.log(response);
-      return response;
-  }
-});
+// export const getFramTypeState = selector({
+//   key: 'getFramTypeState',
+//   get: async ({ get }) => {
+//       const selectFish = get(selectFishNameState);
+//       const response = await getFarmType({ fishName: selectFish });
+//       console.log(response);
+//       return response;
+//   }
+// });
 
 // 수산물 판매지역
 export const getAreaState = selector({

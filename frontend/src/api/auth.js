@@ -50,7 +50,6 @@ export const getArea = async () => {
 export const getFarmType = async ({ fishName }) => {
   try {
     const { data } = await axios.get('http://localhost:8080/fish/farmType', { params: { fishName: fishName }});
-    // console.log(data);
     return data;
   } catch (err) {
     console.log(err.response);
