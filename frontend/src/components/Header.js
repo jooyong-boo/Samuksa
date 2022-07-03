@@ -24,7 +24,7 @@ const Header = () => {
     };
 
     const goFishCal = () => {
-        navigate('/test');
+        navigate('/');
     }
 
     return (
