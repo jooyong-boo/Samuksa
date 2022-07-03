@@ -54,16 +54,21 @@ const SearchResults = () => {
         console.log(selectEstimate)
     return (
         <>  
-            {result.length > 0 ?
             <Card>
-                <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
+                <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
                 <div style={{ display: 'flex' }}>
-                    <div style={{ borderBottom: '1px solid #F6F6F6', borderRight: '1px solid #EAEAEA' , width: '20%', height: 500, position: 'relative', overflow: 'auto'}}>
+                    <div style={{ borderBottom: '1px solid #F6F6F6', borderRight: '1px solid #EAEAEA' , width: '20%', height: 495, position: 'relative', overflow: 'auto'}}>
                         {result? result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations } = item;
                             return (
                                 <CardContent key={i} onClick={() => {onRecommendClick(fishRecommendCombinations)}} sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
-                                    <Img alt="complex" src={image} />
+                                    {/* <Img alt="complex" src={image} /> */}
+                                    <Avatar
+                                        alt={combinationName}
+                                        src={image}
+                                        variant= 'square'
+                                        style={{ height: '50px', width: '50px', borderRadius: '3px', margin: '0px' }}
+                                    />
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '100%', paddingLeft: '10px' }}>
                                         <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
                                             {combinationName}
@@ -97,7 +102,8 @@ const SearchResults = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'scroll',
-                                    maxHeight: 500,
+                                    maxHeight: 495,
+                                    padding: 0,
                                     // borderBottom: '1px solid black'
                                     // border: 0,
                                 }}
@@ -108,12 +114,12 @@ const SearchResults = () => {
                                             const { totalPrice, combinationName, fishRecommendInfos } = item;
                                             return (
                                                 <React.Fragment key={i}>
-                                                    <ListItem onClick={() => {onEstimateClick(fishRecommendInfos, totalPrice)}} sx={{ paddingLeft: 0, borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column' }}>
+                                                    <ListItem onClick={() => {onEstimateClick(fishRecommendInfos, totalPrice)}} sx={{ paddingLeft: 0, borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
                                                         <div style={{  width: '100%', display: 'flex', justifyContent: 'space-around' }}>
                                                             <Typography sx={{ fontSize: '13px', color: '#545454' }}>{combinationName}</Typography>
                                                             <Typography sx={{ fontSize: '13px', color: '#979797' }}>(2인분)</Typography>
                                                         </div>
-                                                            <Typography sx={{ fontSize: '15px', mt:1 }}>{totalPrice}</Typography>
+                                                            <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>
                                                     </ListItem>
                                                 </React.Fragment>
                                             )
@@ -131,8 +137,6 @@ const SearchResults = () => {
                     </div>
                 </div>
             </Card>
-                : null
-            }
         </>
     );
 };

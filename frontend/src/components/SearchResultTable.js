@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import image from '../img/contemplative-reptile.jpeg';
-import { createTheme, ThemeProvider, Typography } from '@mui/material';
+import { Avatar, createTheme, ThemeProvider, Typography } from '@mui/material';
 import { useState } from 'react';
 
 const Img = styled('img')({
@@ -27,8 +27,10 @@ const theme = createTheme({
         primary: {
             main: '#5A5A5A',
         }
-    }
+    },
 });
+
+// const tableTopText = styled('Typo')
 
 
 export default function SearchResultTable({ selectEstimate, totalPrice }) {
@@ -40,7 +42,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                 <Table sx={{ minWidth: 700 }} aria-label="simple table">
                     <TableHead>
                         <TableRow theme={theme}>
-                            <TableCell></TableCell>
+                            <TableCell>{/*image*/}</TableCell>
                             <TableCell>수산물 명</TableCell>
                             <TableCell>원산지</TableCell>
                             <TableCell>양식여부</TableCell>
@@ -59,7 +61,14 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                             key={i}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell><Img alt="complex" src={image} /></TableCell>
+                                <TableCell>                                    
+                                    <Avatar
+                                        // alt={`Avatar n°${value + 1}`}
+                                        src={image}
+                                        variant= 'square'
+                                        style={{ height: '60px', width: '60px', borderRadius: '3px' }}
+                                    />
+                                </TableCell>
                                 <TableCell component="th" scope="row">
                                 {fishName}
                                 </TableCell>
@@ -81,19 +90,24 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
             <div style={{ display: 'flex', width: '50%', flexDirection: 'column' }}>
                 {selectEstimate? selectEstimate.map((item, i) => {
                     const { fishName, maxWeight, serving } = item;
-                    console.log({maxWeight} * {serving})
                     return(
-                        <div key={i} style={{ display: 'flex', justifyContent: 'space-evenly'}}>
-                            <Typography>{fishName}</Typography>
-                            <Typography>{maxWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량)</Typography>
-                            <Typography>{(maxWeight * serving) / 2}g</Typography>
+                        <div key={i} style={{ display: 'flex' }}>
+                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{fishName}</Typography>
+                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 2 }}>{maxWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량)</Typography>
+                            <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{(maxWeight * serving) / 2}g</Typography>
                         </div>
                     )
                 }): null}
             </div>
             <div>
-                <Typography>총 금액: {totalPrice.toLocaleString('ko-KR')}원</Typography>
-                <Typography>총 순살무게: 2500g</Typography>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
+                    <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1  }}>총 순살무게: </Typography>
+                    <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}> 2500</Typography>g
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1 }}>총 금액: </Typography>
+                    <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>{totalPrice? totalPrice.toLocaleString('ko-KR'): null}</Typography>원
+                </div>
             </div>
         </div>
     </div>

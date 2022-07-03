@@ -23,7 +23,7 @@ const Background = styled.div`
     background-color: #ebecee;
 `;
 
-const Img = styled('img')({
+const Img = styled('Avatar')({
     // margin: '13px 13px 12px 16px ',
     display: 'block',
     width: '50px',
@@ -60,37 +60,43 @@ const SelectedConditionList = () => {
     // }
     return (
             <Card>
-                <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
+                <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
                     <form style={{ position: 'relative', overflow: 'auto', height: 500 }}>
                     {selectCondition.map((select) => {
                         {/* console.log(select) */}
                         const { id, selectFish, amount, farmStatus } = select;
                         return (
                             <div style={{ display: 'flex', borderBottom: '1px solid #F6F6F6' }} key={id}>
-                                <Img alt="complex" src={image} />
+                                {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
+                                <Avatar
+                                    // alt={`Avatar n°${value + 1}`}
+                                    src={image}
+                                    variant= 'square'
+                                    style={{ height: '50px', width: '50px', borderRadius: '3px', margin: '13px' }}
+                                />
                                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                     <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: '16px 0px' }}>
                                         <div style={{ display: 'flex' }}>
                                             <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
                                                 {selectFish}
                                             </Typography>
-                                            <Typography sx={{ fontSize: 13, color: '#A5A5A5' }}>
+                                            <Typography sx={{ fontSize: 13, color: '#A5A5A5', fontWeight: 'medium', marginLeft: 1 }}>
                                                 ({amount}인분)
                                             </Typography>
                                         </div>
-                                        <Typography sx={{ fontSize: 14, color: '#A5A5A5' }} color="text.secondary" gutterBottom>
+                                        <Typography sx={{ fontSize: 13, color: '#A5A5A5', fontWeight: 'medium' }} color="text.secondary" gutterBottom>
                                             {farmStatus.join(", ")}
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8' }} onClick={() => {deleteContidion(id)}}>조건 삭제</Button>
+                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8', fontSize: 12 }} onClick={() => {deleteContidion(id)}}>삭제</Button>
                                     </CardActions>
                                 </div>
                             </div>
                         )
                     })}
                     </form>
-                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 12 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
+                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
             </Card>
     );
 };
