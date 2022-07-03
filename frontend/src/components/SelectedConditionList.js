@@ -36,6 +36,10 @@ const SelectedConditionList = () => {
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     console.log(selectCondition)
 
+    const deleteContidion = id => {
+        setSelectCondition(selectCondition.filter(item => item.id !== id ))
+    }
+
     return (
             <Card>
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
@@ -60,7 +64,7 @@ const SelectedConditionList = () => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8' }}>조건 삭제</Button>
+                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8' }} onClick={() => {deleteContidion(id)}}>조건 삭제</Button>
                                     </CardActions>
                                 </div>
                             </div>
