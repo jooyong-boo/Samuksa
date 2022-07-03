@@ -53,18 +53,22 @@ const SearchConditions = () => {
     const personNumInput = useRef();
 
     const handlePersonNumChange = (e) => {
-        setPersonNum(e.target.value);
+        const { value } = e.target;
+        const onlyNumberPersonValue = value.replace(/[^0-9]/g, '');
+        setPersonNum(onlyNumberPersonValue);
         if (e.target.value < 0) {
             alert('인원은 1 이상으로 해주세요');
-            setPersonNum('1');
+            setPersonNum(1);
         } else if (e.target.value > 3) {
             alert('인원은 3 이하로 해주세요');
-            setPersonNum('3');
+            setPersonNum(3);
         }
     }
 
     const handleMoneyChange = (e) => {
-        setMoney(e.target.value)
+        const { value } = e.target;
+        const onlyNumberMoney = value.replace(/[^0-9]/g, '');
+        setMoney(onlyNumberMoney)
     }
 
     const onClick = (e) => {
@@ -89,12 +93,12 @@ const SearchConditions = () => {
         setArea('노량진');
         personNumInput.focus();
     }
-    console.log(area)
+    console.log(typeof personNum)
 
 
     const onSubmit = (e) => {
             e.preventDefault();
-            getAreaTotalFishData().then(res => {setFishList(res)});
+            getAreaTotalFishData().then(res => {res ? setFishList(res) : alert('해당 가격으론 찾을 수 있는 조합이 없어요!')});
     }
 
     return (
@@ -108,7 +112,7 @@ const SearchConditions = () => {
                                 <TextField 
                                     id="outlined-basic" 
                                     label="인원수" 
-                                    type="number"
+                                    type="string"
                                     variant="outlined" 
                                     value={personNum}
                                     onChange={handlePersonNumChange} 
@@ -122,7 +126,7 @@ const SearchConditions = () => {
                                 <TextField
                                     id="outlined-basic"
                                     label="예산" 
-                                    type="number"
+                                    type="string"
                                     variant="outlined" 
                                     value={money}
                                     onChange={handleMoneyChange} 
@@ -151,7 +155,7 @@ const SearchConditions = () => {
                             </Grid>
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900}} onClick={onClick}>검색</Button>
+                            <Button variant="contained" type='submit' sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900}} onClick={onClick}>선택</Button>
                             <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                         </div>
                     </form>

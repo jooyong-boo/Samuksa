@@ -42,15 +42,15 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                 <Table sx={{ minWidth: 700 }} aria-label="simple table">
                     <TableHead>
                         <TableRow theme={theme}>
-                            <TableCell>{/*image*/}</TableCell>
-                            <TableCell>수산물 명</TableCell>
-                            <TableCell>원산지</TableCell>
-                            <TableCell>양식여부</TableCell>
-                            <TableCell>무게</TableCell>
-                            <TableCell>수량</TableCell>
-                            <TableCell>가격</TableCell>
-                            <TableCell>순살 무게</TableCell>
-                            <TableCell>합계</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>{/*image*/}</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>수산물 명</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>원산지</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>양식여부</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>무게</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>수량</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>가격</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>순살 무게</TableCell>
+                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>합계</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody sx={{  }}>
@@ -93,7 +93,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                     return(
                         <div key={i} style={{ display: 'flex' }}>
                             <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{fishName}</Typography>
-                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 2 }}>{maxWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량)</Typography>
+                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{maxWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
                             <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{(maxWeight * serving) / 2}g</Typography>
                         </div>
                     )

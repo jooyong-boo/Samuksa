@@ -9,7 +9,7 @@ import SearchResultTable from './SearchResultTable';
 
 const Card = styled.div`
     background-color: white;
-    width: 1200px;
+    width: 1193px;
     height: 550px;
     border-radius: 5px;
     margin: auto;
@@ -104,6 +104,7 @@ const SearchResults = () => {
                                     overflow: 'scroll',
                                     maxHeight: 495,
                                     padding: 0,
+                                    overflowX: 'hidden',
                                     // borderBottom: '1px solid black'
                                     // border: 0,
                                 }}
