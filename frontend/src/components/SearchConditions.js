@@ -50,7 +50,7 @@ const SearchConditions = () => {
     console.log(fishList);
 
 
-    // const personNumInput = useRef();
+    const personNumInput = useRef();
 
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
@@ -87,7 +87,7 @@ const SearchConditions = () => {
         setPersonNum(1);
         setMoney(50000);
         setArea('노량진');
-        // personNumInput.current.focus();
+        personNumInput.focus();
     }
     console.log(area)
 
@@ -100,7 +100,7 @@ const SearchConditions = () => {
     return (
         <>
             <Card>
-                <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
+                <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
                 <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
                     <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <Grid container spacing={5} justifyContent="center" alignItems="center">
@@ -114,7 +114,7 @@ const SearchConditions = () => {
                                     onChange={handlePersonNumChange} 
                                     autoFocus    
                                     fullWidth
-                                    // ref={personNumInput}
+                                    ref={personNumInput}
                                     // size="small"
                                 />
                             </Grid>
@@ -135,7 +135,7 @@ const SearchConditions = () => {
                                     <InputLabel id="local">지역</InputLabel>
                                     <Select
                                         labelId="local"
-                                        label="local"
+                                        label="지역"
                                         defaultValue={'노량진'}
                                         value={area}
                                         onChange={(e) => {setArea(e.target.value)}}

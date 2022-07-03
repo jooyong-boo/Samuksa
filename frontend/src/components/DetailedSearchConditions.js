@@ -15,7 +15,7 @@ const Card = styled.div`
     width: 570px;
     height: 464px;
     border-radius: 5px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     margin: 1rem;
 `
 
@@ -70,12 +70,6 @@ const DetailedSearchConditions = () => {
     }
 
     const onToggle = id => {
-        // setFish(
-        //     fish.map(fish =>
-        //         fish.fishInfoId !== id ? { ...fish, active: false } : fish
-        //     )
-        // );
-        // setFish(fish ? [] : fish)
         setFish(
             fish.map(fish =>
                 fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false }
@@ -123,9 +117,9 @@ const DetailedSearchConditions = () => {
     return (
         <>
         <Card>
-            <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
+            <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex', height: '100%' }}>
-                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA', height: '420px' }}>
+                <div style={{ width: '45%', borderRight: '1px solid #EAEAEA', maxHeight: '420px' }}>
                     <FormControl fullWidth sx={{}}> 
                         <Input 
                             id="input-with-icon-adornment"
@@ -150,6 +144,7 @@ const DetailedSearchConditions = () => {
                                 flexGrow: 1,
                                 backgroundColor: '#F8F8F8',
                                 padding: 0,
+                                boxShadow: 'none'
                             }}
                         >
                             <List
@@ -162,6 +157,8 @@ const DetailedSearchConditions = () => {
                                     maxHeight: 385,
                                     // borderBottom: '1px solid black'
                                     // border: 0,
+                                    padding: 0,
+                                    boxShadow: 'none'
                                 }}
                                 subheader={<li />}
                                 >
@@ -170,16 +167,18 @@ const DetailedSearchConditions = () => {
                                     {/* console.log(item); */}
                                     return (
                                         <ListItemStyled key={fishInfoId} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => {onToggle(fishInfoId)}}>
-                                            <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
+                                            <ListItemAvatar sx={{ padding: '9px 13px 9px 16px' }}>
                                                 <Avatar
                                                 // alt={`Avatar n°${value + 1}`}
                                                 src={image}
                                                 variant= 'square'
-                                                style={{ height: '50px', width: '50px' }}
+                                                style={{ height: '50px', width: '50px', borderRadius: '3px' }}
                                                 />
                                             </ListItemAvatar>
                                             <ListItem key={i} sx={{ paddingLeft: 0 }}>
                                                 <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
+                                                {/* <Typography>{fishName}</Typography>
+                                                <Typography>{fishYield}</Typography> */}
                                             </ListItem>
                                         </ListItemStyled>
                                     )
@@ -202,6 +201,7 @@ const DetailedSearchConditions = () => {
                             max={personNum}
                             onChange={changeAmount}
                         />
+                        <Typography sx={{ textAlign: 'center' }}>{amount}인분</Typography>
                     </div>
                     <div style={{ width: '90%',height: '100%' , margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
@@ -209,7 +209,7 @@ const DetailedSearchConditions = () => {
                         {
                             farm ? 
                             farm.map((item, i) => (
-                                    <Typography key={i}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
+                                    <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
                                 )) : null
                         }
                         {/* {farmType.map((item, i) => (
@@ -217,7 +217,7 @@ const DetailedSearchConditions = () => {
                         ))} */}
                         {/* <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography> */}
 
-                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 160, }} onClick={addCondition} >조건 추가하기</Button>
+                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
                     </div>
                 </div>
             </div>
