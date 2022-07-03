@@ -36,16 +36,15 @@ public class FishRecommendService {
         FishRecommendRequestToAlgoNeed fishRecommendRequestToAlgoNeed;
         FishRecommendAlgoNeed fishRecommendAlgoNeed;
         FishRecommendAlgo fishRecommendAlgo;
-        List<List<FishRecommendResponseFlagImp>> fishRecommendResponseFlagImpsList;
+        List<FishRecommendCombination> fishRecommendCombinations;
         FishRecommendFlagToResponse fishRecommendFlagToResponse;
 
         fishRecommendRequestToAlgoNeed = new FishRecommendRequestToAlgoNeed(fishRecommendRequest, fishPrices);
         fishRecommendAlgoNeed = fishRecommendRequestToAlgoNeed.getFishRecommendAlgoNeed();
 
         fishRecommendAlgo = new FishRecommendAlgo(fishRecommendAlgoNeed);
-        fishRecommendResponseFlagImpsList = fishRecommendAlgo.getFishRecommendResponseFlagImpsList();
-
-        fishRecommendFlagToResponse = new FishRecommendFlagToResponse(fishRecommendResponseFlagImpsList, fishPrices);
+        fishRecommendCombinations = fishRecommendAlgo.getFishRecommendCombinations();
+        fishRecommendFlagToResponse = new FishRecommendFlagToResponse(fishRecommendCombinations, fishPrices);
         this.fishRecommendResponse = fishRecommendFlagToResponse.getFishRecommendResponse();
 
         return fishRecommendResponse;
