@@ -111,7 +111,7 @@ const DetailedSearchConditions = () => {
     };
 
     console.log(selectFish)
-    console.log(selectCondition);
+    // console.log(selectCondition);
 
     return (
         <>
