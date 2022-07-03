@@ -38,7 +38,7 @@ public class FishController {
     })
     @ApiOperation(value = "수산물 추천", response = FishRecommendResponse.class)
     public FishRecommendResponse getRecommend(@RequestParam(name = "personNumber") int personNumber, @RequestParam(name = "money") int money, @RequestParam(name = "saleArea") String saleArea) {
-        List<FishPrice> fishPrices = fishService.getAllTodayFishPrice();
+        List<FishPrice> fishPrices = fishService.getTodayFishPrice(saleArea);
         FishRecommendRequest fishRecommendRequest = new FishRecommendRequest(personNumber, money, saleArea);
         FishRecommendService fishRecommendService = new FishRecommendService(fishPrices,fishRecommendRequest);
         return fishRecommendService.getFishRecommendResponse();

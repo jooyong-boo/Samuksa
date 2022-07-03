@@ -17,7 +17,7 @@ public class FishRecommendAlgoNeed {
 
     private List<FishRecommendBtDto> fishRecommendBtDtos;
 
-    private int totalServingWeight;
+    private int     maxPrice;
 
-    private int LimitMoney;
+    private int     totalServing;
 }
