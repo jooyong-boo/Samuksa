@@ -6,7 +6,7 @@ import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { fishPriceAllState, getFramTypeState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
+import { fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
 
@@ -35,6 +35,9 @@ const DetailedSearchConditions = () => {
     const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [selectFish, setSelectFish] = useRecoilState(selectFishState)
+    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
+    const personNum = useRecoilValue(personNumState)
+    console.log(fishList)
     // const [selectFishName, setSelectFishName] = useRecoilState(selectFishNameState);
     // console.log(selectCondition);
 
@@ -42,9 +45,13 @@ const DetailedSearchConditions = () => {
     // console.log(farmType);
 
     // console.log(areaFishPrice);
+
+    useEffect(() => {
+        setFish(fishList)
+    }, [fishList])
     
-    const [fish, setFish] = useState(areaFishPrice)
-    const [amount, setAmount] = useState(4);
+    const [fish, setFish] = useState(fishList)
+    const [amount, setAmount] = useState(1);
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
 
@@ -55,9 +62,9 @@ const DetailedSearchConditions = () => {
         let searchName = e.target.value;
         console.log(searchName);
         if (!searchName) {
-            setFish(areaFishPrice);
+            setFish(fishList);
         } else {
-            let result = areaFishPrice.filter(name => name.fishName === searchName);
+            let result = fishList.filter(name => name.fishName === searchName);
             setFish(result);
         }
     }
@@ -118,7 +125,7 @@ const DetailedSearchConditions = () => {
         <Card>
             <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex', height: '100%' }}>
-                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA', height: '100%' }}>
+                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA', height: '420px' }}>
                     <FormControl fullWidth sx={{}}> 
                         <Input 
                             id="input-with-icon-adornment"
@@ -192,7 +199,7 @@ const DetailedSearchConditions = () => {
                             step={1}
                             marks
                             min={1}
-                            max={4}
+                            max={personNum}
                             onChange={changeAmount}
                         />
                     </div>

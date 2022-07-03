@@ -11,10 +11,10 @@ function App() {
   return (
     <Suspense fallback={<Loading/>}>
       <Routes>
-        <Route path='/' element={<MainPage />} />
+        {/* <Route path='/' element={<MainPage />} />
         <Route path='/search' element={<SearchPage />} />
-        <Route path='/detail' element={<DetailRecommendPage />} />
-        <Route path='/test' element={<TestPage/>} />
+        <Route path='/detail' element={<DetailRecommendPage />} /> */}
+        <Route path='/' element={<TestPage/>} />
       </Routes>
     </Suspense>
   );

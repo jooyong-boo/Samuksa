@@ -3,9 +3,10 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextFie
 import styled from 'styled-components';
 import { Container } from '@mui/system';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { areaState, getAreaState, moneyState, personNumState } from '../store/atom';
+import { areaState, fishDetailRecommendInfo, getAreaState, moneyState, personNumState, recommendListState } from '../store/atom';
 import { useNavigate } from 'react-router-dom';
 import DetailedSearchConditions from './DetailedSearchConditions';
+import { getAreaTotalFishData } from '../api/auth';
 
 const Card = styled.div`
     background-color: white;
@@ -40,15 +41,16 @@ const MenuProps = {
 
 const SearchConditions = () => {
 
-    const navigate = useNavigate();
     const getArea = useRecoilValue(getAreaState);
 
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
+    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
+    console.log(fishList);
 
 
-    const personNumInput = useRef();
+    // const personNumInput = useRef();
 
     const handlePersonNumChange = (e) => {
         setPersonNum(e.target.value);
@@ -83,16 +85,16 @@ const SearchConditions = () => {
     const onReset = (e) => {
         e.preventDefault();
         setPersonNum(1);
-        setMoney(5000);
+        setMoney(50000);
         setArea('노량진');
-        personNumInput.current.focus();
+        // personNumInput.current.focus();
     }
     console.log(area)
 
 
     const onSubmit = (e) => {
             e.preventDefault();
-            // 상세 검색조건 어종 불러오기
+            getAreaTotalFishData().then(res => {setFishList(res)});
     }
 
     return (
@@ -112,7 +114,7 @@ const SearchConditions = () => {
                                     onChange={handlePersonNumChange} 
                                     autoFocus    
                                     fullWidth
-                                    ref={personNumInput}
+                                    // ref={personNumInput}
                                     // size="small"
                                 />
                             </Grid>

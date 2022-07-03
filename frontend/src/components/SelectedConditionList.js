@@ -2,8 +2,9 @@ import { Avatar, Button, ButtonBase, CardActions, CardContent, Checkbox, FormCon
 import React from 'react';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
-import { selectConditions } from '../store/atom';
-import { useRecoilState } from 'recoil';
+import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { getFishRecommendData } from '../api/auth';
 
 const Card = styled.div`
     background-color: white;
@@ -34,16 +35,34 @@ const Img = styled('img')({
 
 const SelectedConditionList = () => {
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
+    const [recommendList, setRecommendList] = useRecoilState(recommendListState);
+    const personNum = useRecoilValue(personNumState);
+    const money = useRecoilValue(moneyState);
+    const area = useRecoilValue(areaState);
     console.log(selectCondition)
 
     const deleteContidion = id => {
         setSelectCondition(selectCondition.filter(item => item.id !== id ))
     }
 
+    const onClick = (e) => {
+        e.preventDefault();
+        if (selectCondition.length === 0) {
+            alert('선택한 조건이 없습니다.');
+        } else {
+            getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res.fishRecommendUnions))
+        }
+    }
+
+    // const searchCondition = (e) => {
+    //     e.preventDefault();
+    //     getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res))
+    // }
     return (
             <Card>
                 <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
-                    {selectCondition.map((select, i) => {
+                    <form style={{ position: 'relative', overflow: 'auto', height: 500 }}>
+                    {selectCondition.map((select) => {
                         {/* console.log(select) */}
                         const { id, selectFish, amount, farmStatus } = select;
                         return (
@@ -70,7 +89,8 @@ const SelectedConditionList = () => {
                             </div>
                         )
                     })}
-                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 12 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} >조합 검색</Button>
+                    </form>
+                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 12 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
             </Card>
     );
 };

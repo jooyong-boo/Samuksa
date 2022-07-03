@@ -23,7 +23,7 @@ const Main2 = () => {
         <>
             <Header />
             <Background>
-                <TopStepper />
+                {/* <TopStepper /> */}
                 <SearchConditions />
                 {/* <DetailedSearchConditions /> */}
                 {/* <SelectedConditionList /> */}
