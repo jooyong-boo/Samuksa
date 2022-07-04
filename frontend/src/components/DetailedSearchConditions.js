@@ -9,6 +9,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Card = styled.div`
     background-color: white;
@@ -31,6 +33,8 @@ const ListItemStyled = styled.div`
 `;
 
 const DetailedSearchConditions = () => {
+
+    const notify = () => toast.warning('잘되나');
 
     const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
