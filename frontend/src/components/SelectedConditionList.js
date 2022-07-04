@@ -55,10 +55,6 @@ const SelectedConditionList = () => {
         }
     }
 
-    // const searchCondition = (e) => {
-    //     e.preventDefault();
-    //     getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res))
-    // }
     return (
             <Card>
                 <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
@@ -97,7 +93,8 @@ const SelectedConditionList = () => {
                         )
                     })}
                     </CustomForm>
-                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
+                {selectCondition.length > 0 ? <Button variant='contained' disableElevation sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
+                    : <Button variant='contained' disableElevation sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#767676',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>}
             </Card>
     );
 };

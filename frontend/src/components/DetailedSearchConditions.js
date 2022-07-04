@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonBase, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import { Avatar, Button, Checkbox, FormControl, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
@@ -77,10 +77,16 @@ const DetailedSearchConditions = () => {
             item.active === true ? setSelectFish([]) : item) 
         console.log(filterActive)
 
+        
         // id 일치하면 fishName 넣기 active가 false면 빈배열 반환하기
         fish.map(fish =>
             fish.fishInfoId === id ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : null
-        )
+            )
+        
+        // fish.active === false면 farm 비우기
+        // const activeFarmType = fish.map(item =>
+        //             (fish.fishInfoId === id && item.active === false)? setFarm([]) : setFarm(...farm)
+        //         )
     };
 
     // console.log(farm);
@@ -161,6 +167,7 @@ const DetailedSearchConditions = () => {
                                     // border: 0,
                                     padding: 0,
                                     boxShadow: 'none',
+                                    overflowX: 'hidden',
                                     '&::-webkit-scrollbar': {
                                         width: '8px',
                                         borderRadius: '6px',
@@ -223,16 +230,11 @@ const DetailedSearchConditions = () => {
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
                         {
                             farm ? 
-                            farm.map((item, i) => (
+                                farm.map((item, i) => (
                                     <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
                                 )) : null
                         }
-                        {/* {farmType.map((item, i) => (
-                            <Typography key={i}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={formStatus.includes(`${item}`) ? true : false} />{item}</Typography>
-                        ))} */}
-                        {/* <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography> */}
-
-                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
+                        <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
                     </div>
                 </div>
             </div>

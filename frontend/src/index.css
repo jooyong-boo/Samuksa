@@ -23,7 +23,7 @@ code {
 
 body::-webkit-scrollbar {
   width: 8px;  
-  border-radius: 6px;
+  /* border-radius: 5px; */
   background: #F5F5F5;
 }
 
