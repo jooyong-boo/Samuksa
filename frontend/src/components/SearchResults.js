@@ -86,14 +86,14 @@ const SearchResults = () => {
                                 <CardContent key={i} onClick={() => {onRecommendClick(fishRecommendCombinations)}} sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
                                     {/* <Img alt="complex" src={image} /> */}
                                     <Avatar
-                                        alt={combinationName}
+                                        alt={combinationName.join(" + ")}
                                         src={image}
                                         variant= 'square'
                                         style={{ height: '50px', width: '50px', borderRadius: '3px', margin: '0px' }}
                                     />
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '100%', paddingLeft: '10px' }}>
                                         <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
-                                            {combinationName}
+                                            {combinationName.join(" + ")}
                                         </Typography>
                                         <Typography sx={{ fontSize: 14, color: '#A5A5A5' }} color="text.secondary">
                                             ({fishRecommendCombinations.length})
@@ -145,12 +145,13 @@ const SearchResults = () => {
                                 >
                                     <div style={{ display: 'flex', flexDirection: 'column' ,backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }}>
                                         {selectResult? (selectResult).map((item, i) => {
-                                            const { totalPrice, combinationName, fishRecommendInfos } = item;
+                                            const { totalPrice, combinationName, fishRecommendBtDtos } = item;
+                                            console.log(fishRecommendBtDtos)
                                             return (
                                                 <React.Fragment key={i}>
-                                                    <ListItem onClick={() => {onEstimateClick(fishRecommendInfos, totalPrice)}} sx={{ paddingLeft: 0, borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
+                                                    <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice)}} sx={{ paddingLeft: 0, borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
                                                         <div style={{  width: '100%', display: 'flex', justifyContent: 'space-around' }}>
-                                                            <Typography sx={{ fontSize: '13px', color: '#545454' }}>{combinationName}</Typography>
+                                                            <Typography sx={{ fontSize: '13px', color: '#545454' }}>{combinationName.join("+")}</Typography>
                                                             <Typography sx={{ fontSize: '13px', color: '#979797' }}>(2인분)</Typography>
                                                         </div>
                                                             <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>

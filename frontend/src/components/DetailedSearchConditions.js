@@ -9,6 +9,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Card = styled.div`
     background-color: white;
@@ -31,6 +33,8 @@ const ListItemStyled = styled.div`
 `;
 
 const DetailedSearchConditions = () => {
+
+    const notify = () => toast.warning('잘되나');
 
     const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
@@ -115,8 +119,9 @@ const DetailedSearchConditions = () => {
         }
         setSelectCondition(selectCondition.some(item =>
             item.id === selectFish[0].fishInfoId) ?
-                [...selectCondition] : 
-                [...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
+                (alert('중복임'),
+                [...selectCondition])
+                : [...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
     };
 
     console.log(selectFish)
