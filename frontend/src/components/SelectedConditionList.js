@@ -13,25 +13,26 @@ const Card = styled.div`
     border-radius: 5px;
     /* margin: 30px 100px; */
     position: relative;
-`
-
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    background-color: #ebecee;
 `;
 
-const Img = styled('Avatar')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '50px',
-    height: '50px',
-    objectFit: 'cover',
-    margin: 13,
-    // padding: '9px 13px 11px 16px',
-  });
+const CustomForm = styled.form`
+    position: relative;
+    height: 340px;
+    overflow: auto;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 8px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.4);
+    }
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.00);
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+    }
+`;
 
 const SelectedConditionList = () => {
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
@@ -54,14 +55,10 @@ const SelectedConditionList = () => {
         }
     }
 
-    // const searchCondition = (e) => {
-    //     e.preventDefault();
-    //     getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res))
-    // }
     return (
             <Card>
                 <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
-                    <form style={{ position: 'relative', overflow: 'auto', height: 500 }}>
+                    <CustomForm>
                     {selectCondition.map((select) => {
                         {/* console.log(select) */}
                         const { id, selectFish, amount, farmStatus } = select;
@@ -95,8 +92,9 @@ const SelectedConditionList = () => {
                             </div>
                         )
                     })}
-                    </form>
-                <Button variant='contained' sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
+                    </CustomForm>
+                {selectCondition.length > 0 ? <Button variant='contained' disableElevation sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
+                    : <Button variant='contained' disableElevation sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#767676',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>}
             </Card>
     );
 };

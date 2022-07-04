@@ -23,7 +23,7 @@ export const getAreaTotalFishData = async () => {
   } catch (err) {
     console.log(err.response);
   }
-}
+};
 
 // 수산물 판매지역 조회
 export const getArea = async () => {
@@ -33,7 +33,7 @@ export const getArea = async () => {
   } catch (err) {
     console.log(err.response);
   }
-}
+};
 
 // 수산물 양식여부 조회
 export const getFarmType = async ({ fishName }) => {
@@ -43,4 +43,4 @@ export const getFarmType = async ({ fishName }) => {
   } catch (err) {
     console.log(err.response);
   }
-}
+};

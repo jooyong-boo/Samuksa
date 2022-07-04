@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonBase, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import { Avatar, Button, Checkbox, FormControl, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
@@ -37,14 +37,7 @@ const DetailedSearchConditions = () => {
     const [selectFish, setSelectFish] = useRecoilState(selectFishState)
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
     const personNum = useRecoilValue(personNumState)
-    console.log(fishList)
-    // const [selectFishName, setSelectFishName] = useRecoilState(selectFishNameState);
-    // console.log(selectCondition);
-
-    // const farmType = useRecoilValue(getFramTypeState)
-    // console.log(farmType);
-
-    // console.log(areaFishPrice);
+    // console.log(fishList)
 
     useEffect(() => {
         setFish(fishList)
@@ -55,7 +48,7 @@ const DetailedSearchConditions = () => {
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
 
-    console.log(fish);
+    // console.log(fish);
     
     const onSearch = (e) => {
         e.preventDefault()
@@ -70,20 +63,35 @@ const DetailedSearchConditions = () => {
     }
 
     const onToggle = id => {
+
         setFish(
             fish.map(fish =>
                 fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false }
             )
         );
+
         setSelectFish(fish.filter(fish =>  fish.fishInfoId === id));
 
-        // id 일치하면 fishName 넣기
+        // fish toogle active가 false로 변할시 selectFish 비우기 (조건 추가 후 다른 어종 선택 시 active가 추가되는 문제가 있음)
+        const filterActive = fish.filter(item =>
+            item.active === true ? setSelectFish([]) : item) 
+        console.log(filterActive)
+
+        
+        // id 일치하면 fishName 넣기 active가 false면 빈배열 반환하기
         fish.map(fish =>
             fish.fishInfoId === id ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : null
-        )
+            )
+        
+        // fish.active === false면 farm 비우기
+        // const activeFarmType = fish.map(item =>
+        //             (fish.fishInfoId === id && item.active === false)? setFarm([]) : setFarm(...farm)
+        //         )
     };
-    console.log(farm);
-    console.log(farmStatus);
+
+    // console.log(farm);
+    // console.log(farmStatus);
+    
     const changeAmount = (event, newAmount) => {
         setAmount(newAmount)
         console.log(amount)
@@ -99,7 +107,7 @@ const DetailedSearchConditions = () => {
       };
 
     const addCondition = () => {
-        if (selectFish === '') {
+        if (selectFish.length === 0) {
             return alert('어종을 선택해주세요');
         }
         if (farmStatus.length === 0) {
@@ -120,7 +128,7 @@ const DetailedSearchConditions = () => {
             <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex', height: '100%' }}>
                 <div style={{ width: '45%', borderRight: '1px solid #EAEAEA', maxHeight: '420px' }}>
-                    <FormControl fullWidth sx={{}}> 
+                    <FormControl fullWidth> 
                         <Input 
                             id="input-with-icon-adornment"
                             startAdornment={
@@ -158,7 +166,21 @@ const DetailedSearchConditions = () => {
                                     // borderBottom: '1px solid black'
                                     // border: 0,
                                     padding: 0,
-                                    boxShadow: 'none'
+                                    boxShadow: 'none',
+                                    overflowX: 'hidden',
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px',
+                                        borderRadius: '6px',
+                                        background: 'rgba(255, 255, 255, 0.4)',
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                        borderRadius: '6px'
+                                    },
                                 }}
                                 subheader={<li />}
                                 >
@@ -175,7 +197,7 @@ const DetailedSearchConditions = () => {
                                                 style={{ height: '50px', width: '50px', borderRadius: '3px' }}
                                                 />
                                             </ListItemAvatar>
-                                            <ListItem key={i} sx={{ paddingLeft: 0 }}>
+                                            <ListItem sx={{ paddingLeft: 0 }}>
                                                 <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
                                                 {/* <Typography>{fishName}</Typography>
                                                 <Typography>{fishYield}</Typography> */}
@@ -208,16 +230,11 @@ const DetailedSearchConditions = () => {
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
                         {
                             farm ? 
-                            farm.map((item, i) => (
+                                farm.map((item, i) => (
                                     <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
                                 )) : null
                         }
-                        {/* {farmType.map((item, i) => (
-                            <Typography key={i}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={formStatus.includes(`${item}`) ? true : false} />{item}</Typography>
-                        ))} */}
-                        {/* <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography> */}
-
-                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
+                        <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
                     </div>
                 </div>
             </div>

@@ -9,12 +9,34 @@ import SearchResultTable from './SearchResultTable';
 
 const Card = styled.div`
     background-color: white;
-    width: 1200px;
+    width: 1193px;
     height: 550px;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 3%;
-`
+`;
+
+const CustomDiv = styled.div`
+    border-bottom: 1px solid #F6F6F6;
+    border-right: 1px solid #EAEAEA;
+    width: 20%;
+    height: 494px;
+    position: relative;
+    overflow: auto;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 8px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.4);
+    }
+    &::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.00);
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 6px;
+    }
+`;
 
 const Background = styled.div`
     width: 100%;
@@ -36,7 +58,7 @@ const Img = styled('img')({
 
 const SearchResults = () => {
         const result = useRecoilValue(recommendListState);
-        console.log(result);
+        // console.log(result);
 
         const [selectResult, setSelectResult] = useState();
         const [selectEstimate, setSelectEstimate] = useState();
@@ -45,19 +67,19 @@ const SearchResults = () => {
         const onRecommendClick = (item) => {
             setSelectResult(item);
         }
-        console.log(selectResult);
+        // console.log(selectResult);
 
         const onEstimateClick = (item, price) => {
             setSelectEstimate(item);
             setTotalPrice(price)
         };
-        console.log(selectEstimate)
+        // console.log(selectEstimate)
     return (
         <>  
             <Card>
                 <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
                 <div style={{ display: 'flex' }}>
-                    <div style={{ borderBottom: '1px solid #F6F6F6', borderRight: '1px solid #EAEAEA' , width: '20%', height: 495, position: 'relative', overflow: 'auto'}}>
+                    <CustomDiv>
                         {result? result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations } = item;
                             return (
@@ -80,7 +102,7 @@ const SearchResults = () => {
                                 </CardContent>
                             )
                         }) : null}
-                    </div>
+                    </CustomDiv>
                     <div style={{ width: '12%', height: '100%' , borderRight: '1px solid #EAEAEA' }}>
                         <Paper
                             sx={{
@@ -102,10 +124,22 @@ const SearchResults = () => {
                                     bgcolor: 'background.paper',
                                     position: 'relative',
                                     overflow: 'scroll',
-                                    maxHeight: 495,
+                                    maxHeight: 494,
                                     padding: 0,
-                                    // borderBottom: '1px solid black'
-                                    // border: 0,
+                                    overflowX: 'hidden',
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px',
+                                        borderRadius: '6px',
+                                        background: 'rgba(255, 255, 255, 0.4)',
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                        borderRadius: '6px'
+                                    },
                                 }}
                                 subheader={<li />}
                                 >
