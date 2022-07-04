@@ -47,7 +47,7 @@ const SearchConditions = () => {
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
-    console.log(fishList);
+    // console.log(fishList);
 
 
     const personNumInput = useRef();
@@ -93,7 +93,6 @@ const SearchConditions = () => {
         setArea('노량진');
         personNumInput.focus();
     }
-    console.log(typeof personNum)
 
 
     const onSubmit = (e) => {

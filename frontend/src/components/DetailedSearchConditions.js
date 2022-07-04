@@ -37,14 +37,7 @@ const DetailedSearchConditions = () => {
     const [selectFish, setSelectFish] = useRecoilState(selectFishState)
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
     const personNum = useRecoilValue(personNumState)
-    console.log(fishList)
-    // const [selectFishName, setSelectFishName] = useRecoilState(selectFishNameState);
-    // console.log(selectCondition);
-
-    // const farmType = useRecoilValue(getFramTypeState)
-    // console.log(farmType);
-
-    // console.log(areaFishPrice);
+    // console.log(fishList)
 
     useEffect(() => {
         setFish(fishList)
@@ -55,7 +48,7 @@ const DetailedSearchConditions = () => {
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
 
-    console.log(fish);
+    // console.log(fish);
     
     const onSearch = (e) => {
         e.preventDefault()
@@ -70,20 +63,29 @@ const DetailedSearchConditions = () => {
     }
 
     const onToggle = id => {
+
         setFish(
             fish.map(fish =>
                 fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false }
             )
         );
+
         setSelectFish(fish.filter(fish =>  fish.fishInfoId === id));
 
-        // id 일치하면 fishName 넣기
+        // fish toogle active가 false로 변할시 selectFish 비우기 (조건 추가 후 다른 어종 선택 시 active가 추가되는 문제가 있음)
+        const filterActive = fish.filter(item =>
+            item.active === true ? setSelectFish([]) : item) 
+        console.log(filterActive)
+
+        // id 일치하면 fishName 넣기 active가 false면 빈배열 반환하기
         fish.map(fish =>
             fish.fishInfoId === id ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : null
         )
     };
-    console.log(farm);
-    console.log(farmStatus);
+
+    // console.log(farm);
+    // console.log(farmStatus);
+    
     const changeAmount = (event, newAmount) => {
         setAmount(newAmount)
         console.log(amount)
@@ -99,7 +101,7 @@ const DetailedSearchConditions = () => {
       };
 
     const addCondition = () => {
-        if (selectFish === '') {
+        if (selectFish.length === 0) {
             return alert('어종을 선택해주세요');
         }
         if (farmStatus.length === 0) {
@@ -120,7 +122,7 @@ const DetailedSearchConditions = () => {
             <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
             <div style={{ display: 'flex', height: '100%' }}>
                 <div style={{ width: '45%', borderRight: '1px solid #EAEAEA', maxHeight: '420px' }}>
-                    <FormControl fullWidth sx={{}}> 
+                    <FormControl fullWidth> 
                         <Input 
                             id="input-with-icon-adornment"
                             startAdornment={

@@ -36,7 +36,7 @@ const Img = styled('img')({
 
 const SearchResults = () => {
         const result = useRecoilValue(recommendListState);
-        console.log(result);
+        // console.log(result);
 
         const [selectResult, setSelectResult] = useState();
         const [selectEstimate, setSelectEstimate] = useState();
@@ -45,13 +45,13 @@ const SearchResults = () => {
         const onRecommendClick = (item) => {
             setSelectResult(item);
         }
-        console.log(selectResult);
+        // console.log(selectResult);
 
         const onEstimateClick = (item, price) => {
             setSelectEstimate(item);
             setTotalPrice(price)
         };
-        console.log(selectEstimate)
+        // console.log(selectEstimate)
     return (
         <>  
             <Card>
