@@ -105,8 +105,19 @@ const SearchResults = () => {
                                     maxHeight: 495,
                                     padding: 0,
                                     overflowX: 'hidden',
-                                    // borderBottom: '1px solid black'
-                                    // border: 0,
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px',
+                                        borderRadius: '6px',
+                                        background: 'rgba(255, 255, 255, 0.4)',
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                        borderRadius: '6px'
+                                    },
                                 }}
                                 subheader={<li />}
                                 >
