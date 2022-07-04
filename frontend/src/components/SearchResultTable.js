@@ -35,6 +35,7 @@ const theme = createTheme({
 
 export default function SearchResultTable({ selectEstimate, totalPrice }) {
 
+    // console.log(selectEstimate, totalPrice)
   return (
     <div>
         <ThemeProvider theme={theme}>
@@ -55,7 +56,9 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                     </TableHead>
                     <TableBody sx={{  }}>
                     {selectEstimate ? selectEstimate.map((item, i) => {
-                        const { fishName, area, areaFrom, farmType, size, maxWeight, minWeight, serving, price } = item;
+                        const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
+                        const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [...fishRecommendAlgoWeights];
+                        console.log(maxWeight);
                         return (
                             <TableRow
                             key={i}
@@ -74,11 +77,13 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                                 </TableCell>
                                 <TableCell>{areaFrom}</TableCell>
                                 <TableCell>{farmType}</TableCell>
-                                <TableCell>{minWeight / 1000}~{maxWeight / 1000}kg</TableCell>
+                                {/* <TableCell>{ maxWeight && minWeight? `${minWeight / 1000} ~ ${maxWeight / 1000}kg` : maxWeight? `${maxWeight / 1000}kg` : `${minWeight / 1000}kg` }</TableCell> */}
+                                <TableCell>{ weightPerServing * serving / 1000 }kg</TableCell>
                                 <TableCell>{serving}</TableCell>
-                                <TableCell>{price.toLocaleString('ko-KR')}원</TableCell>
-                                <TableCell>순살무게</TableCell>
-                                <TableCell>{(price * serving).toLocaleString('ko-KR')}원</TableCell>
+                                <TableCell>{(price * 1000).toLocaleString('ko-KR')}원</TableCell>
+                                <TableCell>{(weightPerServing * serving / 1000) * 0.5}kg</TableCell>
+                                {/* <TableCell>{maxWeight? ((maxWeight * 0.5) / 1000) : minWeight? ((minWeight * 0.5) / 1000) : null}kg</TableCell> */}
+                                <TableCell>{totalMoney.toLocaleString('ko-KR')}원</TableCell>
                             </TableRow>
                         )
                     }) : null}
@@ -89,12 +94,15 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '95%', margin: 'auto', marginTop: '1rem'}}>
             <div style={{ display: 'flex', width: '50%', flexDirection: 'column' }}>
                 {selectEstimate? selectEstimate.map((item, i) => {
-                    const { fishName, maxWeight, serving } = item;
+                    const { fishName, serving, fishRecommendAlgoWeights, weightPerServing } = item;
+                    const [{ maxWeight, minWeight }] = [...fishRecommendAlgoWeights];
                     return(
                         <div key={i} style={{ display: 'flex' }}>
                             <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{fishName}</Typography>
-                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{maxWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
-                            <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{(maxWeight * serving) / 2}g</Typography>
+                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{ weightPerServing * serving / 1000 }kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
+                            <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{ (weightPerServing * serving / 1000) * 0.5 * serving }kg</Typography>
+                            {/* <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{maxWeight? maxWeight / 1000 : minWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
+                            <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{maxWeight ? ((maxWeight * serving / 2) / 1000) : ((minWeight * serving / 2) / 1000)}kg</Typography> */}
                         </div>
                     )
                 }): null}
@@ -102,7 +110,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
             <div>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
                     <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1  }}>총 순살무게: </Typography>
-                    <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}> 2500</Typography>g
+                    <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>?</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1 }}>총 금액: </Typography>

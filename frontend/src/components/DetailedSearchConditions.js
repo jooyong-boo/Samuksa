@@ -115,8 +115,9 @@ const DetailedSearchConditions = () => {
         }
         setSelectCondition(selectCondition.some(item =>
             item.id === selectFish[0].fishInfoId) ?
-                [...selectCondition] : 
-                [...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
+                (alert('중복임'),
+                [...selectCondition])
+                : [...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
     };
 
     console.log(selectFish)
