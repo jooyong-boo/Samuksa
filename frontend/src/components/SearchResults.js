@@ -155,7 +155,7 @@ const SearchResults = () => {
                                                     {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
                                                         const { fishName, serving } = item;
                                                         return (
-                                                            <div style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+                                                            <div key={i} style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
                                                                 <Typography sx={{ fontSize: '13px', color: '#545454' }}>{fishName}</Typography>
                                                                 <Typography sx={{ fontSize: '13px', color: '#979797' }}>({serving}인분)</Typography>
                                                             </div>
