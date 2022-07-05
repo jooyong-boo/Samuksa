@@ -112,6 +112,7 @@ const SearchConditions = () => {
                                     onChange={handlePersonNumChange} 
                                     autoFocus={true}
                                     fullWidth
+                                    autoComplete='off'
                                     // size="small"
                                 />
                             </Grid>
@@ -124,6 +125,7 @@ const SearchConditions = () => {
                                     value={money}
                                     onChange={handleMoneyChange} 
                                     fullWidth
+                                    autoComplete='off'
                                     // size="small"
                                 />
                             </Grid>
