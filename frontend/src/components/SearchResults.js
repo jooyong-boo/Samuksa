@@ -1,7 +1,7 @@
 import { Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { fishDataState, recommendListState } from '../store/atom';
@@ -11,6 +11,7 @@ const Card = styled.div`
     background-color: white;
     width: 1193px;
     height: 550px;
+    min-width: 500px;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 3%;
@@ -24,6 +25,7 @@ const CustomDiv = styled.div`
     position: relative;
     overflow: auto;
     overflow-x: hidden;
+    min-width: 20%;
     &::-webkit-scrollbar {
         width: 8px;
         border-radius: 6px;
@@ -57,20 +59,22 @@ const Img = styled('img')({
   });
 
 const SearchResults = () => {
-        const result = useRecoilValue(recommendListState);
+        const [result, setResult] = useRecoilState(recommendListState);
         // console.log(result);
 
         const [selectResult, setSelectResult] = useState();
         const [selectEstimate, setSelectEstimate] = useState();
-        const [totalServing, setTotalServing] = useState();
         const [totalPrice, setTotalPrice] = useState();
 
-        const onRecommendClick = (item) => {
+        const onRecommendClick = (item, id) => {
             setSelectResult(item);
+            setResult(result.map((item) =>
+                item.combinationName === id ? {...item, active: !item.active} : { ...item, active: false }))
         }
-        // console.log(selectResult);
 
-        const onEstimateClick = (item, price) => {
+        const onEstimateClick = (item, price, selectId) => {
+            setSelectResult(selectResult.map((item, id) =>
+                id === selectId ? {...item, active: !item.active} : { ...item, active: false }))
             setSelectEstimate(item);
             setTotalPrice(price)
         };
@@ -80,12 +84,12 @@ const SearchResults = () => {
         <>  
             <Card>
                 <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                     <CustomDiv>
                         {result? result.map((item, i) => {
-                            const { combinationName, combinationSize, fishRecommendCombinations } = item;
+                            const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                             return (
-                                <CardContent key={i} onClick={() => {onRecommendClick(fishRecommendCombinations)}} sx={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
+                                <CardContent key={i} onToggle={onRecommendClick}  onClick={() => {onRecommendClick(fishRecommendCombinations, combinationName)}} sx={{ display: 'flex', alignItems: 'center', backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
                                     {/* <Img alt="complex" src={image} /> */}
                                     <Avatar
                                         alt={combinationName.join(" + ")}
@@ -105,7 +109,7 @@ const SearchResults = () => {
                             )
                         }) : null}
                     </CustomDiv>
-                    <div style={{ width: '12%', height: '100%' , borderRight: '1px solid #EAEAEA' }}>
+                    <div style={{ width: '10%', height: '100%' , borderRight: '1px solid #EAEAEA', minWidth: '10%' }}>
                         <Paper
                             sx={{
                                 p: 2,
@@ -147,11 +151,11 @@ const SearchResults = () => {
                                 >
                                     <div style={{ display: 'flex', flexDirection: 'column' ,backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }}>
                                         {selectResult? (selectResult).map((item, i) => {
-                                            const { totalPrice, combinationName, fishRecommendBtDtos, serving } = item;
-                                            console.log(item)
+                                            const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
+                                            {/* console.log(item) */}
                                             return (
                                                 <React.Fragment key={i}>
-                                                    <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice)}} sx={{ paddingLeft: 0, borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
+                                                    <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice, i)}} sx={{ paddingLeft: 0, backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
                                                     {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
                                                         const { fishName, serving } = item;
                                                         return (
@@ -170,7 +174,7 @@ const SearchResults = () => {
                                 </List>
                             </Paper>
                     </div>
-                    <div style={{ width: '70%', height: '100%'}}>
+                    <div style={{ width: '70%', height: '100%',  minWidth: '300px' }}>
                         <div style={{ width: '95%', margin: 'auto', height: '490px', overflow: 'auto' }}>
                             <Typography sx={{ color: '#010000', paddingTop: '18px', fontWeight: 'bold', fontSize: '16px'}}>수산물 견적</Typography>
                             <Typography variant='body2' sx={{ color: '#949494', fontSize: '11px', mb: '11px' }}>실제 시세과 상이할 수 있습니다.</Typography>

@@ -42,15 +42,14 @@ const DetailedSearchConditions = () => {
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
     const personNum = useRecoilValue(personNumState)
     // console.log(fishList)
-
-    useEffect(() => {
-        setFish(fishList)
-    }, [fishList])
-    
     const [fish, setFish] = useState(fishList)
     const [amount, setAmount] = useState(1);
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
+    
+    useEffect(() => {
+        setFish(fishList)
+    }, [fishList])
 
     // console.log(fish);
     
@@ -92,6 +91,7 @@ const DetailedSearchConditions = () => {
         //             (fish.fishInfoId === id && item.active === false)? setFarm([]) : setFarm(...farm)
         //         )
     };
+
 
     // console.log(farm);
     // console.log(farmStatus);
@@ -191,7 +191,7 @@ const DetailedSearchConditions = () => {
                                 }}
                                 subheader={<li />}
                                 >
-                                {fish.map((item, i) => {
+                                {fish.map((item) => {
                                     const { fishName, fishYield, fishInfoId, active} = item;
                                     {/* console.log(item); */}
                                     return (

@@ -47,7 +47,7 @@ const SelectedConditionList = () => {
     const area = useRecoilValue(areaState);
     console.log(selectCondition)
 
-    const deleteContidion = id => {
+    const deleteContidion = (id) => {
         setSelectCondition(selectCondition.filter(item => item.id !== id ))
     }
 
