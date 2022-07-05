@@ -5,6 +5,8 @@ import image from '../img/contemplative-reptile.jpeg';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getFishRecommendData } from '../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Card = styled.div`
     background-color: white;
@@ -35,6 +37,9 @@ const CustomForm = styled.form`
 `;
 
 const SelectedConditionList = () => {
+
+    const notify = (text) => toast.warning(text, { position: "top-center", autoClose: 1000, hideProgressBar: true });
+
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
     const personNum = useRecoilValue(personNumState);
@@ -49,7 +54,7 @@ const SelectedConditionList = () => {
     const onClick = (e) => {
         e.preventDefault();
         if (selectCondition.length === 0) {
-            alert('선택한 조건이 없습니다.');
+            notify('선택한 조건이 없습니다.');
         } else {
             getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res.fishRecommendUnions))
         }
@@ -87,6 +92,7 @@ const SelectedConditionList = () => {
                                     </CardContent>
                                     <CardActions>
                                         <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8', fontSize: 12 }} onClick={() => {deleteContidion(id)}}>삭제</Button>
+                                        <ToastContainer />
                                     </CardActions>
                                 </div>
                             </div>
