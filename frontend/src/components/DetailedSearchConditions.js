@@ -34,7 +34,7 @@ const ListItemStyled = styled.div`
 
 const DetailedSearchConditions = () => {
 
-    const notify = () => toast.warning('잘되나');
+    const notify = (text) => toast.warning(text, { position: "top-center", autoClose: 1000, hideProgressBar: true });
 
     const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
@@ -112,14 +112,16 @@ const DetailedSearchConditions = () => {
 
     const addCondition = () => {
         if (selectFish.length === 0) {
-            return alert('어종을 선택해주세요');
+            // return alert('어종을 선택해주세요');
+            return notify('어종을 선택해주세요');
         }
         if (farmStatus.length === 0) {
-            return alert('양식 여부를 체크해주세요');
+            // return alert('양식 여부를 체크해주세요');
+            return notify('양식 여부를 체크해주세요');
         }
         setSelectCondition(selectCondition.some(item =>
             item.id === selectFish[0].fishInfoId) ?
-                (alert('중복임'),
+                (notify('선택한 어종이 이미 있습니다.'),
                 [...selectCondition])
                 : [...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
     };
@@ -240,6 +242,7 @@ const DetailedSearchConditions = () => {
                                 )) : null
                         }
                         <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
+                        <ToastContainer />
                     </div>
                 </div>
             </div>

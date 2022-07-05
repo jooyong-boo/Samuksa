@@ -62,6 +62,7 @@ const SearchResults = () => {
 
         const [selectResult, setSelectResult] = useState();
         const [selectEstimate, setSelectEstimate] = useState();
+        const [totalServing, setTotalServing] = useState();
         const [totalPrice, setTotalPrice] = useState();
 
         const onRecommendClick = (item) => {
@@ -74,6 +75,7 @@ const SearchResults = () => {
             setTotalPrice(price)
         };
         // console.log(selectEstimate)
+
     return (
         <>  
             <Card>
@@ -145,15 +147,20 @@ const SearchResults = () => {
                                 >
                                     <div style={{ display: 'flex', flexDirection: 'column' ,backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }}>
                                         {selectResult? (selectResult).map((item, i) => {
-                                            const { totalPrice, combinationName, fishRecommendBtDtos } = item;
-                                            console.log(fishRecommendBtDtos)
+                                            const { totalPrice, combinationName, fishRecommendBtDtos, serving } = item;
+                                            console.log(item)
                                             return (
                                                 <React.Fragment key={i}>
                                                     <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice)}} sx={{ paddingLeft: 0, borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
-                                                        <div style={{  width: '100%', display: 'flex', justifyContent: 'space-around' }}>
-                                                            <Typography sx={{ fontSize: '13px', color: '#545454' }}>{combinationName.join("+")}</Typography>
-                                                            <Typography sx={{ fontSize: '13px', color: '#979797' }}>(2인분)</Typography>
-                                                        </div>
+                                                    {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
+                                                        const { fishName, serving } = item;
+                                                        return (
+                                                            <div style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+                                                                <Typography sx={{ fontSize: '13px', color: '#545454' }}>{fishName}</Typography>
+                                                                <Typography sx={{ fontSize: '13px', color: '#979797' }}>({serving}인분)</Typography>
+                                                            </div>
+                                                        ) 
+                                                    }) : null}
                                                             <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>
                                                     </ListItem>
                                                 </React.Fragment>
