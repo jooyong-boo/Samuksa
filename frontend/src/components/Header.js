@@ -22,7 +22,7 @@ const NAV_ITEMS = [
 	{
 		id: 2,
 		name: '시세 검색',
-		path: '/test',
+		path: '/',
 	},
 ];
 

@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
@@ -39,6 +39,7 @@ const DetailedSearchConditions = () => {
     const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [selectFish, setSelectFish] = useRecoilState(selectFishState)
+    const resetSelectFish = useResetRecoilState(selectFishState)
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
     const personNum = useRecoilValue(personNumState)
     // console.log(fishList)
@@ -65,20 +66,30 @@ const DetailedSearchConditions = () => {
         }
     }
 
-    const onToggle = id => {
+    useEffect(() => {
+        resetSelectFish();
+        setFish(
+            fish.map(fish =>
+                fish ? { ...fish, active: false } : null
+            )
+        );
+    }, [selectCondition])
 
+    const onToggle = id => {
+        
         setFish(
             fish.map(fish =>
                 fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false }
-            )
-        );
-
+                )
+                );
+                
         setSelectFish(fish.filter(fish =>  fish.fishInfoId === id));
+        console.log(fish)
 
         // fish toogle active가 false로 변할시 selectFish 비우기 (조건 추가 후 다른 어종 선택 시 active가 추가되는 문제가 있음)
-        const filterActive = fish.filter(item =>
-            item.active === true ? setSelectFish([]) : item) 
-        console.log(filterActive)
+        // const filterActive = fish.filter(item =>
+        //     item.active === true ? setSelectFish([item]) : item) 
+        // console.log(selectFish)
 
         
         // id 일치하면 fishName 넣기 active가 false면 빈배열 반환하기
@@ -98,7 +109,7 @@ const DetailedSearchConditions = () => {
     
     const changeAmount = (event, newAmount) => {
         setAmount(newAmount)
-        console.log(amount)
+        // console.log(amount)
     };
 
     const changeHandler = (checked, id) => {
