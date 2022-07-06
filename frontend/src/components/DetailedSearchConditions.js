@@ -42,7 +42,7 @@ const DetailedSearchConditions = () => {
     const resetSelectFish = useResetRecoilState(selectFishState)
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
     const [personNum, setPersonNum] = useRecoilState(personNumState)
-    const [totalAmount, setTotalAmount] = useState(personNum)
+    const [totalAmount, setTotalAmount] = useState(Number(personNum))
     const [fish, setFish] = useState(fishList)
     const [amount, setAmount] = useState(0);
     const [farm, setFarm] = useState([]);
@@ -53,7 +53,9 @@ const DetailedSearchConditions = () => {
     }, [fishList])
 
     useEffect(() => {
-        setTotalAmount(personNum)
+        if (Number(personNum) >= 1) {
+            setTotalAmount(Number(personNum))
+        }
     }, [personNum])
     
     
@@ -128,8 +130,10 @@ const DetailedSearchConditions = () => {
         } else if (farmStatus.length === 0) {
             // return alert('양식 여부를 체크해주세요');
             return notify('양식 여부를 체크해주세요');
-        } else if (amount === 0) {
+        } else if (amount === 0 && selectCondition.length > 0) {
             return notify('분량 부족');
+        } else if (amount === 0 && selectCondition.length === 0){
+            return notify('분량을 선택해주세요');
         } else {
             selectCondition.some(item =>
                 item.id === selectFish[0].fishInfoId) ?
