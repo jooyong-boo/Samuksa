@@ -10,8 +10,8 @@ import { createTheme, ThemeProvider  } from '@mui/material';
 
 const theme = createTheme({
   typography: {
-    fontFamily: "'GangwonEdu_OTFBoldA', Pretendard, 'Noto Sans KR', Pretendard, nanumsquare ,sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen"
-  }
+    fontFamily: "Pretendard, 'Noto Sans KR', nanumsquare ,sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen"
+  },
 })
 
 function App() {

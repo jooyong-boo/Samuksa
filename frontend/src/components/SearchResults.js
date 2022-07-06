@@ -109,7 +109,7 @@ const SearchResults = () => {
                             )
                         }) : null}
                     </CustomDiv>
-                    <div style={{ width: '10%', height: '100%' , borderRight: '1px solid #EAEAEA', minWidth: '10%' }}>
+                    <div style={{ width: '11%', height: '100%' , borderRight: '1px solid #EAEAEA', minWidth: '10%' }}>
                         <Paper
                             sx={{
                                 p: 2,
@@ -174,7 +174,7 @@ const SearchResults = () => {
                                 </List>
                             </Paper>
                     </div>
-                    <div style={{ width: '70%', height: '100%',  minWidth: '300px' }}>
+                    <div style={{ width: '69%', height: '100%',  minWidth: '300px' }}>
                         <div style={{ width: '95%', margin: 'auto', height: '490px', overflow: 'auto' }}>
                             <Typography sx={{ color: '#010000', paddingTop: '18px', fontWeight: 'bold', fontSize: '16px'}}>수산물 견적</Typography>
                             <Typography variant='body2' sx={{ color: '#949494', fontSize: '11px', mb: '11px' }}>실제 시세과 상이할 수 있습니다.</Typography>
