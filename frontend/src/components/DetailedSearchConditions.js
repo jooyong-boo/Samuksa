@@ -5,7 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { errorSelector, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
@@ -41,16 +41,44 @@ const DetailedSearchConditions = () => {
     const [selectFish, setSelectFish] = useRecoilState(selectFishState)
     const resetSelectFish = useResetRecoilState(selectFishState)
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
-    const personNum = useRecoilValue(personNumState)
+    const [personNum, setPersonNum] = useRecoilState(personNumState)
+    const [totalAmount, setTotalAmount] = useState(personNum)
     const [fish, setFish] = useState(fishList)
-    const [amount, setAmount] = useState(1);
+    const [amount, setAmount] = useState(0);
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
-    
+
     useEffect(() => {
         setFish(fishList)
     }, [fishList])
+
+    useEffect(() => {
+        setTotalAmount(personNum)
+    }, [personNum])
     
+    
+    useEffect(() => {
+        resetSelectFish();
+        setFish(
+            fish.map(fish =>
+                fish ? { ...fish, active: false } : {...fish}
+            )
+        );
+    }, [selectCondition])
+            
+    useEffect(() => {
+        fish.map(fish =>
+            fish.active === true ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : setFarm([])
+            )
+    }, [selectFish])
+
+    useEffect(() => {
+        if (totalAmount > 0 && totalAmount - amount >= 0) {
+            setTotalAmount(totalAmount - amount);
+            setAmount(0);
+        }
+    }, [selectCondition])
+
     const onSearch = (e) => {
         e.preventDefault()
         let searchName = e.target.value;
@@ -62,21 +90,6 @@ const DetailedSearchConditions = () => {
             setFish(result);
         }
     }
-
-    useEffect(() => {
-        resetSelectFish();
-        setFish(
-            fish.map(fish =>
-                fish ? { ...fish, active: false } : {...fish}
-            )
-        );
-    }, [selectCondition])
-
-    useEffect(() => {
-        fish.map(fish =>
-            fish.active === true ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : setFarm([])
-            )
-    }, [selectFish])
 
     const onToggle = id => {
         
@@ -94,6 +107,7 @@ const DetailedSearchConditions = () => {
     // console.log(farmStatus);
     
     const changeAmount = (event, newAmount) => {
+        event.preventDefault();
         setAmount(newAmount)
         // console.log(amount)
     };
@@ -111,20 +125,20 @@ const DetailedSearchConditions = () => {
         if (selectFish.length === 0) {
             // return alert('어종을 선택해주세요');
             return notify('어종을 선택해주세요');
-        }
-        if (farmStatus.length === 0) {
+        } else if (farmStatus.length === 0) {
             // return alert('양식 여부를 체크해주세요');
             return notify('양식 여부를 체크해주세요');
+        } else if (amount === 0) {
+            return notify('분량 부족');
+        } else {
+            selectCondition.some(item =>
+                item.id === selectFish[0].fishInfoId) ?
+                    notify('선택한 어종이 이미 있습니다.')
+                    : setSelectCondition([...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
         }
-        setSelectCondition(selectCondition.some(item =>
-            item.id === selectFish[0].fishInfoId) ?
-                (notify('선택한 어종이 이미 있습니다.'),
-                [...selectCondition])
-                : [...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
     };
 
-    // console.log(selectFish)
-    // console.log(selectCondition);
+    // console.log(totalAmount)
 
     return (
         <>
@@ -223,8 +237,8 @@ const DetailedSearchConditions = () => {
                             valueLabelDisplay="auto"
                             step={1}
                             marks
-                            min={1}
-                            max={personNum}
+                            min={0}
+                            max={totalAmount}
                             onChange={changeAmount}
                         />
                         <Typography sx={{ textAlign: 'center' }}>{amount}인분</Typography>
@@ -244,7 +258,7 @@ const DetailedSearchConditions = () => {
                 </div>
             </div>
         </Card>
-        <SelectedConditionList />
+        <SelectedConditionList setTotalAmount={setTotalAmount} totalAmount={totalAmount} setAmount={setAmount} />
         </>
     );
 };
