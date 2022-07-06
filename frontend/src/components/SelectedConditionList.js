@@ -45,7 +45,7 @@ const SelectedConditionList = () => {
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
-    console.log(selectCondition)
+    // console.log(selectCondition)
 
     const deleteContidion = (id) => {
         setSelectCondition(selectCondition.filter(item => item.id !== id ))
