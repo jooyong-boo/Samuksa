@@ -22,6 +22,7 @@ const Img = styled('img')({
 const theme = createTheme({
     typography: {
         fontSize: 12,
+        fontFamily:"Pretendard"
     },
     palette: {
         primary: {
@@ -99,8 +100,8 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                     return(
                         <div key={i} style={{ display: 'flex' }}>
                             <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{fishName}</Typography>
-                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{ weightPerServing * serving / 1000 }kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
-                            <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{ ((weightPerServing * serving / 1000) * 0.5 * serving).toFixed(1) }kg</Typography>
+                            <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 0.3 }}>{ weightPerServing * serving / 1000 }kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
+                            <Typography sx={{ fontSize: 13, fontWeight: '700', color: '#707070' }}>{ ((weightPerServing * serving / 1000) * 0.5 * serving).toFixed(1) }kg</Typography>
                             {/* <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{maxWeight? maxWeight / 1000 : minWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
                             <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{maxWeight ? ((maxWeight * serving / 2) / 1000) : ((minWeight * serving / 2) / 1000)}kg</Typography> */}
                         </div>

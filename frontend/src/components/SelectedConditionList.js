@@ -36,7 +36,7 @@ const CustomForm = styled.form`
     }
 `;
 
-const SelectedConditionList = () => {
+const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
 
     const notify = (text) => toast.warning(text, { position: "top-center", autoClose: 1000, hideProgressBar: true });
 
@@ -45,10 +45,12 @@ const SelectedConditionList = () => {
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
-    console.log(selectCondition)
+    // console.log(selectCondition)
 
-    const deleteContidion = (id) => {
+    const deleteContidion = (id, PlusAmount) => {
         setSelectCondition(selectCondition.filter(item => item.id !== id ))
+        setTotalAmount(totalAmount + PlusAmount)
+        setAmount(0)
     }
 
     const onClick = (e) => {
@@ -91,7 +93,7 @@ const SelectedConditionList = () => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8', fontSize: 12 }} onClick={() => {deleteContidion(id)}}>삭제</Button>
+                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8', fontSize: 12 }} onClick={() => {deleteContidion(id, amount)}}>삭제</Button>
                                         <ToastContainer />
                                     </CardActions>
                                 </div>
