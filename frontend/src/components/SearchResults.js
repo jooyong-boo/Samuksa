@@ -89,7 +89,7 @@ const SearchResults = () => {
                         {result? result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                             return (
-                                <CardContent key={i} onToggle={onRecommendClick}  onClick={() => {onRecommendClick(fishRecommendCombinations, combinationName)}} sx={{ display: 'flex', alignItems: 'center', backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
+                                <CardContent key={i} onClick={() => {onRecommendClick(fishRecommendCombinations, combinationName)}} sx={{ display: 'flex', alignItems: 'center', backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
                                     {/* <Img alt="complex" src={image} /> */}
                                     <Avatar
                                         alt={combinationName.join(" + ")}
