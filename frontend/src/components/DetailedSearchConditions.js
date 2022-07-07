@@ -1,16 +1,23 @@
-import { Avatar, Button, ButtonBase, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import { Avatar, Button, Checkbox, FormControl, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
+import SelectedConditionList from './SelectedConditionList';
+import { errorSelector, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
+import { getFarmType } from '../api/auth';
+import { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Card = styled.div`
     background-color: white;
     width: 570px;
     height: 464px;
     border-radius: 5px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     margin: 1rem;
 `
 
@@ -25,117 +32,121 @@ const ListItemStyled = styled.div`
     }
 `;
 
-// const serving = [
-//     {
-//         value: 1,
-//         label: '1인분',
-//     },
-//     {
-//         value: 2,
-//         label: '2인분',
-//     },
-//     {
-//         value: 3,
-//         label: '3인분',
-//     },
-//     {
-//         value: 4,
-//         label: '4인분',
-//     },
-// ];
-
-const dummy = 
-    [   
-        { id: 1, fishName: '광어', yield1: 50, active: false },
-        { id: 2, fishName: '숭어', yield1: 33, active: false },
-        { id: 3, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 4, fishName: '우럭', yield1: 44, active: false },
-        { id: 5, fishName: '숭어', yield1: 33, active: false },
-        { id: 6, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 7, fishName: '우럭', yield1: 44, active: false },
-        { id: 8, fishName: '숭어', yield1: 33, active: false },
-        { id: 9, fishName: '참돔', yield1: 22, active: false }, 
-        { id: 10, fishName: '우럭', yield1: 44, active: false },
-    ]
-
-
-function valuetext(value) {
-    return `${value}인분`;
-}
-
-// function valueLabelFormat(value) {
-//     return serving.findIndex((serv) => serv.value === value) + 1;
-// }
-
-// function valueLabelFormat(value) {
-//     return `${value}인분`;
-// }
-
 const DetailedSearchConditions = () => {
 
-    const [fish, setFish] = useState(dummy);
-    const [amount, setAmount] = useState(4);
-    const [formStatus, setFormStatus] = useState([]);
+    const notify = (text) => toast.warning(text, { position: "top-center", autoClose: 1000, hideProgressBar: true });
 
-    console.log(fish)
+    const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
+    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
+    const [selectFish, setSelectFish] = useRecoilState(selectFishState)
+    const resetSelectFish = useResetRecoilState(selectFishState)
+    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
+    const [personNum, setPersonNum] = useRecoilState(personNumState)
+    const [totalAmount, setTotalAmount] = useState(personNum)
+    const [fish, setFish] = useState(fishList)
+    const [amount, setAmount] = useState(0);
+    const [farm, setFarm] = useState([]);
+    const [farmStatus, setFarmStatus] = useState([]);
+
+    useEffect(() => {
+        setFish(fishList)
+    }, [fishList])
+
+    useEffect(() => {
+        setTotalAmount(personNum)
+    }, [personNum])
+    
+    
+    useEffect(() => {
+        resetSelectFish();
+        setFish(
+            fish.map(fish =>
+                fish ? { ...fish, active: false } : {...fish}
+            )
+        );
+    }, [selectCondition])
+            
+    useEffect(() => {
+        fish.map(fish =>
+            fish.active === true ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : setFarm([])
+            )
+    }, [selectFish])
+
+    useEffect(() => {
+        if (totalAmount > 0 && totalAmount - amount >= 0) {
+            setTotalAmount(totalAmount - amount);
+            setAmount(0);
+        }
+    }, [selectCondition])
 
     const onSearch = (e) => {
         e.preventDefault()
         let searchName = e.target.value;
         console.log(searchName);
         if (!searchName) {
-            setFish(dummy);
+            setFish(fishList);
         } else {
-            let result = dummy.filter(name => name.fishName === searchName);
+            let result = fishList.filter(name => name.fishName === searchName);
             setFish(result);
         }
     }
 
     const onToggle = id => {
+        
         setFish(
             fish.map(fish =>
-              fish.active = false
+                fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false }
             )
-          );
-        // setFish(
-        //     fish.map(fish =>
-        //       fish.id !== id ? { ...fish, active: false } : fish
-        //     )
-        //   );
-        setFish(
-          fish.map(fish =>
-            fish.id === id ? { ...fish, active: !fish.active } : fish
-          )
-        );
-      };
+                );
+                
+        setSelectFish(fish.filter(fish =>  fish.fishInfoId === id));
+    };
 
+
+    // console.log(farm);
+    // console.log(farmStatus);
+    
     const changeAmount = (event, newAmount) => {
+        event.preventDefault();
         setAmount(newAmount)
-        console.log(amount)
-    }
+        // console.log(amount)
+    };
 
-    console.log(formStatus)
     const changeHandler = (checked, id) => {
         if (checked) {
-            setFormStatus([...formStatus, id]);
+            setFarmStatus([...farmStatus, id]);
         } else {
           // 체크 해제
-          setFormStatus(formStatus.filter((el) => el !== id));
+          setFarmStatus(farmStatus.filter((el) => el !== id));
         }
       };
 
     const addCondition = () => {
-        if (formStatus.length === 0) {
-            alert('양식 여부를 체크해주세요');
+        if (selectFish.length === 0) {
+            // return alert('어종을 선택해주세요');
+            return notify('어종을 선택해주세요');
+        } else if (farmStatus.length === 0) {
+            // return alert('양식 여부를 체크해주세요');
+            return notify('양식 여부를 체크해주세요');
+        } else if (amount === 0) {
+            return notify('분량 부족');
+        } else {
+            selectCondition.some(item =>
+                item.id === selectFish[0].fishInfoId) ?
+                    notify('선택한 어종이 이미 있습니다.')
+                    : setSelectCondition([...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
         }
-    }
+    };
+
+    // console.log(totalAmount)
 
     return (
+        <>
         <Card>
-            <Typography sx={{ color: '#575757', padding: '10px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
-            <div style={{ display: 'flex' }}>
-                <div style={{ width: '45%', borderBottom: '1px solid #EAEAEA', borderRight: '1px solid #EAEAEA' }}>
-                    <FormControl fullWidth sx={{}}> 
+            <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
+            <div style={{ display: 'flex', height: '100%' }}>
+                <div style={{ width: '45%', borderRight: '1px solid #EAEAEA', maxHeight: '420px' }}>
+                    <FormControl fullWidth> 
                         <Input 
                             id="input-with-icon-adornment"
                             startAdornment={
@@ -159,6 +170,7 @@ const DetailedSearchConditions = () => {
                                 flexGrow: 1,
                                 backgroundColor: '#F8F8F8',
                                 padding: 0,
+                                boxShadow: 'none'
                             }}
                         >
                             <List
@@ -171,23 +183,42 @@ const DetailedSearchConditions = () => {
                                     maxHeight: 385,
                                     // borderBottom: '1px solid black'
                                     // border: 0,
+                                    padding: 0,
+                                    boxShadow: 'none',
+                                    overflowX: 'hidden',
+                                    '&::-webkit-scrollbar': {
+                                        width: '8px',
+                                        borderRadius: '6px',
+                                        background: 'rgba(255, 255, 255, 0.4)',
+                                    },
+                                    '&::-webkit-scrollbar-track': {
+                                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+                                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
+                                    },
+                                    '&::-webkit-scrollbar-thumb': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                                        borderRadius: '6px'
+                                    },
                                 }}
                                 subheader={<li />}
                                 >
-                                {fish.map((item, i) => {
-                                    const { fishName, yield1, id, active} = item;
+                                {fish.map((item) => {
+                                    const { fishName, fishYield, fishInfoId, active} = item;
+                                    {/* console.log(item); */}
                                     return (
-                                        <ListItemStyled key={id} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onToggle={onToggle} onClick={() => onToggle(id)}>
-                                            <ListItemAvatar sx={{ padding: '9px 13px 11px 16px' }}>
+                                        <ListItemStyled key={fishInfoId} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onClick={() => {onToggle(fishInfoId)}}>
+                                            <ListItemAvatar sx={{ padding: '9px 13px 9px 16px' }}>
                                                 <Avatar
                                                 // alt={`Avatar n°${value + 1}`}
                                                 src={image}
                                                 variant= 'square'
-                                                style={{ height: '50px', width: '50px' }}
+                                                style={{ height: '50px', width: '50px', borderRadius: '3px' }}
                                                 />
                                             </ListItemAvatar>
-                                            <ListItem key={i} sx={{ paddingLeft: 0 }}>
-                                                <ListItemText primary={fishName} secondary={`(수율: ${yield1}%)`} />
+                                            <ListItem sx={{ paddingLeft: 0 }}>
+                                                <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
+                                                {/* <Typography>{fishName}</Typography>
+                                                <Typography>{fishYield}</Typography> */}
                                             </ListItem>
                                         </ListItemStyled>
                                     )
@@ -206,44 +237,30 @@ const DetailedSearchConditions = () => {
                             valueLabelDisplay="auto"
                             step={1}
                             marks
-                            min={1}
-                            max={4}
+                            min={0}
+                            max={totalAmount}
                             onChange={changeAmount}
                         />
+                        <Typography sx={{ textAlign: 'center' }}>{amount}인분</Typography>
                     </div>
-                    <div style={{ width: '90%', margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
+                    <div style={{ width: '90%',height: '100%' , margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
-
-                        <Typography><Checkbox id={'자연산'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '자연산')}} checked={formStatus.includes('자연산') ? true : false} />자연산</Typography>
-                        <Typography><Checkbox id={'양식'} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, '양식')}} checked={formStatus.includes('양식') ? true : false} />양식</Typography>
-
-                        <Button variant="contained" type='submit' sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: -100, }} onClick={addCondition} >조건 추가하기</Button>
+                        {
+                            farm ? 
+                                farm.map((item, i) => (
+                                    <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
+                                )) : null
+                        }
+                        <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
+                        <ToastContainer />
                     </div>
                 </div>
             </div>
         </Card>
+        <SelectedConditionList setTotalAmount={setTotalAmount} totalAmount={totalAmount} setAmount={setAmount} />
+        </>
     );
 };
 
 export default DetailedSearchConditions;
-
-                            {/* <Grid container spacing={6}>
-                                <Grid item>
-                                <ButtonBase sx={{ width: 50, height: 50 }}>
-                                    <Img alt="complex" src={image} />
-                                </ButtonBase>
-                                </Grid>
-                                <Grid item xs={12} sm container>
-                                <Grid item xs container direction="column" spacing={1}>
-                                    <Grid item xs>
-                                        <Typography gutterBottom variant="subtitle2" component="div">
-                                            광어
-                                        </Typography>
-                                        <Typography gutterBottom variant="caption" component="div">
-                                            수율(35%)
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                </Grid>
-                            </Grid> */}

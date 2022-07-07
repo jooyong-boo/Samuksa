@@ -5,20 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { QueryClientProvider } from 'react-query';
-import { queryClient } from './api/auth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </RecoilRoot>
-    </QueryClientProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <RecoilRoot>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </RecoilRoot>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

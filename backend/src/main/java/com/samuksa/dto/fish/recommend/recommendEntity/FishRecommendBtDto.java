@@ -3,20 +3,23 @@ package com.samuksa.dto.fish.recommend.recommendEntity;
 import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
+import java.util.List;
+
+
 @Getter
 @Setter
+@AllArgsConstructor
 public class FishRecommendBtDto {
-    private int fishPosition;
+    private String  fishName;
 
-    private int price;
+    private List<FishRecommendAlgoWeight> fishRecommendAlgoWeights;
 
-    private int yiled;
+    private int     weightPerServing;
 
-    private int serving;
+    private int     Serving;
 
-    private int filletWeight;
-
+    private int     totalMoney;
 }

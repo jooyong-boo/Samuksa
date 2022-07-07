@@ -9,11 +9,22 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../img/SAMUKSA.png';
 import { Button } from '@mui/material';
 
-// const pages = ['Products', 'Pricing', 'Blog'];
+const NAV_ITEMS = [
+	{
+		id: 1,
+		name: '수산물 계산기',
+		path: '/',
+	},
+	{
+		id: 2,
+		name: '시세 검색',
+		path: '/',
+	},
+];
 
 const Header = () => {
 
@@ -24,22 +35,27 @@ const Header = () => {
     };
 
     const goFishCal = () => {
-        navigate('/test');
+        navigate('/');
     }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }} style={{ width: '100vw' }}>
           <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }} style={{ width: '90vw' }}>
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
                 <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2.5rem' }} />
                 <Typography variant="h6" component="a" onClick={goMain} sx={{ color: '#6EA5F8', fontWeight: '900', fontSize: '1.7rem', cursor: 'pointer', fontFamily: 'sans-serif' }}>
                     Samuksa
                 </Typography>
             </div>
             <div>
-                <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2, cursor: 'pointer', ":hover": { color: '#A7A7A7', borderBottom: '1px solid #A7A7A7' }, ":active": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7' } }} onClick={goFishCal}>수산물 계산기</Typography>
-                <Typography variant='button' sx={{ color: '#7a7a7a', ":hover": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7'} }}>시세 검색</Typography>
+                {NAV_ITEMS.map(({ id, name, path }) => {
+                    return (
+                        <Typography key={id} variant='button' sx={{ mr: 1, ":hover": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7' } }}><NavLink to={`${path}`} style={{ textDecoration: 'none', color: '#7a7a7a' }}>{name}</NavLink></Typography>
+                    )
+                })}
+                {/* <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2, cursor: 'pointer', ":hover": { color: '#A7A7A7', borderBottom: '1px solid #A7A7A7' }, ":active": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7' } }} onClick={goFishCal}>수산물 계산기</Typography>
+                <Typography variant='button' sx={{ color: '#7a7a7a', ":hover": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7'} }}>시세 검색</Typography> */}
             </div>
           </Toolbar>
         </AppBar>
