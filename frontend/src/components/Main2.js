@@ -29,7 +29,6 @@ const Main2 = () => {
                 {/* <SelectedConditionList /> */}
                 <SearchResults />
             </Background>
-            <div>테스트</div>
         </>
     );
 };
