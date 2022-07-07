@@ -45,7 +45,7 @@ public class FishController {
     }
 
     @PostMapping("/api")
-    @ApiOperation(value = "수산물 시가 API 호출 트리거 (*주의) test", response = FishRecommendResponse.class)
+    @ApiOperation(value = "수산물 시가 API 호출 트리거 (*주의)", response = FishRecommendResponse.class)
     public String postPrice() {
         schedulerService.register();
         return "S";

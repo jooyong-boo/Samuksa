@@ -26,7 +26,7 @@ const Main2 = () => {
                 <SearchConditions />
                 <SearchResults />
             </Background>
-            {/* <div>test</div> */}
+            <div>test</div>
         </>
     );
 };
