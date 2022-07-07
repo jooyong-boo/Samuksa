@@ -5,10 +5,10 @@ const instance = axios.create({
 });
 
 
-// 수산물 추천
+// 추천
 export const getFishRecommendData = async ({ personNum, money, area }) => {
   try {
-    const { data } = await instance.get('/fish/recommend', { params: { personNumber : personNum, money: money, saleArea: area }});
+    const { data } = await instance.get('/fish/recommend', { params: { personNumber : Number(personNum), money: Number(money), saleArea: area }});
     console.log(data)
     return data;
   } catch (err) {
@@ -16,7 +16,7 @@ export const getFishRecommendData = async ({ personNum, money, area }) => {
   }
 };
 
-// 수산물 정보 조회
+// 정보 조회
 export const getAreaTotalFishData = async () => {
   try {
     const { data } = await instance.get('/fish/info');
@@ -27,7 +27,7 @@ export const getAreaTotalFishData = async () => {
   }
 };
 
-// 수산물 판매지역 조회
+// 판매지역 조회
 export const getArea = async () => {
   try {
     const { data } = await instance.get('/fish/area');
@@ -37,7 +37,7 @@ export const getArea = async () => {
   }
 };
 
-// 수산물 양식여부 조회
+// 양식여부 조회
 export const getFarmType = async ({ fishName }) => {
   try {
     const { data } = await instance.get('/fish/farmType', { params: { fishName: fishName }});
