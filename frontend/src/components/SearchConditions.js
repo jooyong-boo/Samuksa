@@ -14,15 +14,6 @@ const Card = styled.div`
     width: 295px;
     height: 464px;
     border-radius: 5px;
-`
-
-
-const Background = styled.div`
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background-color: #ebecee;
 `;
 
 const ITEM_HEIGHT = 48;
@@ -50,12 +41,12 @@ const SearchConditions = () => {
 
     const handlePersonNumChange = (e) => {
         const { value } = e.target;
-        const onlyNumberPersonValue = value.replace(/[^0-9]/g, '');
-        setPersonNum(Number(onlyNumberPersonValue));
-        if (e.target.value <= 0) {
+        const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+        setPersonNum(onlyNumberPersonValue);
+        if (e.target.value > 100) {
             // alert('인원은 1 이상으로 해주세요');
-            notify('인원은 1 이상으로 해주세요');
-            setPersonNum(1);
+            notify('인원수는 100명 이하로 해주세요');
+            setPersonNum(99);
         } 
     }
 
@@ -77,7 +68,7 @@ const SearchConditions = () => {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
             notify('인원은 1 이상으로 해주세요');
-            // setPersonNum('1');
+            setPersonNum(1);
             return;
         }
     }
@@ -106,7 +97,7 @@ const SearchConditions = () => {
                                 <TextField 
                                     id="outlined-basic" 
                                     label="인원수" 
-                                    type="number"
+                                    type="string"
                                     variant="outlined" 
                                     value={personNum}
                                     onChange={handlePersonNumChange} 

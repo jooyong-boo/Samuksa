@@ -40,14 +40,6 @@ const CustomDiv = styled.div`
     }
 `;
 
-const Background = styled.div`
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    background-color: #ebecee;
-`;
-
 const Img = styled('img')({
     // margin: '13px 13px 12px 16px ',
     display: 'block',

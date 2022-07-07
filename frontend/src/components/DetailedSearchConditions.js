@@ -11,6 +11,7 @@ import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useMemo } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -19,7 +20,7 @@ const Card = styled.div`
     border-radius: 5px;
     /* border: 1px solid black; */
     margin: 1rem;
-`
+`;
 
 const ListItemStyled = styled.div`
     /* style={{ display: 'flex', backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }} */
@@ -42,28 +43,38 @@ const DetailedSearchConditions = () => {
     const resetSelectFish = useResetRecoilState(selectFishState)
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
     const [personNum, setPersonNum] = useRecoilState(personNumState)
-    const [totalAmount, setTotalAmount] = useState(personNum)
+    const [totalAmount, setTotalAmount] = useState(Number(personNum))
     const [fish, setFish] = useState(fishList)
     const [amount, setAmount] = useState(0);
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     setFish(fishList)
+    // }, [fishList])
+
+    useMemo(() => {
         setFish(fishList)
     }, [fishList])
 
     useEffect(() => {
-        setTotalAmount(personNum)
+        if (Number(personNum) >= 1) {
+            setTotalAmount(Number(personNum))
+        }
     }, [personNum])
     
     
-    useEffect(() => {
+    useMemo(() => {
         resetSelectFish();
         setFish(
             fish.map(fish =>
                 fish ? { ...fish, active: false } : {...fish}
             )
         );
+        if (totalAmount > 0 && totalAmount - amount >= 0) {
+            setTotalAmount(totalAmount - amount);
+            setAmount(0);
+        }
     }, [selectCondition])
             
     useEffect(() => {
@@ -72,12 +83,8 @@ const DetailedSearchConditions = () => {
             )
     }, [selectFish])
 
-    useEffect(() => {
-        if (totalAmount > 0 && totalAmount - amount >= 0) {
-            setTotalAmount(totalAmount - amount);
-            setAmount(0);
-        }
-    }, [selectCondition])
+    // useEffect(() => {
+    // }, [selectCondition])
 
     const onSearch = (e) => {
         e.preventDefault()
@@ -128,8 +135,10 @@ const DetailedSearchConditions = () => {
         } else if (farmStatus.length === 0) {
             // return alert('양식 여부를 체크해주세요');
             return notify('양식 여부를 체크해주세요');
-        } else if (amount === 0) {
+        } else if (amount === 0 && selectCondition.length > 0) {
             return notify('분량 부족');
+        } else if (amount === 0 && selectCondition.length === 0){
+            return notify('분량을 선택해주세요');
         } else {
             selectCondition.some(item =>
                 item.id === selectFish[0].fishInfoId) ?
