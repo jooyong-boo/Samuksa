@@ -16,7 +16,7 @@ const Background = styled.div`
     justify-content: center;
     align-items: center;
     padding-top: 33px;
-`
+`;
 
 const Main2 = () => {
     return (
@@ -29,6 +29,7 @@ const Main2 = () => {
                 {/* <SelectedConditionList /> */}
                 <SearchResults />
             </Background>
+            <div>테스트</div>
         </>
     );
 };
