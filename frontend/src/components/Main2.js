@@ -23,13 +23,10 @@ const Main2 = () => {
         <>
             <Header />
             <Background>
-                {/* <TopStepper /> */}
                 <SearchConditions />
-                {/* <DetailedSearchConditions /> */}
-                {/* <SelectedConditionList /> */}
                 <SearchResults />
             </Background>
-            <div>test</div>
+            {/* <div>test</div> */}
         </>
     );
 };

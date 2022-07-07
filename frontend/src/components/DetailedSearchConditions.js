@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useMemo } from 'react';
+import { useCallback } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -64,7 +65,7 @@ const DetailedSearchConditions = () => {
     }, [personNum])
     
     
-    useMemo(() => {
+    useEffect(() => {
         resetSelectFish();
         setFish(
             fish.map(fish =>
@@ -113,11 +114,11 @@ const DetailedSearchConditions = () => {
     // console.log(farm);
     // console.log(farmStatus);
     
-    const changeAmount = (event, newAmount) => {
+    const changeAmount = useCallback((event, newAmount) => {
         event.preventDefault();
         setAmount(newAmount)
         // console.log(amount)
-    };
+    }, []);
 
     const changeHandler = (checked, id) => {
         if (checked) {
@@ -256,10 +257,10 @@ const DetailedSearchConditions = () => {
                         <Typography variant='subtitle1'>양식 여부</Typography>
                         <Typography variant='body2' sx={{ color: '#737373' }}>중복 선택이 가능합니다.</Typography>
                         {
-                            farm ? 
+                            farm.length ? 
                                 farm.map((item, i) => (
                                     <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
-                                )) : null
+                                )) : <Typography sx={{ color: '#B9B9B9' }}>어종을 선택해주세요</Typography>
                         }
                         <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
                         <ToastContainer />
