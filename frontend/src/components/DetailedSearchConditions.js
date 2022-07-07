@@ -11,6 +11,7 @@ import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useMemo } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -19,7 +20,7 @@ const Card = styled.div`
     border-radius: 5px;
     /* border: 1px solid black; */
     margin: 1rem;
-`
+`;
 
 const ListItemStyled = styled.div`
     /* style={{ display: 'flex', backgroundColor: 'white', height: '100%', borderBottom: '1px solid #F6F6F6' }} */
@@ -48,7 +49,11 @@ const DetailedSearchConditions = () => {
     const [farm, setFarm] = useState([]);
     const [farmStatus, setFarmStatus] = useState([]);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     setFish(fishList)
+    // }, [fishList])
+
+    useMemo(() => {
         setFish(fishList)
     }, [fishList])
 
@@ -59,13 +64,17 @@ const DetailedSearchConditions = () => {
     }, [personNum])
     
     
-    useEffect(() => {
+    useMemo(() => {
         resetSelectFish();
         setFish(
             fish.map(fish =>
                 fish ? { ...fish, active: false } : {...fish}
             )
         );
+        if (totalAmount > 0 && totalAmount - amount >= 0) {
+            setTotalAmount(totalAmount - amount);
+            setAmount(0);
+        }
     }, [selectCondition])
             
     useEffect(() => {
@@ -74,12 +83,8 @@ const DetailedSearchConditions = () => {
             )
     }, [selectFish])
 
-    useEffect(() => {
-        if (totalAmount > 0 && totalAmount - amount >= 0) {
-            setTotalAmount(totalAmount - amount);
-            setAmount(0);
-        }
-    }, [selectCondition])
+    // useEffect(() => {
+    // }, [selectCondition])
 
     const onSearch = (e) => {
         e.preventDefault()

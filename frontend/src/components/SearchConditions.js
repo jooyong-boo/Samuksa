@@ -14,15 +14,6 @@ const Card = styled.div`
     width: 295px;
     height: 464px;
     border-radius: 5px;
-`
-
-
-const Background = styled.div`
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background-color: #ebecee;
 `;
 
 const ITEM_HEIGHT = 48;
