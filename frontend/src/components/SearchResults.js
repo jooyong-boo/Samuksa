@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { fishDataState, recommendListState } from '../store/atom';
 import SearchResultTable from './SearchResultTable';
-import { List, AutoSizer } from "react-virtualized";
 
 const Card = styled.div`
     background-color: white;
@@ -126,45 +125,28 @@ const SearchResults = () => {
                         )
                     }) : null}
                 </CustomDiv>
-                {selectResult ?
-                    <CustomList>
-                        {selectResult? (selectResult).map((item, i) => {
-                            const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
-                            {/* console.log(item) */}
-                            {/* const rowRenderer = useCallback(
-                                ({ i, key, style }) => {
-                                    const list = fishRecommendBtDtos[i];
-                                    return (
-                                        <ListItem 
-                                            list={list}
-                                            key={key}
-                                            onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice, i)}}
-                                            sx={{ paddingLeft: 0, backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}
-                                        />
-                                    );
-                                }, 
-                                [fishRecommendBtDtos, onEstimateClick],
-                            ); */}
-                            return (
-                                <React.Fragment key={i}>
-                                    <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice, i)}} sx={{ paddingLeft: 0, backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
-                                    {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
-                                        const { fishName, serving } = item;
-                                        return (
-                                            <div key={i} style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-                                                <Typography sx={{ fontSize: '13px', color: '#545454' }}>{fishName}</Typography>
-                                                <Typography sx={{ fontSize: '13px', color: '#979797' }}>({serving}인분)</Typography>
-                                            </div>
-                                        ) 
-                                    }) : null}
-                                            <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>
-                                    </ListItem>
-                                </React.Fragment>
-                            )
-                        }): null}
-                    </CustomList> 
-                    : null
-                }
+                <CustomList>
+                {selectResult? (selectResult).map((item, i) => {
+                    const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
+                    {/* console.log(item) */}
+                    return (
+                        <React.Fragment key={i}>
+                            <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice, i)}} sx={{ paddingLeft: 0, backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
+                            {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
+                                const { fishName, serving } = item;
+                                return (
+                                    <div key={i} style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+                                        <Typography sx={{ fontSize: '13px', color: '#545454' }}>{fishName}</Typography>
+                                        <Typography sx={{ fontSize: '13px', color: '#979797' }}>({serving}인분)</Typography>
+                                    </div>
+                                ) 
+                            }) : null}
+                                    <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>
+                            </ListItem>
+                        </React.Fragment>
+                    )
+                }): null}
+                </CustomList> 
                 {selectEstimate ?
                     <div style={{ width: '69%', height: '100%',  minWidth: '300px' }}>
                         <div style={{ width: '95%', margin: 'auto', height: '490px', overflow: 'auto' }}>
@@ -181,3 +163,5 @@ const SearchResults = () => {
 };
 
 export default React.memo(SearchResults);
+
+
