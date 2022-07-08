@@ -146,6 +146,9 @@ const DetailedSearchConditions = () => {
                     notify('선택한 어종이 이미 있습니다.')
                     : setSelectCondition([...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
         }
+        setAmount(0)
+        resetSelectFish()
+        setFarmStatus([])
     };
 
     // console.log(totalAmount)
@@ -168,6 +171,7 @@ const DetailedSearchConditions = () => {
                             defaultValue=""
                             placeholder='찾는 어종을 입력하세요'
                             onChange={onSearch}
+                            autoComplete='off'
                         />
                     </FormControl>
                     <>
@@ -262,7 +266,8 @@ const DetailedSearchConditions = () => {
                                     <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
                                 )) : <Typography sx={{ color: '#B9B9B9' }}>어종을 선택해주세요</Typography>
                         }
-                        <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
+                        {selectFish && amount && farmStatus.length > 0 ? <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#0098EE', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
+                        : <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>}
                         <ToastContainer />
                     </div>
                 </div>
