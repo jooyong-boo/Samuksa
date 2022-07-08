@@ -1,12 +1,12 @@
-import { Avatar, CardContent, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, CardContent, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
 import React from 'react';
+import { useCallback } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { fishDataState, recommendListState } from '../store/atom';
 import SearchResultTable from './SearchResultTable';
-import { FixedSizeList } from 'react-window';
 
 const Card = styled.div`
     background-color: white;
@@ -40,6 +40,11 @@ const CustomDiv = styled.div`
 const CustomList = styled.div`
     width: 11%;
     height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    flex-wrap: wrap;
     background-color: white;
     border-right: 1px solid #EAEAEA;
     border-bottom: 1px solid #F6F6F6;
@@ -58,6 +63,7 @@ const CustomList = styled.div`
         border-radius: 6px;
     }
 `;
+{/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '100%', paddingLeft: '10px' }}> */}
 
 const Img = styled('img')({
     // margin: '13px 13px 12px 16px ',
@@ -90,7 +96,6 @@ const SearchResults = () => {
         setSelectEstimate(item);
         setTotalPrice(price)
     };
-    // console.log(selectEstimate)
 
     return (
         <Card>
@@ -120,33 +125,28 @@ const SearchResults = () => {
                         )
                     }) : null}
                 </CustomDiv>
-                {selectResult ?
-                    <CustomList>
-                        <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'white', height: '100%' }}>
-                            {selectResult? (selectResult).map((item, i) => {
-                                const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
-                                {/* console.log(item) */}
+                <CustomList>
+                {selectResult? (selectResult).map((item, i) => {
+                    const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
+                    {/* console.log(item) */}
+                    return (
+                        <React.Fragment key={i}>
+                            <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice, i)}} sx={{ paddingLeft: 0, backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
+                            {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
+                                const { fishName, serving } = item;
                                 return (
-                                    <React.Fragment key={i}>
-                                        <ListItem onClick={() => {onEstimateClick(fishRecommendBtDtos, totalPrice, i)}} sx={{ paddingLeft: 0, backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', display: 'flex', flexDirection: 'column', ':hover': {backgroundColor: '#F4F4F4'} }}>
-                                        {fishRecommendBtDtos? fishRecommendBtDtos.map((item, i) => {
-                                            const { fishName, serving } = item;
-                                            return (
-                                                <div key={i} style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-                                                    <Typography sx={{ fontSize: '13px', color: '#545454' }}>{fishName}</Typography>
-                                                    <Typography sx={{ fontSize: '13px', color: '#979797' }}>({serving}인분)</Typography>
-                                                </div>
-                                            ) 
-                                        }) : null}
-                                                <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>
-                                        </ListItem>
-                                    </React.Fragment>
-                                )
-                            }): null}
-                        </div>
-                    </CustomList> 
-                    : null
-                }
+                                    <div key={i} style={{  width: '100%', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+                                        <Typography sx={{ fontSize: '13px', color: '#545454' }}>{fishName}</Typography>
+                                        <Typography sx={{ fontSize: '13px', color: '#979797' }}>({serving}인분)</Typography>
+                                    </div>
+                                ) 
+                            }) : null}
+                                    <Typography sx={{ fontSize: '15px', mt:1, fontWeight: 'bold' }}>{totalPrice.toLocaleString('ko-KR')}원</Typography>
+                            </ListItem>
+                        </React.Fragment>
+                    )
+                }): null}
+                </CustomList> 
                 {selectEstimate ?
                     <div style={{ width: '69%', height: '100%',  minWidth: '300px' }}>
                         <div style={{ width: '95%', margin: 'auto', height: '490px', overflow: 'auto' }}>
@@ -162,4 +162,6 @@ const SearchResults = () => {
     );
 };
 
-export default SearchResults;
+export default React.memo(SearchResults);
+
+
