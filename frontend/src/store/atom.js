@@ -3,7 +3,7 @@ import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from
 
 export const personNumState = atom ({
   key: 'personNumState',
-  default: 0,
+  default: '',
 });
 
 export const moneyState = atom ({

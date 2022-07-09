@@ -9,7 +9,7 @@ const instance = axios.create({
 export const getFishRecommendData = async ({ personNum, money, area }) => {
   try {
     const { data } = await instance.get('/fish/recommend', { params: { personNumber : Number(personNum), money: Number(money), saleArea: area }});
-    console.log(data)
+    // console.log(data)
     return data;
   } catch (err) {
     console.log(err.response);
