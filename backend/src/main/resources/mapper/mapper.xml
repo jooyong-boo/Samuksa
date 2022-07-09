@@ -116,4 +116,17 @@
           FROM FISH_SALE_AREA
     </select>
 
+    <select id="selectMaxRegDate" resultType="String">
+        SELECT DATE(MAX(SALE_DTM)) AS SALE_DTM
+          FROM FISH_SALE_AREA FSA
+             , FISH_SALE_INFO FSI
+             , FISH_MARKET_PRICE FMP
+         WHERE FMP.FISH_SALE_INFO_ID = FSI.FISH_SALE_INFO_ID
+           AND FMP.FISH_SALE_AREA_ID = FSA.FISH_SALE_AREA_ID
+           AND FSA.ZONE_NAME = #{saleArea}
+           AND FSI.FISHERY_AREA = #{fisheryArea}
+           AND FSI.FARM_TYPE = #{farmType}
+           AND FSI.FISH_SIZE = #{fishSize}
+    </select>
+
 </mapper>

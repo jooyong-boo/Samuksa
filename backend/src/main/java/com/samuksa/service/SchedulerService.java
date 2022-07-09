@@ -2,6 +2,8 @@ package com.samuksa.service;
 
 import com.samuksa.dto.fish.price.FishPriceRequest;
 import com.samuksa.entity.fish.price.FishPriceEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 @Service
 public class SchedulerService {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
@@ -35,7 +39,7 @@ public class SchedulerService {
                 if(fishPriceRequestList == null || count == fishPriceRequestList.size()){
                     remove();
                 } else {
-                    System.out.println(fishPriceRequestList.get(count));
+                    logger.info("register >> fishPriceRequest: {}", fishPriceRequestList.get(count));
                     fishPriceEntity.setFishPrice(fishPriceRequestList.get(count++));
                 }
             }

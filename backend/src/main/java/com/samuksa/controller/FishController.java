@@ -9,6 +9,8 @@ import com.samuksa.service.FishService;
 import com.samuksa.service.SchedulerService;
 import com.samuksa.service.fishrecommend.FishRecommendService;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,8 @@ import java.util.List;
 @RequestMapping("fish")
 @Api(tags = {"수산물 API"})
 public class FishController {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     FishService fishService;
@@ -31,6 +35,9 @@ public class FishController {
     })
     @ApiOperation(value = "모든 수산물 정보를 판매 지역으로 조회", response = FishInfo.class)
     public List<FishInfoResponse> getAllFishInfo(@RequestParam(name = "saleArea") String saleArea) {
+        List<FishInfoResponse> result = fishService.getAllFishInfo(saleArea);
+
+        logger.info("getAllFishInfo output >> result: {}", result);
         return fishService.getAllFishInfo(saleArea);
     }
 
@@ -58,7 +65,10 @@ public class FishController {
     @GetMapping("/price/all")
     @ApiOperation(value = "오늘 수산물 시가 전체를 조회", response = FishPrice.class)
     public List<FishPrice> getTodayPrices() {
-        return fishService.getAllTodayFishPrice();
+        List<FishPrice> result = fishService.getAllTodayFishPrice();
+        logger.info("getTodayPrices output >> result: {}", result);
+
+        return result;
     }
 
     @GetMapping("/price/area")
@@ -67,13 +77,18 @@ public class FishController {
     })
     @ApiOperation(value = "오늘 수산물을 시가 판매 지역으로 조회", response = FishPrice.class)
     public List<FishPrice> getTodayFishPrice(@RequestParam(name = "saleArea") String saleArea) {
-        return fishService.getTodayFishPrice(saleArea);
+        List<FishPrice> result = fishService.getTodayFishPrice(saleArea);
+        logger.info("getTodayFishPrice output >> result: {}", result);
+
+        return result;
     }
 
     @GetMapping("/area")
     @ApiOperation(value = "수산물 판매지역 목록을 조회", response = String.class)
     public List<String> getAllSaleArea() {
-        return fishService.getAllSaleArea();
+        List<String> result = fishService.getAllSaleArea();
+        logger.info("getAllSaleArea output >> result: {}", result);
+        return result;
     }
 
 }

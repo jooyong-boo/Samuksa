@@ -20,4 +20,6 @@ public interface FishMapper {
     public List<FishPrice> selectTodayFishPriceBySaleArea(String saleArea);
 
     public List<String> selectAllSaleArea();
+
+    public String selectMaxRegDate(FishPriceRequest fishPriceRequest);
 }
