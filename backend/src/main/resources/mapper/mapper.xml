@@ -7,6 +7,7 @@
              , FI.FISH_NAME       AS FISH_NAME
              , AA.FARM_TYPES      AS FARM_TYPES
              , FI.YIELD           AS FISH_YIELD
+             , FI.IMG_URL         AS IMG_URL
           FROM FISH_INFO FI
              , (SELECT A.FISH_INFO_ID
                      , GROUP_CONCAT(A.FARM_TYPE) AS FARM_TYPES
