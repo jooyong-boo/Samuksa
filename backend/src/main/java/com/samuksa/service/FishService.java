@@ -1,6 +1,7 @@
 package com.samuksa.service;
 
 import com.samuksa.dto.fish.info.FishInfo;
+import com.samuksa.dto.fish.info.FishInfoResponse;
 import com.samuksa.dto.fish.price.FishPrice;
 import com.samuksa.entity.fish.info.FishInfoEntity;
 import com.samuksa.entity.fish.price.FishPriceEntity;
@@ -22,8 +23,9 @@ public class FishService {
     @Autowired
     FishSaleAreaEntity fishSaleAreaEntity;
 
-    public List<FishInfo> getAllFishInfo() {
-        return fishInfoEntity.getAllFishInfo();
+    public List<FishInfoResponse> getAllFishInfo(String saleArea) {
+        List<FishInfo> fishInfoList = fishInfoEntity.getAllFishInfo(saleArea);
+        return fishInfoEntity.convertResponse(fishInfoList);
     }
 
     public List<FishPrice> getAllTodayFishPrice() {
@@ -38,7 +40,4 @@ public class FishService {
         return fishSaleAreaEntity.getAllSaleArea();
     }
 
-    public List<String> getFishFarmTypeByName(String fishName) {
-        return fishInfoEntity.getFishFarmTypeByName(fishName);
-    }
 }
