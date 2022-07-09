@@ -10,4 +10,5 @@ public class FishInfo {
     private String fishName;
     private int fishYield;
     private String imgUrl;
+    private String farmTypes;
 }

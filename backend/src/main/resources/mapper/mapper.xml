@@ -2,46 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.samuksa.mapper.FishMapper">
 
-    <select id="selectAllFishInfo" resultType="com.samuksa.dto.fish.info.FishInfo">
-        SELECT FI.FISH_INFO_ID
-             , FI.FISH_NAME
-             , FI.YIELD AS FISH_YIELD
-        FROM FISH_INFO FI
+    <select id="selectAllFishInfoBySaleArea" resultType="com.samuksa.dto.fish.info.FishInfo">
+        SELECT AA.FISH_INFO_ID    AS FISH_INFO_ID
+             , FI.FISH_NAME       AS FISH_NAME
+             , AA.FARM_TYPES      AS FARM_TYPES
+             , FI.YIELD           AS FISH_YIELD
+          FROM FISH_INFO FI
+             , (SELECT A.FISH_INFO_ID
+                     , GROUP_CONCAT(A.FARM_TYPE) AS FARM_TYPES
+                  FROM (SELECT FI.FISH_INFO_ID
+                            , FARM_TYPE
+                         FROM FISH_MARKET_PRICE FMP
+                            , FISH_SALE_AREA FSA
+                            , FISH_SALE_INFO FSI
+                            , FISH_INFO FI
+                        WHERE FMP.FISH_SALE_AREA_ID = FSA.FISH_SALE_AREA_ID
+                          AND FSA.ZONE_NAME = '노량진'
+                          AND DATE(FMP.SALE_DTM) = DATE('2022-06-19')
+				          AND FMP.FISH_SALE_INFO_ID = FSI.FISH_SALE_INFO_ID
+				          AND FSI.FISH_INFO_ID = FI.FISH_INFO_ID
+                        GROUP BY FI.FISH_INFO_ID, FSI.FARM_TYPE) A
+                 GROUP BY A.FISH_INFO_ID) AA
+         WHERE FI.FISH_INFO_ID = AA.FISH_INFO_ID
     </select>
 
     <insert id="insertFishPrice">
         INSERT INTO FISH_MARKET_PRICE (FISH_SALE_AREA_ID, FISH_SALE_INFO_ID, PRICE, SALE_DTM)
         SELECT FSA.FISH_SALE_AREA_ID, FSI.FISH_SALE_INFO_ID, #{price}, #{saleDtm}
-        FROM FISH_SALE_AREA FSA
-           , FISH_SALE_INFO FSI
-        WHERE FSA.ZONE_NAME = #{saleArea}
-          AND FSI.FISHERY_AREA = #{fisheryArea}
-          AND FSI.FARM_TYPE = #{farmType}
-          AND FSI.FISH_SIZE = #{fishSize}
-          AND NOT EXISTS(SELECT *
-						   FROM FISH_SALE_AREA FSA2
-							  , FISH_SALE_INFO FSI2
-							  , FISH_MARKET_PRICE FMP2
-						  WHERE FMP2.FISH_SALE_INFO_ID = FSI2.FISH_SALE_INFO_ID
-							AND FMP2.FISH_SALE_AREA_ID = FSA2.FISH_SALE_AREA_ID
-							AND FSA2.ZONE_NAME = #{saleArea}
-                            AND FSI2.FISHERY_AREA = #{fisheryArea}
-                            AND FSI2.FARM_TYPE = #{farmType}
-                            AND FSI2.FISH_SIZE = #{fishSize}
-                            AND DATE_FORMAT(FMP2.SALE_DTM,'%Y-%m-%d') = #{saleDtm})
+          FROM FISH_SALE_AREA FSA
+             , FISH_SALE_INFO FSI
+         WHERE FSA.ZONE_NAME = #{saleArea}
+           AND FSI.FISHERY_AREA = #{fisheryArea}
+           AND FSI.FARM_TYPE = #{farmType}
+           AND FSI.FISH_SIZE = #{fishSize}
+           AND NOT EXISTS(SELECT 1
+						    FROM FISH_SALE_AREA FSA2
+							   , FISH_SALE_INFO FSI2
+							   , FISH_MARKET_PRICE FMP2
+						   WHERE FMP2.FISH_SALE_INFO_ID = FSI2.FISH_SALE_INFO_ID
+						 	 AND FMP2.FISH_SALE_AREA_ID = FSA2.FISH_SALE_AREA_ID
+							 AND FSA2.ZONE_NAME = #{saleArea}
+                             AND FSI2.FISHERY_AREA = #{fisheryArea}
+                             AND FSI2.FARM_TYPE = #{farmType}
+                             AND FSI2.FISH_SIZE = #{fishSize}
+                             AND DATE_FORMAT(FMP2.SALE_DTM,'%Y-%m-%d') = #{saleDtm})
     </insert>
 
     <select id="selectFishPriceRequest" resultType="com.samuksa.dto.fish.price.FishPriceRequest">
-        SELECT FI.FISH_NAME
-             , FSI.FISHERY_AREA
-             , FSI.FARM_TYPE
-             , FSI.FISH_SIZE
-             , CONCAT(ZONE_CODE, '_', FSI.FISH_CODE) AS NAME_CODE
-             , FSI.MAX_WEIGHT
-             , FSI.MIN_WEIGHT
-             , FSA.ZONE_NAME AS SALE_AREA
-             , FSA.ZONE_CODE AS SALE_AREA_CODE
-             , '0000000000' AS SIZE_CODE
+        SELECT FI.FISH_NAME                             AS FISH_NAME
+             , FSI.FISHERY_AREA                         AS FISHERY_AREA
+             , FSI.FARM_TYPE                            AS FARM_TYPE
+             , FSI.FISH_SIZE                            AS FISH_SIZE
+             , CONCAT(ZONE_CODE, '_', FSI.FISH_CODE)    AS NAME_CODE
+             , FSI.MAX_WEIGHT                           AS MAX_WEIGHT
+             , FSI.MIN_WEIGHT                           AS MIN_WEIGHT
+             , FSA.ZONE_NAME                            AS SALE_AREA
+             , FSA.ZONE_CODE                            AS SALE_AREA_CODE
+             , '0000000000'                             AS SIZE_CODE
           FROM FISH_SALE_INFO FSI
              , FISH_INFO FI
              , FISH_SALE_AREA FSA
@@ -49,16 +66,16 @@
     </select>
 
     <select id="selectAllTodayFishPrice" resultType="com.samuksa.dto.fish.price.FishPrice">
-        SELECT FSA.ZONE_NAME AS SALE_AREA
-             , FMP.PRICE
-             , FSI.FISHERY_AREA
-             , FSI.FARM_TYPE
-             , FSI.FISH_SIZE
-             , FSI.MIN_WEIGHT
-             , FSI.MAX_WEIGHT
-             , FI.FISH_NAME
-             , FI.YIELD
-             , DATE_FORMAT(FMP.SALE_DTM, '%Y-%m-%d') AS SALE_DTM
+        SELECT FSA.ZONE_NAME                            AS SALE_AREA
+             , FMP.PRICE                                AS PRICE
+             , FSI.FISHERY_AREA                         AS FISHERY_AREA
+             , FSI.FARM_TYPE                            AS FARM_TYPE
+             , FSI.FISH_SIZE                            AS FISH_SIZE
+             , FSI.MIN_WEIGHT                           AS MIN_WEIGHT
+             , FSI.MAX_WEIGHT                           AS MAX_WEIGHT
+             , FI.FISH_NAME                             AS FISH_NAME
+             , FI.YIELD                                 AS YIELD
+             , DATE_FORMAT(FMP.SALE_DTM, '%Y-%m-%d')    AS SALE_DTM
           FROM FISH_MARKET_PRICE FMP
              , FISH_SALE_INFO FSI
              , FISH_SALE_AREA FSA
@@ -71,16 +88,16 @@
     </select>
 
     <select id="selectTodayFishPriceBySaleArea" resultType="com.samuksa.dto.fish.price.FishPrice">
-        SELECT FSA.ZONE_NAME AS SALE_AREA
-             , FMP.PRICE
-             , FSI.FISHERY_AREA
-             , FSI.FARM_TYPE
-             , FSI.FISH_SIZE
-             , FSI.MIN_WEIGHT
-             , FSI.MAX_WEIGHT
-             , FI.FISH_NAME
-             , FI.YIELD
-             , DATE_FORMAT(FMP.SALE_DTM, '%Y-%m-%d') AS SALE_DTM
+        SELECT FSA.ZONE_NAME                            AS SALE_AREA
+             , FMP.PRICE                                AS PRICE
+             , FSI.FISHERY_AREA                         AS FISHERY_AREA
+             , FSI.FARM_TYPE                            AS FARM_TYPE
+             , FSI.FISH_SIZE                            AS FISH_SIZE
+             , FSI.MIN_WEIGHT                           AS MIN_WEIGHT
+             , FSI.MAX_WEIGHT                           AS MAX_WEIGHT
+             , FI.FISH_NAME                             AS FISH_NAME
+             , FI.YIELD                                 AS YIELD
+             , DATE_FORMAT(FMP.SALE_DTM, '%Y-%m-%d')    AS SALE_DTM
             FROM FISH_MARKET_PRICE FMP
              , FISH_SALE_INFO FSI
              , FISH_SALE_AREA FSA
@@ -94,16 +111,8 @@
     </select>
 
     <select id="selectAllSaleArea" resultType="String">
-        SELECT ZONE_NAME AS SALE_AREA
+        SELECT ZONE_NAME    AS SALE_AREA
           FROM FISH_SALE_AREA
-    </select>
-
-    <select id="selectFishFarmTypeByName" resultType="String">
-        SELECT DISTINCT(FARM_TYPE) AS FARM_TYPE
-        FROM FISH_INFO FI
-           , FISH_SALE_INFO FSI
-        WHERE FI.FISH_INFO_ID = FSI.FISH_INFO_ID
-          AND FI.FISH_NAME = #{fishName}
     </select>
 
 </mapper>

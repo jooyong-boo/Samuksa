@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface FishMapper {
-    public List<FishInfo> selectAllFishInfo();
+    public List<FishInfo> selectAllFishInfoBySaleArea(String saleArea);
 
     public void insertFishPrice(FishPrice fishPrice);
 
@@ -20,6 +20,4 @@ public interface FishMapper {
     public List<FishPrice> selectTodayFishPriceBySaleArea(String saleArea);
 
     public List<String> selectAllSaleArea();
-
-    public List<String> selectFishFarmTypeByName(String fishName);
 }
