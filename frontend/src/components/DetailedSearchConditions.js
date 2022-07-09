@@ -78,14 +78,19 @@ const DetailedSearchConditions = () => {
         }
     }, [selectCondition])
             
+
+    //선택한 어종이 바뀔때 어종의 양식여부를 불러옴
+    //현재 양식여부의 길이하고 불러온 양식여부의 길이가 같으면 변화없고 다르면 현재 양식여부를 불러온 양식여부로 바꿔줌
     useEffect(() => {
+        // if (selectFish.length > 0) {
+        //     (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)}))
+        // } else {
+        //     setFarm([])
+        // }
         fish.map(fish =>
             fish.active === true ? (getFarmType({ fishName: fish.fishName }).then(res => {setFarm(res)})) : setFarm([])
             )
     }, [selectFish])
-
-    // useEffect(() => {
-    // }, [selectCondition])
 
     const onSearch = (e) => {
         e.preventDefault()
@@ -133,20 +138,20 @@ const DetailedSearchConditions = () => {
         if (selectFish.length === 0) {
             // return alert('어종을 선택해주세요');
             return notify('어종을 선택해주세요');
+        } else if (amount === 0 && totalAmount > 0){
+            return notify('분량을 선택해주세요');
+        } else if (amount === 0 && selectCondition.length > 0) {
+            return notify('분량 부족');
         } else if (farmStatus.length === 0) {
             // return alert('양식 여부를 체크해주세요');
             return notify('양식 여부를 체크해주세요');
-        } else if (amount === 0 && selectCondition.length > 0) {
-            return notify('분량 부족');
-        } else if (amount === 0 && selectCondition.length === 0){
-            return notify('분량을 선택해주세요');
         } else {
             selectCondition.some(item =>
                 item.id === selectFish[0].fishInfoId) ?
                     notify('선택한 어종이 이미 있습니다.')
                     : setSelectCondition([...selectCondition, { id: selectFish[0].fishInfoId, selectFish: selectFish[0].fishName, amount, farmStatus }]);
         }
-        setAmount(0)
+        // setAmount(0)
         resetSelectFish()
         setFarmStatus([])
     };
@@ -264,7 +269,7 @@ const DetailedSearchConditions = () => {
                             farm.length ? 
                                 farm.map((item, i) => (
                                     <Typography key={i} sx={{ fontSize: '14px' }}><Checkbox id={item} sx={{ color: '#E1E1E1' }} onChange={(e) => {changeHandler(e.currentTarget.checked, `${item}`)}} checked={farmStatus.includes(`${item}`) ? true : false} />{item}</Typography>
-                                )) : <Typography sx={{ color: '#B9B9B9' }}>어종을 선택해주세요</Typography>
+                                )) : <Typography sx={{ color: '#B9B9B9', paddingTop: '10px' }}>어종을 선택해주세요</Typography>
                         }
                         {selectFish && amount && farmStatus.length > 0 ? <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#0098EE', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>
                         : <Button variant="contained" type='submit' disableElevation sx={{ mb: 2, width: '100%', height: '38px', backgroundColor: '#767676', fontWeight: 900, marginTop: '70px', position: 'absolute' , bottom: 193, }} onClick={addCondition} >조건 추가하기</Button>}

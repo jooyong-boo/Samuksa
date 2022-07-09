@@ -57,11 +57,11 @@ const SearchConditions = () => {
     }
 
     const onClick = (e) => {
-        if (money < 5000) {
+        if (money < 50000) {
             e.preventDefault();
-            // alert('가격은 5000이상으로 해주세요');
-            notify('가격을 5000이상으로 해주세요');
-            // setMoney(5000)
+            // alert('가격은 50000이상으로 해주세요');
+            notify('가격을 50000이상으로 해주세요');
+            setMoney(50000)
             return;
         }
         if (personNum <= 0) {
@@ -141,7 +141,8 @@ const SearchConditions = () => {
                             </Grid>
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>선택</Button>
+                            {personNum > 0 && money >= 50000 ? <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>선택</Button>
+                            : <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#767676', fontWeight: 900, }} onClick={onClick}>선택</Button>}
                             <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                             <ToastContainer toastStyle={{ backgroundColor: "#F5F5F5", color: "#575757" }}/>
                         </div>
