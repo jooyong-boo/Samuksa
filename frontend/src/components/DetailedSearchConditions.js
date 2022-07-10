@@ -163,6 +163,7 @@ const DetailedSearchConditions = () => {
         // setAmount(0)
         resetSelectFish()
         setFarmStatus([])
+        setFarm([])
         setFish(
             fish.map(fish =>
                 fish ? { ...fish, active: false } : {...fish}
@@ -191,6 +192,8 @@ const DetailedSearchConditions = () => {
                             placeholder='찾는 어종을 입력하세요'
                             onChange={onSearch}
                             autoComplete='off'
+                            readOnly={fishList.length > 0 ? false : true}
+                            disableUnderline={fishList.length > 0 ? false : true}
                         />
                     </FormControl>
                         <Paper
