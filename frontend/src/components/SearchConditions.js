@@ -75,8 +75,8 @@ const SearchConditions = () => {
         if (personNum <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
-            notify('인원은 1 이상으로 해주세요');
-            setPersonNum(1);
+            notify('인원을 입력해주세요');
+            // setPersonNum(1);
             return;
         }
     }
@@ -164,10 +164,10 @@ const SearchConditions = () => {
                             </Grid>
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                            {personNum > 0 && money >= 50000 ? <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>선택</Button>
-                            : <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#767676', fontWeight: 900, }} onClick={onClick}>선택</Button>}
+                            {personNum > 0 && money >= 50000 ? <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>조건 선택</Button>
+                            : <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#767676', fontWeight: 900, ':hover': {backgroundColor: '#767676'} }} onClick={onClick}>조건 선택</Button>}
                             <ToastContainer toastStyle={{ backgroundColor: "#F5F5F5", color: "#575757" }}/>
-                            <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
+                            <Button variant='outlined' onClick={onReset} sx={{ width: '40%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>조건 초기화</Button>
                         </div>
                     </form>
                 </Container>
