@@ -64,13 +64,13 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                     <CustomForm>
                     {selectCondition.map((select) => {
                         {/* console.log(select) */}
-                        const { id, selectFish, amount, farmStatus } = select;
+                        const { id, selectFish, amount, farmStatus, imgUrl } = select;
                         return (
                             <div style={{ display: 'flex', borderBottom: '1px solid #F6F6F6' }} key={id}>
                                 {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
                                 <Avatar
                                     // alt={`Avatar n°${value + 1}`}
-                                    src={image}
+                                    src={imgUrl}
                                     variant= 'square'
                                     style={{ height: '50px', width: '50px', borderRadius: '3px', margin: '13px' }}
                                 />
