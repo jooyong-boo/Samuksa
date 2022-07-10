@@ -8,6 +8,7 @@ import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -37,12 +38,14 @@ const SearchConditions = () => {
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
-    // console.log(fishList);
     const resetFishDetailRecommendInfo = useResetRecoilState(fishDetailRecommendInfo);
     const resetSelectCondition = useResetRecoilState(selectConditions);
     const resetSelectFish = useResetRecoilState(selectFishState);
     const resetTotalAmount = useResetRecoilState(totalAmountState);
     const resetFarm = useResetRecoilState(farmState);
+
+    // 검색조건 선택 여부 체크
+    const [select, setSelect] = useState(true)
 
     const handlePersonNumChange = (e) => {
         const { value } = e.target;
@@ -88,12 +91,13 @@ const SearchConditions = () => {
         resetSelectFish();
         resetTotalAmount();
         resetFarm();
+        setSelect(true)
     }
 
 
     const onSubmit = (e) => {
             e.preventDefault();
-            getAreaTotalFishData({ area }).then(res => {res ? setFishList(res) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!')});
+            getAreaTotalFishData({ area }).then(res => res ? (setFishList(res), setSelect(false)) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'));
     }
 
     return (
@@ -101,7 +105,7 @@ const SearchConditions = () => {
             <Card>
                 <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 조건</Typography>
                 <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
-                    <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
                         <Grid container spacing={5} justifyContent="center" alignItems="center">
                             <Grid item xs={11}>
                                 <TextField 
@@ -117,6 +121,7 @@ const SearchConditions = () => {
                                     InputProps={{
                                         endAdornment:<InputAdornment position="end">명</InputAdornment>,
                                     }}
+                                    disabled={select ? false : true}
                                     // size="small"
                                 />
                             </Grid>
@@ -133,6 +138,7 @@ const SearchConditions = () => {
                                     InputProps={{
                                         endAdornment:<InputAdornment position="end">원</InputAdornment>,
                                     }}
+                                    disabled={select ? false : true}
                                     // size="small"
                                 />
                             </Grid>
@@ -147,6 +153,7 @@ const SearchConditions = () => {
                                         onChange={(e) => {setArea(e.target.value)}}
                                         MenuProps={MenuProps}
                                         fullWidth
+                                        disabled={select ? false : true}
                                         // size="small"
                                     >
                                         {getArea.map((a, i) => (
@@ -159,8 +166,8 @@ const SearchConditions = () => {
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                             {personNum > 0 && money >= 50000 ? <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>선택</Button>
                             : <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#767676', fontWeight: 900, }} onClick={onClick}>선택</Button>}
-                            <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                             <ToastContainer toastStyle={{ backgroundColor: "#F5F5F5", color: "#575757" }}/>
+                            <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                         </div>
                     </form>
                 </Container>
