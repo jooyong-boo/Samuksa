@@ -34,6 +34,18 @@ export const selectFishState = atom({
   default: [],
 });
 
+// 총 분량
+export const totalAmountState = atom({
+  key: 'totalAmountState',
+  default: 0,
+});
+
+// 양식 여부
+export const farmState = atom({
+  key: 'farmState',
+  default: [],
+});
+
 //추천 수산물
 export const recommendListState = atom({
   key: 'recommendListState',
@@ -66,8 +78,8 @@ export const getAreaState = selector({
 export const fishPriceAllState = selector({
   key: 'fishPriceAllState',
   get: async ({ get }) => {
-    // const area = get(areaState);
-    const response = await getAreaTotalFishData();
+    const area = get(areaState);
+    const response = await getAreaTotalFishData({ area });
     return response;
   },
 });

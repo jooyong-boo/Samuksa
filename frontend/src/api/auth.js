@@ -17,10 +17,10 @@ export const getFishRecommendData = async ({ personNum, money, area }) => {
 };
 
 // 정보 조회
-export const getAreaTotalFishData = async () => {
+export const getAreaTotalFishData = async ({ area }) => {
   try {
-    const { data } = await instance.get('/fish/info');
-    // console.log(data)
+    const { data } = await instance.get('/fish/info', { params: { saleArea: area }});
+    console.log(data)
     return data;
   } catch (err) {
     console.log(err.response);
