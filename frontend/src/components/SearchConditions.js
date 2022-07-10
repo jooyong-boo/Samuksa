@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
-import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import { Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
 import styled, { keyframes } from 'styled-components';
 import { Container } from '@mui/system';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { areaState, fishDetailRecommendInfo, getAreaState, moneyState, personNumState, recommendListState } from '../store/atom';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { areaState, farmState, fishDetailRecommendInfo, fishPriceAllState, getAreaState, moneyState, personNumState, recommendListState, selectConditions, selectFishState, totalAmountState } from '../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
@@ -36,8 +36,13 @@ const SearchConditions = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
-    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo)
+    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
     // console.log(fishList);
+    const resetFishDetailRecommendInfo = useResetRecoilState(fishDetailRecommendInfo);
+    const resetSelectCondition = useResetRecoilState(selectConditions);
+    const resetSelectFish = useResetRecoilState(selectFishState);
+    const resetTotalAmount = useResetRecoilState(totalAmountState);
+    const resetFarm = useResetRecoilState(farmState);
 
     const handlePersonNumChange = (e) => {
         const { value } = e.target;
@@ -57,11 +62,11 @@ const SearchConditions = () => {
     }
 
     const onClick = (e) => {
-        if (money < 5000) {
+        if (money < 50000) {
             e.preventDefault();
-            // alert('가격은 5000이상으로 해주세요');
-            notify('가격을 5000이상으로 해주세요');
-            // setMoney(5000)
+            // alert('가격은 50000이상으로 해주세요');
+            notify('가격을 50000이상으로 해주세요');
+            setMoney(50000)
             return;
         }
         if (personNum <= 0) {
@@ -78,12 +83,17 @@ const SearchConditions = () => {
         setPersonNum(1);
         setMoney(50000);
         setArea('노량진');
+        resetFishDetailRecommendInfo();
+        resetSelectCondition();
+        resetSelectFish();
+        resetTotalAmount();
+        resetFarm();
     }
 
 
     const onSubmit = (e) => {
             e.preventDefault();
-            getAreaTotalFishData().then(res => {res ? setFishList(res) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!')});
+            getAreaTotalFishData({ area }).then(res => {res ? setFishList(res) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!')});
     }
 
     return (
@@ -104,6 +114,9 @@ const SearchConditions = () => {
                                     autoFocus={true}
                                     fullWidth
                                     autoComplete='off'
+                                    InputProps={{
+                                        endAdornment:<InputAdornment position="end">명</InputAdornment>,
+                                    }}
                                     // size="small"
                                 />
                             </Grid>
@@ -117,6 +130,9 @@ const SearchConditions = () => {
                                     onChange={handleMoneyChange} 
                                     fullWidth
                                     autoComplete='off'
+                                    InputProps={{
+                                        endAdornment:<InputAdornment position="end">원</InputAdornment>,
+                                    }}
                                     // size="small"
                                 />
                             </Grid>
@@ -141,7 +157,8 @@ const SearchConditions = () => {
                             </Grid>
                         </Grid>
                         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                            <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>선택</Button>
+                            {personNum > 0 && money >= 50000 ? <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#0098EE', fontWeight: 900, }} onClick={onClick}>선택</Button>
+                            : <Button variant="contained" type='submit' disableElevation sx={{ mt: 3, mb: 2, width: '274px',height: '38px' ,backgroundColor: '#767676', fontWeight: 900, }} onClick={onClick}>선택</Button>}
                             <Button variant='outlined' onClick={onReset} sx={{ width: '30%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494' }}>초기화</Button>
                             <ToastContainer toastStyle={{ backgroundColor: "#F5F5F5", color: "#575757" }}/>
                         </div>

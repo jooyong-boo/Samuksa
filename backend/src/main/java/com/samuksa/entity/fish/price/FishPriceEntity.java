@@ -5,6 +5,8 @@ import com.samuksa.dto.fish.api.FishApiResponse;
 import com.samuksa.dto.fish.price.FishPrice;
 import com.samuksa.dto.fish.price.FishPriceRequest;
 import com.samuksa.mapper.FishMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Component
 public class FishPriceEntity {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     FishMapper fishMapper;
@@ -54,18 +58,23 @@ public class FishPriceEntity {
             ObjectMapper objectMapper = new ObjectMapper();
             FishApiResponse apiResponse = objectMapper.readValue(response, FishApiResponse.class);
 
-            System.out.println("API 호출 response: " + apiResponse);
+            logger.info("setFishPrice API 호출 response >> {}", apiResponse);
 
             List<String> priceList = apiResponse.getPrice();
             List<String> dateList = apiResponse.getDate();
 
+            String latestRegDate = fishMapper.selectMaxRegDate(fishPriceRequest);
+            if(latestRegDate == null) latestRegDate = "1";
+
             for(int i = 0; i < priceList.size(); i++) {
+                if(latestRegDate.compareTo(dateList.get(i)) >= 0) continue;
+
                 FishPrice fishPrice = new FishPrice(fishPriceRequest, priceList.get(i), dateList.get(i));
                 this.registFishPrice(fishPrice);
             }
 
         } catch(Exception e) {
-            System.out.println(e);
+            logger.error("setFishPrice API 호출 ERROR >> ", e);
         }
         return "S";
     }

@@ -3,7 +3,7 @@ import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from
 
 export const personNumState = atom ({
   key: 'personNumState',
-  default: 0,
+  default: '',
 });
 
 export const moneyState = atom ({
@@ -31,6 +31,18 @@ export const fishDetailRecommendInfo = atom({
 // 선택한 어종
 export const selectFishState = atom({
   key: 'selectFishState',
+  default: [],
+});
+
+// 총 분량
+export const totalAmountState = atom({
+  key: 'totalAmountState',
+  default: 0,
+});
+
+// 양식 여부
+export const farmState = atom({
+  key: 'farmState',
   default: [],
 });
 
@@ -66,8 +78,8 @@ export const getAreaState = selector({
 export const fishPriceAllState = selector({
   key: 'fishPriceAllState',
   get: async ({ get }) => {
-    // const area = get(areaState);
-    const response = await getAreaTotalFishData();
+    const area = get(areaState);
+    const response = await getAreaTotalFishData({ area });
     return response;
   },
 });

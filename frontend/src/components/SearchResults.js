@@ -126,7 +126,7 @@ const SearchResults = () => {
                     }) : null}
                 </CustomDiv>
                 <CustomList>
-                {selectResult? (selectResult).map((item, i) => {
+                {selectResult? selectResult.map((item, i) => {
                     const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
                     {/* console.log(item) */}
                     return (
