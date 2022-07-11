@@ -1,11 +1,12 @@
-import { Avatar, CardContent, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
-import React from 'react';
+import { Avatar, Button, CardContent, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import React, { forwardRef } from 'react';
+import { useEffect } from 'react';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
-import { fishDataState, recommendListState } from '../store/atom';
+import { fishDataState, recommendListState, selectConditions } from '../store/atom';
 import SearchResultTable from './SearchResultTable';
 
 const Card = styled.div`
@@ -75,19 +76,26 @@ const Img = styled('img')({
     // padding: '9px 13px',
   });
 
-const SearchResults = () => {
+const SearchResults = forwardRef((props, ref) => {
 
     const [result, setResult] = useRecoilState(recommendListState);
+    const selectCondition = useRecoilValue(selectConditions);
     // console.log(result);
 
     const [selectResult, setSelectResult] = useState();
     const [selectEstimate, setSelectEstimate] = useState();
     const [totalPrice, setTotalPrice] = useState();
 
+    useEffect(() => {
+        setSelectResult();
+        setSelectEstimate();
+    }, [selectCondition])
+
     const onRecommendClick = (item, id) => {
         setSelectResult(item);
         setResult(result.map((item) =>
             item.combinationName === id ? {...item, active: !item.active} : { ...item, active: false }))
+        setSelectEstimate();
     }
 
     const onEstimateClick = (item, price, selectId) => {
@@ -98,7 +106,7 @@ const SearchResults = () => {
     };
 
     return (
-        <Card>
+        <Card ref={ref}>
             <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
@@ -160,7 +168,7 @@ const SearchResults = () => {
             </div>
         </Card>
     );
-};
+});
 
 export default React.memo(SearchResults);
 

@@ -8,7 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import image from '../img/contemplative-reptile.jpeg';
-import { Avatar, createTheme, ThemeProvider, Typography } from '@mui/material';
+import { Avatar, Button, createTheme, ThemeProvider, Typography } from '@mui/material';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useState } from 'react';
 
 const Img = styled('img')({
@@ -35,6 +36,10 @@ const theme = createTheme({
 
 
 export default function SearchResultTable({ selectEstimate, totalPrice }) {
+
+    const moveTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     // console.log(selectEstimate, totalPrice)
   return (
@@ -110,14 +115,14 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
             </div>
             <div>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 6 }}>
-                    <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1  }}>총 순살무게: </Typography>
+                    <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1 }}>총 순살무게: </Typography>
                     <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>?</Typography>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1 }}>총 금액: </Typography>
                     <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>{totalPrice? totalPrice.toLocaleString('ko-KR'): null}</Typography>원
                 </div>
-            </div>
+                <Button variant='outlined' sx={{ width: '100%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494', marginTop: 2, paddingLeft: 3 }} onClick={moveTop}>Top<ArrowDropUpIcon/></Button>            </div>
         </div>
     </div>
   );

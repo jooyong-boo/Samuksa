@@ -75,14 +75,14 @@ export const getAreaState = selector({
 });
 
 // 수산물 정보
-export const fishPriceAllState = selector({
-  key: 'fishPriceAllState',
-  get: async ({ get }) => {
-    const area = get(areaState);
-    const response = await getAreaTotalFishData({ area });
-    return response;
-  },
-});
+// export const fishPriceAllState = selector({
+//   key: 'fishPriceAllState',
+//   get: async ({ get }) => {
+//     const area = get(areaState);
+//     const response = await getAreaTotalFishData({ area });
+//     return response;
+//   },
+// });
 
 // 수산물 추천
 // export const fishDataState = selector({
