@@ -24,7 +24,6 @@ const Main2 = () => {
             <Header />
             <Background>
                 <SearchConditions />
-                <SearchResults />
             </Background>
         </>
     );

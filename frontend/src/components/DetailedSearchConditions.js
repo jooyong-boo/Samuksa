@@ -1,18 +1,38 @@
 import { Avatar, Button, Checkbox, FormControl, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import image from '../img/contemplative-reptile.jpeg';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
 import { errorSelector, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { farmState, fishDetailRecommendInfo, fishPriceAllState, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
+import { farmState, fishDetailRecommendInfo, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
+
+const Opacity = keyframes`
+    from {
+        opacity:0;
+	}
+	to {
+		opacity:1;
+	}
+`;
+
+const opacityAnimation = props =>
+css`
+    ${props => (props.length > 0 ? Opacity : null)}
+`;
+
+const AnimationContainer = styled.div`
+    display: flex;
+    height: 100%;
+    animation: 1s ${opacityAnimation} ease-in-out forwards;
+`
 
 const Card = styled.div`
     background-color: white;
@@ -38,7 +58,6 @@ const DetailedSearchConditions = () => {
 
     const notify = (text) => toast.warning(text, { position: "top-center", autoClose: 1000, hideProgressBar: true });
 
-    const [areaFishPrice, setAreaFishPrice] = useRecoilState(fishPriceAllState);
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [selectFish, setSelectFish] = useRecoilState(selectFishState)
     const resetSelectFish = useResetRecoilState(selectFishState)
@@ -88,8 +107,8 @@ const DetailedSearchConditions = () => {
         fish.map(fish =>
             fish.active === true ? (setFarm(fish.farmTypes)) : null
             )
-            console.log(farm);
-            console.log(selectFish)
+            // console.log(farm);
+            // console.log(selectFish)
     }, [selectFish])
 
     useEffect(() => {
@@ -177,7 +196,8 @@ const DetailedSearchConditions = () => {
         <>
         <Card>
             <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>상세 검색 조건</Typography>
-            <div style={{ display: 'flex', height: '100%', opacity: fish.length > 0 ? 1 : 0.3 }}>
+            {/* <div style={{ display: 'flex', height: '100%', opacity: fish.length > 0 ? 1 : 0.4 }}> */}
+            <div style={{ display: 'flex', height: '100%' }}>
                 <div style={{ width: '45%', borderRight: '1px solid #EAEAEA', maxHeight: '420px' }}>
                     <FormControl fullWidth> 
                         <Input 
@@ -215,7 +235,7 @@ const DetailedSearchConditions = () => {
                                     // maxWidth: 500,
                                     bgcolor: 'background.paper',
                                     position: 'relative',
-                                    overflow: 'auto',
+                                    overflow: 'overlay',
                                     maxHeight: 375,
                                     // borderBottom: '1px solid black'
                                     // border: 0,
@@ -225,11 +245,6 @@ const DetailedSearchConditions = () => {
                                     '&::-webkit-scrollbar': {
                                         width: '8px',
                                         borderRadius: '6px',
-                                        background: 'rgba(255, 255, 255, 0.4)',
-                                    },
-                                    '&::-webkit-scrollbar-track': {
-                                        boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                                        webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)'
                                     },
                                     '&::-webkit-scrollbar-thumb': {
                                         backgroundColor: 'rgba(0, 0, 0, 0.3)',

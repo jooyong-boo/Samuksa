@@ -43,6 +43,7 @@ const SearchConditions = () => {
     const resetSelectFish = useResetRecoilState(selectFishState);
     const resetTotalAmount = useResetRecoilState(totalAmountState);
     const resetFarm = useResetRecoilState(farmState);
+    const resetRecommendList = useResetRecoilState(recommendListState)
 
     // 검색조건 선택 여부 체크
     const [select, setSelect] = useState(true)
@@ -71,8 +72,7 @@ const SearchConditions = () => {
             notify('가격을 50000이상으로 해주세요');
             setMoney(50000)
             return;
-        }
-        if (personNum <= 0) {
+        } else if (personNum <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
             notify('인원을 입력해주세요');
@@ -83,7 +83,7 @@ const SearchConditions = () => {
 
     const onReset = (e) => {
         e.preventDefault();
-        setPersonNum(1);
+        setPersonNum('');
         setMoney(50000);
         setArea('노량진');
         resetFishDetailRecommendInfo();
@@ -91,6 +91,7 @@ const SearchConditions = () => {
         resetSelectFish();
         resetTotalAmount();
         resetFarm();
+        resetRecommendList();
         setSelect(true)
     }
 
@@ -156,8 +157,8 @@ const SearchConditions = () => {
                                         disabled={select ? false : true}
                                         // size="small"
                                     >
-                                        {getArea.map((a, i) => (
-                                            <MenuItem key={i} value={a}>{a}</MenuItem>
+                                        {getArea.map((area, i) => (
+                                            <MenuItem key={i} value={area}>{area}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
