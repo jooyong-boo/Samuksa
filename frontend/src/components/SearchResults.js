@@ -1,5 +1,5 @@
 import { Avatar, CardContent, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -75,7 +75,7 @@ const Img = styled('img')({
     // padding: '9px 13px',
   });
 
-const SearchResults = () => {
+const SearchResults = forwardRef((props, ref) => {
 
     const [result, setResult] = useRecoilState(recommendListState);
     // console.log(result);
@@ -98,7 +98,7 @@ const SearchResults = () => {
     };
 
     return (
-        <Card>
+        <Card ref={ref}>
             <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
@@ -160,7 +160,7 @@ const SearchResults = () => {
             </div>
         </Card>
     );
-};
+});
 
 export default React.memo(SearchResults);
 
