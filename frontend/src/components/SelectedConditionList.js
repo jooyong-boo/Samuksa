@@ -74,7 +74,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                             <div style={{ display: 'flex', borderBottom: '1px solid #F6F6F6' }} key={id}>
                                 {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
                                 <Avatar
-                                    // alt={`Avatar n°${value + 1}`}
+                                    alt={selectFish}
                                     src={imgUrl}
                                     variant= 'square'
                                     style={{ height: '50px', width: '50px', borderRadius: '3px', margin: '13px' }}
@@ -86,7 +86,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                                                 {selectFish}
                                             </Typography>
                                             <Typography sx={{ fontSize: 13, color: '#A5A5A5', fontWeight: 'medium', marginLeft: 1 }}>
-                                                ({amount}인분)
+                                                ({amount}인)
                                             </Typography>
                                         </div>
                                         <Typography sx={{ fontSize: 13, color: '#A5A5A5', fontWeight: 'medium' }} color="text.secondary" gutterBottom>
@@ -94,7 +94,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8', fontSize: 12 }} onClick={() => {deleteContidion(id, amount)}}>삭제</Button>
+                                        <Button variant='outlined' sx={{ borderRadius: '1px', color: '#949494', borderColor: '#D8D8D8', fontSize: 12, marginRight: '12px' }} onClick={() => {deleteContidion(id, amount)}}>조건 삭제</Button>
                                         <ToastContainer />
                                     </CardActions>
                                 </div>
