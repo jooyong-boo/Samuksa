@@ -1,4 +1,4 @@
-import { Avatar, Button, CardContent, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Button, CardContent, Grid, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
 import { useCallback } from 'react';
@@ -107,26 +107,42 @@ const SearchResults = forwardRef((props, ref) => {
 
     return (
         <Card ref={ref}>
-            <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과</Typography>
+            <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>검색 결과({result.length})</Typography>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
                     {result? result.map((item, i) => {
                         const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                         return (
                             <CardContent key={i} onClick={() => {onRecommendClick(fishRecommendCombinations, combinationName)}} sx={{ display: 'flex', alignItems: 'center', backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer', borderBottom: '1px solid #F6F6F6', height: '70px', '&:last-child': { pb: 0 }, padding: '0 10px 0 10px', ':hover': {backgroundColor: '#F4F4F4'}}}>
-                                {/* <Img alt="complex" src={image} /> */}
-                                <Avatar
-                                    alt={combinationName.join(" + ")}
-                                    src={image}
-                                    variant= 'square'
-                                    style={{ height: '50px', width: '50px', borderRadius: '3px', margin: '0px' }}
-                                />
+                                <Grid container spacing={0} rowSpacing={0} justifyContent="center" sx={{ width: '40%' }}>
+                                    {combinationName.length > 1 ? 
+                                        combinationName.map((item, i) => {
+                                            if(i > 3) return <Typography key={item} sx={{ fontSize: '5px' }}>외 {combinationName.length - i}개</Typography>; // 이미지 5개 이상 안나오게
+
+                                            return (
+                                                <Grid item xs={6} key={item}>
+                                                    <Avatar
+                                                        alt={item}
+                                                        src={image}
+                                                        variant= 'rounded'
+                                                        sx={{ height: '27px', width: '27px' }}
+                                                    />
+                                                </Grid>
+                                            )}) 
+                                            :   <Avatar
+                                                    alt={combinationName.join(" + ")}
+                                                    src={image}
+                                                    variant= 'rounded'
+                                                    sx={{ height: '50px', width: '50px', margin: '0px' }}                                    
+                                                />
+                                    }
+                                </Grid>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: '100%', paddingLeft: '10px' }}>
                                     <Typography sx={{ fontSize: 14, color: '#4A4A4A', fontWeight: 'bold' }}>
                                         {combinationName.join(" + ")}
                                     </Typography>
                                     <Typography sx={{ fontSize: 14, color: '#A5A5A5' }} color="text.secondary">
-                                        ({fishRecommendCombinations.length})
+                                        ({combinationSize})
                                     </Typography>
                                 </div>
                             </CardContent>
