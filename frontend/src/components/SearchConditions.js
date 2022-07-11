@@ -43,6 +43,7 @@ const SearchConditions = () => {
     const resetSelectFish = useResetRecoilState(selectFishState);
     const resetTotalAmount = useResetRecoilState(totalAmountState);
     const resetFarm = useResetRecoilState(farmState);
+    const resetRecommendList = useResetRecoilState(recommendListState)
 
     // 검색조건 선택 여부 체크
     const [select, setSelect] = useState(true)
@@ -90,6 +91,7 @@ const SearchConditions = () => {
         resetSelectFish();
         resetTotalAmount();
         resetFarm();
+        resetRecommendList();
         setSelect(true)
     }
 
