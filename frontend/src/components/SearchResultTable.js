@@ -9,8 +9,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import image from '../img/contemplative-reptile.jpeg';
 import { Avatar, Button, createTheme, ThemeProvider, Typography } from '@mui/material';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import { useState } from 'react';
 
 const Img = styled('img')({
     // margin: '13px 13px 12px 16px ',
@@ -32,14 +30,27 @@ const theme = createTheme({
     },
 });
 
+const tableTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A' 
+}
+
+const tableTop = [
+    '',
+    '수산물 명',
+    '원산지',
+    '양식여부',
+    '무게',
+    '수량',
+    '가격',
+    '순살 무게',
+    '합계'
+]
+
 // const tableTopText = styled('Typo')
 
 
 export default function SearchResultTable({ selectEstimate, totalPrice }) {
-
-    const moveTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
 
     // console.log(selectEstimate, totalPrice)
   return (
@@ -49,15 +60,9 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                 <Table sx={{ minWidth: 700 }} aria-label="simple table">
                     <TableHead>
                         <TableRow theme={theme}>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>{/*image*/}</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>수산물 명</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>원산지</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>양식여부</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>무게</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>수량</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>가격</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>순살 무게</TableCell>
-                            <TableCell sx={{ padding: '8px 16px 8px 16px' }}>합계</TableCell>
+                            {tableTop.map((item) => (
+                                <TableCell key={item} sx={tableTextStyle}>{item}</TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody sx={{  }}>
@@ -78,18 +83,18 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                                         style={{ height: '60px', width: '60px', borderRadius: '3px' }}
                                     />
                                 </TableCell>
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row" sx={tableTextStyle}>
                                 {fishName}
                                 </TableCell>
-                                <TableCell>{areaFrom}</TableCell>
-                                <TableCell>{farmType}</TableCell>
+                                <TableCell sx={tableTextStyle}>{areaFrom}</TableCell>
+                                <TableCell sx={tableTextStyle}>{farmType}</TableCell>
                                 {/* <TableCell>{ maxWeight && minWeight? `${minWeight / 1000} ~ ${maxWeight / 1000}kg` : maxWeight? `${maxWeight / 1000}kg` : `${minWeight / 1000}kg` }</TableCell> */}
-                                <TableCell>{ weightPerServing * serving / 1000 }kg</TableCell>
-                                <TableCell>{serving}</TableCell>
-                                <TableCell>{(price * 1000).toLocaleString('ko-KR')}원</TableCell>
-                                <TableCell>{(weightPerServing * serving / 1000) * 0.5}kg</TableCell>
+                                <TableCell sx={tableTextStyle}>{ weightPerServing * serving / 1000 }kg</TableCell>
+                                <TableCell sx={tableTextStyle}>{serving}</TableCell>
+                                <TableCell sx={tableTextStyle}>{(price * 1000).toLocaleString('ko-KR')}원</TableCell>
+                                <TableCell sx={tableTextStyle}>{(weightPerServing * serving / 1000) * 0.5}kg</TableCell>
                                 {/* <TableCell>{maxWeight? ((maxWeight * 0.5) / 1000) : minWeight? ((minWeight * 0.5) / 1000) : null}kg</TableCell> */}
-                                <TableCell>{totalMoney.toLocaleString('ko-KR')}원</TableCell>
+                                <TableCell sx={tableTextStyle}>{totalMoney.toLocaleString('ko-KR')}원</TableCell>
                             </TableRow>
                         )
                     }) : null}
@@ -122,7 +127,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                     <Typography sx={{ fontSize: 14, fontWeight: 'medium', marginRight: 1 }}>총 금액: </Typography>
                     <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>{totalPrice? totalPrice.toLocaleString('ko-KR'): null}</Typography>원
                 </div>
-                <Button variant='outlined' sx={{ width: '100%', borderRadius: '1px', borderColor: '#D8D8D8', color: '#949494', marginTop: 2, paddingLeft: 3 }} onClick={moveTop}>Top<ArrowDropUpIcon/></Button>            </div>
+            </div>
         </div>
     </div>
   );
