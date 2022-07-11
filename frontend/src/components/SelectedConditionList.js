@@ -2,7 +2,7 @@ import { Avatar, Button, ButtonBase, CardActions, CardContent, Checkbox, FormCon
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
-import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
+import { areaState, isLoading, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getFishRecommendData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
@@ -40,6 +40,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
 
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
+
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);

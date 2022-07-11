@@ -107,8 +107,8 @@ const DetailedSearchConditions = () => {
         fish.map(fish =>
             fish.active === true ? (setFarm(fish.farmTypes)) : null
             )
-            console.log(farm);
-            console.log(selectFish)
+            // console.log(farm);
+            // console.log(selectFish)
     }, [selectFish])
 
     useEffect(() => {
