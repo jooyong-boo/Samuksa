@@ -1,5 +1,5 @@
 import { Avatar, Button, ButtonBase, CardActions, CardContent, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
@@ -7,6 +7,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getFishRecommendData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SearchResults from './SearchResults';
 
 const Card = styled.div`
     background-color: white;
@@ -35,6 +36,7 @@ const CustomForm = styled.form`
 const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
 
     const notify = (text) => toast.warning(text, { position: "top-center", autoClose: 1000, hideProgressBar: true });
+    const contactRef = useRef(null);
 
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
@@ -43,9 +45,9 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
     const area = useRecoilValue(areaState);
     // console.log(selectCondition)
 
-    const deleteContidion = (id, PlusAmount) => {
+    const deleteContidion = (id, plusAmount) => {
         setSelectCondition(selectCondition.filter(item => item.id !== id ))
-        setTotalAmount(totalAmount + PlusAmount)
+        setTotalAmount(totalAmount + plusAmount)
         setAmount(0)
     }
 
@@ -54,11 +56,13 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
         if (selectCondition.length === 0) {
             notify('선택한 조건이 없습니다.');
         } else {
-            getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res.fishRecommendUnions))
+            getFishRecommendData({ personNum, money, area }).then(res => setRecommendList(res.fishRecommendUnions));
+            contactRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }
 
     return (
+        <>
             <Card>
                 <Typography sx={{ color: '#575757', padding: '18px 0px 13px 19px', borderBottom: '1px solid #EAEAEA', fontWeight: 'bold'}}>선택한 조건 목록</Typography>
                     <CustomForm>
@@ -100,6 +104,8 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                 {selectCondition.length > 0 ? <Button variant='contained' disableElevation sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#0098EE',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>
                     : <Button variant='contained' disableElevation sx={{ display: 'inline-block', position: 'absolute', backgroundColor: '#767676',fontSize: 15 , fontWeight: 900, width: '274px', height: '38px' ,bottom: '9px', left: '10px' }} onClick={onClick} >조합 검색</Button>}
             </Card>
+            <SearchResults ref={contactRef} />
+        </>
     );
 };
 
