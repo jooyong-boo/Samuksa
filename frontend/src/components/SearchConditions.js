@@ -108,7 +108,7 @@ const SearchConditions = () => {
                 <Container style={{ display: 'flex', width: '100%', height: '90%' , justifyContent: 'center', alignItems: 'center' }}>
                     <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
                         <Grid container spacing={5} justifyContent="center" alignItems="center">
-                            <Grid item xs={11}>
+                            <Grid item xs={10}>
                                 <TextField 
                                     id="outlined-basic" 
                                     label="인원수" 
@@ -126,7 +126,7 @@ const SearchConditions = () => {
                                     // size="small"
                                 />
                             </Grid>
-                            <Grid item xs={11}>
+                            <Grid item xs={10}>
                                 <TextField
                                     id="outlined-basic"
                                     label="예산" 
@@ -143,7 +143,7 @@ const SearchConditions = () => {
                                     // size="small"
                                 />
                             </Grid>
-                            <Grid item xs={11}>
+                            <Grid item xs={10}>
                                 <FormControl fullWidth>
                                     <InputLabel id="local">지역</InputLabel>
                                     <Select
