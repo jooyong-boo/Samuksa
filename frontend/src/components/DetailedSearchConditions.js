@@ -260,7 +260,7 @@ const DetailedSearchConditions = () => {
                                         <ListItemStyled key={fishInfoId} style={{ backgroundColor: active? '#F8F8F8' : 'white', cursor: 'pointer' }} onClick={() => {onToggle(fishInfoId, active)}}>
                                             <ListItemAvatar sx={{ padding: '9px 13px 9px 16px' }}>
                                                 <Avatar
-                                                // alt={`Avatar n°${value + 1}`}
+                                                alt={fishName}
                                                 src={imgUrl}
                                                 variant= 'square'
                                                 style={{ height: '50px', width: '50px', borderRadius: '3px' }}
@@ -296,7 +296,7 @@ const DetailedSearchConditions = () => {
                             />
                         : <Slider disabled value={0} />
                         } 
-                        <Typography sx={{ textAlign: 'center' }}>{amount}인분</Typography>
+                        <Typography sx={{ textAlign: 'center' }}>{amount}인</Typography>
                     </div>
                     <div style={{ width: '90%',height: '100%' , margin: 'auto', marginTop: '10%', borderTop: '1px solid #EAEAEA', paddingTop: '24px', position: 'relative' }}>
                         <Typography variant='subtitle1'>양식 여부</Typography>
