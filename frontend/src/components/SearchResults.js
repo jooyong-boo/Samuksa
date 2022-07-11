@@ -95,6 +95,7 @@ const SearchResults = forwardRef((props, ref) => {
         setSelectResult(item);
         setResult(result.map((item) =>
             item.combinationName === id ? {...item, active: !item.active} : { ...item, active: false }))
+        setSelectEstimate();
     }
 
     const onEstimateClick = (item, price, selectId) => {
