@@ -43,7 +43,7 @@ public class SchedulerService {
                     fishPriceEntity.setFishPrice(fishPriceRequestList.get(count++));
                 }
             }
-        }, 1000);
+        }, 50);
         scheduledTasks.put("mySchedulerId", task);
     }
 

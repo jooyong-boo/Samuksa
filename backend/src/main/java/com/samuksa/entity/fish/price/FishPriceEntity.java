@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -40,8 +41,8 @@ public class FishPriceEntity {
         return fishMapper.selectTodayFishPriceBySaleArea(saleArea);
     }
 
-    public void registFishPrice(FishPrice fishPrice){
-        fishMapper.insertFishPrice(fishPrice);
+    public void registFishPrice(List<FishPrice> fishPriceList){
+        fishMapper.insertFishPrice(fishPriceList);
     }
 
     public String setFishPrice(FishPriceRequest fishPriceRequest) {
@@ -66,13 +67,18 @@ public class FishPriceEntity {
             String latestRegDate = fishMapper.selectMaxRegDate(fishPriceRequest);
             if(latestRegDate == null) latestRegDate = "1";
 
+            List<FishPrice> fishPriceList = new ArrayList<>();
+
             for(int i = 0; i < priceList.size(); i++) {
                 if(latestRegDate.compareTo(dateList.get(i)) >= 0) continue;
 
                 FishPrice fishPrice = new FishPrice(fishPriceRequest, priceList.get(i), dateList.get(i));
-                this.registFishPrice(fishPrice);
+                fishPriceList.add(fishPrice);
             }
 
+            if(fishPriceList.size() > 0) {
+                this.registFishPrice(fishPriceList);
+            }
         } catch(Exception e) {
             logger.error("setFishPrice API 호출 ERROR >> ", e);
         }
