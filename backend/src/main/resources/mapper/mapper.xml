@@ -29,24 +29,35 @@
 
     <insert id="insertFishPrice">
         INSERT INTO FISH_MARKET_PRICE (FISH_SALE_AREA_ID, FISH_SALE_INFO_ID, PRICE, SALE_DTM)
-        SELECT FSA.FISH_SALE_AREA_ID, FSI.FISH_SALE_INFO_ID, #{price}, #{saleDtm}
-          FROM FISH_SALE_AREA FSA
-             , FISH_SALE_INFO FSI
-         WHERE FSA.ZONE_NAME = #{saleArea}
-           AND FSI.FISHERY_AREA = #{fisheryArea}
-           AND FSI.FARM_TYPE = #{farmType}
-           AND FSI.FISH_SIZE = #{fishSize}
-           AND NOT EXISTS(SELECT 1
-						    FROM FISH_SALE_AREA FSA2
-							   , FISH_SALE_INFO FSI2
-							   , FISH_MARKET_PRICE FMP2
-						   WHERE FMP2.FISH_SALE_INFO_ID = FSI2.FISH_SALE_INFO_ID
-						 	 AND FMP2.FISH_SALE_AREA_ID = FSA2.FISH_SALE_AREA_ID
-							 AND FSA2.ZONE_NAME = #{saleArea}
-                             AND FSI2.FISHERY_AREA = #{fisheryArea}
-                             AND FSI2.FARM_TYPE = #{farmType}
-                             AND FSI2.FISH_SIZE = #{fishSize}
-                             AND DATE_FORMAT(FMP2.SALE_DTM,'%Y-%m-%d') = #{saleDtm})
+        SELECT A.FISH_SALE_AREA_ID
+             , A.FISH_SALE_INFO_ID
+             , A.PRICE
+             , A.SALE_DTM
+        FROM (
+        <foreach item="item" collection="list" separator=" UNION ALL ">
+                 SELECT FSA.FISH_SALE_AREA_ID
+                      , FSI.FISH_SALE_INFO_ID
+                      , #{item.price} AS PRICE
+                      , #{item.saleDtm} AS SALE_DTM
+                 FROM FISH_SALE_AREA FSA
+                    , FISH_SALE_INFO FSI
+                 WHERE FSA.ZONE_NAME = #{item.saleArea}
+                   AND FSI.FISHERY_AREA = #{item.fisheryArea}
+                   AND FSI.FARM_TYPE = #{item.farmType}
+                   AND FSI.FISH_SIZE = #{item.fishSize}
+                   AND NOT EXISTS(SELECT 1
+                                  FROM FISH_SALE_AREA FSA2
+                                     , FISH_SALE_INFO FSI2
+                                     , FISH_MARKET_PRICE FMP2
+                                  WHERE FMP2.FISH_SALE_INFO_ID = FSI2.FISH_SALE_INFO_ID
+                                    AND FMP2.FISH_SALE_AREA_ID = FSA2.FISH_SALE_AREA_ID
+                                    AND FSA2.ZONE_NAME = #{item.saleArea}
+                                    AND FSI2.FISHERY_AREA = #{item.fisheryArea}
+                                    AND FSI2.FARM_TYPE = #{item.farmType}
+                                    AND FSI2.FISH_SIZE = #{item.fishSize}
+                                    AND DATE_FORMAT(FMP2.SALE_DTM,'%Y-%m-%d') = #{item.saleDtm})
+        </foreach>
+        ) A
     </insert>
 
     <select id="selectFishPriceRequest" resultType="com.samuksa.dto.fish.price.FishPriceRequest">
