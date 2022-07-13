@@ -66,12 +66,12 @@ const listStyle = {
     boxShadow: 'none',
     overflowX: 'hidden',
     '&::-webkit-scrollbar': {
-        width: '8px',
-        borderRadius: '6px',
+        width: '5px',
+        borderRadius: '5px',
     },
     '&::-webkit-scrollbar-thumb': {
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        borderRadius: '6px',
+        borderRadius: '5px',
     },
 };
 
@@ -299,7 +299,7 @@ const DetailedSearchConditions = () => {
                             )}
                         </Paper>
                     </div>
-                    <div style={{ width: '55%' }}>
+                    <div style={{ width: '55%', maxHeight: '420px' }}>
                         <div
                             style={{
                                 width: '70%',
@@ -328,7 +328,7 @@ const DetailedSearchConditions = () => {
                         <div
                             style={{
                                 width: '90%',
-                                height: '100%',
+                                height: '30%',
                                 margin: 'auto',
                                 marginTop: '10%',
                                 borderTop: '1px solid #EAEAEA',
@@ -359,20 +359,27 @@ const DetailedSearchConditions = () => {
                                       </Typography>
                                   ))
                                 : null}
+                        </div>
+                        <div
+                            style={{
+                                width: '90%',
+                                height: '20%',
+                                margin: 'auto',
+                                marginTop: '20px',
+                                position: 'relative',
+                            }}
+                        >
                             {selectFish && amount && farmStatus.length > 0 ? (
                                 <Button
                                     variant="contained"
                                     type="submit"
                                     disableElevation
                                     sx={{
-                                        mb: 2,
                                         width: '100%',
                                         height: '38px',
                                         backgroundColor: '#0098EE',
                                         fontWeight: 900,
                                         marginTop: '70px',
-                                        position: 'absolute',
-                                        bottom: 193,
                                     }}
                                     onClick={addCondition}
                                 >
@@ -383,24 +390,24 @@ const DetailedSearchConditions = () => {
                                     variant="contained"
                                     type="submit"
                                     disableElevation
+                                    disabled={true}
                                     sx={{
-                                        mb: 2,
                                         width: '100%',
                                         height: '38px',
-                                        backgroundColor: '#0098EE',
-                                        opacity: 0.3,
                                         fontWeight: 900,
                                         marginTop: '70px',
-                                        position: 'absolute',
-                                        bottom: 193,
+                                        ':disabled': {
+                                            backgroundColor: 'rgba(0,152,238,0.3)',
+                                            color: '#FFFFFF',
+                                        },
                                     }}
                                     onClick={addCondition}
                                 >
-                                    조건 추가하기
+                                    조건을 선택해주세요
                                 </Button>
                             )}
-                            <ToastContainer />
                         </div>
+                        <ToastContainer />
                     </div>
                 </div>
             </Card>
