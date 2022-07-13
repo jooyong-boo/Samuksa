@@ -42,6 +42,8 @@ const SearchConditions = () => {
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
+
+    // 리셋
     const resetFishDetailRecommendInfo = useResetRecoilState(fishDetailRecommendInfo);
     const resetSelectCondition = useResetRecoilState(selectConditions);
     const resetSelectFish = useResetRecoilState(selectFishState);
@@ -57,10 +59,10 @@ const SearchConditions = () => {
         const { value } = e.target;
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
-        if (e.target.value > 100) {
+        if (e.target.value >= 35) {
             // alert('인원은 1 이상으로 해주세요');
-            notify('인원수는 100명 이하로 해주세요');
-            setPersonNum(99);
+            notify('인원수는 35명 이하로 해주세요');
+            setPersonNum(35);
         }
     };
 
@@ -68,6 +70,10 @@ const SearchConditions = () => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
+        if (e.target.value > 10000000) {
+            notify('가격은 천만원 이하로 해주세요');
+            setMoney(10000000);
+        }
     };
 
     const onClick = (e) => {
@@ -227,17 +233,18 @@ const SearchConditions = () => {
                                     variant="contained"
                                     type="submit"
                                     disableElevation
+                                    disabled={true}
                                     sx={{
                                         mt: 3,
                                         mb: 2,
                                         width: '274px',
                                         height: '38px',
-                                        backgroundColor: '#0098EE',
-                                        opacity: 0.3,
+                                        // opacity: 0.3,
                                         fontWeight: 900,
-                                        // ':hover': {
-                                        //     backgroundColor: '#767676',
-                                        // },
+                                        ':disabled': {
+                                            backgroundColor: 'rgba(0,152,238,0.3)',
+                                            color: '#FFFFFF',
+                                        },
                                     }}
                                     onClick={onClick}
                                 >
