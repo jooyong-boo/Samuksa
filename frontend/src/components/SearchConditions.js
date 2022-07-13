@@ -211,7 +211,7 @@ const SearchConditions = () => {
                                 justifyContent: 'flex-end',
                             }}
                         >
-                            {personNum > 0 && money >= 50000 ? (
+                            {select ? (
                                 <Button
                                     variant="contained"
                                     type="submit"
@@ -248,7 +248,7 @@ const SearchConditions = () => {
                                     }}
                                     onClick={onClick}
                                 >
-                                    조건 선택
+                                    선택 완료
                                 </Button>
                             )}
                             <ToastContainer

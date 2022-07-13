@@ -119,7 +119,6 @@ const DetailedSearchConditions = () => {
             setFarm(selectFish[0].farmTypes);
         }
     }, [selectFish]);
-    console.log(selectFish);
 
     useEffect(() => {
         setSelectFish(fish.filter((fish) => fish.active === true));
