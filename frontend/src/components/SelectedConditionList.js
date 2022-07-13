@@ -24,12 +24,12 @@ const CustomForm = styled.form`
     overflow: overlay;
     overflow-x: hidden;
     &::-webkit-scrollbar {
-        width: 6px;
-        border-radius: 6px;
+        width: 5px;
+        border-radius: 5px;
     }
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
-        border-radius: 6px;
+        border-radius: 5px;
     }
 `;
 
@@ -175,46 +175,47 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                         );
                     })}
                 </CustomForm>
-                {selectCondition.length > 0 ? (
-                    <Button
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                            display: 'inline-block',
-                            position: 'absolute',
-                            backgroundColor: '#0098EE',
-                            fontSize: 15,
-                            fontWeight: 900,
-                            width: '274px',
-                            height: '38px',
-                            bottom: '9px',
-                            left: '10px',
-                        }}
-                        onClick={onClick}
-                    >
-                        조합 검색
-                    </Button>
-                ) : (
-                    <Button
-                        variant="contained"
-                        disableElevation
-                        sx={{
-                            display: 'inline-block',
-                            position: 'absolute',
-                            backgroundColor: '#0098EE',
-                            opacity: 0.3,
-                            fontSize: 15,
-                            fontWeight: 900,
-                            width: '274px',
-                            height: '38px',
-                            bottom: '9px',
-                            left: '10px',
-                        }}
-                        onClick={onClick}
-                    >
-                        조합 검색
-                    </Button>
-                )}
+                <div style={{ width: '100%', height: '17%', display: 'flex' }}>
+                    {selectCondition.length > 0 ? (
+                        <Button
+                            variant="contained"
+                            disableElevation
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                width: '274px',
+                                height: '38px',
+                                backgroundColor: '#0098EE',
+                                fontWeight: 900,
+                                margin: 'auto',
+                            }}
+                            onClick={onClick}
+                        >
+                            조합 검색
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            disableElevation
+                            disabled={true}
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                width: '274px',
+                                height: '38px',
+                                fontWeight: 900,
+                                margin: 'auto',
+                                ':disabled': {
+                                    backgroundColor: 'rgba(0,152,238,0.3)',
+                                    color: '#FFFFFF',
+                                },
+                            }}
+                            onClick={onClick}
+                        >
+                            선택한 조합이 없어요
+                        </Button>
+                    )}
+                </div>
             </Card>
             <SearchResults ref={contactRef} />
         </>
