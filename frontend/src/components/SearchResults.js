@@ -17,6 +17,7 @@ const Card = styled.div`
     border-radius: 5px;
     margin: auto;
     margin-bottom: 3%;
+    z-index: 3;
 `;
 
 const CustomDiv = styled.div`
@@ -29,12 +30,12 @@ const CustomDiv = styled.div`
     overflow-x: hidden;
     min-width: 20%;
     &::-webkit-scrollbar {
-        width: 6px;
-        border-radius: 6px;
+        width: 5px;
+        border-radius: 5px;
     }
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
-        border-radius: 6px;
+        border-radius: 5px;
     }
 `;
 
@@ -56,12 +57,12 @@ const CustomList = styled.div`
     padding: 0;
     overflow-x: hidden;
     &::-webkit-scrollbar {
-        width: 6px;
-        border-radius: 6px;
+        width: 5px;
+        border-radius: 5px;
     }
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
-        border-radius: 6px;
+        border-radius: 5px;
     }
 `;
 
@@ -87,6 +88,7 @@ const SearchResults = forwardRef((props, ref) => {
     useEffect(() => {
         setSelectResult();
         setSelectEstimate();
+        setResult([]);
     }, [selectCondition]);
 
     const onRecommendClick = (item, id) => {
@@ -111,7 +113,7 @@ const SearchResults = forwardRef((props, ref) => {
                     fontWeight: 'bold',
                 }}
             >
-                검색 결과({result.length})
+                검색 결과({result.length > 0 ? result.length : null})
             </Typography>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
@@ -131,7 +133,7 @@ const SearchResults = forwardRef((props, ref) => {
                                           cursor: 'pointer',
                                           borderBottom: '1px solid #F6F6F6',
                                           height: '70px',
-                                          '&:last-child': { pb: 0 },
+                                          '&:last-child': { pb: 1 },
                                           padding: '0 10px 0 10px',
                                           ':hover': {
                                               backgroundColor: '#F4F4F4',
