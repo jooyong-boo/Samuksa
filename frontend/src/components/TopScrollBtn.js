@@ -13,7 +13,7 @@ const CustomBox = styled(Box)`
     // 데스크탑
     @media screen and (min-width: 480px) {
         right: 4%;
-        bottom: 6%;
+        bottom: 5%;
     }
 `;
 
@@ -31,7 +31,6 @@ const TopScrollBtn = () => {
         // 스크롤이 Top에서 200px 이상 내려오면 true값을 useState에 넣어줌
         if (window.scrollY >= 200) {
             setScroll(true);
-            console.log(scroll);
         } else {
             // 스크롤이 50px 미만일경우 false를 넣어줌
             setScroll(false);
@@ -48,9 +47,10 @@ const TopScrollBtn = () => {
                 color="primary"
                 aria-label="top"
                 onClick={moveTop}
+                size="medium"
                 sx={{
                     boxShadow: 'none',
-                    backgroundColor: 'rgba(0,152,238,0.8)',
+                    backgroundColor: 'rgba(245,216,176,0.8)',
                     opacity: scroll ? '1' : '0',
                     visibility: scroll ? '' : 'hidden',
                     transition: scroll ? 'all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms' : 'all 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
