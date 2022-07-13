@@ -1,13 +1,29 @@
 import { Avatar, AvatarGroup, Button, CardContent, Grid, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { height } from '@mui/system';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
 import { useCallback } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { fishDataState, recommendListState, selectConditions } from '../store/atom';
 import SearchResultTable from './SearchResultTable';
+
+const smoothAppear = keyframes`
+    0% {
+        opacity: 0;
+        transform: translateY(-5%);
+    }
+    50% {
+        opacity: 0.5;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 const Card = styled.div`
     background-color: white;
@@ -16,7 +32,7 @@ const Card = styled.div`
     min-width: 500px;
     border-radius: 5px;
     margin: auto;
-    margin-bottom: 3%;
+    margin-bottom: 7%;
     z-index: 3;
 `;
 
@@ -63,7 +79,8 @@ const CustomList = styled.div`
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
-    }
+    },
+    animation: ${smoothAppear} 3s linear infinite;
 `;
 
 const Img = styled('img')({
