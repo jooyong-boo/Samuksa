@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Button, CardContent, Grid, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, AvatarGroup, Button, CardContent, Fade, Grid, ListItem, ListItemAvatar, ListItemText, Paper, Typography, Zoom } from '@mui/material';
 import { height } from '@mui/system';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
@@ -13,15 +13,15 @@ import SearchResultTable from './SearchResultTable';
 const smoothAppear = keyframes`
     0% {
         opacity: 0;
-        transform: translateY(-5%);
+        transform: none;
     }
     50% {
         opacity: 0.5;
-        transform: translateY(0);
+        transform: translateY(-5px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 `;
 
@@ -138,97 +138,88 @@ const SearchResults = forwardRef((props, ref) => {
                         ? result.map((item, i) => {
                               const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                               return (
-                                  <CardContent
-                                      key={i}
-                                      onClick={() => {
-                                          onRecommendClick(fishRecommendCombinations, combinationName);
-                                      }}
-                                      sx={{
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          backgroundColor: active ? '#F8F8F8' : 'white',
-                                          cursor: 'pointer',
-                                          borderBottom: '1px solid #F6F6F6',
-                                          height: '70px',
-                                          '&:last-child': { pb: 1 },
-                                          padding: '0 10px 0 10px',
-                                          ':hover': {
-                                              backgroundColor: '#F4F4F4',
-                                          },
-                                      }}
-                                  >
-                                      <Grid container spacing={0} rowSpacing={0} justifyContent="center" sx={{ width: '40%' }}>
-                                          {combinationName.length > 1 ? (
-                                              combinationName.map((item, i) => {
-                                                  if (i > 3)
-                                                      return (
-                                                          <Typography
-                                                              key={item}
-                                                              sx={{
-                                                                  fontSize: '5px',
-                                                              }}
-                                                          >
-                                                              외 {combinationName.length - i}개
-                                                          </Typography>
-                                                      ); // 이미지 5개 이상 안나오게
-
-                                                  return (
-                                                      <Grid item xs={6} key={item}>
-                                                          <Avatar
-                                                              alt={item}
-                                                              src={image}
-                                                              variant="rounded"
-                                                              sx={{
-                                                                  height: '30px',
-                                                                  width: '30px',
-                                                              }}
-                                                          />
-                                                      </Grid>
-                                                  );
-                                              })
-                                          ) : (
-                                              <Avatar
-                                                  alt={combinationName.join(' + ')}
-                                                  src={image}
-                                                  variant="rounded"
-                                                  sx={{
-                                                      height: '50px',
-                                                      width: '50px',
-                                                      margin: '0px',
-                                                  }}
-                                              />
-                                          )}
-                                      </Grid>
-                                      <div
-                                          style={{
+                                  <Fade in={true} timeout={i * 100} key={i}>
+                                      <CardContent
+                                          onClick={() => {
+                                              onRecommendClick(fishRecommendCombinations, combinationName);
+                                          }}
+                                          sx={{
                                               display: 'flex',
-                                              justifyContent: 'space-between',
                                               alignItems: 'center',
-                                              width: '100%',
-                                              height: '100%',
-                                              paddingLeft: '10px',
+                                              backgroundColor: active ? '#F8F8F8' : 'white',
+                                              cursor: 'pointer',
+                                              borderBottom: '1px solid #F6F6F6',
+                                              height: '70px',
+                                              '&:last-child': { pb: 1 },
+                                              padding: '0 10px 0 10px',
+                                              ':hover': {
+                                                  backgroundColor: '#F4F4F4',
+                                              },
                                           }}
                                       >
-                                          <Typography
-                                              sx={{
-                                                  fontSize: 14,
-                                                  color: '#4A4A4A',
-                                                  fontWeight: 'bold',
+                                          <Grid container spacing={0} rowSpacing={0} justifyContent="center" sx={{ width: '40%' }}>
+                                              {combinationName.length > 1 ? (
+                                                  combinationName.map((item, i) => {
+                                                      if (i > 3) return null;
+
+                                                      return (
+                                                          <Grid item xs={6} key={item}>
+                                                              <Avatar
+                                                                  alt={item}
+                                                                  src={image}
+                                                                  variant="rounded"
+                                                                  sx={{
+                                                                      height: '30px',
+                                                                      width: '30px',
+                                                                  }}
+                                                              />
+                                                          </Grid>
+                                                      );
+                                                  })
+                                              ) : (
+                                                  <Avatar
+                                                      alt={combinationName.join(' + ')}
+                                                      src={image}
+                                                      variant="rounded"
+                                                      sx={{
+                                                          height: '50px',
+                                                          width: '50px',
+                                                          margin: '0px',
+                                                      }}
+                                                  />
+                                              )}
+                                          </Grid>
+                                          <div
+                                              style={{
+                                                  display: 'flex',
+                                                  justifyContent: 'space-between',
+                                                  alignItems: 'center',
+                                                  width: '100%',
+                                                  height: '100%',
+                                                  paddingLeft: '10px',
                                               }}
                                           >
-                                              {combinationName.join(' + ')}
-                                          </Typography>
-                                          <Typography
-                                              sx={{
-                                                  fontSize: 14,
-                                                  color: '#A5A5A5',
-                                              }}
-                                              color="text.secondary"
-                                          >
-                                              ({combinationSize})
-                                          </Typography>
-                                      </div>
-                                  </CardContent>
+                                              <Typography
+                                                  sx={{
+                                                      fontSize: 14,
+                                                      color: '#4A4A4A',
+                                                      fontWeight: 'bold',
+                                                  }}
+                                              >
+                                                  {combinationName.join(' + ')}
+                                              </Typography>
+                                              <Typography
+                                                  sx={{
+                                                      fontSize: 14,
+                                                      color: '#A5A5A5',
+                                                  }}
+                                                  color="text.secondary"
+                                              >
+                                                  ({combinationSize})
+                                              </Typography>
+                                          </div>
+                                      </CardContent>
+                                  </Fade>
                               );
                           })
                         : null}
@@ -241,7 +232,7 @@ const SearchResults = forwardRef((props, ref) => {
                                   /* console.log(item) */
                               }
                               return (
-                                  <React.Fragment key={i}>
+                                  <Fade in={true} timeout={i * 300} key={i}>
                                       <ListItem
                                           onClick={() => {
                                               onEstimateClick(fishRecommendBtDtos, totalPrice, i);
@@ -302,50 +293,52 @@ const SearchResults = forwardRef((props, ref) => {
                                               {totalPrice.toLocaleString('ko-KR')}원
                                           </Typography>
                                       </ListItem>
-                                  </React.Fragment>
+                                  </Fade>
                               );
                           })
                         : null}
                 </CustomList>
                 {selectEstimate ? (
-                    <div
-                        style={{
-                            width: '69%',
-                            height: '100%',
-                            minWidth: '300px',
-                        }}
-                    >
+                    <Fade in={true}>
                         <div
                             style={{
-                                width: '95%',
-                                margin: 'auto',
-                                height: '490px',
-                                overflow: 'auto',
+                                width: '69%',
+                                height: '100%',
+                                minWidth: '300px',
                             }}
                         >
-                            <Typography
-                                sx={{
-                                    color: '#010000',
-                                    paddingTop: '18px',
-                                    fontWeight: 'bold',
-                                    fontSize: '16px',
+                            <div
+                                style={{
+                                    width: '95%',
+                                    margin: 'auto',
+                                    height: '490px',
+                                    overflow: 'auto',
                                 }}
                             >
-                                수산물 견적
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: '#949494',
-                                    fontSize: '11px',
-                                    mb: '11px',
-                                }}
-                            >
-                                실제 시세과 상이할 수 있습니다.
-                            </Typography>
-                            <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
+                                <Typography
+                                    sx={{
+                                        color: '#010000',
+                                        paddingTop: '18px',
+                                        fontWeight: 'bold',
+                                        fontSize: '16px',
+                                    }}
+                                >
+                                    수산물 견적
+                                </Typography>
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        color: '#949494',
+                                        fontSize: '11px',
+                                        mb: '11px',
+                                    }}
+                                >
+                                    실제 시세과 상이할 수 있습니다.
+                                </Typography>
+                                <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
+                            </div>
                         </div>
-                    </div>
+                    </Fade>
                 ) : null}
             </div>
         </Card>
@@ -353,3 +346,15 @@ const SearchResults = forwardRef((props, ref) => {
 });
 
 export default React.memo(SearchResults);
+
+// if (i > 3)
+// return (
+//     <Typography
+//         key={item}
+//         sx={{
+//             fontSize: '5px',
+//         }}
+//     >
+//         외 {combinationName.length - i}개
+//     </Typography>
+// ); // 이미지 5개 이상 안나오게
