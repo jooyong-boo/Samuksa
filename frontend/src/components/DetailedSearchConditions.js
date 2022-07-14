@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, FormControl, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import { Avatar, Button, Checkbox, FormControl, Grow, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
@@ -243,41 +243,42 @@ const DetailedSearchConditions = () => {
                         >
                             {fish.length > 0 ? (
                                 <List sx={listStyle} subheader={<li />}>
-                                    {fish.map((item) => {
+                                    {fish.map((item, i) => {
                                         const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
                                         return (
-                                            <ListItemStyled
-                                                key={fishInfoId}
-                                                style={{
-                                                    backgroundColor: active ? '#F8F8F8' : 'white',
-                                                    cursor: 'pointer',
-                                                }}
-                                                onClick={() => {
-                                                    onToggle(fishInfoId, active);
-                                                }}
-                                            >
-                                                <ListItemAvatar
-                                                    sx={{
-                                                        padding: '9px 13px 9px 16px',
+                                            <Grow in={true} timeout={i * 200} key={fishInfoId}>
+                                                <ListItemStyled
+                                                    style={{
+                                                        backgroundColor: active ? '#F8F8F8' : 'white',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                    onClick={() => {
+                                                        onToggle(fishInfoId, active);
                                                     }}
                                                 >
-                                                    <Avatar
-                                                        alt={fishName}
-                                                        src={imgUrl}
-                                                        variant="square"
-                                                        style={{
-                                                            height: '50px',
-                                                            width: '50px',
-                                                            borderRadius: '3px',
+                                                    <ListItemAvatar
+                                                        sx={{
+                                                            padding: '9px 13px 9px 16px',
                                                         }}
-                                                    />
-                                                </ListItemAvatar>
-                                                <ListItem sx={{ paddingLeft: 0 }}>
-                                                    <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
-                                                    {/* <Typography>{fishName}</Typography>
+                                                    >
+                                                        <Avatar
+                                                            alt={fishName}
+                                                            src={imgUrl}
+                                                            variant="square"
+                                                            style={{
+                                                                height: '50px',
+                                                                width: '50px',
+                                                                borderRadius: '3px',
+                                                            }}
+                                                        />
+                                                    </ListItemAvatar>
+                                                    <ListItem sx={{ paddingLeft: 0 }}>
+                                                        <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
+                                                        {/* <Typography>{fishName}</Typography>
                                                 <Typography>{fishYield}</Typography> */}
-                                                </ListItem>
-                                            </ListItemStyled>
+                                                    </ListItem>
+                                                </ListItemStyled>
+                                            </Grow>
                                         );
                                     })}
                                 </List>
