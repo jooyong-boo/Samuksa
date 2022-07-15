@@ -21,7 +21,6 @@ const Background = styled.div`
 const Calculator = () => {
     return (
         <>
-            <Header />
             <Background>
                 <SearchConditions />
                 <TopScrollBtn />
