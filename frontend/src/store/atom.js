@@ -16,6 +16,12 @@ export const areaState = atom({
     default: '노량진',
 });
 
+// 조건부 스타일링용
+export const selectState = atom({
+    key: 'selectState',
+    default: true,
+});
+
 // 선택 조건목록
 export const selectConditions = atom({
     key: 'selectConditions',
