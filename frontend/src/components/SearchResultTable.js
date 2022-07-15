@@ -58,8 +58,16 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                         <TableBody sx={{}}>
                             {selectEstimate
                                 ? selectEstimate.map((item, i) => {
-                                      const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
-                                      const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [...fishRecommendAlgoWeights];
+                                      const {
+                                          fishName,
+                                          weightPerServing,
+                                          totalMoney,
+                                          serving,
+                                          fishRecommendAlgoWeights,
+                                      } = item;
+                                      const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [
+                                          ...fishRecommendAlgoWeights,
+                                      ];
                                       return (
                                           <TableRow
                                               key={i}
@@ -90,13 +98,17 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                                                   kg
                                               </TableCell>
                                               <TableCell sx={tableTextStyle}>{serving}</TableCell>
-                                              <TableCell sx={tableTextStyle}>{(price * 1000).toLocaleString('ko-KR')}원</TableCell>
+                                              <TableCell sx={tableTextStyle}>
+                                                  {(price * 1000).toLocaleString('ko-KR')}원
+                                              </TableCell>
                                               <TableCell sx={tableTextStyle}>
                                                   {((weightPerServing * serving) / 1000) * 0.5}
                                                   kg
                                               </TableCell>
                                               {/* <TableCell>{maxWeight? ((maxWeight * 0.5) / 1000) : minWeight? ((minWeight * 0.5) / 1000) : null}kg</TableCell> */}
-                                              <TableCell sx={tableTextStyle}>{totalMoney.toLocaleString('ko-KR')}원</TableCell>
+                                              <TableCell sx={tableTextStyle}>
+                                                  {totalMoney.toLocaleString('ko-KR')}원
+                                              </TableCell>
                                           </TableRow>
                                       );
                                   })
@@ -192,7 +204,10 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                         >
                             총 금액:{' '}
                         </Typography>
-                        <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>{totalPrice ? totalPrice.toLocaleString('ko-KR') : null}</Typography>원
+                        <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>
+                            {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
+                        </Typography>
+                        원
                     </div>
                 </div>
             </div>

@@ -1,4 +1,23 @@
-import { Avatar, Button, ButtonBase, CardActions, CardContent, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slide, Slider, Typography } from '@mui/material';
+import {
+    Avatar,
+    Button,
+    ButtonBase,
+    CardActions,
+    CardContent,
+    Checkbox,
+    FormControl,
+    Grid,
+    Input,
+    InputAdornment,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Paper,
+    Slide,
+    Slider,
+    Typography,
+} from '@mui/material';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
@@ -8,6 +27,7 @@ import { getFishRecommendData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';
+import { useState } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -44,10 +64,10 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
 
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
-
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
+    const [loading, setLoading] = useState(false);
     // console.log(selectCondition)
 
     const deleteContidion = (id, plusAmount) => {
@@ -61,6 +81,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
         if (selectCondition.length === 0) {
             notify('선택한 조건이 없습니다.');
         } else {
+            setLoading(true);
             getFishRecommendData({ personNum, money, area }).then((res) => setRecommendList(res.fishRecommendUnions));
             contactRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -218,7 +239,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                     )}
                 </div>
             </Card>
-            <SearchResults ref={contactRef} />
+            <SearchResults ref={contactRef} loading={loading} setLoading={setLoading} />
         </>
     );
 };

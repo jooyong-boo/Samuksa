@@ -1,9 +1,34 @@
 import React, { useRef } from 'react';
-import { Button, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Paper, Select, TextField, Typography } from '@mui/material';
+import {
+    Button,
+    FormControl,
+    Grid,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Paper,
+    Select,
+    TextField,
+    Typography,
+} from '@mui/material';
 import styled, { keyframes } from 'styled-components';
 import { Container } from '@mui/system';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { amountState, areaState, farmState, fishDetailRecommendInfo, fishPriceAllState, getAreaState, moneyState, personNumState, recommendListState, selectConditions, selectFishState, totalAmountState } from '../store/atom';
+import {
+    amountState,
+    areaState,
+    farmState,
+    fishDetailRecommendInfo,
+    fishPriceAllState,
+    getAreaState,
+    moneyState,
+    personNumState,
+    recommendListState,
+    selectConditions,
+    selectFishState,
+    selectState,
+    totalAmountState,
+} from '../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
@@ -53,7 +78,7 @@ const SearchConditions = () => {
     const resetAmount = useResetRecoilState(amountState);
 
     // 검색조건 선택 여부 체크
-    const [select, setSelect] = useState(true);
+    const [select, setSelect] = useRecoilState(selectState);
 
     const handlePersonNumChange = (e) => {
         const { value } = e.target;
@@ -110,7 +135,11 @@ const SearchConditions = () => {
     const onSubmit = (e) => {
         e.preventDefault();
         // getAreaTotalFishData({ area }).then(res => res ? (setFishList(res), setSelect(false)) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'));
-        getAreaTotalFishData({ area }).then((res) => (res ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false)) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!')));
+        getAreaTotalFishData({ area }).then((res) =>
+            res
+                ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false))
+                : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'),
+        );
     };
 
     return (
