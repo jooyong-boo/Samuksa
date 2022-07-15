@@ -152,7 +152,9 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
         localStorage.setItem('bookmark', JSON.stringify(selectEstimate));
     };
 
-    console.log(localStorage.length);
+    console.log(selectEstimate);
+
+    // console.log(localStorage.length);
 
     return (
         <Card ref={ref}>
@@ -389,7 +391,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                 <div style={{ verticalAlign: 'middle' }}>
                                     <BookmarkBorderIcon
                                         fontSize="large"
-                                        onClick={addBookmark}
+                                        onClick={addBookmark(selectEstimate)}
                                         sx={{ cursor: 'pointer' }}
                                     />
                                     <BookmarkAddedIcon fontSize="medium" />
