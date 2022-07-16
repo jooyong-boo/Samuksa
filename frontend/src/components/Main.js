@@ -30,6 +30,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Introduction from './Introduction';
 
 const Background = styled.div`
     /* background-color: #ebecee; */
@@ -128,7 +129,6 @@ const Main = () => {
 
     return (
         <>
-            <Header />
             <Background>
                 <div style={{ display: 'inline-flex' }}>
                     <Typography
@@ -242,6 +242,7 @@ const Main = () => {
                     <TopScrollBtn />
                 </form>
             </Background>
+            <Introduction />
         </>
     );
 };
