@@ -1,38 +1,41 @@
-import { Avatar, Button, Checkbox, FormControl, Input, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import {
+    Avatar,
+    Button,
+    Checkbox,
+    FormControl,
+    Grow,
+    Input,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Paper,
+    Slider,
+    Typography,
+} from '@mui/material';
 import React from 'react';
 import styled, { css, keyframes } from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
 import { errorSelector, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { amountState, farmState, fishDetailRecommendInfo, getFramTypeState, personNumState, recommendListState, selectConditions, selectFishNameState, selectFishState } from '../store/atom';
+import {
+    amountState,
+    farmState,
+    fishDetailRecommendInfo,
+    getFramTypeState,
+    personNumState,
+    recommendListState,
+    selectConditions,
+    selectFishNameState,
+    selectFishState,
+} from '../store/atom';
 import { getFarmType } from '../api/auth';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
-// import { styled as muiStyled } from '@mui/system';
-
-const Opacity = keyframes`
-    from {
-        opacity:0;
-	}
-	to {
-		opacity:1;
-	}
-`;
-
-const opacityAnimation = (props) =>
-    css`
-        ${(props) => (props.length > 0 ? Opacity : null)}
-    `;
-
-const AnimationContainer = styled.div`
-    display: flex;
-    height: 100%;
-    animation: 1s ${opacityAnimation} ease-in-out forwards;
-`;
 
 const Card = styled.div`
     background-color: white;
@@ -59,7 +62,8 @@ const listStyle = {
     bgcolor: 'background.paper',
     position: 'relative',
     overflow: 'overlay',
-    maxHeight: 375,
+    maxHeight: 408,
+    borderRadius: '5px',
     // borderBottom: '1px solid black'
     // border: 0,
     padding: 0,
@@ -138,7 +142,11 @@ const DetailedSearchConditions = () => {
 
     const onToggle = (id) => {
         setFarmStatus([]);
-        setFish(fish.map((fish) => (fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false })));
+        setFish(
+            fish.map((fish) =>
+                fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false },
+            ),
+        );
 
         // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
     };
@@ -208,11 +216,12 @@ const DetailedSearchConditions = () => {
                     <div
                         style={{
                             width: '45%',
+                            height: '100%',
                             borderRight: '1px solid #EAEAEA',
-                            maxHeight: '420px',
+                            maxHeight: '410px',
                         }}
                     >
-                        <FormControl fullWidth>
+                        {/* <FormControl fullWidth>
                             <Input
                                 id="input-with-icon-adornment"
                                 startAdornment={
@@ -228,7 +237,7 @@ const DetailedSearchConditions = () => {
                                 readOnly={fishList.length > 0 ? false : true}
                                 disableUnderline={fishList.length > 0 ? false : true}
                             />
-                        </FormControl>
+                        </FormControl> */}
                         <Paper
                             sx={{
                                 p: 2,
@@ -243,41 +252,45 @@ const DetailedSearchConditions = () => {
                         >
                             {fish.length > 0 ? (
                                 <List sx={listStyle} subheader={<li />}>
-                                    {fish.map((item) => {
+                                    {fish.map((item, i) => {
                                         const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
                                         return (
-                                            <ListItemStyled
-                                                key={fishInfoId}
-                                                style={{
-                                                    backgroundColor: active ? '#F8F8F8' : 'white',
-                                                    cursor: 'pointer',
-                                                }}
-                                                onClick={() => {
-                                                    onToggle(fishInfoId, active);
-                                                }}
-                                            >
-                                                <ListItemAvatar
-                                                    sx={{
-                                                        padding: '9px 13px 9px 16px',
+                                            <Grow in={true} timeout={i * 200} key={fishInfoId}>
+                                                <ListItemStyled
+                                                    style={{
+                                                        backgroundColor: active ? '#F8F8F8' : 'white',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                    onClick={() => {
+                                                        onToggle(fishInfoId, active);
                                                     }}
                                                 >
-                                                    <Avatar
-                                                        alt={fishName}
-                                                        src={imgUrl}
-                                                        variant="square"
-                                                        style={{
-                                                            height: '50px',
-                                                            width: '50px',
-                                                            borderRadius: '3px',
+                                                    <ListItemAvatar
+                                                        sx={{
+                                                            padding: '9px 13px 9px 16px',
                                                         }}
-                                                    />
-                                                </ListItemAvatar>
-                                                <ListItem sx={{ paddingLeft: 0 }}>
-                                                    <ListItemText primary={fishName} secondary={`(수율: ${fishYield}%)`} />
-                                                    {/* <Typography>{fishName}</Typography>
+                                                    >
+                                                        <Avatar
+                                                            alt={fishName}
+                                                            src={imgUrl}
+                                                            variant="square"
+                                                            style={{
+                                                                height: '50px',
+                                                                width: '50px',
+                                                                borderRadius: '3px',
+                                                            }}
+                                                        />
+                                                    </ListItemAvatar>
+                                                    <ListItem sx={{ paddingLeft: 0 }}>
+                                                        <ListItemText
+                                                            primary={fishName}
+                                                            secondary={`(수율: ${fishYield}%)`}
+                                                        />
+                                                        {/* <Typography>{fishName}</Typography>
                                                 <Typography>{fishYield}</Typography> */}
-                                                </ListItem>
-                                            </ListItemStyled>
+                                                    </ListItem>
+                                                </ListItemStyled>
+                                            </Grow>
                                         );
                                     })}
                                 </List>
@@ -337,11 +350,18 @@ const DetailedSearchConditions = () => {
                         >
                             <Typography variant="subtitle1">양식 여부</Typography>
                             {farm.length > 0 && selectFish.length > 0 ? (
-                                <Typography variant="body2" sx={{ fontSize: '14px', color: '#737373', marginTop: '5px', fontWeight: 'medium' }}>
+                                <Typography
+                                    variant="body2"
+                                    sx={{ fontSize: '14px', color: '#737373', marginTop: '5px', fontWeight: 'medium' }}
+                                >
                                     중복 선택이 가능합니다.
                                 </Typography>
                             ) : (
-                                <Typography sx={{ fontSize: '14px', color: '#AEAEAE', marginTop: '5px', fontWeight: 'medium' }}>어종 선택이 필요합니다.</Typography>
+                                <Typography
+                                    sx={{ fontSize: '14px', color: '#AEAEAE', marginTop: '5px', fontWeight: 'medium' }}
+                                >
+                                    어종 선택이 필요합니다.
+                                </Typography>
                             )}
                             {farm.length > 0 && selectFish.length > 0
                                 ? farm.map((item, i) => (

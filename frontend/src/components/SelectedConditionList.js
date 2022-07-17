@@ -1,4 +1,23 @@
-import { Avatar, Button, ButtonBase, CardActions, CardContent, Checkbox, FormControl, Grid, Input, InputAdornment, List, ListItem, ListItemAvatar, ListItemText, Paper, Slider, Typography } from '@mui/material';
+import {
+    Avatar,
+    Button,
+    ButtonBase,
+    CardActions,
+    CardContent,
+    Checkbox,
+    FormControl,
+    Grid,
+    Input,
+    InputAdornment,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Paper,
+    Slide,
+    Slider,
+    Typography,
+} from '@mui/material';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
@@ -8,6 +27,7 @@ import { getFishRecommendData } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';
+import { useState } from 'react';
 
 const Card = styled.div`
     background-color: white;
@@ -44,10 +64,10 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
 
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
-
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
+    const [loading, setLoading] = useState(false);
     // console.log(selectCondition)
 
     const deleteContidion = (id, plusAmount) => {
@@ -61,6 +81,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
         if (selectCondition.length === 0) {
             notify('선택한 조건이 없습니다.');
         } else {
+            setLoading(true);
             getFishRecommendData({ personNum, money, area }).then((res) => setRecommendList(res.fishRecommendUnions));
             contactRef.current.scrollIntoView({ behavior: 'smooth' });
         }
@@ -86,92 +107,93 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                         }
                         const { id, selectFish, amount, farmStatus, imgUrl } = select;
                         return (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    borderBottom: '1px solid #F6F6F6',
-                                }}
-                                key={id}
-                            >
-                                {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
-                                <Avatar
-                                    alt={selectFish}
-                                    src={imgUrl}
-                                    variant="square"
-                                    style={{
-                                        height: '50px',
-                                        width: '50px',
-                                        borderRadius: '3px',
-                                        margin: '13px',
-                                    }}
-                                />
+                            <Slide key={id} direction="right" in={true} timeout={400}>
                                 <div
                                     style={{
                                         display: 'flex',
-                                        justifyContent: 'space-between',
-                                        width: '100%',
+                                        borderBottom: '1px solid #F6F6F6',
                                     }}
                                 >
-                                    <CardContent
-                                        sx={{
+                                    {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
+                                    <Avatar
+                                        alt={selectFish}
+                                        src={imgUrl}
+                                        variant="square"
+                                        style={{
+                                            height: '50px',
+                                            width: '50px',
+                                            borderRadius: '3px',
+                                            margin: '13px',
+                                        }}
+                                    />
+                                    <div
+                                        style={{
                                             display: 'flex',
-                                            flexDirection: 'column',
-                                            padding: '16px 0px',
+                                            justifyContent: 'space-between',
+                                            width: '100%',
                                         }}
                                     >
-                                        <div style={{ display: 'flex' }}>
-                                            <Typography
-                                                sx={{
-                                                    fontSize: 14,
-                                                    color: '#4A4A4A',
-                                                    fontWeight: 'bold',
-                                                }}
-                                            >
-                                                {selectFish}
-                                            </Typography>
+                                        <CardContent
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                padding: '16px 0px',
+                                            }}
+                                        >
+                                            <div style={{ display: 'flex' }}>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: 14,
+                                                        color: '#4A4A4A',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    {selectFish}
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: 13,
+                                                        color: '#A5A5A5',
+                                                        fontWeight: 'medium',
+                                                        marginLeft: 1,
+                                                    }}
+                                                >
+                                                    ({amount}인)
+                                                </Typography>
+                                            </div>
                                             <Typography
                                                 sx={{
                                                     fontSize: 13,
                                                     color: '#A5A5A5',
                                                     fontWeight: 'medium',
-                                                    marginLeft: 1,
+                                                }}
+                                                color="text.secondary"
+                                                gutterBottom
+                                            >
+                                                {farmStatus.join(', ')}
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions>
+                                            <Button
+                                                variant="outlined"
+                                                sx={{
+                                                    borderRadius: '1px',
+                                                    color: '#949494',
+                                                    borderColor: '#D8D8D8',
+                                                    fontSize: 12,
+                                                    marginRight: '12px',
+                                                }}
+                                                onClick={() => {
+                                                    deleteContidion(id, amount);
                                                 }}
                                             >
-                                                ({amount}인)
-                                            </Typography>
-                                        </div>
-                                        <Typography
-                                            sx={{
-                                                fontSize: 13,
-                                                color: '#A5A5A5',
-                                                fontWeight: 'medium',
-                                            }}
-                                            color="text.secondary"
-                                            gutterBottom
-                                        >
-                                            {farmStatus.join(', ')}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button
-                                            variant="outlined"
-                                            sx={{
-                                                borderRadius: '1px',
-                                                color: '#949494',
-                                                borderColor: '#D8D8D8',
-                                                fontSize: 12,
-                                                marginRight: '12px',
-                                            }}
-                                            onClick={() => {
-                                                deleteContidion(id, amount);
-                                            }}
-                                        >
-                                            조건 삭제
-                                        </Button>
-                                        <ToastContainer />
-                                    </CardActions>
+                                                조건 삭제
+                                            </Button>
+                                            <ToastContainer />
+                                        </CardActions>
+                                    </div>
                                 </div>
-                            </div>
+                            </Slide>
                         );
                     })}
                 </CustomForm>
@@ -217,7 +239,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                     )}
                 </div>
             </Card>
-            <SearchResults ref={contactRef} />
+            <SearchResults ref={contactRef} loading={loading} setLoading={setLoading} />
         </>
     );
 };

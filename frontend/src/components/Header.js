@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,54 +11,115 @@ import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../img/SAMUKSA.png';
-import { Button } from '@mui/material';
-
-const NAV_ITEMS = [
-    {
-        id: 1,
-        name: '수산물 계산기',
-        path: '/',
-    },
-    {
-        id: 2,
-        name: '시세 검색',
-        path: '/',
-    },
-];
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Header = () => {
     const navigate = useNavigate();
 
+    const [NAV_ITEMS, setNAV_ITEMS] = useState([
+        {
+            id: 1,
+            name: '수산물 계산기',
+            path: '/calculator',
+        },
+        {
+            id: 2,
+            name: '시세 검색',
+            path: '/',
+        },
+    ]);
+
     const goMain = () => {
         navigate('/');
+        setNAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
     };
 
-    const goFishCal = () => {
-        navigate('/');
+    const goAccount = () => {
+        navigate('/login');
     };
+
+    const onClick = useCallback((id) => {
+        setNAV_ITEMS(
+            NAV_ITEMS.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })),
+        );
+    }, []);
+
+    // const onToggle = (id) => {
+    //     setFarmStatus([]);
+    //     setFish(
+    //         fish.map((fish) =>
+    //             fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false },
+    //         ),
+    //     );
+
+    //     // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
+    // };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }} style={{ width: '100vw' }}>
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }} style={{ width: '90vw' }}>
+            <AppBar position="fixed" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }} style={{ width: '100vw' }}>
+                <Toolbar
+                    sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}
+                    style={{ width: '95vw' }}
+                >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2.5rem' }} />
-                        <Typography variant="h6" component="a" onClick={goMain} sx={{ color: '#6EA5F8', fontWeight: '900', fontSize: '1.7rem', cursor: 'pointer', fontFamily: 'sans-serif' }}>
+                        <Typography
+                            variant="h6"
+                            component="a"
+                            onClick={goMain}
+                            sx={{
+                                color: '#6EA5F8',
+                                fontWeight: '900',
+                                fontSize: '1.7rem',
+                                cursor: 'pointer',
+                                fontFamily: 'sans-serif',
+                            }}
+                        >
                             SAMUKSA
                         </Typography>
                     </div>
                     <div>
-                        {NAV_ITEMS.map(({ id, name, path }) => {
+                        {NAV_ITEMS.map(({ id, name, path, active }) => {
                             return (
-                                <Typography key={id} variant="button" sx={{ mr: 3, ':hover': { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7' } }}>
-                                    <NavLink to={`${path}`} style={{ textDecoration: 'none', color: '#7a7a7a' }}>
-                                        [{name}]
+                                <Typography
+                                    key={id}
+                                    variant="button"
+                                    sx={{
+                                        mr: 2,
+                                        ':hover': {
+                                            color: '#7A7A7A',
+                                            fontWeight: 'bold',
+                                            borderBottom: '1px solid #A7A7A7',
+                                        },
+                                    }}
+                                >
+                                    <NavLink
+                                        to={`${path}`}
+                                        onClick={() => {
+                                            onClick(id);
+                                        }}
+                                        style={{
+                                            textDecoration: 'none',
+                                            color: '#7A7A7A',
+                                            fontWeight: active ? 'bold' : '',
+                                        }}
+                                    >
+                                        {name}
                                     </NavLink>
                                 </Typography>
                             );
                         })}
-                        {/* <Typography variant='button' sx={{ color: '#7a7a7a', mr: 2, cursor: 'pointer', ":hover": { color: '#A7A7A7', borderBottom: '1px solid #A7A7A7' }, ":active": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7' } }} onClick={goFishCal}>수산물 계산기</Typography>
-                <Typography variant='button' sx={{ color: '#7a7a7a', ":hover": { color: '#A7A7A7', fontWeight: 'bold', borderBottom: '1px solid #A7A7A7'} }}>시세 검색</Typography> */}
+                        <AccountCircleIcon
+                            onClick={goAccount}
+                            sx={{
+                                color: '#6EA5F8',
+                                verticalAlign: 'middle',
+                                width: '30px',
+                                height: '40px',
+                                cursor: 'pointer',
+                            }}
+                        />
                     </div>
                 </Toolbar>
             </AppBar>
@@ -66,4 +127,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default React.memo(Header);

@@ -1,4 +1,17 @@
-import { Avatar, AvatarGroup, Button, CardContent, Grid, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import {
+    Avatar,
+    AvatarGroup,
+    Button,
+    CardContent,
+    Fade,
+    Grid,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Paper,
+    Typography,
+    Zoom,
+} from '@mui/material';
 import { height } from '@mui/system';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
@@ -8,22 +21,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import styled, { css, keyframes } from 'styled-components';
 import image from '../img/contemplative-reptile.jpeg';
 import { fishDataState, recommendListState, selectConditions } from '../store/atom';
+import Spinner from '../spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
-
-const smoothAppear = keyframes`
-    0% {
-        opacity: 0;
-        transform: translateY(-5%);
-    }
-    50% {
-        opacity: 0.5;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-`;
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
 const Card = styled.div`
     background-color: white;
@@ -44,6 +45,7 @@ const CustomDiv = styled.div`
     position: relative;
     overflow: overlay;
     overflow-x: hidden;
+    border-radius: 5px;
     min-width: 20%;
     &::-webkit-scrollbar {
         width: 5px;
@@ -79,8 +81,7 @@ const CustomList = styled.div`
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
-    },
-    animation: ${smoothAppear} 3s linear infinite;
+    }
 `;
 
 const Img = styled('img')({
@@ -93,7 +94,7 @@ const Img = styled('img')({
     // padding: '9px 13px',
 });
 
-const SearchResults = forwardRef((props, ref) => {
+const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
     const [result, setResult] = useRecoilState(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
     // console.log(result);
@@ -108,17 +109,37 @@ const SearchResults = forwardRef((props, ref) => {
         setResult([]);
     }, [selectCondition]);
 
+    useEffect(() => {
+        setLoading(false);
+    }, [result]);
+
     const onRecommendClick = (item, id) => {
         setSelectResult(item);
-        setResult(result.map((item) => (item.combinationName === id ? { ...item, active: !item.active } : { ...item, active: false })));
+        setResult(
+            result.map((item) =>
+                item.combinationName === id ? { ...item, active: !item.active } : { ...item, active: false },
+            ),
+        );
         setSelectEstimate();
     };
 
     const onEstimateClick = (item, price, selectId) => {
-        setSelectResult(selectResult.map((item, id) => (id === selectId ? { ...item, active: !item.active } : { ...item, active: false })));
+        setSelectResult(
+            selectResult.map((item, id) =>
+                id === selectId ? { ...item, active: !item.active } : { ...item, active: false },
+            ),
+        );
         setSelectEstimate(item);
         setTotalPrice(price);
     };
+
+    const addBookmark = (item) => {
+        localStorage.setItem('bookmark', JSON.stringify(selectEstimate));
+    };
+
+    console.log(selectEstimate);
+
+    // console.log(localStorage.length);
 
     return (
         <Card ref={ref}>
@@ -134,104 +155,107 @@ const SearchResults = forwardRef((props, ref) => {
             </Typography>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
-                    {result
-                        ? result.map((item, i) => {
-                              const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
-                              return (
-                                  <CardContent
-                                      key={i}
-                                      onClick={() => {
-                                          onRecommendClick(fishRecommendCombinations, combinationName);
-                                      }}
-                                      sx={{
-                                          display: 'flex',
-                                          alignItems: 'center',
-                                          backgroundColor: active ? '#F8F8F8' : 'white',
-                                          cursor: 'pointer',
-                                          borderBottom: '1px solid #F6F6F6',
-                                          height: '70px',
-                                          '&:last-child': { pb: 1 },
-                                          padding: '0 10px 0 10px',
-                                          ':hover': {
-                                              backgroundColor: '#F4F4F4',
-                                          },
-                                      }}
-                                  >
-                                      <Grid container spacing={0} rowSpacing={0} justifyContent="center" sx={{ width: '40%' }}>
-                                          {combinationName.length > 1 ? (
-                                              combinationName.map((item, i) => {
-                                                  if (i > 3)
-                                                      return (
-                                                          <Typography
-                                                              key={item}
-                                                              sx={{
-                                                                  fontSize: '5px',
-                                                              }}
-                                                          >
-                                                              외 {combinationName.length - i}개
-                                                          </Typography>
-                                                      ); // 이미지 5개 이상 안나오게
+                    {result.length > 0 && loading === false ? (
+                        result.map((item, i) => {
+                            const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
+                            return (
+                                <Fade in={true} timeout={i * 100} key={i}>
+                                    <CardContent
+                                        onClick={() => {
+                                            onRecommendClick(fishRecommendCombinations, combinationName);
+                                        }}
+                                        sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            backgroundColor: active ? '#F8F8F8' : 'white',
+                                            cursor: 'pointer',
+                                            borderBottom: '1px solid #F6F6F6',
+                                            height: '70px',
+                                            '&:last-child': { pb: 1 },
+                                            padding: '0 10px 0 10px',
+                                            ':hover': {
+                                                backgroundColor: '#F4F4F4',
+                                            },
+                                        }}
+                                    >
+                                        <Grid
+                                            container
+                                            spacing={0}
+                                            rowSpacing={0}
+                                            justifyContent="center"
+                                            sx={{ width: '40%' }}
+                                        >
+                                            {combinationName.length > 1 ? (
+                                                combinationName.map((item, i) => {
+                                                    if (i > 3) return null;
 
-                                                  return (
-                                                      <Grid item xs={6} key={item}>
-                                                          <Avatar
-                                                              alt={item}
-                                                              src={image}
-                                                              variant="rounded"
-                                                              sx={{
-                                                                  height: '30px',
-                                                                  width: '30px',
-                                                              }}
-                                                          />
-                                                      </Grid>
-                                                  );
-                                              })
-                                          ) : (
-                                              <Avatar
-                                                  alt={combinationName.join(' + ')}
-                                                  src={image}
-                                                  variant="rounded"
-                                                  sx={{
-                                                      height: '50px',
-                                                      width: '50px',
-                                                      margin: '0px',
-                                                  }}
-                                              />
-                                          )}
-                                      </Grid>
-                                      <div
-                                          style={{
-                                              display: 'flex',
-                                              justifyContent: 'space-between',
-                                              alignItems: 'center',
-                                              width: '100%',
-                                              height: '100%',
-                                              paddingLeft: '10px',
-                                          }}
-                                      >
-                                          <Typography
-                                              sx={{
-                                                  fontSize: 14,
-                                                  color: '#4A4A4A',
-                                                  fontWeight: 'bold',
-                                              }}
-                                          >
-                                              {combinationName.join(' + ')}
-                                          </Typography>
-                                          <Typography
-                                              sx={{
-                                                  fontSize: 14,
-                                                  color: '#A5A5A5',
-                                              }}
-                                              color="text.secondary"
-                                          >
-                                              ({combinationSize})
-                                          </Typography>
-                                      </div>
-                                  </CardContent>
-                              );
-                          })
-                        : null}
+                                                    return (
+                                                        <Grid item xs={6} key={item}>
+                                                            <Avatar
+                                                                alt={item}
+                                                                src={image}
+                                                                variant="rounded"
+                                                                sx={{
+                                                                    height: '30px',
+                                                                    width: '30px',
+                                                                }}
+                                                            />
+                                                        </Grid>
+                                                    );
+                                                })
+                                            ) : (
+                                                <Avatar
+                                                    alt={combinationName.join(' + ')}
+                                                    src={image}
+                                                    variant="rounded"
+                                                    sx={{
+                                                        height: '50px',
+                                                        width: '50px',
+                                                        margin: '0px',
+                                                    }}
+                                                />
+                                            )}
+                                        </Grid>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                height: '100%',
+                                                paddingLeft: '10px',
+                                            }}
+                                        >
+                                            <Typography
+                                                sx={{
+                                                    fontSize: 14,
+                                                    color: '#4A4A4A',
+                                                    fontWeight: 'bold',
+                                                }}
+                                            >
+                                                {combinationName.join(' + ')}
+                                            </Typography>
+                                            <Typography
+                                                sx={{
+                                                    fontSize: 14,
+                                                    color: '#A5A5A5',
+                                                }}
+                                                color="text.secondary"
+                                            >
+                                                ({combinationSize})
+                                            </Typography>
+                                        </div>
+                                    </CardContent>
+                                </Fade>
+                            );
+                        })
+                    ) : loading === true ? (
+                        <div
+                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}
+                        >
+                            <img src={Spinner} alt="로딩중" width="30%" />
+                        </div>
+                    ) : null}
                 </CustomDiv>
                 <CustomList>
                     {selectResult
@@ -241,7 +265,7 @@ const SearchResults = forwardRef((props, ref) => {
                                   /* console.log(item) */
                               }
                               return (
-                                  <React.Fragment key={i}>
+                                  <Fade in={true} timeout={i * 300} key={i}>
                                       <ListItem
                                           onClick={() => {
                                               onEstimateClick(fishRecommendBtDtos, totalPrice, i);
@@ -302,50 +326,62 @@ const SearchResults = forwardRef((props, ref) => {
                                               {totalPrice.toLocaleString('ko-KR')}원
                                           </Typography>
                                       </ListItem>
-                                  </React.Fragment>
+                                  </Fade>
                               );
                           })
                         : null}
                 </CustomList>
                 {selectEstimate ? (
-                    <div
-                        style={{
-                            width: '69%',
-                            height: '100%',
-                            minWidth: '300px',
-                        }}
-                    >
+                    <Fade in={true}>
                         <div
                             style={{
-                                width: '95%',
-                                margin: 'auto',
-                                height: '490px',
-                                overflow: 'auto',
+                                width: '69%',
+                                height: '100%',
+                                minWidth: '300px',
                             }}
                         >
-                            <Typography
-                                sx={{
-                                    color: '#010000',
-                                    paddingTop: '18px',
-                                    fontWeight: 'bold',
-                                    fontSize: '16px',
+                            <div
+                                style={{
+                                    width: '95%',
+                                    margin: 'auto',
+                                    height: '490px',
+                                    overflow: 'auto',
                                 }}
                             >
-                                수산물 견적
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                sx={{
-                                    color: '#949494',
-                                    fontSize: '11px',
-                                    mb: '11px',
-                                }}
-                            >
-                                실제 시세과 상이할 수 있습니다.
-                            </Typography>
-                            <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
+                                <div>
+                                    <Typography
+                                        sx={{
+                                            color: '#010000',
+                                            paddingTop: '18px',
+                                            fontWeight: 'bold',
+                                            fontSize: '16px',
+                                        }}
+                                    >
+                                        수산물 견적
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            color: '#949494',
+                                            fontSize: '11px',
+                                            mb: '11px',
+                                        }}
+                                    >
+                                        실제 시세과 상이할 수 있습니다.
+                                    </Typography>
+                                </div>
+                                <div style={{ verticalAlign: 'middle' }}>
+                                    <BookmarkBorderIcon
+                                        fontSize="large"
+                                        onClick={addBookmark(selectEstimate)}
+                                        sx={{ cursor: 'pointer' }}
+                                    />
+                                    <BookmarkAddedIcon fontSize="medium" />
+                                </div>
+                                <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
+                            </div>
                         </div>
-                    </div>
+                    </Fade>
                 ) : null}
             </div>
         </Card>
@@ -353,3 +389,15 @@ const SearchResults = forwardRef((props, ref) => {
 });
 
 export default React.memo(SearchResults);
+
+// if (i > 3)
+// return (
+//     <Typography
+//         key={item}
+//         sx={{
+//             fontSize: '5px',
+//         }}
+//     >
+//         외 {combinationName.length - i}개
+//     </Typography>
+// ); // 이미지 5개 이상 안나오게
