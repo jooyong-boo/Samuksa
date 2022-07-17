@@ -26,21 +26,6 @@ import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
-const smoothAppear = keyframes`
-    0% {
-        opacity: 0;
-        transform: none;
-    }
-    50% {
-        opacity: 0.5;
-        transform: translateY(-5px);
-    }
-    100% {
-        opacity: 1;
-        transform: none;
-    }
-`;
-
 const Card = styled.div`
     background-color: white;
     width: 1193px;
@@ -359,11 +344,8 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                 style={{
                                     width: '95%',
                                     margin: 'auto',
-                                    height: '80px',
+                                    height: '490px',
                                     overflow: 'auto',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
                                 }}
                             >
                                 <div>
@@ -396,8 +378,8 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                     />
                                     <BookmarkAddedIcon fontSize="medium" />
                                 </div>
+                                <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
                             </div>
-                            <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
                         </div>
                     </Fade>
                 ) : null}
