@@ -291,7 +291,7 @@ const SearchConditions = () => {
                                 onClick={onReset}
                                 sx={{
                                     width: '40%',
-                                    borderRadius: '1px',
+                                    borderRadius: '5px',
                                     borderColor: '#D8D8D8',
                                     color: '#949494',
                                 }}

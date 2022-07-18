@@ -8,7 +8,7 @@ export const personNumState = atom({
 
 export const moneyState = atom({
     key: 'moneyState',
-    default: 50000,
+    default: '',
 });
 
 export const areaState = atom({

@@ -137,8 +137,6 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
         localStorage.setItem('bookmark', JSON.stringify(selectEstimate));
     };
 
-    console.log(selectEstimate);
-
     // console.log(localStorage.length);
 
     return (
