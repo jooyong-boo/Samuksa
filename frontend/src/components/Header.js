@@ -44,17 +44,6 @@ const Header = () => {
         );
     }, []);
 
-    // const onToggle = (id) => {
-    //     setFarmStatus([]);
-    //     setFish(
-    //         fish.map((fish) =>
-    //             fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false },
-    //         ),
-    //     );
-
-    //     // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
-    // };
-
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }} style={{ width: '100vw' }}>

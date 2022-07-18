@@ -1,21 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './Header';
 import TopScrollBtn from './TopScrollBtn';
 import image from '../img/mainImage.jpg';
-import {
-    Box,
-    Button,
-    Container,
-    FormControl,
-    Grid,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { getAreaTotalFishData } from '../api/auth';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -28,7 +15,6 @@ import {
 } from '../store/atom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 

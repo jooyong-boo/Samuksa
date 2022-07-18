@@ -7,7 +7,9 @@ const instance = axios.create({
 // 추천
 export const getFishRecommendData = async ({ personNum, money, area }) => {
     try {
-        const { data } = await instance.get('/fish/recommend', { params: { personNumber: parseInt(personNum), money: parseInt(money), saleArea: area } });
+        const { data } = await instance.get('/fish/recommend', {
+            params: { personNumber: parseInt(personNum), money: parseInt(money), saleArea: area },
+        });
         // console.log(data)
         return data;
     } catch (err) {
