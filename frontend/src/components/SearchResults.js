@@ -346,35 +346,49 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                     overflow: 'auto',
                                 }}
                             >
-                                <div>
-                                    <Typography
-                                        sx={{
-                                            color: '#010000',
-                                            paddingTop: '18px',
-                                            fontWeight: 'bold',
-                                            fontSize: '16px',
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: '250px',
                                         }}
                                     >
-                                        수산물 견적
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            color: '#949494',
-                                            fontSize: '11px',
-                                            mb: '11px',
-                                        }}
-                                    >
-                                        실제 시세과 상이할 수 있습니다.
-                                    </Typography>
-                                </div>
-                                <div style={{ verticalAlign: 'middle' }}>
-                                    <BookmarkBorderIcon
-                                        fontSize="large"
-                                        onClick={addBookmark(selectEstimate)}
-                                        sx={{ cursor: 'pointer' }}
-                                    />
-                                    <BookmarkAddedIcon fontSize="medium" />
+                                        <Typography
+                                            sx={{
+                                                color: '#010000',
+                                                paddingTop: '18px',
+                                                fontWeight: 'bold',
+                                                fontSize: '16px',
+                                            }}
+                                        >
+                                            수산물 견적
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                color: '#949494',
+                                                fontSize: '11px',
+                                                mb: '11px',
+                                            }}
+                                        >
+                                            실제 시세과 상이할 수 있습니다.
+                                        </Typography>
+                                    </div>
+                                    <div style={{ width: '120px', display: 'flex', justifyContent: 'flex-end' }}>
+                                        {/* {localStorage.getItem('boomark').} */}
+                                        <BookmarkBorderIcon
+                                            fontSize="large"
+                                            onClick={addBookmark(selectEstimate)}
+                                            sx={{ cursor: 'pointer' }}
+                                        />
+                                        <BookmarkAddedIcon fontSize="medium" />
+                                    </div>
                                 </div>
                                 <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
                             </div>
