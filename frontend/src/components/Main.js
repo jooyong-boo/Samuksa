@@ -120,8 +120,9 @@ const Main = () => {
                     <Typography
                         sx={{
                             fontSize: '54px',
+                            fontWeight: '900',
                             color: 'white',
-                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
+                            textShadow: '-1px 0px #A7A7A7, 0px 1px #A7A7A7, 1px 0px #A7A7A7, 0px -1px #A7A7A7',
                         }}
                     >
                         모두가 편히 떠먹는 그날까지,
@@ -130,6 +131,7 @@ const Main = () => {
                         sx={{
                             fontSize: '54px',
                             color: '#6EA5F8',
+                            fontWeight: '900',
                             textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
                             marginLeft: '5px',
                         }}
@@ -141,6 +143,7 @@ const Main = () => {
                     sx={{
                         fontSize: '25px',
                         color: 'white',
+                        fontWeight: '600',
                         textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
                         marginBottom: '2rem',
                     }}
