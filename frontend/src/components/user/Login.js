@@ -82,7 +82,8 @@ const Login = () => {
                             }}
                         >
                             <Typography fontSize={12} color="#969696">
-                                <button
+                                <input
+                                    type="checkbox"
                                     style={{
                                         width: '16px',
                                         height: '16px',
