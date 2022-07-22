@@ -10,6 +10,8 @@ import java.util.List;
 public class FishRecommendUnion {
     private  List<String> combinationName;
 
+    private int maxPrice;
+
     private int combinationSize;
 
     private List<FishRecommendCombination> fishRecommendCombinations;

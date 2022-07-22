@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Setter
@@ -13,6 +14,8 @@ public class FishRecommendResponse {
     private int recommendTotalCount;
 
     private int recommendUnionCount;
+
+    private Set<FishRecommendUnion> randomUnions;
 
     private List<FishRecommendUnion> fishRecommendUnions;
 

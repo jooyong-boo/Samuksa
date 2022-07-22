@@ -8,9 +8,7 @@ import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendInfo;
 import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendResponse;
 import com.samuksa.dto.fish.recommend.recommendResponse.FishRecommendUnion;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class FishRecommendFlagToResponse {
 
@@ -28,12 +26,16 @@ public class FishRecommendFlagToResponse {
     public FishRecommendResponse getFishRecommendResponse() {
 
         List<FishRecommendUnion> fishRecommendUnions = new ArrayList<>();
+        Set<FishRecommendUnion> randomRecommendUnions = new HashSet<>();
+        Random rd = new Random();
 
         for(FishRecommendCombination fishRecommendCombination : this.fishRecommendCombinations)
             combinationToUnion(fishRecommendUnions, fishRecommendCombination);
         for(FishRecommendUnion fishRecommendUnion : fishRecommendUnions)
             fishRecommendUnion.setCombinationSize(fishRecommendUnion.getFishRecommendCombinations().size());
-        fishRecommendResponse = new FishRecommendResponse(this.fishRecommendCombinations.size(),fishRecommendUnions.size(),fishRecommendUnions);
+        while (randomRecommendUnions.size() < 5 && randomRecommendUnions.size() != fishRecommendUnions.size())
+            randomRecommendUnions.add(fishRecommendUnions.get(rd.nextInt(fishRecommendUnions.size())));
+        fishRecommendResponse = new FishRecommendResponse(this.fishRecommendCombinations.size(),fishRecommendUnions.size(), randomRecommendUnions, fishRecommendUnions);
         return fishRecommendResponse;
     }
 
@@ -61,7 +63,21 @@ public class FishRecommendFlagToResponse {
         {
             if (checkName(fishRecommendUnion, fishRecommendCombination))
             {
-                fishRecommendUnion.getFishRecommendCombinations().add(fishRecommendCombination);
+                if (fishRecommendUnion.getCombinationSize() < 20)
+                {
+                    fishRecommendUnion.getFishRecommendCombinations().add(fishRecommendCombination);
+                    fishRecommendUnion.setCombinationSize(fishRecommendUnion.getCombinationSize() + 1);
+                    if (fishRecommendCombination.getTotalPrice() > fishRecommendUnion.getMaxPrice())
+                        fishRecommendUnion.setMaxPrice(fishRecommendCombination.getTotalPrice());
+                }
+                else{
+                    if (fishRecommendCombination.getTotalPrice() < fishRecommendUnion.getMaxPrice()){
+                        fishRecommendUnion.getFishRecommendCombinations().add(fishRecommendCombination);
+                        Collections.sort(fishRecommendUnion.getFishRecommendCombinations(), Comparator.comparingInt(FishRecommendCombination::getTotalPrice));
+                        fishRecommendUnion.getFishRecommendCombinations().remove(20);
+                        fishRecommendUnion.setMaxPrice(fishRecommendUnion.getFishRecommendCombinations().get(19).getTotalPrice());
+                    }
+                }
                 return;
             }
         }
@@ -69,6 +85,6 @@ public class FishRecommendFlagToResponse {
         fishRecommendCombinations1.add(fishRecommendCombination);
         FishRecommendUnion fishRecommendUnion = new FishRecommendUnion(fishRecommendCombination.getCombinationName(), fishRecommendCombinations1);
         fishRecommendUnions.add(fishRecommendUnion);
+        fishRecommendUnion.setCombinationSize(1);
     }
-
 }
