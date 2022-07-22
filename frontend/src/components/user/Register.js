@@ -20,7 +20,7 @@ const Background = styled.div`
 const Card = styled.div`
     background-color: white;
     width: 30%;
-    height: 65%;
+    height: 35rem;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
