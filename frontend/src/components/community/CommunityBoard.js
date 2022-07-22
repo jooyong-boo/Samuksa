@@ -1,12 +1,13 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import React from 'react';
-import styled from 'styled-components';
+import { useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 
 const Background = styled.div`
     background-color: #ebecee;
-    width: 95vw;
-    height: 93vh;
-    /* padding-top: 104px; */
+    width: 100%;
+    height: 100vh;
+    padding-top: 70px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -17,7 +18,18 @@ const Background = styled.div`
 `;
 
 const CommunityBoard = () => {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+
+    const tab = [
+        {
+            id: 0,
+            label: '자유게시판',
+        },
+        {
+            id: 1,
+            label: '꿀TIP게시판',
+        },
+    ];
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -25,11 +37,11 @@ const CommunityBoard = () => {
 
     return (
         <Background>
-            <Box sx={{ width: '100%', height: '100%', bgcolor: 'background.paper' }}>
+            <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white' }}>
                 <Tabs value={value} onChange={handleChange} centered>
-                    <Tab label="Item One" />
-                    <Tab label="Item Two" />
-                    <Tab label="Item Three" />
+                    {tab.map(({ id, label }) => {
+                        return <Tab label={label} key={id} center />;
+                    })}
                 </Tabs>
             </Box>
         </Background>
