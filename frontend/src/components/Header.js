@@ -14,7 +14,7 @@ import Logo from '../img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Avatar, Tooltip } from '@mui/material';
 
-const settings = ['프로필', '회원정보', '게시판', '로그인'];
+// const settings = ['프로필', '회원정보', '게시판', '로그인'];
 
 const Header = () => {
     const navigate = useNavigate();
@@ -32,14 +32,45 @@ const Header = () => {
         },
     ]);
 
+    const [USERS_ITEMS, setUSERS_ITEMS] = useState([
+        {
+            id: 1,
+            name: '프로필',
+            path: '/',
+        },
+        {
+            id: 2,
+            name: '회원 정보',
+            path: '/',
+        },
+        {
+            id: 3,
+            name: '게시판',
+            path: '/community',
+        },
+        {
+            id: 4,
+            name: '로그인',
+            path: '/login',
+        },
+    ]);
+
     const goMain = () => {
         navigate('/');
         setNAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
     };
 
-    const goAccount = () => {
-        navigate('/login');
+    const goNavigate = (path) => {
+        navigate(`${path}`);
     };
+
+    // const goAccount = () => {
+    //     navigate('/login');
+    // };
+
+    // const goCommunity = () => {
+    //     navigate('/community');
+    // };
 
     const onClick = useCallback((id) => {
         setNAV_ITEMS(
@@ -133,10 +164,16 @@ const Header = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center" onClick={setting === '로그인' ? goAccount : null}>
-                                        {setting}
+                            {USERS_ITEMS.map(({ id, name, path }) => (
+                                <MenuItem
+                                    key={id}
+                                    onClick={() => {
+                                        handleCloseUserMenu();
+                                        goNavigate(path);
+                                    }}
+                                >
+                                    <Typography textAlign="center" variant="button" color="#7A7A7A">
+                                        {name}
                                     </Typography>
                                 </MenuItem>
                             ))}
