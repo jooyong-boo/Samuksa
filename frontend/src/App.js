@@ -8,6 +8,7 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CommunityPage from './pages/CommunityPage';
+import WritingPage from './pages/WritingPage';
 
 const theme = createTheme({
     typography: {
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/calculator" element={<CalculatorPage />} />
                     <Route path="/community" element={<CommunityPage />} />
+                    <Route path="/write" element={<WritingPage />} />
                 </Routes>
             </Suspense>
         </ThemeProvider>

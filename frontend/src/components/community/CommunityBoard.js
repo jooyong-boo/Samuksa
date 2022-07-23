@@ -1,7 +1,10 @@
 import { Box, Tab, Tabs } from '@mui/material';
 import React from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import FreeBoard from './FreeBoard';
+import TipBoard from './TipBoard';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -19,6 +22,7 @@ const Background = styled.div`
 
 const CommunityBoard = () => {
     const [value, setValue] = useState(0);
+    const [selectTab, setSelectTab] = useState('자유게시판');
 
     const tab = [
         {
@@ -31,6 +35,15 @@ const CommunityBoard = () => {
         },
     ];
 
+    useEffect(() => {
+        setSelectTab(tab[0]);
+    }, []);
+
+    const onChangeTab = (label, id) => {
+        setSelectTab(...tab.filter((item) => item.id === id));
+    };
+    console.log(selectTab);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -40,9 +53,18 @@ const CommunityBoard = () => {
             <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white' }}>
                 <Tabs value={value} onChange={handleChange} centered>
                     {tab.map(({ id, label }) => {
-                        return <Tab label={label} key={id} center />;
+                        return (
+                            <Tab
+                                label={label}
+                                key={id}
+                                onClick={() => {
+                                    onChangeTab(label, id);
+                                }}
+                            />
+                        );
                     })}
                 </Tabs>
+                {selectTab.label === '자유게시판' ? <FreeBoard /> : <TipBoard />}
             </Box>
         </Background>
     );
