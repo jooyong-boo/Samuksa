@@ -1,9 +1,10 @@
-import { Paper } from '@mui/material';
+import { FormControl, Input, InputLabel, Paper } from '@mui/material';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -53,15 +54,27 @@ const Writing = () => {
     return (
         <Background>
             <Paper sx={{ height: '80%', width: '90%', margin: 'auto' }}>
-                <label htmlFor="">제목</label>
-                <input type="text" />
+                <AccountCircleIcon
+                    sx={{
+                        color: '#a2a5a9',
+                        verticalAlign: 'middle',
+                        width: '40px',
+                        height: '40px',
+                        cursor: 'pointer',
+                    }}
+                />
+                {/* <label htmlFor="">제목</label>
+                <input type="text" /> */}
+                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                    <Input id="title" placeholder="제목" sx={{ width: '90%', fontSize: '2rem' }} />
+                </FormControl>
                 <ReactQuill
                     theme="snow"
                     value={value}
                     onChange={onValueChange}
                     formats={formats}
                     modules={modules}
-                    style={{ height: '80%', verticalAlign: 'center' }}
+                    style={{ height: '90%', verticalAlign: 'center', overflow: 'auto' }}
                 />
             </Paper>
         </Background>
