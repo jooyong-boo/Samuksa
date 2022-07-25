@@ -182,6 +182,7 @@ const FreeBoard = () => {
                         color: 'white',
                         boxShadow: 'none',
                         width: '10%',
+                        ':hover': { boxShadow: 'none' },
                     }}
                     onClick={goWriting}
                 >

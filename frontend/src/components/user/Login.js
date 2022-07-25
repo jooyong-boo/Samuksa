@@ -2,7 +2,6 @@ import { Button, Checkbox, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from '../Header';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -33,7 +32,6 @@ const Card = styled.div`
 const Login = () => {
     return (
         <>
-            <Header />
             <Background>
                 <Card>
                     <div>

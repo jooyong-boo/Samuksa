@@ -9,15 +9,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Logo from '../img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Avatar, Tooltip } from '@mui/material';
+import { useEffect } from 'react';
 
 // const settings = ['프로필', '회원정보', '게시판', '로그인'];
 
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
         {
@@ -30,28 +32,28 @@ const Header = () => {
             name: '시세 검색',
             path: '/',
         },
-    ]);
-
-    const [USERS_ITEMS, setUSERS_ITEMS] = useState([
-        {
-            id: 1,
-            name: '프로필',
-            path: '/',
-        },
-        {
-            id: 2,
-            name: '회원 정보',
-            path: '/',
-        },
         {
             id: 3,
             name: '게시판',
             path: '/community',
         },
+    ]);
+    const [online, setOnline] = useState(false);
+    const [USERS_ITEMS, setUSERS_ITEMS] = useState([
         {
-            id: 4,
-            name: '로그인',
+            id: 1,
+            name: online ? '로그아웃' : '로그인',
             path: '/login',
+        },
+        {
+            id: 2,
+            name: '프로필',
+            path: '/',
+        },
+        {
+            id: 3,
+            name: '회원 정보',
+            path: '/',
         },
     ]);
 
@@ -72,11 +74,23 @@ const Header = () => {
     //     navigate('/community');
     // };
 
-    const onClick = useCallback((id) => {
+    useEffect(() => {
         setNAV_ITEMS(
-            NAV_ITEMS.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })),
+            NAV_ITEMS.map((item) =>
+                location.pathname === item.path ? { ...item, active: true } : { ...item, active: false },
+            ),
         );
-    }, []);
+    }, [location]);
+
+    // const onClick = useCallback((id) => {
+    //     setNAV_ITEMS(
+    //         NAV_ITEMS.map((item) =>
+    //             item.id === id && location.pathname === item.path
+    //                 ? { ...item, active: true }
+    //                 : { ...item, active: false },
+    //         ),
+    //     );
+    // }, []);
 
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -129,9 +143,9 @@ const Header = () => {
                                 >
                                     <NavLink
                                         to={`${path}`}
-                                        onClick={() => {
-                                            onClick(id);
-                                        }}
+                                        // onClick={() => {
+                                        //     onClick(id);
+                                        // }}
                                         style={{
                                             textDecoration: 'none',
                                             color: '#7A7A7A',
@@ -143,9 +157,26 @@ const Header = () => {
                                 </Typography>
                             );
                         })}
-                        <Tooltip title="Open settings">
+                        <Tooltip title="User">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Login" src="/static/images/avatar/2.jpg" />
+                                <AccountCircleIcon
+                                    sx={{
+                                        color: '#a2a5a9',
+                                        verticalAlign: 'middle',
+                                        width: '40px',
+                                        height: '40px',
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                                {/* <AccountCircleIcon
+                                    sx={{
+                                        color: '#6EA5F8',
+                                        verticalAlign: 'middle',
+                                        width: '40px',
+                                        height: '40px',
+                                        cursor: 'pointer',
+                                    }}
+                                /> */}
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -178,16 +209,6 @@ const Header = () => {
                                 </MenuItem>
                             ))}
                         </Menu>
-                        {/* <AccountCircleIcon
-                            onClick={goAccount}
-                            sx={{
-                                color: '#6EA5F8',
-                                verticalAlign: 'middle',
-                                width: '30px',
-                                height: '40px',
-                                cursor: 'pointer',
-                            }}
-                        /> */}
                     </div>
                 </Toolbar>
             </AppBar>

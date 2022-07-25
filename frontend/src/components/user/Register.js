@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from '../Header';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -21,7 +20,7 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 30%;
+    width: 40%;
     height: 45rem;
     margin: 0 auto;
     display: flex;
@@ -34,35 +33,75 @@ const Card = styled.div`
 
 const Register = () => {
     const [id, setId] = useState('');
+    const [idOverlapping, setIdOverlapping] = useState('');
+
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [checkPw, setCheckPW] = useState(true);
+
     const [email, setEmail] = useState('');
+    const [checkEmail, setCheckEmail] = useState(false);
+
+    const [nickName, setNickName] = useState('');
+    const [nickNameOverlapping, setNickNameOverlapping] = useState('');
+
+    const [authNum, setAuthNum] = useState('');
+    const [checkAuthNum, setCheckAuthNum] = useState(false);
 
     const onChange = (change, check, e) => {
         let inputChange = e.target.value;
         let reg;
         if (check === id) {
             reg = new RegExp(/^[a-z0-9]{4,12}$/);
+            if (reg.test(inputChange)) {
+                change(inputChange);
+            }
+        }
+        if (check === nickName) {
+            reg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{2,6}$/);
+            if (reg.test(inputChange)) {
+                change(inputChange);
+            }
         }
         if (check === password) {
             reg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            if (reg.test(inputChange)) {
+                change(inputChange);
+            }
         }
         if (check === passwordConfirm) {
             reg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            if (reg.test(inputChange)) {
+                change(inputChange);
+            }
         }
         if (check === email) {
             reg = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);
+            if (reg.test(inputChange)) {
+                setCheckEmail(true);
+                change(inputChange);
+            } else {
+                setCheckEmail(false);
+            }
         }
-        if (reg) {
-            change(inputChange);
-        }
-        console.log(reg.test(inputChange));
-        // return console.log(reg.test(inputChange));
-        // change(e.target.value);
+        // console.log(reg.test(inputChange));
     };
 
-    console.log(id, password, passwordConfirm, email);
+    console.log(id, nickName, password, passwordConfirm, email);
+
+    const checkOverlapping = () => {};
+
+    const onClickAuth = () => {
+        setCheckAuthNum(true);
+    };
+
+    const onSignUp = () => {
+        if (id && checkPw && checkAuthNum) {
+            alert('회원가입 완료');
+        } else {
+            alert('빈칸을 입력해주세요');
+        }
+    };
 
     useEffect(() => {
         if (password !== passwordConfirm) {
@@ -72,15 +111,11 @@ const Register = () => {
         }
     }, [password, passwordConfirm]);
 
-    const onSign = () => {};
-
     return (
         <>
-            <Header />
             <Background>
                 <Card>
-                    <div>
-                        {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
+                    <div style={{ width: '50%', textAlign: 'center' }}>
                         <Typography
                             sx={{
                                 fontSize: '1.5rem',
@@ -93,83 +128,160 @@ const Register = () => {
                             회원가입
                         </Typography>
                         {/* </div> */}
-                        <div style={{ paddingTop: '24px', display: 'inline-flex', flexDirection: 'column' }}>
+                        <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>아이디</Typography>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
                                 placeholder="아이디 입력"
+                                autoComplete="off"
+                                // fullWidth
                                 sx={{}}
                                 onChange={(e) => {
                                     onChange(setId, id, e);
                                 }}
                             />
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#6EA5F8',
+                                    color: 'white',
+                                    boxShadow: 'none',
+                                    marginTop: '0.2rem',
+                                    ml: '0.5rem',
+                                    ':hover': { boxShadow: 'none' },
+                                }}
+                            >
+                                중복체크
+                            </Button>
+                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
+                                사용 가능한 아이디입니다.
+                            </Typography>
+                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                이미 존재하는 아이디입니다.
+                            </Typography>
                         </div>
-                        <div style={{ paddingTop: '24px' }}>
+                        <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>닉네임</Typography>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
                                 placeholder="한글 또는 영문"
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    onChange(setNickName, nickName, e);
+                                }}
                             />
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#6EA5F8',
+                                    color: 'white',
+                                    boxShadow: 'none',
+                                    marginTop: '0.2rem',
+                                    ml: '0.5rem',
+                                    ':hover': { boxShadow: 'none' },
+                                }}
+                            >
+                                중복체크
+                            </Button>
+                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
+                                사용 가능한 닉네임입니다.
+                            </Typography>
+                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                이미 존재하는 닉네임입니다.
+                            </Typography>
                         </div>
-                        <div style={{ paddingTop: '24px' }}>
+                        <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
                                 placeholder="8자리 이상 영문, 숫자"
-                                sx={
-                                    {
-                                        // '::-webkit-input-placeholder': { fontSize: '12px' },
-                                        // '::-ms-input-placeholder': { fontSize: '5px' },
-                                        // '::placeholder': { fontSize: '1px' },
-                                    }
-                                }
+                                autoComplete="off"
                                 onChange={(e) => {
                                     onChange(setPassword, password, e);
                                 }}
                             />
                         </div>
-                        <div style={{ paddingTop: '12px' }}>
+                        <div style={{ paddingTop: '0.5rem' }}>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
                                 placeholder="비밀번호 확인"
+                                autoComplete="off"
                                 onChange={(e) => {
                                     onChange(setPasswordConfirm, passwordConfirm, e);
                                 }}
                             />
-                            {checkPw ? null : <Typography>비밀번호가 일치하지 않습니다.</Typography>}
+                            {checkPw ? null : (
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                    비밀번호가 일치하지 않습니다.
+                                </Typography>
+                            )}
                         </div>
-                        <div style={{ paddingTop: '24px' }}>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>이메일 주소</Typography>
+                        <div style={{ paddingTop: '1rem' }}>
+                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>이메일</Typography>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
-                                placeholder="8자리 이상 영문, 숫자"
+                                placeholder="이메일 형식을 지켜주세요"
+                                sx={{ width: '70%' }}
                                 onChange={(e) => {
                                     onChange(setEmail, email, e);
                                 }}
                             />
-                            <Button
-                                sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                }}
-                            >
-                                인증
-                            </Button>
+                            {checkEmail ? (
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: '#6EA5F8',
+                                        color: 'white',
+                                        boxShadow: 'none',
+                                        marginTop: '0.2rem',
+                                        ml: '0.5rem',
+                                        ':hover': { boxShadow: 'none' },
+                                    }}
+                                    onClick={onClickAuth}
+                                >
+                                    인증
+                                </Button>
+                            ) : null}
+                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                이미 등록된 이메일입니다.
+                            </Typography>
                         </div>
-                        <div style={{ paddingTop: '0.5rem' }}>
-                            <Typography sx={{ fontSize: '16px', mb: 0.5 }}>인증번호를 입력해주세요</Typography>
-                            <TextField id="outlined-basic" variant="outlined" size="small" placeholder="" />
+                        <div></div>
+                        <div style={{ paddingTop: '0.1rem' }}>
+                            {checkAuthNum ? (
+                                <>
+                                    {/* <Typography sx={{ fontSize: '16px', mb: 0.5 }}>인증번호를 입력해주세요</Typography> */}
+                                    <TextField
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        size="small"
+                                        autoComplete="off"
+                                        placeholder="인증번호"
+                                    />
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            backgroundColor: '#6EA5F8',
+                                            color: 'white',
+                                            boxShadow: 'none',
+                                            marginTop: '0.2rem',
+                                            ml: '0.5rem',
+                                        }}
+                                    >
+                                        확인
+                                    </Button>
+                                </>
+                            ) : null}
                         </div>
                         <div
                             style={{
@@ -195,7 +307,9 @@ const Register = () => {
                                     color: 'white',
                                     boxShadow: 'none',
                                     width: '100%',
+                                    ':hover': { boxShadow: 'none' },
                                 }}
+                                onClick={onSignUp}
                             >
                                 회원가입
                             </Button>

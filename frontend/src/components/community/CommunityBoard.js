@@ -3,7 +3,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import FreeBoard from './FreeBoard';
+import ReviewBoard from './ReviewBoard';
 import TipBoard from './TipBoard';
 
 const Background = styled.div`
@@ -27,7 +27,7 @@ const CommunityBoard = () => {
     const tab = [
         {
             id: 0,
-            label: '자유게시판',
+            label: '리뷰게시판',
         },
         {
             id: 1,
@@ -64,7 +64,7 @@ const CommunityBoard = () => {
                         );
                     })}
                 </Tabs>
-                {selectTab.label === '자유게시판' ? <FreeBoard /> : <TipBoard />}
+                {selectTab.label === '리뷰게시판' ? <ReviewBoard /> : <TipBoard />}
             </Box>
         </Background>
     );
