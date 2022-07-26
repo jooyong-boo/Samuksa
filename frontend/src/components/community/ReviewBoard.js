@@ -131,7 +131,7 @@ const FreeBoard = () => {
 
     return (
         <Background>
-            <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>자유게시판</Typography>
+            <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>리뷰게시판</Typography>
             <ThemeProvider theme={theme}>
                 <TableContainer
                     component={Paper}

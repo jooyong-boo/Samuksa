@@ -1,8 +1,8 @@
 import React from 'react';
-import Writing from '../components/community/Writing';
+import Editor from '../components/community/Editor';
 
 const WritingPage = () => {
-    return <Writing />;
+    return <Editor />;
 };
 
 export default WritingPage;
