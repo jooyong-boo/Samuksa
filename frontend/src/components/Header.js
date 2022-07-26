@@ -38,12 +38,13 @@ const Header = () => {
             path: '/community',
         },
     ]);
-    const [online, setOnline] = useState(false);
-    const [USERS_ITEMS, setUSERS_ITEMS] = useState([
+
+    const [loginStatus, setLoginStatus] = useState(false);
+    const USERS_ITEMS = [
         {
             id: 1,
-            name: online ? '로그아웃' : '로그인',
-            path: '/login',
+            name: '로그아웃',
+            path: '/',
         },
         {
             id: 2,
@@ -55,7 +56,15 @@ const Header = () => {
             name: '회원 정보',
             path: '/',
         },
-    ]);
+    ];
+
+    const NON_USERS_ITEMS = [
+        {
+            id: 1,
+            name: '로그인',
+            path: '/login',
+        },
+    ];
 
     const goMain = () => {
         navigate('/');
@@ -81,16 +90,6 @@ const Header = () => {
             ),
         );
     }, [location]);
-
-    // const onClick = useCallback((id) => {
-    //     setNAV_ITEMS(
-    //         NAV_ITEMS.map((item) =>
-    //             item.id === id && location.pathname === item.path
-    //                 ? { ...item, active: true }
-    //                 : { ...item, active: false },
-    //         ),
-    //     );
-    // }, []);
 
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -159,24 +158,27 @@ const Header = () => {
                         })}
                         <Tooltip title="User">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <AccountCircleIcon
-                                    sx={{
-                                        color: '#a2a5a9',
-                                        verticalAlign: 'middle',
-                                        width: '40px',
-                                        height: '40px',
-                                        cursor: 'pointer',
-                                    }}
-                                />
-                                {/* <AccountCircleIcon
-                                    sx={{
-                                        color: '#6EA5F8',
-                                        verticalAlign: 'middle',
-                                        width: '40px',
-                                        height: '40px',
-                                        cursor: 'pointer',
-                                    }}
-                                /> */}
+                                {loginStatus ? (
+                                    <AccountCircleIcon
+                                        sx={{
+                                            color: '#6EA5F8',
+                                            verticalAlign: 'middle',
+                                            width: '40px',
+                                            height: '40px',
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                ) : (
+                                    <AccountCircleIcon
+                                        sx={{
+                                            color: '#a2a5a9',
+                                            verticalAlign: 'middle',
+                                            width: '40px',
+                                            height: '40px',
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                )}
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -195,7 +197,7 @@ const Header = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {USERS_ITEMS.map(({ id, name, path }) => (
+                            {(loginStatus ? USERS_ITEMS : NON_USERS_ITEMS).map(({ id, name, path }) => (
                                 <MenuItem
                                     key={id}
                                     onClick={() => {
