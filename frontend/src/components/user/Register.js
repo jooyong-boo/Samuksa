@@ -20,7 +20,7 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 40%;
+    width: 40rem;
     height: 45rem;
     margin: 0 auto;
     display: flex;
@@ -29,6 +29,7 @@ const Card = styled.div`
     align-items: center;
     border-radius: 5px;
     border: 1px solid #eaeaea;
+    overflow: auto;
 `;
 
 const Register = () => {
@@ -50,34 +51,36 @@ const Register = () => {
 
     const onChange = (change, check, e) => {
         let inputChange = e.target.value;
-        let reg;
+        // let reg;
         if (check === id) {
-            reg = new RegExp(/^[a-z0-9]{4,12}$/);
-            if (reg.test(inputChange)) {
+            const IdReg = new RegExp(/^[a-z0-9]{4,12}$/);
+            if (IdReg.test(inputChange)) {
                 change(inputChange);
             }
         }
         if (check === nickName) {
-            reg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{2,6}$/);
-            if (reg.test(inputChange)) {
+            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{2,6}$/);
+            if (nickNameReg.test(inputChange)) {
                 change(inputChange);
             }
         }
         if (check === password) {
-            reg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
-            if (reg.test(inputChange)) {
+            const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            if (passwordReg.test(inputChange)) {
                 change(inputChange);
             }
         }
         if (check === passwordConfirm) {
-            reg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
-            if (reg.test(inputChange)) {
+            const passwordConfirmReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            if (passwordConfirmReg.test(inputChange)) {
                 change(inputChange);
             }
         }
         if (check === email) {
-            reg = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);
-            if (reg.test(inputChange)) {
+            const emailReg = new RegExp(
+                /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+            );
+            if (emailReg.test(inputChange)) {
                 setCheckEmail(true);
                 change(inputChange);
             } else {
@@ -131,7 +134,7 @@ const Register = () => {
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>아이디</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="id"
                                 variant="outlined"
                                 size="small"
                                 placeholder="아이디 입력"
@@ -165,7 +168,7 @@ const Register = () => {
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>닉네임</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="nickName"
                                 variant="outlined"
                                 size="small"
                                 placeholder="한글 또는 영문"
@@ -197,9 +200,10 @@ const Register = () => {
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="password"
                                 variant="outlined"
                                 size="small"
+                                type="password"
                                 placeholder="8자리 이상 영문, 숫자"
                                 autoComplete="off"
                                 onChange={(e) => {
@@ -209,9 +213,10 @@ const Register = () => {
                         </div>
                         <div style={{ paddingTop: '0.5rem' }}>
                             <TextField
-                                id="outlined-basic"
+                                id="passwordConfirm"
                                 variant="outlined"
                                 size="small"
+                                type="password"
                                 placeholder="비밀번호 확인"
                                 autoComplete="off"
                                 onChange={(e) => {
@@ -231,7 +236,7 @@ const Register = () => {
                                 variant="outlined"
                                 size="small"
                                 placeholder="이메일 형식을 지켜주세요"
-                                sx={{ width: '70%' }}
+                                // sx={{ width: '70%' }}
                                 onChange={(e) => {
                                     onChange(setEmail, email, e);
                                 }}
