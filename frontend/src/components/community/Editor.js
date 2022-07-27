@@ -1,14 +1,18 @@
-import { FormControl, Input, InputLabel, Paper } from '@mui/material';
+import { Button, FormControl, Input, InputLabel, Paper } from '@mui/material';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useRef } from 'react';
+import { Editor } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 const Background = styled.div`
     background-color: #ebecee;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
     padding-top: 70px;
     /* display: flex; */
@@ -20,40 +24,16 @@ const Background = styled.div`
     margin: auto;
 `;
 
-const modules = {
-    toolbar: [
-        [{ header: [1, 2, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-        ['link', 'image'],
-        ['clean'],
-    ],
-};
-
-const formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'indent',
-    'link',
-    'image',
-];
-
 const Writing = () => {
-    const [value, setValue] = useState('');
-
-    console.log(value);
-    const onValueChange = useEffect(() => {
-        setValue(value.normalize('NFC'));
-    }, [value]);
+    const onChange = () => {
+        const data = editorRef.current.getInstance().getHTML();
+        console.log(data);
+    };
+    const editorRef = useRef();
+    console.log(editorRef);
     return (
         <Background>
-            <Paper sx={{ height: '80%', width: '90%', margin: 'auto' }}>
+            <Paper sx={{ height: '40rem', width: '95rem', margin: 'auto' }}>
                 <AccountCircleIcon
                     sx={{
                         color: '#a2a5a9',
@@ -63,19 +43,29 @@ const Writing = () => {
                         cursor: 'pointer',
                     }}
                 />
-                {/* <label htmlFor="">제목</label>
-                <input type="text" /> */}
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                    <Input id="title" placeholder="제목" sx={{ width: '90%', fontSize: '2rem' }} />
+                    <Input id="title" placeholder="제목" sx={{ width: '40rem', fontSize: '2rem' }} />
                 </FormControl>
-                <ReactQuill
-                    theme="snow"
-                    value={value}
-                    onChange={onValueChange}
-                    formats={formats}
-                    modules={modules}
-                    style={{ height: '90%', verticalAlign: 'center', overflow: 'auto' }}
+                <Editor
+                    ref={editorRef}
+                    onChange={onChange}
+                    placeholder="내용을 입력해주세요."
+                    previewStyle="vertical" // 미리보기 스타일 지정
+                    height="600px" // 에디터 창 높이
+                    initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
+                    useCommandShortcut={false}
+                    hideModeSwitch="true"
+                    toolbarItems={[
+                        // 툴바 옵션 설정
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task', 'indent', 'outdent'],
+                        ['table', 'image', 'link'],
+                    ]}
+                    plugins={[colorSyntax]}
+                    // language="ko-KR"
                 />
+                <Button variant="contained">작성</Button>
             </Paper>
         </Background>
     );

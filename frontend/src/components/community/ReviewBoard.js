@@ -43,8 +43,9 @@ const theme = createTheme({
 });
 
 const tableTextStyle = {
-    padding: '8px 16px 8px 16px',
+    // padding: '8px 16px 8px 16px',
     color: '#5A5A5A',
+    textAlign: 'center',
 };
 
 const freeBoardHead = ['No', '제목', '글쓴이', '작성시간', '조회수'];
@@ -157,7 +158,7 @@ const FreeBoard = () => {
                                             '&:last-child td, &:last-child th': { border: 0 },
                                         }}
                                     >
-                                        <TableCell>{id}</TableCell>
+                                        <TableCell sx={tableTextStyle}>{id}</TableCell>
                                         <TableCell component="th" scope="row" sx={tableTextStyle}>
                                             {title}
                                         </TableCell>
