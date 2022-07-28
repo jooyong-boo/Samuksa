@@ -1,5 +1,6 @@
 import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/auth';
+import { getPosts } from '../api/post';
 
 export const personNumState = atom({
     key: 'personNumState',
@@ -81,6 +82,16 @@ export const getAreaState = selector({
     key: 'getAreaState',
     get: async ({ get }) => {
         const response = await getArea();
+        // console.log(response)
+        return response;
+    },
+});
+
+// 게시글 조회
+export const getPostState = selector({
+    key: 'getPostState',
+    get: async ({ get }) => {
+        const response = await getPosts();
         // console.log(response)
         return response;
     },
