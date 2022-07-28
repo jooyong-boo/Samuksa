@@ -236,7 +236,7 @@ const Register = () => {
                                 variant="outlined"
                                 size="small"
                                 placeholder="이메일 형식을 지켜주세요"
-                                // sx={{ width: '70%' }}
+                                sx={{ width: '14rem' }}
                                 onChange={(e) => {
                                     onChange(setEmail, email, e);
                                 }}
@@ -281,6 +281,7 @@ const Register = () => {
                                             boxShadow: 'none',
                                             marginTop: '0.2rem',
                                             ml: '0.5rem',
+                                            ':hover': { boxShadow: 'none' },
                                         }}
                                     >
                                         확인
