@@ -38,6 +38,11 @@ const Writing = () => {
     console.log(content);
     const onSave = ({ title, content }) => {
         const date = new Date();
+        const a = {
+            date: date,
+            title: title,
+            content: content,
+        };
     };
     const editorRef = useRef();
     // console.log(editorRef);
