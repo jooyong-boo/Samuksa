@@ -9,6 +9,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CommunityPage from './pages/CommunityPage';
 import WritingPage from './pages/WritingPage';
+import PostViewPage from './pages/PostViewPage';
 
 const theme = createTheme({
     typography: {
@@ -16,6 +17,11 @@ const theme = createTheme({
             "Pretendard, 'Noto Sans KR', nanumsquare ,sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen",
     },
 });
+
+if (process.env.NODE_ENV === 'production') {
+    console.log = function no_console() {};
+    console.warn = function no_console() {};
+}
 
 function App() {
     return (
@@ -28,6 +34,7 @@ function App() {
                     <Route path="/calculator" element={<CalculatorPage />} />
                     <Route path="/community" element={<CommunityPage />} />
                     <Route path="/write" element={<WritingPage />} />
+                    <Route path="/post" element={<PostViewPage />} />
                 </Routes>
             </Suspense>
         </ThemeProvider>
