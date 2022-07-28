@@ -422,7 +422,7 @@ const DetailedSearchConditions = () => {
                                     }}
                                     onClick={addCondition}
                                 >
-                                    조건을 선택해주세요
+                                    {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
                                 </Button>
                             )}
                         </div>
