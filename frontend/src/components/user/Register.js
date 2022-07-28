@@ -279,7 +279,7 @@ const Register = () => {
                                             backgroundColor: '#6EA5F8',
                                             color: 'white',
                                             boxShadow: 'none',
-                                            marginTop: '0.2rem',
+                                            marginTop: '0.2rem',[]
                                             ml: '0.5rem',
                                             ':hover': { boxShadow: 'none' },
                                         }}
