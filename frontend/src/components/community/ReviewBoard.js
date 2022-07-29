@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import usePagination from '@mui/material/usePagination/usePagination';
 import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -111,6 +112,9 @@ const dummy = [
 
 const FreeBoard = () => {
     const navigate = useNavigate();
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+    const offset = (page - 1) * limit;
 
     const goWriting = () => {
         navigate('/write');
@@ -145,16 +149,16 @@ const FreeBoard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody sx={{}}>
-                                {post.map((item) => {
+                                {post.slice(offset, offset + limit).map((item) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
                                         <TableRow
                                             key={id}
                                             sx={{
                                                 '&:last-child td, &:last-child th': { border: 0 },
-                                                // whiteSpace: 'nowrap',
-                                                // overflow: 'hidden',
-                                                // textOverflow: 'ellipsis',
+                                                ':hover': {
+                                                    backgroundColor: '#F4F4F4',
+                                                },
                                             }}
                                         >
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>

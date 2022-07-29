@@ -159,7 +159,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                         result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                             return (
-                                <Fade in={true} timeout={i * 100} key={i}>
+                                <Fade in={true} timeout={i * 50} key={i}>
                                     <CardContent
                                         onClick={() => {
                                             onRecommendClick(fishRecommendCombinations, combinationName);
