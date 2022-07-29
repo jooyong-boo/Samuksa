@@ -109,7 +109,16 @@ const Header = () => {
                     style={{ width: '95vw' }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2.5rem' }} />
+                        <SetMealIcon
+                            onClick={goMain}
+                            sx={{
+                                display: { xs: 'flex' },
+                                mr: 1,
+                                color: '#6EA5F8',
+                                fontSize: '2.5rem',
+                                cursor: 'pointer',
+                            }}
+                        />
                         <Typography
                             variant="h6"
                             component="a"
