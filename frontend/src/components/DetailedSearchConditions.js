@@ -51,7 +51,8 @@ const ListItemStyled = styled.div`
     background-color: white;
     height: 100%;
     border-bottom: 1px solid #f6f6f6;
-    &:hover {
+    cursor: pointer;
+    &:hover > div {
         background-color: #f4f4f4;
     }
 `;
@@ -259,7 +260,6 @@ const DetailedSearchConditions = () => {
                                                 <ListItemStyled
                                                     style={{
                                                         backgroundColor: active ? '#F8F8F8' : 'white',
-                                                        cursor: 'pointer',
                                                     }}
                                                     onClick={() => {
                                                         onToggle(fishInfoId, active);
@@ -281,7 +281,12 @@ const DetailedSearchConditions = () => {
                                                             }}
                                                         />
                                                     </ListItemAvatar>
-                                                    <ListItem sx={{ paddingLeft: 0 }}>
+                                                    <ListItem
+                                                        sx={{
+                                                            paddingLeft: 0,
+                                                            ':hover': { backgroundColor: '#f4f4f4' },
+                                                        }}
+                                                    >
                                                         <ListItemText
                                                             primary={fishName}
                                                             secondary={`(수율: ${fishYield}%)`}
