@@ -34,7 +34,7 @@ function App() {
                     <Route path="/calculator" element={<CalculatorPage />} />
                     <Route path="/community" element={<CommunityPage />} />
                     <Route path="/write" element={<WritingPage />} />
-                    <Route path="/post" element={<PostViewPage />} />
+                    <Route path="/post/:id" element={<PostViewPage />} />
                 </Routes>
             </Suspense>
         </ThemeProvider>
