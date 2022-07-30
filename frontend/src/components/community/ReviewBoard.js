@@ -1,7 +1,6 @@
 import {
     Button,
     createTheme,
-    Pagination,
     Paper,
     Stack,
     Table,
@@ -16,22 +15,21 @@ import {
 import usePagination from '@mui/material/usePagination/usePagination';
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getPostState } from '../../store/atom';
+import Pagination from './Pagination';
 
 const Background = styled.div`
     background-color: white;
     width: 95%;
     height: 90%;
-    padding-top: 30px;
-    padding-left: 30px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     overflow: hidden;
-    margin: 10px auto;
+    margin: auto;
 `;
 
 const theme = createTheme({
@@ -120,14 +118,16 @@ const FreeBoard = () => {
         navigate('/write');
     };
 
-    const [post, setPost] = useRecoilState(getPostState);
+    const [posts, setPost] = useRecoilState(getPostState);
 
-    console.log(post);
+    console.log(posts);
 
     return (
         <Background>
             <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
-                <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold' }}>리뷰게시판</Typography>
+                <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+                    리뷰게시판
+                </Typography>
                 <ThemeProvider theme={theme}>
                     <TableContainer
                         component={Paper}
@@ -149,7 +149,7 @@ const FreeBoard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody sx={{}}>
-                                {post.slice(offset, offset + limit).map((item) => {
+                                {posts.slice(offset, offset + limit).map((item) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
                                         <TableRow
@@ -163,7 +163,12 @@ const FreeBoard = () => {
                                         >
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
-                                                {title}
+                                                <Link
+                                                    to={`/post/${id}`}
+                                                    style={{ textDecoration: 'none', color: '#5A5A5A' }}
+                                                >
+                                                    {title}
+                                                </Link>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{createdAt}</TableCell>
@@ -176,7 +181,15 @@ const FreeBoard = () => {
                     </TableContainer>
                 </ThemeProvider>
                 <Stack spacing={2} sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
-                    <Pagination count={10} variant="outlined" color="primary" />
+                    <Pagination
+                        count={10}
+                        variant="outlined"
+                        color="primary"
+                        total={posts.length}
+                        limit={limit}
+                        page={page}
+                        setPage={setPage}
+                    />
                 </Stack>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
                     <Button
@@ -185,7 +198,7 @@ const FreeBoard = () => {
                             backgroundColor: '#6EA5F8',
                             color: 'white',
                             boxShadow: 'none',
-                            width: '10%',
+                            width: '15%',
                             ':hover': { boxShadow: 'none' },
                         }}
                         onClick={goWriting}
