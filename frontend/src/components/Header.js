@@ -69,6 +69,7 @@ const Header = () => {
     const goMain = () => {
         navigate('/');
         setNAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const goNavigate = (path) => {
