@@ -20,7 +20,7 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 40rem;
+    width: 30rem;
     height: 45rem;
     margin: 0 auto;
     display: flex;
@@ -34,7 +34,7 @@ const Card = styled.div`
 
 const Register = () => {
     const [id, setId] = useState('');
-    const [idOverlapping, setIdOverlapping] = useState('');
+    const [checkId, setCheckId] = useState(true);
 
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -44,7 +44,7 @@ const Register = () => {
     const [checkEmail, setCheckEmail] = useState(false);
 
     const [nickName, setNickName] = useState('');
-    const [nickNameOverlapping, setNickNameOverlapping] = useState('');
+    const [checkNickName, setCheckNickName] = useState(true);
 
     const [authNum, setAuthNum] = useState('');
     const [checkAuthNum, setCheckAuthNum] = useState(false);
@@ -56,6 +56,7 @@ const Register = () => {
             const IdReg = new RegExp(/^[a-z0-9]{4,12}$/);
             if (IdReg.test(inputChange)) {
                 change(inputChange);
+                setCheckId(true);
             }
         }
         if (check === nickName) {
@@ -92,7 +93,7 @@ const Register = () => {
 
     console.log(id, nickName, password, passwordConfirm, email);
 
-    const checkOverlapping = () => {};
+    const checkOverlappingId = () => {};
 
     const onClickAuth = () => {
         setCheckAuthNum(true);
@@ -118,7 +119,7 @@ const Register = () => {
         <>
             <Background>
                 <Card>
-                    <div style={{ width: '50%', textAlign: 'center' }}>
+                    <div style={{ width: '100%', textAlign: 'center' }}>
                         <Typography
                             sx={{
                                 fontSize: '1.5rem',
@@ -140,6 +141,7 @@ const Register = () => {
                                 placeholder="아이디 입력"
                                 autoComplete="off"
                                 // fullWidth
+                                color={checkId ? 'primary' : 'error'}
                                 sx={{}}
                                 onChange={(e) => {
                                     onChange(setId, id, e);
@@ -158,12 +160,15 @@ const Register = () => {
                             >
                                 중복체크
                             </Button>
-                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
-                                사용 가능한 아이디입니다.
-                            </Typography>
-                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
-                                이미 존재하는 아이디입니다.
-                            </Typography>
+                            {checkId ? (
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
+                                    사용 가능한 아이디입니다.
+                                </Typography>
+                            ) : (
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                    이미 존재하는 아이디입니다.
+                                </Typography>
+                            )}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>닉네임</Typography>
@@ -173,6 +178,7 @@ const Register = () => {
                                 size="small"
                                 placeholder="한글 또는 영문"
                                 autoComplete="off"
+                                color={checkNickName ? 'primary' : 'error'}
                                 onChange={(e) => {
                                     onChange(setNickName, nickName, e);
                                 }}
@@ -190,12 +196,15 @@ const Register = () => {
                             >
                                 중복체크
                             </Button>
-                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
-                                사용 가능한 닉네임입니다.
-                            </Typography>
-                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
-                                이미 존재하는 닉네임입니다.
-                            </Typography>
+                            {checkNickName ? (
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
+                                    사용 가능한 닉네임입니다.
+                                </Typography>
+                            ) : (
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                    이미 존재하는 닉네임입니다.
+                                </Typography>
+                            )}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
@@ -312,7 +321,7 @@ const Register = () => {
                                     backgroundColor: '#6EA5F8',
                                     color: 'white',
                                     boxShadow: 'none',
-                                    width: '100%',
+                                    width: '50%',
                                     ':hover': { boxShadow: 'none' },
                                 }}
                                 onClick={onSignUp}
