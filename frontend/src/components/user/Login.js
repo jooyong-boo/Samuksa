@@ -18,7 +18,7 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 30%;
+    width: 30rem;
     height: 35rem;
     margin: 0 auto;
     display: flex;
@@ -34,7 +34,7 @@ const Login = () => {
         <>
             <Background>
                 <Card>
-                    <div>
+                    <div style={{ width: '100%', textAlign: 'center' }}>
                         {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
                         <Typography
                             sx={{
@@ -72,11 +72,12 @@ const Login = () => {
                         </div>
                         <div
                             style={{
-                                display: 'flex',
+                                display: 'inline-flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                                 padding: '1.5rem 0',
                                 height: '20px',
+                                width: '40%',
                             }}
                         >
                             <Typography fontSize={12} color="#969696">
@@ -108,7 +109,7 @@ const Login = () => {
                                     backgroundColor: '#6EA5F8',
                                     color: 'white',
                                     boxShadow: 'none',
-                                    width: '100%',
+                                    width: '40%',
                                 }}
                             >
                                 로그인

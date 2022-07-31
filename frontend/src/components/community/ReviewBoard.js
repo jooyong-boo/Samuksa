@@ -59,6 +59,9 @@ const titleTextStyle = {
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
+    ':hover': {
+        fontWeight: 'bold',
+    },
 };
 
 const tableTopTextStyle = {
@@ -124,7 +127,7 @@ const FreeBoard = () => {
 
     return (
         <Background>
-            <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
+            <div style={{ width: '70%', textAlign: 'center', margin: 'auto', padding: '5rem' }}>
                 <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
                     리뷰게시판
                 </Typography>

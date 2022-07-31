@@ -2,11 +2,11 @@ import React from 'react';
 import { Viewer } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styled from 'styled-components';
-import { Paper } from '@mui/material';
+import { Button, Paper, Typography } from '@mui/material';
 // import { getPostsId } from '../../api/post';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Background = styled.div`
@@ -24,10 +24,11 @@ const Background = styled.div`
 `;
 
 const PostViewer = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState('');
 
     const { id } = useParams();
-    console.log(id);
+    // console.log(id);
 
     const getPostsId = async (id) => {
         try {
@@ -41,15 +42,23 @@ const PostViewer = () => {
     useEffect(() => {
         getPostsId(id);
     }, []);
-    console.log(data);
+    // console.log(data);
+
+    const goList = () => {
+        navigate(-1);
+    };
+
+    const html = '<h3> html 헤더 <span style="color:blue;">파란색</span></h3>';
 
     return (
         <Background>
-            <Paper sx={{ height: '95%', width: '95rem', margin: 'auto', marginTop: '30px', padding: '20px' }}>
-                <Viewer initiasValue={data.title} />
-                <div>{data.title}</div>
-                <div>{data.content}</div>
-                <div>{data.createdAt}</div>
+            <Paper sx={{ height: '95%', width: '50rem', margin: 'auto', marginTop: '30px', padding: '20px' }}>
+                <Typography>제목: {data.title}</Typography>
+                {data !== '' ? <Viewer initialValue={data.content} /> : null}
+                <Typography>날짜: {data.createdAt}</Typography>
+                <Button variant="contained" onClick={goList}>
+                    목록
+                </Button>
             </Paper>
         </Background>
     );
