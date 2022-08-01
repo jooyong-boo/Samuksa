@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import TopScrollBtn from './TopScrollBtn';
+import TopScrollBtn from './common/TopScrollBtn';
 import image from '../components/assets/img/mainImage.jpg';
 import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { getAreaTotalFishData } from '../api/auth';

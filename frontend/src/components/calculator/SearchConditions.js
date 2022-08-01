@@ -28,9 +28,9 @@ import {
     selectFishState,
     selectState,
     totalAmountState,
-} from '../store/atom';
+} from '../../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
-import { getAreaTotalFishData } from '../api/auth';
+import { getAreaTotalFishData } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';

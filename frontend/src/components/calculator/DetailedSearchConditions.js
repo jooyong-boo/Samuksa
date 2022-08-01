@@ -29,8 +29,8 @@ import {
     selectConditions,
     selectFishNameState,
     selectFishState,
-} from '../store/atom';
-import { getFarmType } from '../api/auth';
+} from '../../store/atom';
+import { getFarmType } from '../../api/auth';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
