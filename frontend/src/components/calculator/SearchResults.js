@@ -1,27 +1,12 @@
-import {
-    Avatar,
-    AvatarGroup,
-    Button,
-    CardContent,
-    Fade,
-    Grid,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Paper,
-    Typography,
-    Zoom,
-} from '@mui/material';
-import { height } from '@mui/system';
+import { Avatar, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
-import { useCallback } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import styled, { css, keyframes } from 'styled-components';
-import image from '../components/assets/img/contemplative-reptile.jpeg';
-import { fishDataState, recommendListState, selectConditions } from '../store/atom';
-import Spinner from '../components/assets/spinner/Spinner.gif';
+import styled from 'styled-components';
+import image from '../../components/assets/img/contemplative-reptile.jpeg';
+import { fishDataState, recommendListState, selectConditions } from '../../store/atom';
+import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';

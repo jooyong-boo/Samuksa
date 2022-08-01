@@ -1,28 +1,16 @@
-import {
-    Avatar,
-    Button,
-    ButtonBase,
-    CardActions,
-    CardContent,
-    Checkbox,
-    FormControl,
-    Grid,
-    Input,
-    InputAdornment,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Paper,
-    Slide,
-    Slider,
-    Typography,
-} from '@mui/material';
+import { Avatar, Button, CardActions, CardContent, Slide, Typography } from '@mui/material';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import { areaState, isLoading, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
+import {
+    areaState,
+    isLoading,
+    moneyState,
+    personNumState,
+    recommendListState,
+    selectConditions,
+} from '../../store/atom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { getFishRecommendData } from '../api/auth';
+import { getFishRecommendData } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';
