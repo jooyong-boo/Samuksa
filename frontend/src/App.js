@@ -1,6 +1,6 @@
 import './App.css';
 import React, { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import { createTheme, ThemeProvider } from '@mui/material';
 import CalculatorPage from './pages/CalculatorPage';
@@ -34,12 +34,14 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/calculator" element={<CalculatorPage />} />
-                    <Route path="/board/*" element={<BoardPage />}>
+                    <Route path="/board" element={<BoardPage />}>
                         <Route path="review" element={<ReviewPage />} />
                         <Route path="tip" element={<TipPage />} />
+                        <Route path="review/post/:id" element={<PostViewPage />} />
+                        <Route path="tip/post/:id" element={<PostViewPage />} />
                     </Route>
                     <Route path="/write" element={<WritingPage />} />
-                    <Route path="/post/:id" element={<PostViewPage />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
             </Suspense>
         </ThemeProvider>
