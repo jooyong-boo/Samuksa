@@ -29,8 +29,8 @@ const Header = () => {
         },
         {
             id: 2,
-            name: '시세 검색',
-            path: '/',
+            name: '회원가입',
+            path: '/register',
         },
         {
             id: 3,
@@ -76,21 +76,23 @@ const Header = () => {
         navigate(`${path}`);
     };
 
-    // const goAccount = () => {
-    //     navigate('/login');
-    // };
-
-    // const goCommunity = () => {
-    //     navigate('/community');
-    // };
+    useEffect(() => {
+        if (location.pathname === '/board') {
+            navigate('/board/review');
+        }
+    }, [location]);
 
     useEffect(() => {
         setNAV_ITEMS(
             NAV_ITEMS.map((item) =>
-                location.pathname === item.path ? { ...item, active: true } : { ...item, active: false },
+                location.pathname === item.path || location.pathname.includes(`${item.path}`)
+                    ? { ...item, active: true }
+                    : { ...item, active: false },
             ),
         );
     }, [location]);
+
+    console.log(location);
 
     const [anchorElUser, setAnchorElUser] = useState(null);
 
