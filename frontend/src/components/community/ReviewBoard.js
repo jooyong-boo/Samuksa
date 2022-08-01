@@ -30,6 +30,7 @@ const Background = styled.div`
     flex-direction: row;
     overflow: hidden;
     margin: auto;
+    padding: 40px;
 `;
 
 const theme = createTheme({
@@ -48,12 +49,14 @@ const tableTextStyle = {
     padding: '8px 16px 8px 16px',
     color: '#5A5A5A',
     textAlign: 'center',
+    fontSize: '0.9rem',
     // maxWidth: '800px',
 };
 
 const titleTextStyle = {
     padding: '8px 16px 8px 16px',
     color: '#5A5A5A',
+    fontSize: '0.9rem',
     textAlign: 'center',
     maxWidth: '200px',
     textOverflow: 'ellipsis',
@@ -67,7 +70,7 @@ const titleTextStyle = {
 const tableTopTextStyle = {
     color: '#5A5A5A',
     textAlign: 'center',
-    fontSize: '14px',
+    fontSize: '1rem',
     padding: '16px 0px',
 };
 
@@ -111,7 +114,7 @@ const dummy = [
     },
 ];
 
-const FreeBoard = () => {
+const ReviewBoard = () => {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
@@ -123,14 +126,12 @@ const FreeBoard = () => {
 
     const [posts, setPost] = useRecoilState(getPostState);
 
-    console.log(posts);
+    // console.log(posts);
 
     return (
         <Background>
-            <div style={{ width: '70%', textAlign: 'center', margin: 'auto', padding: '5rem' }}>
-                <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-                    리뷰게시판
-                </Typography>
+            <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
+                <Typography sx={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>리뷰게시판</Typography>
                 <ThemeProvider theme={theme}>
                     <TableContainer
                         component={Paper}
@@ -214,4 +215,4 @@ const FreeBoard = () => {
     );
 };
 
-export default FreeBoard;
+export default ReviewBoard;
