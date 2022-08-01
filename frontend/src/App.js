@@ -5,11 +5,13 @@ import Loading from './components/Loading';
 import { createTheme, ThemeProvider } from '@mui/material';
 import CalculatorPage from './pages/CalculatorPage';
 import MainPage from './pages/MainPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import CommunityPage from './pages/CommunityPage';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import BoardPage from './pages/board/BoardPage';
 import WritingPage from './pages/WritingPage';
 import PostViewPage from './pages/PostViewPage';
+import ReviewPage from './pages/board/ReviewPage';
+import TipPage from './pages/board/TipPage';
 
 const theme = createTheme({
     typography: {
@@ -32,7 +34,10 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/calculator" element={<CalculatorPage />} />
-                    <Route path="/community" element={<CommunityPage />} />
+                    <Route path="/board/*" element={<BoardPage />}>
+                        <Route path="review" element={<ReviewPage />} />
+                        <Route path="tip" element={<TipPage />} />
+                    </Route>
                     <Route path="/write" element={<WritingPage />} />
                     <Route path="/post/:id" element={<PostViewPage />} />
                 </Routes>

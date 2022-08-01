@@ -2,6 +2,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import ReviewBoard from './ReviewBoard';
 import TipBoard from './TipBoard';
@@ -11,27 +12,30 @@ const Background = styled.div`
     width: 100%;
     height: 100vh;
     padding-top: 70px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
     overflow: hidden;
     margin: auto;
 `;
 
-const CommunityBoard = () => {
+const Board = () => {
     const [value, setValue] = useState(0);
-    const [selectTab, setSelectTab] = useState('자유게시판');
+    const [selectTab, setSelectTab] = useState('리뷰게시판');
+    const navigate = useNavigate();
 
     const tab = [
         {
             id: 0,
             label: '리뷰게시판',
+            path: '/board/review',
         },
         {
             id: 1,
             label: '꿀TIP게시판',
+            path: '/board/tip',
         },
     ];
 
@@ -42,7 +46,10 @@ const CommunityBoard = () => {
     const onChangeTab = (label, id) => {
         setSelectTab(...tab.filter((item) => item.id === id));
     };
-    console.log(selectTab);
+
+    const changePage = (path) => {
+        navigate(path);
+    };
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -50,24 +57,25 @@ const CommunityBoard = () => {
 
     return (
         <Background>
-            <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white' }}>
+            <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white', margin: 'auto' }}>
                 <Tabs value={value} onChange={handleChange} centered>
-                    {tab.map(({ id, label }) => {
+                    {tab.map(({ id, label, path }) => {
                         return (
                             <Tab
                                 label={label}
                                 key={id}
                                 onClick={() => {
                                     onChangeTab(label, id);
+                                    changePage(path);
                                 }}
                             />
                         );
                     })}
                 </Tabs>
-                {selectTab.label === '리뷰게시판' ? <ReviewBoard /> : <TipBoard />}
+                <Outlet />
             </Box>
         </Background>
     );
 };
 
-export default CommunityBoard;
+export default Board;

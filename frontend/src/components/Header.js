@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import Logo from '../img/SAMUKSA.png';
+import Logo from '../components/assets/img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Avatar, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
@@ -35,7 +35,7 @@ const Header = () => {
         {
             id: 3,
             name: '게시판',
-            path: '/community',
+            path: '/board',
         },
     ]);
 
