@@ -20,7 +20,6 @@ import {
 } from '@mui/material';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import image from '../components/assets/img/contemplative-reptile.jpeg';
 import { areaState, isLoading, moneyState, personNumState, recommendListState, selectConditions } from '../store/atom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getFishRecommendData } from '../api/auth';
