@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import TopScrollBtn from './TopScrollBtn';
-import image from '../img/mainImage.jpg';
+import image from '../components/assets/img/mainImage.jpg';
 import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { getAreaTotalFishData } from '../api/auth';
 import { useRecoilState, useRecoilValue } from 'recoil';

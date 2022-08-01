@@ -1,6 +1,6 @@
 import React from 'react';
-import {Background, LoadingText} from './Styles';
-import Spinner from '../spinner/Spinner.gif';
+import { Background, LoadingText } from './Styles';
+import Spinner from '../components/assets/spinner/Spinner.gif';
 
 const Loading = () => {
     return (
