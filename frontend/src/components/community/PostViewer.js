@@ -10,9 +10,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Background = styled.div`
-    background-color: #ebecee;
-    width: 100vw;
-    height: 100vh;
+    background-color: white;
+    width: 95%;
+    height: 90%;
     padding-top: 70px;
     /* display: flex; */
     /* flex-wrap: wrap; */
@@ -48,11 +48,9 @@ const PostViewer = () => {
         navigate(-1);
     };
 
-    const html = '<h3> html 헤더 <span style="color:blue;">파란색</span></h3>';
-
     return (
         <Background>
-            <Paper sx={{ height: '95%', width: '50rem', margin: 'auto', marginTop: '30px', padding: '20px' }}>
+            <Paper sx={{ height: '95%', width: '80%', margin: 'auto', marginTop: 'auto' }}>
                 <Typography>제목: {data.title}</Typography>
                 {data !== '' ? <Viewer initialValue={data.content} /> : null}
                 <Typography>날짜: {data.createdAt}</Typography>
