@@ -168,7 +168,7 @@ const ReviewBoard = () => {
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
                                                 <Link
-                                                    to={`/post/${id}`}
+                                                    to={`post/${id}`}
                                                     style={{ textDecoration: 'none', color: '#5A5A5A' }}
                                                 >
                                                     {title}
