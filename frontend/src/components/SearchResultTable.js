@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import image from '../img/contemplative-reptile.jpeg';
+import image from '../components/assets/img/contemplative-reptile.jpeg';
 import { Avatar, Button, createTheme, ThemeProvider, Typography } from '@mui/material';
 
 const Img = styled('img')({
