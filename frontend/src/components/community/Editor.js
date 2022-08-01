@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, InputLabel, Paper } from '@mui/material';
+import { Button, FormControl, Input, InputLabel, MenuItem, Paper, Select } from '@mui/material';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
@@ -25,9 +25,22 @@ const Background = styled.div`
     margin: auto;
 `;
 
+const ITEM_HEIGHT = 45;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 100,
+        },
+    },
+};
+const totalBoard = ['리뷰게시판', '꿀팁게시판'];
+
 const Writing = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [board, setBoard] = useState('리뷰게시판');
     const onTitleChange = (e) => {
         setTitle(e.target.value);
     };
@@ -48,7 +61,16 @@ const Writing = () => {
     // console.log(editorRef);
     return (
         <Background>
-            <Paper sx={{ height: '95%', width: '95rem', margin: 'auto', marginTop: '30px', padding: '20px' }}>
+            <Paper
+                sx={{
+                    height: '95%',
+                    width: '95rem',
+                    margin: 'auto',
+                    marginTop: '30px',
+                    padding: '20px',
+                    overflow: 'auto',
+                }}
+            >
                 <AccountCircleIcon
                     sx={{
                         color: '#a2a5a9',
@@ -59,6 +81,27 @@ const Writing = () => {
                     }}
                 />{' '}
                 유저정보 보이는곳
+                <FormControl fullWidth>
+                    <Select
+                        labelId="local"
+                        // label="지역"
+                        defaultValue={'리뷰게시판'}
+                        value={board}
+                        MenuProps={MenuProps}
+                        placeholder="게시판 선택"
+                        // fullWidth
+                        onChange={(e) => {
+                            setBoard(e.target.value);
+                        }}
+                        sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8', width: '10rem' }}
+                    >
+                        {totalBoard.map((val) => (
+                            <MenuItem key={val} value={val}>
+                                {val}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <FormControl fullWidth sx={{ m: 1 }} variant="standard">
                     <Input
                         id="title"
