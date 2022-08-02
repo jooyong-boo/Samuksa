@@ -92,7 +92,7 @@ const Header = () => {
         );
     }, [location]);
 
-    console.log(location);
+    // console.log(location);
 
     const [anchorElUser, setAnchorElUser] = useState(null);
 

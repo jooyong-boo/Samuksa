@@ -14,7 +14,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
         for (let i = 1; i <= numPages; i++) {
             pageArray.push(i);
         }
-        setTotalPage(pageArray);
+        setTotalPage([...pageArray]);
     }, [numPages]);
 
     let pageArr = [];
@@ -27,9 +27,9 @@ const Pagination = ({ total, limit, page, setPage }) => {
 
     useEffect(() => {
         setCurrentGroup(pagination(pageArr)[Math.floor((page - 1) / 10)]);
-    }, [page]);
+    }, [totalPage, page]);
 
-    console.log(currentGroup);
+    // console.log(currentGroup);
 
     return (
         <nav>
