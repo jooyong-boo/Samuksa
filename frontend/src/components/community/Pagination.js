@@ -1,10 +1,35 @@
 import { List } from '@mui/material';
 import usePagination from '@mui/material/usePagination/usePagination';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const Pagination = ({ total, limit, page, setPage }) => {
     const numPages = Math.ceil(total / limit);
+    const [totalPage, setTotalPage] = useState([]);
+    const [currentGroup, setCurrentGroup] = useState([]);
+
+    let pageArray = [];
+    useEffect(() => {
+        for (let i = 1; i <= numPages; i++) {
+            pageArray.push(i);
+        }
+        setTotalPage(pageArray);
+    }, [numPages]);
+
+    let pageArr = [];
+    const pagination = () => {
+        for (let i = 0; i < totalPage.length; i += 10) {
+            pageArr.push(totalPage.slice(i, i + 10));
+        }
+        return pageArr;
+    };
+
+    useEffect(() => {
+        setCurrentGroup(pagination(pageArr)[Math.floor((page - 1) / 10)]);
+    }, [page]);
+
+    console.log(currentGroup);
 
     return (
         <nav>
@@ -12,15 +37,10 @@ const Pagination = ({ total, limit, page, setPage }) => {
                 <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
                     &lt;
                 </Button>
-                {Array(numPages)
-                    .fill()
-                    .map((_, i) => (
-                        <Button
-                            key={i + 1}
-                            onClick={() => setPage(i + 1)}
-                            aria-current={page === i + 1 ? 'page' : null}
-                        >
-                            {i + 1}
+                {currentGroup &&
+                    currentGroup.map((btn, i) => (
+                        <Button key={btn} onClick={() => setPage(btn)} aria-current={page === btn ? 'page' : null}>
+                            {btn}
                         </Button>
                     ))}
                 <Button onClick={() => setPage(page + 1)} disabled={page === numPages}>
@@ -33,12 +53,13 @@ const Pagination = ({ total, limit, page, setPage }) => {
 
 const Button = styled.button`
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 8px;
     margin: 0;
     background: #6ea5f8;
     color: white;
     font-size: 1rem;
+    margin: 0 1px;
 
     &:hover {
         background: #6ea5f8;
