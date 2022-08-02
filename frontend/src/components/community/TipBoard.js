@@ -30,7 +30,7 @@ const Background = styled.div`
     flex-direction: row;
     overflow: hidden;
     margin: auto;
-    padding: 40px;
+    padding: 30px;
 `;
 
 const theme = createTheme({
