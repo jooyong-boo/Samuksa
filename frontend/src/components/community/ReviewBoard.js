@@ -12,7 +12,6 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import usePagination from '@mui/material/usePagination/usePagination';
 import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -30,7 +29,7 @@ const Background = styled.div`
     flex-direction: row;
     overflow: hidden;
     margin: auto;
-    padding: 40px;
+    padding: 30px;
 `;
 
 const theme = createTheme({
@@ -75,44 +74,6 @@ const tableTopTextStyle = {
 };
 
 const freeBoardHead = ['No', '제목', '글쓴이', '작성시간', '조회수'];
-
-const dummy = [
-    {
-        id: 1,
-        title: '안녕하세요',
-        author: '아무개',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 12,
-    },
-    {
-        id: 2,
-        title: '반갑습니다',
-        author: '광어킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 21,
-    },
-    {
-        id: 3,
-        title: '이거',
-        author: '우럭킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 222,
-    },
-    {
-        id: 4,
-        title: '어떻게',
-        author: '참돔킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 32,
-    },
-    {
-        id: 5,
-        title: '먹나요',
-        author: '돌돔킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 52,
-    },
-];
 
 const ReviewBoard = () => {
     const navigate = useNavigate();
@@ -168,7 +129,7 @@ const ReviewBoard = () => {
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
                                                 <Link
-                                                    to={`/post/${id}`}
+                                                    to={`post/${id}`}
                                                     style={{ textDecoration: 'none', color: '#5A5A5A' }}
                                                 >
                                                     {title}
@@ -184,16 +145,8 @@ const ReviewBoard = () => {
                         </Table>
                     </TableContainer>
                 </ThemeProvider>
-                <Stack spacing={2} sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
-                    <Pagination
-                        count={10}
-                        variant="outlined"
-                        color="primary"
-                        total={posts.length}
-                        limit={limit}
-                        page={page}
-                        setPage={setPage}
-                    />
+                <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
+                    <Pagination total={posts.length} limit={limit} page={page} setPage={setPage} />
                 </Stack>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
                     <Button

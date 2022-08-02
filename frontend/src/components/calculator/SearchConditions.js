@@ -122,7 +122,6 @@ const SearchConditions = () => {
     };
 
     const onReset = (e) => {
-        e.preventDefault();
         setPersonNum('');
         setMoney(50000);
         setArea('노량진');
@@ -144,6 +143,10 @@ const SearchConditions = () => {
                 ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false))
                 : (dismissAll(), notify('해당 가격으론 찾을 수 있는 조합이 없어요!')),
         );
+    };
+
+    const moveTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -291,7 +294,10 @@ const SearchConditions = () => {
                             />
                             <Button
                                 variant="outlined"
-                                onClick={onReset}
+                                onClick={() => {
+                                    onReset();
+                                    moveTop();
+                                }}
                                 sx={{
                                     width: '40%',
                                     borderRadius: '5px',

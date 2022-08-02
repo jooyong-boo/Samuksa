@@ -30,7 +30,7 @@ const Background = styled.div`
     flex-direction: row;
     overflow: hidden;
     margin: auto;
-    padding: 40px;
+    padding: 30px;
 `;
 
 const theme = createTheme({
@@ -168,7 +168,7 @@ const TipBoard = () => {
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
                                                 <Link
-                                                    to={`/post/${id}`}
+                                                    to={`post/${id}`}
                                                     style={{ textDecoration: 'none', color: '#5A5A5A' }}
                                                 >
                                                     {title}

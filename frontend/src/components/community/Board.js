@@ -11,7 +11,7 @@ const Background = styled.div`
     background-color: #ebecee;
     width: 100%;
     height: 100vh;
-    padding-top: 70px;
+    padding-top: 100px;
     /* display: flex; */
     /* flex-wrap: wrap; */
     /* flex-direction: column; */

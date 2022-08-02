@@ -68,6 +68,7 @@ const Login = () => {
                                 variant="outlined"
                                 size="small"
                                 placeholder="비밀번호 입력"
+                                autoComplete="off"
                             />
                         </div>
                         <div
