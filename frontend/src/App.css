@@ -63,3 +63,8 @@ body::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
 }
+
+/* // quill 툴바 2번 나오는 오류 */
+.quill > .ql-toolbar:first-child {
+    display: none !important;
+}

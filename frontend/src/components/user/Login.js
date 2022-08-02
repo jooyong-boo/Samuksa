@@ -2,7 +2,6 @@ import { Button, Checkbox, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from '../Header';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -19,8 +18,8 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 30%;
-    height: 65%;
+    width: 30rem;
+    height: 35rem;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -33,10 +32,9 @@ const Card = styled.div`
 const Login = () => {
     return (
         <>
-            <Header />
             <Background>
                 <Card>
-                    <div>
+                    <div style={{ width: '100%', textAlign: 'center' }}>
                         {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
                         <Typography
                             sx={{
@@ -70,19 +68,22 @@ const Login = () => {
                                 variant="outlined"
                                 size="small"
                                 placeholder="비밀번호 입력"
+                                autoComplete="off"
                             />
                         </div>
                         <div
                             style={{
-                                display: 'flex',
+                                display: 'inline-flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                                 padding: '1.5rem 0',
                                 height: '20px',
+                                width: '40%',
                             }}
                         >
                             <Typography fontSize={12} color="#969696">
-                                <button
+                                <input
+                                    type="checkbox"
                                     style={{
                                         width: '16px',
                                         height: '16px',
@@ -109,7 +110,7 @@ const Login = () => {
                                     backgroundColor: '#6EA5F8',
                                     color: 'white',
                                     boxShadow: 'none',
-                                    width: '100%',
+                                    width: '40%',
                                 }}
                             >
                                 로그인

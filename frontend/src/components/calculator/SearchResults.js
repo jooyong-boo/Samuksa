@@ -1,27 +1,12 @@
-import {
-    Avatar,
-    AvatarGroup,
-    Button,
-    CardContent,
-    Fade,
-    Grid,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Paper,
-    Typography,
-    Zoom,
-} from '@mui/material';
-import { height } from '@mui/system';
+import { Avatar, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
-import { useCallback } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import styled, { css, keyframes } from 'styled-components';
-import image from '../img/contemplative-reptile.jpeg';
-import { fishDataState, recommendListState, selectConditions } from '../store/atom';
-import Spinner from '../spinner/Spinner.gif';
+import styled from 'styled-components';
+import image from '../../components/assets/img/contemplative-reptile.jpeg';
+import { fishDataState, recommendListState, selectConditions } from '../../store/atom';
+import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
@@ -134,10 +119,10 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
     };
 
     const addBookmark = (item) => {
-        localStorage.setItem('bookmark', JSON.stringify(selectEstimate));
+        // let localStorageBookmark = JSON.parse(localStorage.getItem('bookmark'));
+        // localStorageBookmark.push(item);
+        localStorage.setItem('bookmark', JSON.stringify(item));
     };
-
-    console.log(selectEstimate);
 
     // console.log(localStorage.length);
 
@@ -159,7 +144,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                         result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                             return (
-                                <Fade in={true} timeout={i * 100} key={i}>
+                                <Fade in={true} timeout={i * 50} key={i}>
                                     <CardContent
                                         onClick={() => {
                                             onRecommendClick(fishRecommendCombinations, combinationName);
@@ -348,35 +333,49 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                     overflow: 'auto',
                                 }}
                             >
-                                <div>
-                                    <Typography
-                                        sx={{
-                                            color: '#010000',
-                                            paddingTop: '18px',
-                                            fontWeight: 'bold',
-                                            fontSize: '16px',
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            width: '250px',
                                         }}
                                     >
-                                        수산물 견적
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            color: '#949494',
-                                            fontSize: '11px',
-                                            mb: '11px',
-                                        }}
-                                    >
-                                        실제 시세과 상이할 수 있습니다.
-                                    </Typography>
-                                </div>
-                                <div style={{ verticalAlign: 'middle' }}>
-                                    <BookmarkBorderIcon
-                                        fontSize="large"
-                                        onClick={addBookmark(selectEstimate)}
-                                        sx={{ cursor: 'pointer' }}
-                                    />
-                                    <BookmarkAddedIcon fontSize="medium" />
+                                        <Typography
+                                            sx={{
+                                                color: '#010000',
+                                                paddingTop: '18px',
+                                                fontWeight: 'bold',
+                                                fontSize: '16px',
+                                            }}
+                                        >
+                                            수산물 견적
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                color: '#949494',
+                                                fontSize: '11px',
+                                                mb: '11px',
+                                            }}
+                                        >
+                                            실제 시세과 상이할 수 있습니다.
+                                        </Typography>
+                                    </div>
+                                    <div style={{ width: '120px', display: 'flex', justifyContent: 'flex-end' }}>
+                                        {/* {localStorage.getItem('boomark').} */}
+                                        <BookmarkBorderIcon
+                                            fontSize="large"
+                                            onClick={addBookmark(selectEstimate)}
+                                            sx={{ cursor: 'pointer' }}
+                                        />
+                                        <BookmarkAddedIcon fontSize="medium" />
+                                    </div>
                                 </div>
                                 <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
                             </div>

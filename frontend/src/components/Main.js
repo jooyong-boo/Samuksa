@@ -1,21 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import Header from './Header';
-import TopScrollBtn from './TopScrollBtn';
-import image from '../img/mainImage.jpg';
-import {
-    Box,
-    Button,
-    Container,
-    FormControl,
-    Grid,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import TopScrollBtn from './common/TopScrollBtn';
+import image from '../components/assets/img/mainImage.jpg';
+import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { getAreaTotalFishData } from '../api/auth';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -28,7 +15,6 @@ import {
 } from '../store/atom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 
@@ -49,7 +35,7 @@ const Background = styled.div`
     margin: auto;
 `;
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
     PaperProps: {
@@ -134,8 +120,9 @@ const Main = () => {
                     <Typography
                         sx={{
                             fontSize: '54px',
+                            fontWeight: '900',
                             color: 'white',
-                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
+                            textShadow: '-1px 0px #A7A7A7, 0px 1px #A7A7A7, 1px 0px #A7A7A7, 0px -1px #A7A7A7',
                         }}
                     >
                         모두가 편히 떠먹는 그날까지,
@@ -144,6 +131,7 @@ const Main = () => {
                         sx={{
                             fontSize: '54px',
                             color: '#6EA5F8',
+                            fontWeight: '900',
                             textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
                             marginLeft: '5px',
                         }}
@@ -155,6 +143,7 @@ const Main = () => {
                     sx={{
                         fontSize: '25px',
                         color: 'white',
+                        fontWeight: '600',
                         textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
                         marginBottom: '2rem',
                     }}

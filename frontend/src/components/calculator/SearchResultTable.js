@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import image from '../img/contemplative-reptile.jpeg';
+import image from '../../components/assets/img/contemplative-reptile.jpeg';
 import { Avatar, Button, createTheme, ThemeProvider, Typography } from '@mui/material';
 
 const Img = styled('img')({
@@ -183,7 +183,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                             marginBottom: 6,
                         }}
                     >
-                        <Typography
+                        {/* <Typography
                             sx={{
                                 fontSize: 14,
                                 fontWeight: 'medium',
@@ -192,7 +192,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                         >
                             총 순살무게:{' '}
                         </Typography>
-                        <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>?</Typography>
+                        <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>?</Typography> */}
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Typography

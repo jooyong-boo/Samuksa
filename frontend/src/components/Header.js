@@ -9,12 +9,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
-import { NavLink, useNavigate } from 'react-router-dom';
-import Logo from '../img/SAMUKSA.png';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import Logo from '../components/assets/img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Avatar, Tooltip } from '@mui/material';
+import { useEffect } from 'react';
+
+// const settings = ['프로필', '회원정보', '게시판', '로그인'];
 
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
         {
@@ -24,36 +29,80 @@ const Header = () => {
         },
         {
             id: 2,
-            name: '시세 검색',
-            path: '/',
+            name: '회원가입',
+            path: '/register',
+        },
+        {
+            id: 3,
+            name: '게시판',
+            path: '/board',
         },
     ]);
+
+    const [loginStatus, setLoginStatus] = useState(false);
+    const USERS_ITEMS = [
+        {
+            id: 1,
+            name: '로그아웃',
+            path: '/',
+        },
+        {
+            id: 2,
+            name: '프로필',
+            path: '/',
+        },
+        {
+            id: 3,
+            name: '회원 정보',
+            path: '/',
+        },
+    ];
+
+    const NON_USERS_ITEMS = [
+        {
+            id: 1,
+            name: '로그인',
+            path: '/login',
+        },
+    ];
 
     const goMain = () => {
         navigate('/');
         setNAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const goAccount = () => {
-        navigate('/login');
+    const goNavigate = (path) => {
+        navigate(`${path}`);
     };
 
-    const onClick = useCallback((id) => {
+    useEffect(() => {
+        if (location.pathname === '/board') {
+            navigate('/board/review');
+        }
+    }, [location]);
+
+    useEffect(() => {
         setNAV_ITEMS(
-            NAV_ITEMS.map((item) => (item.id === id ? { ...item, active: true } : { ...item, active: false })),
+            NAV_ITEMS.map((item) =>
+                location.pathname === item.path || location.pathname.includes(`${item.path}`)
+                    ? { ...item, active: true }
+                    : { ...item, active: false },
+            ),
         );
-    }, []);
+    }, [location]);
 
-    // const onToggle = (id) => {
-    //     setFarmStatus([]);
-    //     setFish(
-    //         fish.map((fish) =>
-    //             fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false },
-    //         ),
-    //     );
+    // console.log(location);
 
-    //     // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
-    // };
+    const [anchorElUser, setAnchorElUser] = useState(null);
+
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -63,7 +112,16 @@ const Header = () => {
                     style={{ width: '95vw' }}
                 >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <SetMealIcon sx={{ display: { xs: 'flex' }, mr: 1, color: '#6EA5F8', fontSize: '2.5rem' }} />
+                        <SetMealIcon
+                            onClick={goMain}
+                            sx={{
+                                display: { xs: 'flex' },
+                                mr: 1,
+                                color: '#6EA5F8',
+                                fontSize: '2.5rem',
+                                cursor: 'pointer',
+                            }}
+                        />
                         <Typography
                             variant="h6"
                             component="a"
@@ -96,9 +154,9 @@ const Header = () => {
                                 >
                                     <NavLink
                                         to={`${path}`}
-                                        onClick={() => {
-                                            onClick(id);
-                                        }}
+                                        // onClick={() => {
+                                        //     onClick(id);
+                                        // }}
                                         style={{
                                             textDecoration: 'none',
                                             color: '#7A7A7A',
@@ -110,16 +168,61 @@ const Header = () => {
                                 </Typography>
                             );
                         })}
-                        <AccountCircleIcon
-                            onClick={goAccount}
-                            sx={{
-                                color: '#6EA5F8',
-                                verticalAlign: 'middle',
-                                width: '30px',
-                                height: '40px',
-                                cursor: 'pointer',
+                        <Tooltip title="User">
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                {loginStatus ? (
+                                    <AccountCircleIcon
+                                        sx={{
+                                            color: '#6EA5F8',
+                                            verticalAlign: 'middle',
+                                            width: '40px',
+                                            height: '40px',
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                ) : (
+                                    <AccountCircleIcon
+                                        sx={{
+                                            color: '#a2a5a9',
+                                            verticalAlign: 'middle',
+                                            width: '40px',
+                                            height: '40px',
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                )}
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
                             }}
-                        />
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {(loginStatus ? USERS_ITEMS : NON_USERS_ITEMS).map(({ id, name, path }) => (
+                                <MenuItem
+                                    key={id}
+                                    onClick={() => {
+                                        handleCloseUserMenu();
+                                        goNavigate(path);
+                                    }}
+                                >
+                                    <Typography textAlign="center" variant="button" color="#7A7A7A">
+                                        {name}
+                                    </Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </div>
                 </Toolbar>
             </AppBar>

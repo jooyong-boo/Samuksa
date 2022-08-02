@@ -28,9 +28,9 @@ import {
     selectFishState,
     selectState,
     totalAmountState,
-} from '../store/atom';
+} from '../../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
-import { getAreaTotalFishData } from '../api/auth';
+import { getAreaTotalFishData } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
@@ -42,7 +42,7 @@ const Card = styled.div`
     border-radius: 5px;
 `;
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
     PaperProps: {
@@ -60,6 +60,7 @@ const SearchConditions = () => {
             autoClose: 1000,
             hideProgressBar: true,
         });
+    const dismissAll = () => toast.dismiss();
 
     const getArea = useRecoilValue(getAreaState);
 
@@ -85,7 +86,7 @@ const SearchConditions = () => {
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
         if (e.target.value >= 35) {
-            // alert('인원은 1 이상으로 해주세요');
+            dismissAll();
             notify('인원수는 35명 이하로 해주세요');
             setPersonNum(35);
         }
@@ -96,6 +97,7 @@ const SearchConditions = () => {
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
         if (e.target.value > 10000000) {
+            dismissAll();
             notify('가격은 천만원 이하로 해주세요');
             setMoney(10000000);
         }
@@ -105,12 +107,14 @@ const SearchConditions = () => {
         if (money < 50000) {
             e.preventDefault();
             // alert('가격은 50000이상으로 해주세요');
+            dismissAll();
             notify('가격을 50000이상으로 해주세요');
             setMoney(50000);
             return;
         } else if (personNum <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
+            dismissAll();
             notify('인원을 입력해주세요');
             // setPersonNum(1);
             return;
@@ -118,7 +122,6 @@ const SearchConditions = () => {
     };
 
     const onReset = (e) => {
-        e.preventDefault();
         setPersonNum('');
         setMoney(50000);
         setArea('노량진');
@@ -138,8 +141,12 @@ const SearchConditions = () => {
         getAreaTotalFishData({ area }).then((res) =>
             res
                 ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false))
-                : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'),
+                : (dismissAll(), notify('해당 가격으론 찾을 수 있는 조합이 없어요!')),
         );
+    };
+
+    const moveTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -222,7 +229,6 @@ const SearchConditions = () => {
                                         MenuProps={MenuProps}
                                         fullWidth
                                         disabled={select ? false : true}
-                                        // size="small"
                                     >
                                         {getArea.map((area, i) => (
                                             <MenuItem key={i} value={area}>
@@ -288,10 +294,13 @@ const SearchConditions = () => {
                             />
                             <Button
                                 variant="outlined"
-                                onClick={onReset}
+                                onClick={() => {
+                                    onReset();
+                                    moveTop();
+                                }}
                                 sx={{
                                     width: '40%',
-                                    borderRadius: '1px',
+                                    borderRadius: '5px',
                                     borderColor: '#D8D8D8',
                                     color: '#949494',
                                 }}

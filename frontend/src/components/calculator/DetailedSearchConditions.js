@@ -29,8 +29,8 @@ import {
     selectConditions,
     selectFishNameState,
     selectFishState,
-} from '../store/atom';
-import { getFarmType } from '../api/auth';
+} from '../../store/atom';
+import { getFarmType } from '../../api/auth';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -51,7 +51,8 @@ const ListItemStyled = styled.div`
     background-color: white;
     height: 100%;
     border-bottom: 1px solid #f6f6f6;
-    &:hover {
+    cursor: pointer;
+    &:hover > div {
         background-color: #f4f4f4;
     }
 `;
@@ -259,7 +260,6 @@ const DetailedSearchConditions = () => {
                                                 <ListItemStyled
                                                     style={{
                                                         backgroundColor: active ? '#F8F8F8' : 'white',
-                                                        cursor: 'pointer',
                                                     }}
                                                     onClick={() => {
                                                         onToggle(fishInfoId, active);
@@ -281,7 +281,12 @@ const DetailedSearchConditions = () => {
                                                             }}
                                                         />
                                                     </ListItemAvatar>
-                                                    <ListItem sx={{ paddingLeft: 0 }}>
+                                                    <ListItem
+                                                        sx={{
+                                                            paddingLeft: 0,
+                                                            ':hover': { backgroundColor: '#f4f4f4' },
+                                                        }}
+                                                    >
                                                         <ListItemText
                                                             primary={fishName}
                                                             secondary={`(수율: ${fishYield}%)`}
@@ -422,7 +427,7 @@ const DetailedSearchConditions = () => {
                                     }}
                                     onClick={addCondition}
                                 >
-                                    조건을 선택해주세요
+                                    {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
                                 </Button>
                             )}
                         </div>
