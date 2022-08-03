@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/auth';
+import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts, getPostsId } from '../api/post';
 
 export const personNumState = atom({
@@ -14,7 +14,7 @@ export const moneyState = atom({
 
 export const areaState = atom({
     key: 'areaState',
-    default: '노량진',
+    default: '',
 });
 
 // 조건부 스타일링용
