@@ -10,7 +10,7 @@ import {
     selectConditions,
 } from '../../store/atom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { getFishRecommendData } from '../../api/auth';
+import { getFishRecommendData } from '../../api/recommend';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';

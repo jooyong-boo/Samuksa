@@ -30,7 +30,7 @@ import {
     totalAmountState,
 } from '../../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
-import { getAreaTotalFishData } from '../../api/auth';
+import { getAreaTotalFishData } from '../../api/recommend';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
@@ -221,8 +221,8 @@ const SearchConditions = () => {
                                     <Select
                                         labelId="local"
                                         label="지역"
-                                        defaultValue={'노량진'}
-                                        value={area}
+                                        defaultValue={area}
+                                        value={area ? area : ''}
                                         onChange={(e) => {
                                             setArea(e.target.value);
                                         }}
@@ -230,11 +230,12 @@ const SearchConditions = () => {
                                         fullWidth
                                         disabled={select ? false : true}
                                     >
-                                        {getArea.map((area, i) => (
-                                            <MenuItem key={i} value={area}>
-                                                {area}
-                                            </MenuItem>
-                                        ))}
+                                        {getArea &&
+                                            getArea.map((area, i) => (
+                                                <MenuItem key={i} value={area}>
+                                                    {area}
+                                                </MenuItem>
+                                            ))}
                                     </Select>
                                 </FormControl>
                             </Grid>

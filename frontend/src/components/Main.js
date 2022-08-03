@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TopScrollBtn from './common/TopScrollBtn';
 import image from '../components/assets/img/mainImage.jpg';
 import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { getAreaTotalFishData } from '../api/auth';
+import { getAreaTotalFishData } from '../api/recommend';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
     areaState,
@@ -188,9 +188,9 @@ const Main = () => {
                         <FormControl fullWidth>
                             <Select
                                 labelId="local"
-                                // label="지역"
-                                defaultValue={'노량진'}
-                                value={area}
+                                label="지역"
+                                defaultValue={area}
+                                value={area ? area : ''}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}
@@ -198,11 +198,12 @@ const Main = () => {
                                 fullWidth
                                 sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                             >
-                                {getArea.map((area) => (
-                                    <MenuItem key={area} value={area}>
-                                        {area}
-                                    </MenuItem>
-                                ))}
+                                {getArea &&
+                                    getArea.map((area) => (
+                                        <MenuItem key={area} value={area}>
+                                            {area}
+                                        </MenuItem>
+                                    ))}
                             </Select>
                         </FormControl>
                     </Box>
