@@ -1,17 +1,29 @@
 import axios from 'axios';
+import { authHeader } from '../components/utils/authHeader';
+import setAuthorizationToken from '../components/utils/setAuthorizationToken';
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
 });
 
-export const signUp = async ({ userId, userName, passwd, userEmail }) => {
+instance.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        config.headers['X-AUTH-TOKEN'] = null;
+        return config;
+    }
+    config.headers['X-AUTH-TOKEN'] = `${token}`;
+    return config;
+});
+
+export const signUp = async ({ id, password, nickName, email }) => {
     try {
         const { data } = await instance.post('/user/signUp', null, {
             params: {
-                userId: 'samuksa',
-                userName: '사먹사',
-                passwd: 'samuksa123',
-                userEmail: 'samuksa@asdf.com',
+                userId: id,
+                userName: nickName,
+                passwd: password,
+                userEmail: email,
             },
         });
         console.log(data);
@@ -21,15 +33,16 @@ export const signUp = async ({ userId, userName, passwd, userEmail }) => {
     }
 };
 
-export const login = async () => {
+export const login = async ({ userId, passwd }) => {
     try {
-        const { data } = await instance.post('/user/login', null, {
+        const { data } = await instance.get('/user/login', {
             params: {
-                passwd: 'samuksa123',
-                userId: 'samuksa',
+                userId: userId,
+                passwd: passwd,
             },
         });
-        console.log(data);
+        localStorage.setItem('jwtToken', data);
+        setAuthorizationToken(data);
         return data;
     } catch (err) {
         console.log(err.response);
@@ -59,14 +72,13 @@ export const checkNickNameAxios = async ({ nickName }) => {
         console.log(err.response);
     }
 };
-// export const getFishRecommendData = async ({ personNum, money, area }) => {
-//     try {
-//         const { data } = await instance.get('/fish/recommend', {
-//             params: { personNumber: parseInt(personNum), money: parseInt(money), saleArea: area },
-//         });
-//         // console.log(data)
-//         return data;
-//     } catch (err) {
-//         console.log(err.response);
-//     }
-// };
+
+export const getUserInfo = async () => {
+    try {
+        const { data } = await instance.post('/user/user_info');
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err.response);
+    }
+};
