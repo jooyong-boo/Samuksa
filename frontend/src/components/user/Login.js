@@ -1,7 +1,11 @@
 import { Button, Checkbox, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getUserInfo, login } from '../../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -30,6 +34,38 @@ const Card = styled.div`
 `;
 
 const Login = () => {
+    const notify = (text) =>
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const navigate = useNavigate();
+
+    const [userId, setUserId] = useState('');
+    const [passwd, setPasswd] = useState('');
+
+    const getLogin = () => {
+        login({ userId, passwd })
+            .then((res) => {
+                navigate('/');
+                localStorage.setItem('jwtToken', res);
+            })
+            .then(() => {
+                getUserInfo().then((res) => {
+                    notify(`${res.username}님 반갑습니다!`);
+                });
+            });
+    };
+
+    const handleChangeUserId = (e) => {
+        setUserId(e.target.value);
+    };
+
+    const handleChangePasswd = (e) => {
+        setPasswd(e.target.value);
+    };
+
     return (
         <>
             <Background>
@@ -54,21 +90,24 @@ const Login = () => {
                             </Typography>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>아이디</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="id"
                                 variant="outlined"
                                 size="small"
                                 placeholder="아이디 입력"
+                                onChange={handleChangeUserId}
                                 sx={{}}
                             />
                         </div>
                         <div style={{ paddingTop: '24px' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="password"
                                 variant="outlined"
+                                type="password"
                                 size="small"
                                 placeholder="비밀번호 입력"
                                 autoComplete="off"
+                                onChange={handleChangePasswd}
                             />
                         </div>
                         <div
@@ -112,6 +151,7 @@ const Login = () => {
                                     boxShadow: 'none',
                                     width: '40%',
                                 }}
+                                onClick={getLogin}
                             >
                                 로그인
                             </Button>
