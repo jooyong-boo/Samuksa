@@ -2,9 +2,11 @@ import { Button, Checkbox, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { signUp, checkIdAxios, checkNickNameAxios } from '../../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -34,6 +36,14 @@ const Card = styled.div`
 `;
 
 const Register = () => {
+    const navigate = useNavigate();
+    const notify = (text) =>
+        toast.warning(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+
     const [id, setId] = useState('');
     const [checkId, setCheckId] = useState(true);
     const [overlappingId, setOverlappingId] = useState('');
@@ -119,17 +129,19 @@ const Register = () => {
         setCheckAuthNum(true);
     };
 
-    const onSignUp = (id, password, nickName, email) => {
+    const onSignUp = () => {
         if (id && nickName && password && email) {
             if ((checkId && checkNickName && checkPw && checkPwConfirm) === false && checkEmail === true) {
-                signUp({ id, password, nickName, email }).then((res) => alert('회원가입 성공'));
+                signUp({ id, password, nickName, email }).then((res) => {
+                    navigate('/login');
+                    notify('로그인 해주세요');
+                });
             } else {
                 console.log('체크중에 오류');
             }
         } else {
             console.log('입력값 오류');
         }
-        console.log(id, nickName, password, email);
     };
 
     useEffect(() => {
@@ -358,7 +370,9 @@ const Register = () => {
                                     width: '50%',
                                     ':hover': { boxShadow: 'none' },
                                 }}
-                                onClick={onSignUp}
+                                onClick={() => {
+                                    onSignUp(id, nickName, password, email);
+                                }}
                             >
                                 회원가입
                             </Button>
