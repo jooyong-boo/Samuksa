@@ -14,12 +14,14 @@ import Logo from '../components/assets/img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Avatar, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
-
-// const settings = ['프로필', '회원정보', '게시판', '로그인'];
+import { getUserInfo } from '../api/auth';
 
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [userInfo, setUserInfo] = useState('비회원');
+    const [loginStatus, setLoginStatus] = useState(false);
+    let loginConfirm = localStorage.getItem('jwtToken');
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
         {
@@ -28,18 +30,16 @@ const Header = () => {
             path: '/calculator',
         },
         {
-            id: 2,
-            name: '회원가입',
-            path: '/register',
-        },
-        {
             id: 3,
             name: '게시판',
             path: '/board',
         },
+        // {
+        //     id: 2,
+        //     name: '회원가입',
+        //     path: '/register',
+        // },
     ]);
-
-    const [loginStatus, setLoginStatus] = useState(false);
     const USERS_ITEMS = [
         {
             id: 1,
@@ -72,6 +72,13 @@ const Header = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const logout = (name) => {
+        if (name === '로그아웃') {
+            localStorage.removeItem('jwtToken');
+            window.location.replace('/');
+        }
+    };
+
     const goNavigate = (path) => {
         navigate(`${path}`);
     };
@@ -91,6 +98,22 @@ const Header = () => {
             ),
         );
     }, [location]);
+
+    useEffect(() => {
+        if (loginConfirm) {
+            setLoginStatus(true);
+        } else {
+            setLoginStatus(false);
+        }
+    }, [loginConfirm]);
+
+    useEffect(() => {
+        if (loginStatus) {
+            setUserInfo(getUserInfo());
+        } else {
+            setUserInfo('비회원');
+        }
+    }, [loginStatus]);
 
     // console.log(location);
 
@@ -215,6 +238,7 @@ const Header = () => {
                                     onClick={() => {
                                         handleCloseUserMenu();
                                         goNavigate(path);
+                                        logout(name);
                                     }}
                                 >
                                     <Typography textAlign="center" variant="button" color="#7A7A7A">
