@@ -188,9 +188,9 @@ const Main = () => {
                         <FormControl fullWidth>
                             <Select
                                 labelId="local"
-                                label="지역"
-                                defaultValue={area}
-                                value={area ? area : ''}
+                                placeholder="지역"
+                                defaultValue="노량진"
+                                value={area ? area : '노량진'}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}
