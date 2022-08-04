@@ -6,8 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import Header from './components/Header';
+import setAuthorizationToken from './components/utils/setAuthorizationToken';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+setAuthorizationToken(localStorage.jwtToken);
 root.render(
     <React.StrictMode>
         <RecoilRoot>
