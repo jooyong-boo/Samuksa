@@ -1,20 +1,18 @@
 import axios from 'axios';
-import { authHeader } from '../components/utils/authHeader';
-import setAuthorizationToken from '../components/utils/setAuthorizationToken';
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
 });
 
-// instance.interceptors.request.use(function (config) {
-//     const token = localStorage.getItem('jwtToken');
-//     if (!token) {
-//         config.headers['X-AUTH-TOKEN'] = null;
-//         return config;
-//     }
-//     config.headers['X-AUTH-TOKEN'] = `${token}`;
-//     return config;
-// });
+instance.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        config.headers['X-AUTH-TOKEN'] = null;
+        return config;
+    }
+    config.headers['X-AUTH-TOKEN'] = `${token}`;
+    return config;
+});
 
 export const signUp = async ({ id, password, nickName, email }) => {
     try {
@@ -43,7 +41,6 @@ export const login = async ({ userId, passwd }) => {
         });
         if (data) {
             localStorage.setItem('jwtToken', data);
-            setAuthorizationToken(data);
         }
     } catch (err) {
         console.log(err.response);
@@ -77,7 +74,7 @@ export const checkNickNameAxios = async ({ nickName }) => {
 export const getUserInfo = async () => {
     try {
         const { data } = await instance.post('/user/user_info');
-        console.log(data);
+        // console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
