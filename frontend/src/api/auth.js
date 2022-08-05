@@ -6,15 +6,15 @@ const instance = axios.create({
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
 });
 
-instance.interceptors.request.use(function (config) {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) {
-        config.headers['X-AUTH-TOKEN'] = null;
-        return config;
-    }
-    config.headers['X-AUTH-TOKEN'] = `${token}`;
-    return config;
-});
+// instance.interceptors.request.use(function (config) {
+//     const token = localStorage.getItem('jwtToken');
+//     if (!token) {
+//         config.headers['X-AUTH-TOKEN'] = null;
+//         return config;
+//     }
+//     config.headers['X-AUTH-TOKEN'] = `${token}`;
+//     return config;
+// });
 
 export const signUp = async ({ id, password, nickName, email }) => {
     try {
@@ -41,9 +41,10 @@ export const login = async ({ userId, passwd }) => {
                 passwd: passwd,
             },
         });
-        localStorage.setItem('jwtToken', data);
-        setAuthorizationToken(data);
-        return data;
+        if (data) {
+            localStorage.setItem('jwtToken', data);
+            setAuthorizationToken(data);
+        }
     } catch (err) {
         console.log(err.response);
     }
