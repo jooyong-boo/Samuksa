@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { getUserInfo, login } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -44,12 +45,15 @@ const Login = () => {
 
     const [userId, setUserId] = useState('');
     const [passwd, setPasswd] = useState('');
+    const [idSaveStatus, setIdSaveStatus] = useState(false);
 
     const getLogin = () => {
         login({ userId, passwd })
-            .then((res) => {
+            .then(() => {
                 navigate('/');
-                localStorage.setItem('jwtToken', res);
+                if (idSaveStatus) {
+                    localStorage.setItem('id', userId);
+                }
             })
             .then(() => {
                 getUserInfo().then((res) => {
@@ -65,6 +69,22 @@ const Login = () => {
     const handleChangePasswd = (e) => {
         setPasswd(e.target.value);
     };
+
+    const handleCheckbox = (e) => {
+        setIdSaveStatus(e.target.checked);
+        if (e.target.checked) {
+            localStorage.setItem('id', userId);
+        } else {
+            localStorage.removeItem('id');
+        }
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem('id')) {
+            setUserId(localStorage.getItem('id'));
+            setIdSaveStatus(true);
+        }
+    }, []);
 
     return (
         <>
@@ -95,6 +115,7 @@ const Login = () => {
                                 size="small"
                                 placeholder="아이디 입력"
                                 onChange={handleChangeUserId}
+                                value={userId}
                                 sx={{}}
                             />
                         </div>
@@ -132,6 +153,8 @@ const Login = () => {
                                         verticalAlign: 'middle',
                                         marginRight: '0.2rem',
                                     }}
+                                    checked={idSaveStatus}
+                                    onChange={handleCheckbox}
                                 />
                                 아이디 저장
                             </Typography>

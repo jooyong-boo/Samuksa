@@ -159,7 +159,7 @@ const Main = () => {
                         autoComplete="off"
                     >
                         <TextField
-                            id="outlined-basic"
+                            id="person"
                             placeholder="인원"
                             type="string"
                             variant="outlined"
@@ -173,7 +173,7 @@ const Main = () => {
                             sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                         />
                         <TextField
-                            id="outlined-basic"
+                            id="money"
                             placeholder="예산"
                             type="string"
                             variant="outlined"
@@ -190,7 +190,7 @@ const Main = () => {
                                 labelId="local"
                                 placeholder="지역"
                                 defaultValue="노량진"
-                                value={area ? area : '노량진'}
+                                value={area ? area : ''}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}

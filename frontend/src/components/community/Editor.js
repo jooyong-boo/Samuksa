@@ -10,6 +10,9 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import { useRecoilValue } from 'recoil';
+import { getUserInfoState } from '../../store/user';
+import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -38,9 +41,18 @@ const MenuProps = {
 const totalBoard = ['리뷰게시판', '꿀팁게시판'];
 
 const Writing = () => {
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [board, setBoard] = useState('리뷰게시판');
+
+    const userInfo = useRecoilValue(getUserInfoState);
+
+    const goBack = () => {
+        navigate(-1);
+    };
+
     const onTitleChange = (e) => {
         setTitle(e.target.value);
     };
@@ -71,16 +83,26 @@ const Writing = () => {
                     overflow: 'auto',
                 }}
             >
-                <AccountCircleIcon
-                    sx={{
-                        color: '#a2a5a9',
-                        verticalAlign: 'middle',
-                        width: '40px',
-                        height: '40px',
-                        cursor: 'pointer',
-                    }}
-                />{' '}
-                유저정보 보이는곳
+                {userInfo ? (
+                    <AccountCircleIcon
+                        sx={{
+                            color: '#6EA5F8',
+                            verticalAlign: 'middle',
+                            width: '40px',
+                            height: '40px',
+                        }}
+                    />
+                ) : (
+                    <AccountCircleIcon
+                        sx={{
+                            color: '#a2a5a9',
+                            verticalAlign: 'middle',
+                            width: '40px',
+                            height: '40px',
+                        }}
+                    />
+                )}
+                {userInfo.username}
                 <FormControl fullWidth>
                     <Select
                         labelId="local"
@@ -130,11 +152,17 @@ const Writing = () => {
                     language="ko-KR"
                 />
                 <div style={{ width: '99%', display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                    <Button variant="contained" sx={{ width: '7rem', height: '3rem', marginRight: '1rem' }}>
+                    <Button
+                        variant="contained"
+                        sx={{ width: '7rem', height: '3rem', boxShadow: 'none', ':hover': { boxShadow: 'none' } }}
+                    >
                         작성
                     </Button>
-                    <Button variant="outlined" sx={{ width: '7rem', height: '3rem' }}>
+                    <Button variant="outlined" sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}>
                         임시저장
+                    </Button>
+                    <Button variant="outlined" sx={{ width: '7rem', height: '3rem' }} onClick={goBack}>
+                        뒤로가기
                     </Button>
                 </div>
             </Paper>

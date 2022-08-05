@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { authHeader } from '../components/utils/authHeader';
-import setAuthorizationToken from '../components/utils/setAuthorizationToken';
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
@@ -41,9 +39,9 @@ export const login = async ({ userId, passwd }) => {
                 passwd: passwd,
             },
         });
-        localStorage.setItem('jwtToken', data);
-        setAuthorizationToken(data);
-        return data;
+        if (data) {
+            localStorage.setItem('jwtToken', data);
+        }
     } catch (err) {
         console.log(err.response);
     }
@@ -76,7 +74,7 @@ export const checkNickNameAxios = async ({ nickName }) => {
 export const getUserInfo = async () => {
     try {
         const { data } = await instance.post('/user/user_info');
-        console.log(data);
+        // console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
