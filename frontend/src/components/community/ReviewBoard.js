@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getPostState } from '../../store/atom';
+import { getPostState, reviewPostPageState } from '../../store/atom';
 import Pagination from './Pagination';
 
 const Background = styled.div`
@@ -27,7 +27,7 @@ const Background = styled.div`
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    overflow: hidden;
+    overflow: auto;
     margin: auto;
     padding: 30px;
 `;
@@ -79,7 +79,8 @@ const ReviewBoard = () => {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
-    const offset = (page - 1) * limit;
+    const [postPage, setPostPage] = useRecoilState(reviewPostPageState);
+    const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
         navigate('/write');
@@ -146,7 +147,14 @@ const ReviewBoard = () => {
                     </TableContainer>
                 </ThemeProvider>
                 <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
-                    <Pagination total={posts.length} limit={limit} page={page} setPage={setPage} />
+                    <Pagination
+                        total={posts.length}
+                        limit={limit}
+                        page={page}
+                        setPage={setPage}
+                        postPage={postPage}
+                        setPostPage={setPostPage}
+                    />
                 </Stack>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
                     <Button

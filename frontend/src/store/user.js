@@ -6,11 +6,22 @@ export const loginStatusState = atom({
     default: '',
 });
 
-export const getUserInfoState = selector({
-    key: 'getUserInfoState',
-    get: async ({ get }) => {
-        const response = await getUserInfo();
-        console.log(response);
-        return response;
-    },
+export const userIdState = atom({
+    key: 'userIdState',
+    default: '',
 });
+
+export const userInfoState = atom({
+    key: 'userInfoState',
+    default: '',
+});
+
+// export const userInfoSelector = selector({
+//     key: 'userInfoSelector',
+//     get: async ({ get }) => {
+//         let userInfo = get(userInfoState);
+//         userInfo = await getUserInfo();
+//         console.log(userInfo);
+//         return userInfo;
+//     },
+// });
