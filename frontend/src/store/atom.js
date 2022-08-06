@@ -103,6 +103,24 @@ export const getPostViewState = atom({
     default: [],
 });
 
+// 게시판 탭 저장
+export const tabState = atom({
+    key: 'tapState',
+    default: 0,
+});
+
+// 리뷰게시판 페이지버튼 저장
+export const reviewPostPageState = atom({
+    key: 'reviewPostPageState',
+    default: 1,
+});
+
+// 팁게시판 페이지버튼 저장
+export const tipPostPageState = atom({
+    key: 'tipPostPageState',
+    default: 1,
+});
+
 // 수산물 정보
 // export const fishPriceAllState = selector({
 //   key: 'fishPriceAllState',
