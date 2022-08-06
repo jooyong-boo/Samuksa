@@ -1,6 +1,5 @@
-import { Button, FormControl, Input, InputLabel, MenuItem, Paper, Select } from '@mui/material';
+import { Button, FormControl, Input, MenuItem, Paper, Select } from '@mui/material';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef } from 'react';
@@ -11,7 +10,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { useRecoilValue } from 'recoil';
-import { getUserInfoState } from '../../store/user';
+import { userInfoState } from '../../store/user';
 import { useNavigate } from 'react-router-dom';
 
 const Background = styled.div`
@@ -47,7 +46,7 @@ const Writing = () => {
     const [content, setContent] = useState('');
     const [board, setBoard] = useState('리뷰게시판');
 
-    const userInfo = useRecoilValue(getUserInfoState);
+    const userInfo = useRecoilValue(userInfoState);
 
     const goBack = () => {
         navigate(-1);
@@ -63,7 +62,7 @@ const Writing = () => {
     console.log(content);
     const onSave = ({ title, content }) => {
         const date = new Date();
-        const a = {
+        const data = {
             date: date,
             title: title,
             content: content,
@@ -75,8 +74,8 @@ const Writing = () => {
         <Background>
             <Paper
                 sx={{
+                    width: '80%',
                     height: '95%',
-                    width: '95rem',
                     margin: 'auto',
                     marginTop: '30px',
                     padding: '20px',
@@ -102,11 +101,10 @@ const Writing = () => {
                         }}
                     />
                 )}
-                {userInfo.username}
+                {userInfo ? userInfo.username : '비회원'}
                 <FormControl fullWidth>
                     <Select
-                        labelId="local"
-                        // label="지역"
+                        labelId="board"
                         defaultValue={'리뷰게시판'}
                         value={board}
                         MenuProps={MenuProps}
@@ -115,7 +113,13 @@ const Writing = () => {
                         onChange={(e) => {
                             setBoard(e.target.value);
                         }}
-                        sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8', width: '10rem' }}
+                        sx={{
+                            backgroundColor: 'white',
+                            borderRadius: '5px',
+                            opacity: '0.8',
+                            width: '10rem',
+                            margin: '0.5rem 0',
+                        }}
                     >
                         {totalBoard.map((val) => (
                             <MenuItem key={val} value={val}>
@@ -128,7 +132,7 @@ const Writing = () => {
                     <Input
                         id="title"
                         placeholder="제목을 입력해 주세요"
-                        sx={{ width: '40rem', fontSize: '2rem' }}
+                        sx={{ width: '40rem', fontSize: '2rem', marginBottom: '0.5rem' }}
                         onChange={onTitleChange}
                     />
                 </FormControl>
