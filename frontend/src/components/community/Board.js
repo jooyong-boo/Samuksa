@@ -3,7 +3,9 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import styled, { keyframes } from 'styled-components';
+import { tabState } from '../../store/atom';
 import ReviewBoard from './ReviewBoard';
 import TipBoard from './TipBoard';
 
@@ -22,8 +24,7 @@ const Background = styled.div`
 `;
 
 const Board = () => {
-    const [value, setValue] = useState(0);
-    const [selectTab, setSelectTab] = useState('리뷰게시판');
+    const [selectTab, setSelectTab] = useRecoilState(tabState);
     const navigate = useNavigate();
 
     const tab = [
@@ -38,34 +39,34 @@ const Board = () => {
             path: '/board/tip',
         },
     ];
+    // console.log(selectTab);
+    // useEffect(() => {
+    //     setSelectTab(selectTab);
+    // }, []);
 
-    useEffect(() => {
-        setSelectTab(tab[0]);
-    }, []);
-
-    const onChangeTab = (label, id) => {
-        setSelectTab(...tab.filter((item) => item.id === id));
-    };
+    // const onChangeTab = (id) => {
+    //     setSelectTab(...tab.filter((item) => item.id === id));
+    // };
 
     const changePage = (path) => {
         navigate(path);
     };
 
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+        setSelectTab(newValue);
     };
 
     return (
         <Background>
             <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white', margin: 'auto' }}>
-                <Tabs value={value} onChange={handleChange} centered>
+                <Tabs value={selectTab} onChange={handleChange} centered>
                     {tab.map(({ id, label, path }) => {
                         return (
                             <Tab
                                 label={label}
                                 key={id}
                                 onClick={() => {
-                                    onChangeTab(label, id);
+                                    // onChangeTab(id);
                                     changePage(path);
                                 }}
                             />
