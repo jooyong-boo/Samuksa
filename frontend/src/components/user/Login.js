@@ -1,12 +1,15 @@
-import { Button, Checkbox, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserInfo, login } from '../../api/auth';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
+import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userIdState, userInfoState } from '../../store/user';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -43,7 +46,8 @@ const Login = () => {
         });
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useState('');
+    const [userId, setUserId] = useRecoilState(userIdState);
+    const userInfo = useSetRecoilState(userInfoState);
     const [passwd, setPasswd] = useState('');
     const [idSaveStatus, setIdSaveStatus] = useState(false);
 
@@ -58,6 +62,7 @@ const Login = () => {
             .then(() => {
                 getUserInfo().then((res) => {
                     notify(`${res.username}님 반갑습니다!`);
+                    userInfo(res);
                 });
             });
     };
@@ -173,11 +178,16 @@ const Login = () => {
                                     color: 'white',
                                     boxShadow: 'none',
                                     width: '40%',
+                                    marginBottom: '0.5rem',
+                                    ':hover': { boxShadow: 'none' },
                                 }}
                                 onClick={getLogin}
                             >
                                 로그인
                             </Button>
+                        </div>
+                        <div>
+                            <img src={kakaoBtn} width="180" alt="카카오 로그인 버튼" />
                         </div>
                     </div>
                 </Card>
