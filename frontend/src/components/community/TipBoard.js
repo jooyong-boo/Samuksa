@@ -12,13 +12,12 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import usePagination from '@mui/material/usePagination/usePagination';
 import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getPostState } from '../../store/atom';
+import { getPostState, tipPostPageState } from '../../store/atom';
 import Pagination from './Pagination';
 
 const Background = styled.div`
@@ -28,7 +27,7 @@ const Background = styled.div`
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    overflow: hidden;
+    overflow: auto;
     margin: auto;
     padding: 30px;
 `;
@@ -76,49 +75,50 @@ const tableTopTextStyle = {
 
 const freeBoardHead = ['No', '제목', '글쓴이', '작성시간', '조회수'];
 
-const dummy = [
-    {
-        id: 1,
-        title: '안녕하세요',
-        author: '아무개',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 12,
-    },
-    {
-        id: 2,
-        title: '반갑습니다',
-        author: '광어킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 21,
-    },
-    {
-        id: 3,
-        title: '이거',
-        author: '우럭킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 222,
-    },
-    {
-        id: 4,
-        title: '어떻게',
-        author: '참돔킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 32,
-    },
-    {
-        id: 5,
-        title: '먹나요',
-        author: '돌돔킹',
-        createdAt: '2022-04-22T14:07:35Z',
-        hits: 52,
-    },
-];
+// const dummy = [
+//     {
+//         id: 1,
+//         title: '안녕하세요',
+//         author: '아무개',
+//         createdAt: '2022-04-22T14:07:35Z',
+//         hits: 12,
+//     },
+//     {
+//         id: 2,
+//         title: '반갑습니다',
+//         author: '광어킹',
+//         createdAt: '2022-04-22T14:07:35Z',
+//         hits: 21,
+//     },
+//     {
+//         id: 3,
+//         title: '이거',
+//         author: '우럭킹',
+//         createdAt: '2022-04-22T14:07:35Z',
+//         hits: 222,
+//     },
+//     {
+//         id: 4,
+//         title: '어떻게',
+//         author: '참돔킹',
+//         createdAt: '2022-04-22T14:07:35Z',
+//         hits: 32,
+//     },
+//     {
+//         id: 5,
+//         title: '먹나요',
+//         author: '돌돔킹',
+//         createdAt: '2022-04-22T14:07:35Z',
+//         hits: 52,
+//     },
+// ];
 
 const TipBoard = () => {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
-    const offset = (page - 1) * limit;
+    const [postPage, setPostPage] = useRecoilState(tipPostPageState);
+    const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
         navigate('/write');
@@ -130,7 +130,7 @@ const TipBoard = () => {
 
     return (
         <Background>
-            <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
+            <div style={{ width: '70%', textAlign: 'center', margin: 'auto', overflow: 'auto' }}>
                 <Typography sx={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>꿀팁게시판</Typography>
                 <ThemeProvider theme={theme}>
                     <TableContainer
@@ -184,15 +184,14 @@ const TipBoard = () => {
                         </Table>
                     </TableContainer>
                 </ThemeProvider>
-                <Stack spacing={2} sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
+                <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
                     <Pagination
-                        count={10}
-                        variant="outlined"
-                        color="primary"
                         total={posts.length}
                         limit={limit}
                         page={page}
                         setPage={setPage}
+                        postPage={postPage}
+                        setPostPage={setPostPage}
                     />
                 </Stack>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
