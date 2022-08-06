@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { signUp, checkIdAxios, checkNickNameAxios } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSetRecoilState } from 'recoil';
+import { userIdState } from '../../store/user';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -44,6 +46,8 @@ const Register = () => {
             hideProgressBar: true,
         });
 
+    const setUserId = useSetRecoilState(userIdState);
+
     const [id, setId] = useState('');
     const [checkId, setCheckId] = useState(true);
     const [overlappingId, setOverlappingId] = useState('');
@@ -78,7 +82,7 @@ const Register = () => {
             }
         }
         if (check === nickName) {
-            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{2,6}$/);
+            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,6}$/);
             if (nickNameReg.test(inputChange)) {
                 change(inputChange);
                 setCheckNickName(false);
@@ -132,9 +136,10 @@ const Register = () => {
     const onSignUp = () => {
         if (id && nickName && password && email) {
             if ((checkId && checkNickName && checkPw && checkPwConfirm) === false && checkEmail === true) {
-                signUp({ id, password, nickName, email }).then((res) => {
+                signUp({ id, password, nickName, email }).then(() => {
                     navigate('/login');
-                    notify('로그인 해주세요');
+                    localStorage.removeItem('id');
+                    setUserId(id);
                 });
             } else {
                 console.log('체크중에 오류');
