@@ -1,26 +1,35 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import Logo from '../components/assets/img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Avatar, Tooltip } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getUserInfo } from '../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useSetRecoilState } from 'recoil';
+import { userInfoState } from '../store/user';
 
 const Header = () => {
+    const notify = (text) =>
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+
     const navigate = useNavigate();
     const location = useLocation();
-    const [userInfo, setUserInfo] = useState('비회원');
+
     const [loginStatus, setLoginStatus] = useState(false);
+    const setUserInfoState = useSetRecoilState(userInfoState);
     let loginConfirm = localStorage.getItem('jwtToken');
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
@@ -64,6 +73,11 @@ const Header = () => {
             name: '로그인',
             path: '/login',
         },
+        {
+            id: 2,
+            name: '회원가입',
+            path: '/register',
+        },
     ];
 
     const goMain = () => {
@@ -75,7 +89,9 @@ const Header = () => {
     const logout = (name) => {
         if (name === '로그아웃') {
             localStorage.removeItem('jwtToken');
-            window.location.replace('/');
+            // navigate('/');
+            setUserInfoState('');
+            notify('다음에 또 뵈요!');
         }
     };
 
@@ -108,12 +124,25 @@ const Header = () => {
     }, [loginConfirm]);
 
     useEffect(() => {
-        if (loginStatus) {
-            setUserInfo(getUserInfo());
-        } else {
-            setUserInfo('비회원');
-        }
-    }, [loginStatus]);
+        getUserInfo()
+            .then((res) => {
+                if (res) {
+                    setUserInfoState(res);
+                }
+            })
+            .catch((e) => {
+                localStorage.removeItem('jwtToken');
+                setUserInfoState('');
+            });
+    });
+
+    // useEffect(() => {
+    //     if (loginStatus) {
+    //         setUserInfoState(getUserInfo());
+    //     } else {
+    //         setUserInfoState('비회원');
+    //     }
+    // }, [loginStatus]);
 
     // console.log(location);
 
