@@ -57,7 +57,7 @@ const Register = () => {
     const [overlappingNickName, setOverlappingNickName] = useState('');
 
     const [password, setPassword] = useState(''); // 비밀번호
-    const [checkPw, setCheckPW] = useState(true);
+    const [checkPw, setCheckPw] = useState(true);
     const [passwordConfirm, setPasswordConfirm] = useState(''); //비밀번호 확인
     const [checkPwConfirm, setCheckPwConfirm] = useState(true);
 
@@ -95,7 +95,7 @@ const Register = () => {
             const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
             if (passwordReg.test(inputChange)) {
                 change(inputChange);
-                setCheckPW(false);
+                setCheckPw(false);
             }
         }
         if (check === passwordConfirm) {
@@ -148,6 +148,14 @@ const Register = () => {
             console.log('입력값 오류');
         }
     };
+
+    useEffect(() => {
+        setOverlappingId('');
+    }, [id]);
+
+    useEffect(() => {
+        setOverlappingNickName('');
+    }, [nickName]);
 
     useEffect(() => {
         if (password !== passwordConfirm) {
