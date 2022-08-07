@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, MenuItem, Paper, Select } from '@mui/material';
+import { Button, FormControl, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -44,7 +44,7 @@ const Writing = () => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [board, setBoard] = useState('리뷰게시판');
+    const [board, setBoard] = useState('');
 
     const userInfo = useRecoilValue(userInfoState);
 
@@ -82,34 +82,36 @@ const Writing = () => {
                     overflow: 'auto',
                 }}
             >
-                {userInfo ? (
-                    <AccountCircleIcon
-                        sx={{
-                            color: '#6EA5F8',
-                            verticalAlign: 'middle',
-                            width: '40px',
-                            height: '40px',
-                        }}
-                    />
-                ) : (
-                    <AccountCircleIcon
-                        sx={{
-                            color: '#a2a5a9',
-                            verticalAlign: 'middle',
-                            width: '40px',
-                            height: '40px',
-                        }}
-                    />
-                )}
-                {userInfo ? userInfo.username : '비회원'}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {userInfo ? (
+                        <AccountCircleIcon
+                            sx={{
+                                color: '#6EA5F8',
+                                verticalAlign: 'middle',
+                                width: '40px',
+                                height: '40px',
+                            }}
+                        />
+                    ) : (
+                        <AccountCircleIcon
+                            sx={{
+                                color: '#a2a5a9',
+                                verticalAlign: 'middle',
+                                width: '40px',
+                                height: '40px',
+                            }}
+                        />
+                    )}
+                    <Typography>{userInfo ? userInfo.username : '비회원'}</Typography>
+                </div>
                 <FormControl fullWidth>
                     <Select
                         labelId="board"
-                        defaultValue={'리뷰게시판'}
+                        // defaultValue="게시판을 선택해주세요"
                         value={board}
                         MenuProps={MenuProps}
-                        placeholder="게시판 선택"
-                        // fullWidth
+                        displayEmpty
+                        renderValue={board !== '' ? undefined : () => '게시판을 선택해주세요'}
                         onChange={(e) => {
                             setBoard(e.target.value);
                         }}
@@ -117,7 +119,7 @@ const Writing = () => {
                             backgroundColor: 'white',
                             borderRadius: '5px',
                             opacity: '0.8',
-                            width: '10rem',
+                            width: '13rem',
                             margin: '0.5rem 0',
                         }}
                     >
@@ -158,7 +160,14 @@ const Writing = () => {
                 <div style={{ width: '99%', display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
                     <Button
                         variant="contained"
-                        sx={{ width: '7rem', height: '3rem', boxShadow: 'none', ':hover': { boxShadow: 'none' } }}
+                        sx={{
+                            width: '7rem',
+                            height: '3rem',
+                            boxShadow: 'none',
+                            backgroundColor: '#6EA5F8',
+                            fontWeight: 900,
+                            ':hover': { boxShadow: 'none' },
+                        }}
                     >
                         작성
                     </Button>
