@@ -199,6 +199,7 @@ const TipBoard = () => {
                         variant="contained"
                         sx={{
                             backgroundColor: '#6EA5F8',
+                            fontWeight: 900,
                             color: 'white',
                             boxShadow: 'none',
                             width: '15%',
