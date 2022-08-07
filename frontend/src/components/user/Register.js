@@ -122,14 +122,21 @@ const Register = () => {
     // console.log(id, nickName, password, passwordConfirm, email);
 
     const checkOverlappingId = () => {
-        checkIdAxios({ id }).then((res) => setOverlappingId(res));
+        checkIdAxios({ id }).then((res) => {
+            setOverlappingId(res);
+            setCheckId(true);
+        });
     };
 
     const checkOverlappingNickName = () => {
-        checkNickNameAxios({ nickName }).then((res) => setOverlappingNickName(res));
+        checkNickNameAxios({ nickName }).then((res) => {
+            setOverlappingNickName(res);
+            setCheckNickName(true);
+        });
     };
 
     const onClickAuth = () => {
+        setCheckEmail(true);
         setCheckAuthNum(true);
     };
 
