@@ -53,20 +53,25 @@ const Login = () => {
     const [idSaveStatus, setIdSaveStatus] = useState(false);
 
     const getLogin = () => {
-        login({ userId, passwd })
-            .then(() => {
-                navigate('/');
-                if (idSaveStatus) {
-                    localStorage.setItem('id', userId);
-                }
-            })
-            .then(() => {
-                getUserInfo().then((res) => {
-                    notify(`${res.username}님 반갑습니다!`);
-                    userInfo(res);
+        try {
+            login({ userId, passwd })
+                .then(() => {
+                    navigate('/');
+                    if (idSaveStatus) {
+                        localStorage.setItem('id', userId);
+                    }
+                })
+                .then(() => {
+                    getUserInfo().then((res) => {
+                        notify(`${res.userNikName}님 반갑습니다!`);
+                        userInfo(res);
+                    });
                 });
-            })
-            .catch((e) => {});
+        } catch (e) {
+            console.log(e);
+        }
+        // .catch((e) => {
+        // });
     };
 
     const handleChangeUserId = (e) => {
