@@ -18,7 +18,6 @@ root.render(
                 <App />
             </BrowserRouter>
         </RecoilRoot>
-        ,
     </React.StrictMode>,
 );
 
