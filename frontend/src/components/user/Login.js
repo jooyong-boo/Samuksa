@@ -46,8 +46,9 @@ const Login = () => {
         });
     const navigate = useNavigate();
 
-    const [userId, setUserId] = useRecoilState(userIdState);
     const userInfo = useSetRecoilState(userInfoState);
+
+    const [userId, setUserId] = useRecoilState(userIdState);
     const [passwd, setPasswd] = useState('');
     const [idSaveStatus, setIdSaveStatus] = useState(false);
 
@@ -64,7 +65,8 @@ const Login = () => {
                     notify(`${res.username}님 반갑습니다!`);
                     userInfo(res);
                 });
-            });
+            })
+            .catch((e) => {});
     };
 
     const handleChangeUserId = (e) => {
@@ -157,6 +159,7 @@ const Login = () => {
                                         borderRadius: '3px',
                                         verticalAlign: 'middle',
                                         marginRight: '0.2rem',
+                                        cursor: 'pointer',
                                     }}
                                     checked={idSaveStatus}
                                     onChange={handleCheckbox}
