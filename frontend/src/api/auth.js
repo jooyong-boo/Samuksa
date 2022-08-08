@@ -27,7 +27,7 @@ export const signUp = async ({ id, password, nickName, email }) => {
         console.log(data);
         return data;
     } catch (err) {
-        console.log(err.response);
+        return err;
     }
 };
 
@@ -42,14 +42,16 @@ export const login = async ({ userId, passwd }) => {
         if (data) {
             localStorage.setItem('jwtToken', data);
         }
+        return data;
     } catch (err) {
-        console.log(err.response);
+        if (err.response.data.code === 401) {
+        }
     }
 };
 
 export const checkIdAxios = async ({ id }) => {
     try {
-        const { data } = await instance.post('/user/signUp/isHaveId', null, {
+        const { data } = await instance.post('/user/signUp/existence-id', null, {
             params: { userId: id },
         });
         console.log(data);
@@ -61,7 +63,7 @@ export const checkIdAxios = async ({ id }) => {
 
 export const checkNickNameAxios = async ({ nickName }) => {
     try {
-        const { data } = await instance.post('/user/signUp/isHaveName', null, {
+        const { data } = await instance.post('/user/signUp/existence-name', null, {
             params: { userName: nickName },
         });
         console.log(data);
@@ -73,7 +75,7 @@ export const checkNickNameAxios = async ({ nickName }) => {
 
 export const getUserInfo = async () => {
     try {
-        const { data } = await instance.post('/user/user_info');
+        const { data } = await instance.post('/user/user-info');
         // console.log(data);
         return data;
     } catch (err) {

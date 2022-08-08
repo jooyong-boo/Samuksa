@@ -1,4 +1,4 @@
-import { Button, FormControl, Input, MenuItem, Paper, Select } from '@mui/material';
+import { Button, ButtonGroup, FormControl, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -12,6 +12,7 @@ import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../store/user';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -44,7 +45,7 @@ const Writing = () => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [board, setBoard] = useState('리뷰게시판');
+    const [board, setBoard] = useState('');
 
     const userInfo = useRecoilValue(userInfoState);
 
@@ -55,11 +56,30 @@ const Writing = () => {
     const onTitleChange = (e) => {
         setTitle(e.target.value);
     };
+
     const onChange = () => {
         const data = editorRef.current.getInstance().getHTML();
         setContent(data);
     };
-    console.log(content);
+    console.log(title, content, board);
+
+    // 임시저장 테스트중
+    const transientStorage = () => {
+        let data = {
+            title,
+            content,
+            board,
+        };
+        if (localStorage.getItem('transientStorage')) {
+            if (window.confirm('이미 임시저장한 글이 있습니다, 새로 저장할까요?')) {
+                localStorage.setItem('transientStorage', JSON.stringify(data));
+            } else {
+                return;
+            }
+        }
+        localStorage.setItem('transientStorage', JSON.stringify(data));
+    };
+
     const onSave = ({ title, content }) => {
         const date = new Date();
         const data = {
@@ -68,8 +88,22 @@ const Writing = () => {
             content: content,
         };
     };
-    const editorRef = useRef();
-    // console.log(editorRef);
+    const editorRef = useRef(content);
+
+    useEffect(() => {
+        if (localStorage.getItem('transientStorage')) {
+            const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage'));
+            if (window.confirm('임시저장된 글을 불러올까요?')) {
+                setTitle(title);
+                setContent(content);
+                editorRef.current.getInstance().setHTML(content);
+                setBoard(board);
+            } else {
+                return;
+            }
+        }
+    }, []);
+
     return (
         <Background>
             <Paper
@@ -82,34 +116,46 @@ const Writing = () => {
                     overflow: 'auto',
                 }}
             >
-                {userInfo ? (
-                    <AccountCircleIcon
-                        sx={{
-                            color: '#6EA5F8',
-                            verticalAlign: 'middle',
-                            width: '40px',
-                            height: '40px',
-                        }}
-                    />
-                ) : (
-                    <AccountCircleIcon
-                        sx={{
-                            color: '#a2a5a9',
-                            verticalAlign: 'middle',
-                            width: '40px',
-                            height: '40px',
-                        }}
-                    />
-                )}
-                {userInfo ? userInfo.username : '비회원'}
+                <Typography
+                    sx={{
+                        color: '#575757',
+                        padding: '0px 0px 13px 19px',
+                        borderBottom: '1px solid #EAEAEA',
+                        fontSize: '2rem',
+                    }}
+                >
+                    글작성
+                </Typography>
+                <div style={{ display: 'flex', alignItems: 'center', paddingTop: '1rem' }}>
+                    {userInfo ? (
+                        <AccountCircleIcon
+                            sx={{
+                                color: '#6EA5F8',
+                                verticalAlign: 'middle',
+                                width: '40px',
+                                height: '40px',
+                            }}
+                        />
+                    ) : (
+                        <AccountCircleIcon
+                            sx={{
+                                color: '#a2a5a9',
+                                verticalAlign: 'middle',
+                                width: '40px',
+                                height: '40px',
+                            }}
+                        />
+                    )}
+                    <Typography>{userInfo ? userInfo.userNikName : '비회원'}</Typography>
+                </div>
                 <FormControl fullWidth>
                     <Select
                         labelId="board"
-                        defaultValue={'리뷰게시판'}
+                        // defaultValue="게시판을 선택해주세요"
                         value={board}
                         MenuProps={MenuProps}
-                        placeholder="게시판 선택"
-                        // fullWidth
+                        displayEmpty
+                        renderValue={board !== '' ? undefined : () => '게시판을 선택해주세요'}
                         onChange={(e) => {
                             setBoard(e.target.value);
                         }}
@@ -117,7 +163,7 @@ const Writing = () => {
                             backgroundColor: 'white',
                             borderRadius: '5px',
                             opacity: '0.8',
-                            width: '10rem',
+                            width: '13rem',
                             margin: '0.5rem 0',
                         }}
                     >
@@ -132,19 +178,22 @@ const Writing = () => {
                     <Input
                         id="title"
                         placeholder="제목을 입력해 주세요"
-                        sx={{ width: '40rem', fontSize: '2rem', marginBottom: '0.5rem' }}
+                        value={title}
+                        fullWidth
+                        sx={{ width: '70rem', fontSize: '1.5rem', marginBottom: '0.5rem' }}
                         onChange={onTitleChange}
                     />
                 </FormControl>
                 <Editor
                     ref={editorRef}
                     onChange={onChange}
-                    placeholder="내용을 입력해 주세요."
+                    placeholder="내용을 입력하세요."
                     previewStyle="vertical" // 미리보기 스타일 지정
                     height="450px" // 에디터 창 높이
                     initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                     useCommandShortcut={false}
                     hideModeSwitch="true"
+                    initialValue={content ? content : ''}
                     toolbarItems={[
                         // 툴바 옵션 설정
                         ['heading', 'bold', 'italic', 'strike'],
@@ -158,13 +207,24 @@ const Writing = () => {
                 <div style={{ width: '99%', display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
                     <Button
                         variant="contained"
-                        sx={{ width: '7rem', height: '3rem', boxShadow: 'none', ':hover': { boxShadow: 'none' } }}
+                        sx={{
+                            width: '7rem',
+                            height: '3rem',
+                            boxShadow: 'none',
+                            backgroundColor: '#6EA5F8',
+                            fontWeight: 900,
+                            ':hover': { boxShadow: 'none' },
+                        }}
                     >
-                        작성
+                        등록
                     </Button>
-                    <Button variant="outlined" sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}>
-                        임시저장
-                    </Button>
+                    <ButtonGroup variant="outlined" sx={{ width: '8rem', height: '3rem', margin: '0 1rem' }}>
+                        <Button onClick={transientStorage}>임시저장</Button>
+                        <Button>
+                            {localStorage.getItem('transientStorage') &&
+                                localStorage.getItem('transientStorage').length}
+                        </Button>
+                    </ButtonGroup>
                     <Button variant="outlined" sx={{ width: '7rem', height: '3rem' }} onClick={goBack}>
                         뒤로가기
                     </Button>
