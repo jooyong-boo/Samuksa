@@ -15,7 +15,7 @@ import { getUserInfo } from '../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
-import { userInfoState } from '../store/user';
+import { userIdState, userInfoState } from '../store/user';
 
 const Header = () => {
     const notify = (text) =>
@@ -30,6 +30,7 @@ const Header = () => {
 
     const [loginStatus, setLoginStatus] = useState(false);
     const setUserInfoState = useSetRecoilState(userInfoState);
+    const setUserIdState = useSetRecoilState(userIdState);
     let loginConfirm = localStorage.getItem('jwtToken');
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
@@ -91,6 +92,7 @@ const Header = () => {
             localStorage.removeItem('jwtToken');
             // navigate('/');
             setUserInfoState('');
+            setUserIdState('');
             notify('다음에 또 뵈요!');
         }
     };

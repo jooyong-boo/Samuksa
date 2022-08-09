@@ -53,6 +53,7 @@ const Main = () => {
             autoClose: 1000,
             hideProgressBar: true,
         });
+    const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
 
@@ -71,6 +72,7 @@ const Main = () => {
         setPersonNum(onlyNumberPersonValue);
         if (e.target.value >= 35) {
             // alert('인원은 1 이상으로 해주세요');
+            dismissAll();
             notify('인원수는 35명 이하로 해주세요');
             setPersonNum(35);
         }
@@ -81,23 +83,26 @@ const Main = () => {
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
         if (e.target.value > 10000000) {
+            dismissAll();
             notify('가격은 천만원 이하로 해주세요');
             setMoney(10000000);
         }
     };
 
     const onClick = (e) => {
-        if (money < 50000) {
-            e.preventDefault();
-            // alert('가격은 50000이상으로 해주세요');
-            notify('가격을 50000이상으로 해주세요');
-            setMoney(50000);
-            return;
-        } else if (personNum <= 0) {
+        if (personNum <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
+            dismissAll();
             notify('인원을 입력해주세요');
             // setPersonNum(1);
+            return;
+        } else if (money < 50000) {
+            e.preventDefault();
+            // alert('가격은 50000이상으로 해주세요');
+            dismissAll();
+            notify('가격을 50000이상으로 해주세요');
+            setMoney(50000);
             return;
         }
     };
@@ -222,13 +227,13 @@ const Main = () => {
                     >
                         검색
                     </Button>
-                    <ToastContainer
+                    {/* <ToastContainer
                         toastStyle={{
                             backgroundColor: '#F5F5F5',
                             color: '#575757',
                             opacity: '0.9',
                         }}
-                    />
+                    /> */}
                     <TopScrollBtn />
                 </form>
             </Background>
