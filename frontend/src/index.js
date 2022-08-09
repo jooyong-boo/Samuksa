@@ -9,6 +9,7 @@ import Header from './components/Header';
 import setAuthorizationToken from './components/utils/setAuthorizationToken';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import TopScrollBtn from './components/common/TopScrollBtn';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -26,6 +27,7 @@ root.render(
                 />
                 <Header />
                 <App />
+                <TopScrollBtn />
             </BrowserRouter>
         </RecoilRoot>
     </React.StrictMode>,
