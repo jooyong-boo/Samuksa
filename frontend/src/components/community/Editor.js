@@ -13,6 +13,8 @@ import { useRecoilValue } from 'recoil';
 import { userInfoState } from '../../store/user';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -41,6 +43,14 @@ const MenuProps = {
 const totalBoard = ['리뷰게시판', '꿀팁게시판'];
 
 const Writing = () => {
+    const notify = (text) =>
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const dismissAll = () => toast.dismiss();
+
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
@@ -65,19 +75,35 @@ const Writing = () => {
 
     // 임시저장 테스트중
     const transientStorage = () => {
-        let data = {
-            title,
-            content,
-            board,
-        };
+        let data = [
+            {
+                title,
+                content,
+                board,
+            },
+        ];
         if (localStorage.getItem('transientStorage')) {
             if (window.confirm('이미 임시저장한 글이 있습니다, 새로 저장할까요?')) {
                 localStorage.setItem('transientStorage', JSON.stringify(data));
+                notify('임시저장 완료');
+                return;
             } else {
                 return;
             }
+        } else {
+            localStorage.setItem('transientStorage', JSON.stringify(data));
+            notify('임시저장 완료');
+            dismissAll();
         }
-        localStorage.setItem('transientStorage', JSON.stringify(data));
+    };
+
+    const transientStorageDelete = () => {
+        if (localStorage.getItem('transientStorage')) {
+            if (window.confirm('임시저장 글을 삭제할까요?')) {
+                localStorage.removeItem('transientStorage');
+                notify('삭제완료');
+            }
+        }
     };
 
     const onSave = ({ title, content }) => {
@@ -92,7 +118,7 @@ const Writing = () => {
 
     useEffect(() => {
         if (localStorage.getItem('transientStorage')) {
-            const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage'));
+            const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage'))[0];
             if (window.confirm('임시저장된 글을 불러올까요?')) {
                 setTitle(title);
                 setContent(content);
@@ -121,7 +147,7 @@ const Writing = () => {
                         color: '#575757',
                         padding: '0px 0px 13px 19px',
                         borderBottom: '1px solid #EAEAEA',
-                        fontSize: '2rem',
+                        fontSize: '1.5rem',
                     }}
                 >
                     글작성
@@ -215,15 +241,15 @@ const Writing = () => {
                             fontWeight: 900,
                             ':hover': { boxShadow: 'none' },
                         }}
+                        onClick={onSave}
                     >
                         등록
                     </Button>
-                    <ButtonGroup variant="outlined" sx={{ width: '8rem', height: '3rem', margin: '0 1rem' }}>
+                    <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
                         <Button onClick={transientStorage}>임시저장</Button>
-                        <Button>
-                            {localStorage.getItem('transientStorage') &&
-                                localStorage.getItem('transientStorage').length}
-                        </Button>
+                        {localStorage.getItem('transientStorage') ? (
+                            <Button onClick={transientStorageDelete}>삭제</Button>
+                        ) : null}
                     </ButtonGroup>
                     <Button variant="outlined" sx={{ width: '7rem', height: '3rem' }} onClick={goBack}>
                         뒤로가기
