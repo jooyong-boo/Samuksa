@@ -69,7 +69,7 @@ const Register = () => {
 
     const onChange = (change, check, e) => {
         let inputChange = e.target.value;
-        console.log(check);
+        // console.log(check);
         // let reg;
         if (check === id) {
             const IdReg = new RegExp(/^[a-z0-9]{4,12}$/);
