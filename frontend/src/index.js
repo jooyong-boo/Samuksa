@@ -7,13 +7,23 @@ import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import Header from './components/Header';
 import setAuthorizationToken from './components/utils/setAuthorizationToken';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 setAuthorizationToken(localStorage.jwtToken);
 root.render(
     <React.StrictMode>
         <RecoilRoot>
             <BrowserRouter>
+                <ToastContainer
+                    toastStyle={{
+                        backgroundColor: '#F5F5F5',
+                        color: '#575757',
+                        opacity: '0.9',
+                    }}
+                />
                 <Header />
                 <App />
             </BrowserRouter>
