@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../../store/user';
+import KakaoLogin from './KakaoLogin';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -64,12 +65,12 @@ const Login = () => {
         login({ userId, passwd })
             .then((res) => {
                 console.log(res);
-                if (res.message === 'PASSWORD NOT MATCH') {
-                    dismissAll();
-                    notifyError('비밀번호가 틀립니다.');
-                } else if (res.message === 'ID REGISTERED') {
+                if (res.message === 'ID REGISTERED') {
                     dismissAll();
                     notifyError('아이디가 틀립니다.');
+                } else if (res.message === 'PASSWORD NOT MATCH') {
+                    dismissAll();
+                    notifyError('비밀번호가 틀립니다.');
                 } else if (res) {
                     navigate('/');
                 }
@@ -79,6 +80,10 @@ const Login = () => {
             })
             .then(() => {
                 getUserInfo().then((res) => {
+                    // console.log(res);
+                    if (res.code === 500) {
+                        return;
+                    }
                     notifySuccess(`${res.userNikName}님 반갑습니다!`);
                     userInfo(res);
                 });
@@ -111,7 +116,7 @@ const Login = () => {
             setUserId(localStorage.getItem('id'));
             setIdSaveStatus(true);
         }
-    });
+    }, []);
 
     return (
         <>
@@ -216,7 +221,7 @@ const Login = () => {
                             </Button>
                         </div>
                         <div>
-                            <img src={kakaoBtn} width="180" alt="카카오 로그인 버튼" />
+                            <KakaoLogin />
                         </div>
                     </div>
                 </Card>
