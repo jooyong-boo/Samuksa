@@ -59,12 +59,12 @@ const Header = () => {
         {
             id: 2,
             name: '프로필',
-            path: '/',
+            path: '/myinfo/profile',
         },
         {
             id: 3,
             name: '회원 정보',
-            path: '/',
+            path: '/myinfo',
         },
     ];
 
@@ -122,21 +122,28 @@ const Header = () => {
             setLoginStatus(true);
         } else {
             setLoginStatus(false);
+            setUserInfoState('');
         }
     }, [loginConfirm]);
 
     useEffect(() => {
-        getUserInfo()
-            .then((res) => {
-                if (res) {
+        getUserInfo().then((res) => {
+            if (res) {
+                if (res.code === 500) {
+                    localStorage.removeItem('jwtToken');
+                    setUserInfoState('');
+                    // notify(
+                    //     <p>
+                    //         아이디 인증시간이 만료되었습니다.
+                    //         <br /> 재로그인 해주세요
+                    //     </p>,
+                    // );
+                } else {
                     setUserInfoState(res);
                 }
-            })
-            .catch((e) => {
-                localStorage.removeItem('jwtToken');
-                setUserInfoState('');
-            });
-    });
+            }
+        });
+    }, []);
 
     // useEffect(() => {
     //     if (loginStatus) {
