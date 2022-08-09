@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserInfo, login } from '../../api/auth';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
@@ -38,40 +38,55 @@ const Card = styled.div`
 `;
 
 const Login = () => {
-    const notify = (text) =>
+    const notifyError = (text) =>
+        toast.error(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const notifySuccess = (text) =>
         toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
+    const dismissAll = () => toast.dismiss();
+
     const navigate = useNavigate();
 
     const userInfo = useSetRecoilState(userInfoState);
 
     const [userId, setUserId] = useRecoilState(userIdState);
     const [passwd, setPasswd] = useState('');
-    const [idSaveStatus, setIdSaveStatus] = useState(false);
+    const [idSaveStatus, setIdSaveStatus] = useState('');
 
-    const getLogin = () => {
-        try {
-            login({ userId, passwd })
-                .then(() => {
+    const getLogin = async () => {
+        login({ userId, passwd })
+            .then((res) => {
+                console.log(res);
+                if (res.message === 'PASSWORD NOT MATCH') {
+                    dismissAll();
+                    notifyError('비밀번호가 틀립니다.');
+                } else if (res.message === 'ID REGISTERED') {
+                    dismissAll();
+                    notifyError('아이디가 틀립니다.');
+                } else if (res) {
                     navigate('/');
-                    if (idSaveStatus) {
-                        localStorage.setItem('id', userId);
-                    }
-                })
-                .then(() => {
-                    getUserInfo().then((res) => {
-                        notify(`${res.userNikName}님 반갑습니다!`);
-                        userInfo(res);
-                    });
+                }
+                if (idSaveStatus) {
+                    localStorage.setItem('id', userId);
+                }
+            })
+            .then(() => {
+                getUserInfo().then((res) => {
+                    notifySuccess(`${res.userNikName}님 반갑습니다!`);
+                    userInfo(res);
                 });
-        } catch (e) {
-            console.log(e);
-        }
-        // .catch((e) => {
-        // });
+            })
+            .catch((e) => {
+                console.log(e);
+                notifyError(e);
+            });
     };
 
     const handleChangeUserId = (e) => {
@@ -96,10 +111,16 @@ const Login = () => {
             setUserId(localStorage.getItem('id'));
             setIdSaveStatus(true);
         }
-    }, []);
+    });
 
     return (
         <>
+            {/* <ToastContainer
+                toastStyle={{
+                    backgroundColor: '#F5F5F5',
+                    color: '#575757',
+                }}
+            /> */}
             <Background>
                 <Card>
                     <div style={{ width: '100%', textAlign: 'center' }}>
