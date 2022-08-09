@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { reject } from 'lodash';
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
@@ -39,13 +40,14 @@ export const login = async ({ userId, passwd }) => {
                 passwd: passwd,
             },
         });
+        // console.log(data);
         if (data) {
             localStorage.setItem('jwtToken', data);
+            return data;
         }
-        return data;
     } catch (err) {
-        if (err.response.data.code === 401) {
-        }
+        console.log(err);
+        return err.response.data;
     }
 };
 
