@@ -73,45 +73,7 @@ const tableTopTextStyle = {
     padding: '16px 0px',
 };
 
-const freeBoardHead = ['No', '제목', '글쓴이', '작성시간', '조회수'];
-
-// const dummy = [
-//     {
-//         id: 1,
-//         title: '안녕하세요',
-//         author: '아무개',
-//         createdAt: '2022-04-22T14:07:35Z',
-//         hits: 12,
-//     },
-//     {
-//         id: 2,
-//         title: '반갑습니다',
-//         author: '광어킹',
-//         createdAt: '2022-04-22T14:07:35Z',
-//         hits: 21,
-//     },
-//     {
-//         id: 3,
-//         title: '이거',
-//         author: '우럭킹',
-//         createdAt: '2022-04-22T14:07:35Z',
-//         hits: 222,
-//     },
-//     {
-//         id: 4,
-//         title: '어떻게',
-//         author: '참돔킹',
-//         createdAt: '2022-04-22T14:07:35Z',
-//         hits: 32,
-//     },
-//     {
-//         id: 5,
-//         title: '먹나요',
-//         author: '돌돔킹',
-//         createdAt: '2022-04-22T14:07:35Z',
-//         hits: 52,
-//     },
-// ];
+const tipBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const TipBoard = () => {
     const navigate = useNavigate();
@@ -145,7 +107,7 @@ const TipBoard = () => {
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    {freeBoardHead.map((item) => (
+                                    {tipBoardHead.map((item) => (
                                         <TableCell key={item} sx={tableTopTextStyle}>
                                             {item}
                                         </TableCell>
@@ -176,6 +138,7 @@ const TipBoard = () => {
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{createdAt}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                         </TableRow>
                                     );
