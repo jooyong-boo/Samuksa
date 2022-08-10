@@ -22,7 +22,7 @@ const CustomBox = styled(Box)`
 
 const TopScrollBtn = () => {
     const [scroll, setScroll] = useState(false);
-    const beforeScrollY = useRef(200);
+    const beforeScrollY = useRef(100);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -67,7 +67,7 @@ const TopScrollBtn = () => {
                 size="medium"
                 sx={{
                     boxShadow: 'none',
-                    backgroundColor: 'rgba(245,216,176,0.8)',
+                    backgroundColor: 'rgba(245,216,176,0.9)',
                     opacity: scroll ? '1' : '0',
                     visibility: scroll ? '' : 'hidden',
                     transition: scroll

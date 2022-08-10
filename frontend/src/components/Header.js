@@ -1,25 +1,37 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import Logo from '../components/assets/img/SAMUKSA.png';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Avatar, Tooltip } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { useEffect } from 'react';
-
-// const settings = ['프로필', '회원정보', '게시판', '로그인'];
+import { getUserInfo } from '../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useSetRecoilState } from 'recoil';
+import { userIdState, userInfoState } from '../store/user';
 
 const Header = () => {
+    const notify = (text) =>
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [loginStatus, setLoginStatus] = useState(false);
+    const setUserInfoState = useSetRecoilState(userInfoState);
+    const setUserIdState = useSetRecoilState(userIdState);
+    let loginConfirm = localStorage.getItem('jwtToken');
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
         {
@@ -28,18 +40,16 @@ const Header = () => {
             path: '/calculator',
         },
         {
-            id: 2,
-            name: '회원가입',
-            path: '/register',
-        },
-        {
             id: 3,
             name: '게시판',
             path: '/board',
         },
+        // {
+        //     id: 2,
+        //     name: '회원가입',
+        //     path: '/register',
+        // },
     ]);
-
-    const [loginStatus, setLoginStatus] = useState(false);
     const USERS_ITEMS = [
         {
             id: 1,
@@ -49,12 +59,12 @@ const Header = () => {
         {
             id: 2,
             name: '프로필',
-            path: '/',
+            path: '/myinfo/profile',
         },
         {
             id: 3,
             name: '회원 정보',
-            path: '/',
+            path: '/myinfo',
         },
     ];
 
@@ -64,12 +74,27 @@ const Header = () => {
             name: '로그인',
             path: '/login',
         },
+        {
+            id: 2,
+            name: '회원가입',
+            path: '/register',
+        },
     ];
 
     const goMain = () => {
         navigate('/');
         setNAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const logout = (name) => {
+        if (name === '로그아웃') {
+            localStorage.removeItem('jwtToken');
+            // navigate('/');
+            setUserInfoState('');
+            setUserIdState('');
+            notify('다음에 또 뵈요!');
+        }
     };
 
     const goNavigate = (path) => {
@@ -91,6 +116,42 @@ const Header = () => {
             ),
         );
     }, [location]);
+
+    useEffect(() => {
+        if (loginConfirm) {
+            setLoginStatus(true);
+        } else {
+            setLoginStatus(false);
+            setUserInfoState('');
+        }
+    }, [loginConfirm]);
+
+    useEffect(() => {
+        getUserInfo().then((res) => {
+            if (res) {
+                if (res.code === 500) {
+                    localStorage.removeItem('jwtToken');
+                    setUserInfoState('');
+                    // notify(
+                    //     <p>
+                    //         아이디 인증시간이 만료되었습니다.
+                    //         <br /> 재로그인 해주세요
+                    //     </p>,
+                    // );
+                } else {
+                    setUserInfoState(res);
+                }
+            }
+        });
+    }, []);
+
+    // useEffect(() => {
+    //     if (loginStatus) {
+    //         setUserInfoState(getUserInfo());
+    //     } else {
+    //         setUserInfoState('비회원');
+    //     }
+    // }, [loginStatus]);
 
     // console.log(location);
 
@@ -215,6 +276,7 @@ const Header = () => {
                                     onClick={() => {
                                         handleCloseUserMenu();
                                         goNavigate(path);
+                                        logout(name);
                                     }}
                                 >
                                     <Typography textAlign="center" variant="button" color="#7A7A7A">

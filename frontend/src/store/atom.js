@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/auth';
+import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts, getPostsId } from '../api/post';
 
 export const personNumState = atom({
@@ -14,7 +14,7 @@ export const moneyState = atom({
 
 export const areaState = atom({
     key: 'areaState',
-    default: '노량진',
+    default: '',
 });
 
 // 조건부 스타일링용
@@ -101,6 +101,24 @@ export const getPostState = selector({
 export const getPostViewState = atom({
     key: 'getPostViewState',
     default: [],
+});
+
+// 게시판 탭 저장
+export const tabState = atom({
+    key: 'tapState',
+    default: 0,
+});
+
+// 리뷰게시판 페이지버튼 저장
+export const reviewPostPageState = atom({
+    key: 'reviewPostPageState',
+    default: 1,
+});
+
+// 팁게시판 페이지버튼 저장
+export const tipPostPageState = atom({
+    key: 'tipPostPageState',
+    default: 1,
 });
 
 // 수산물 정보

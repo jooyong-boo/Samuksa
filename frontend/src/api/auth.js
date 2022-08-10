@@ -1,49 +1,87 @@
 import axios from 'axios';
+import { reject } from 'lodash';
 
 const instance = axios.create({
-    baseURL: process.env.REACT_APP_Samuksa_URL,
+    baseURL: process.env.REACT_APP_SamuksaUser_URL,
 });
 
-// 추천
-export const getFishRecommendData = async ({ personNum, money, area }) => {
+instance.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        config.headers['X-AUTH-TOKEN'] = null;
+        return config;
+    }
+    config.headers['X-AUTH-TOKEN'] = `${token}`;
+    return config;
+});
+
+export const signUp = async ({ id, password, nickName, email }) => {
     try {
-        const { data } = await instance.get('/fish/recommend', {
-            params: { personNumber: parseInt(personNum), money: parseInt(money), saleArea: area },
+        const { data } = await instance.post('/user/signUp', null, {
+            params: {
+                userId: id,
+                userName: nickName,
+                passwd: password,
+                userEmail: email,
+            },
         });
-        // console.log(data)
+        console.log(data);
+        return data;
+    } catch (err) {
+        return err;
+    }
+};
+
+export const login = async ({ userId, passwd }) => {
+    try {
+        const { data } = await instance.get('/user/login', {
+            params: {
+                userId: userId,
+                passwd: passwd,
+            },
+        });
+        // console.log(data);
+        if (data) {
+            localStorage.setItem('jwtToken', data);
+            return data;
+        }
+    } catch (err) {
+        console.log(err);
+        return err.response.data;
+    }
+};
+
+export const checkIdAxios = async ({ id }) => {
+    try {
+        const { data } = await instance.post('/user/signUp/existence-id', null, {
+            params: { userId: id },
+        });
+        console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
     }
 };
 
-// 정보 조회
-export const getAreaTotalFishData = async ({ area }) => {
+export const checkNickNameAxios = async ({ nickName }) => {
     try {
-        const { data } = await instance.get('/fish/info', { params: { saleArea: area } });
-        // console.log(data)
+        const { data } = await instance.post('/user/signUp/existence-name', null, {
+            params: { userName: nickName },
+        });
+        console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
     }
 };
 
-// 판매지역 조회
-export const getArea = async () => {
+export const getUserInfo = async () => {
     try {
-        const { data } = await instance.get('/fish/area');
+        const { data } = await instance.post('/user/user-info');
+        console.log(data);
         return data;
     } catch (err) {
-        console.log(err.response);
-    }
-};
-
-// 양식여부 조회
-export const getFarmType = async ({ fishName }) => {
-    try {
-        const { data } = await instance.get('/fish/farmType', { params: { fishName: fishName } });
-        return data;
-    } catch (err) {
-        console.log(err.response);
+        // console.log(err);
+        return err.response.data;
     }
 };

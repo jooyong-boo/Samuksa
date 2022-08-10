@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import TopScrollBtn from './common/TopScrollBtn';
 import image from '../components/assets/img/mainImage.jpg';
 import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { getAreaTotalFishData } from '../api/auth';
+import { getAreaTotalFishData } from '../api/recommend';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
     areaState,
@@ -53,6 +53,7 @@ const Main = () => {
             autoClose: 1000,
             hideProgressBar: true,
         });
+    const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
 
@@ -71,6 +72,7 @@ const Main = () => {
         setPersonNum(onlyNumberPersonValue);
         if (e.target.value >= 35) {
             // alert('인원은 1 이상으로 해주세요');
+            dismissAll();
             notify('인원수는 35명 이하로 해주세요');
             setPersonNum(35);
         }
@@ -81,23 +83,26 @@ const Main = () => {
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
         if (e.target.value > 10000000) {
+            dismissAll();
             notify('가격은 천만원 이하로 해주세요');
             setMoney(10000000);
         }
     };
 
     const onClick = (e) => {
-        if (money < 50000) {
-            e.preventDefault();
-            // alert('가격은 50000이상으로 해주세요');
-            notify('가격을 50000이상으로 해주세요');
-            setMoney(50000);
-            return;
-        } else if (personNum <= 0) {
+        if (personNum <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
+            dismissAll();
             notify('인원을 입력해주세요');
             // setPersonNum(1);
+            return;
+        } else if (money < 50000) {
+            e.preventDefault();
+            // alert('가격은 50000이상으로 해주세요');
+            dismissAll();
+            notify('가격을 50000이상으로 해주세요');
+            setMoney(50000);
             return;
         }
     };
@@ -159,7 +164,7 @@ const Main = () => {
                         autoComplete="off"
                     >
                         <TextField
-                            id="outlined-basic"
+                            id="person"
                             placeholder="인원"
                             type="string"
                             variant="outlined"
@@ -173,7 +178,7 @@ const Main = () => {
                             sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                         />
                         <TextField
-                            id="outlined-basic"
+                            id="money"
                             placeholder="예산"
                             type="string"
                             variant="outlined"
@@ -188,9 +193,9 @@ const Main = () => {
                         <FormControl fullWidth>
                             <Select
                                 labelId="local"
-                                // label="지역"
-                                defaultValue={'노량진'}
-                                value={area}
+                                placeholder="지역"
+                                defaultValue="노량진"
+                                value={area ? area : ''}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}
@@ -198,11 +203,12 @@ const Main = () => {
                                 fullWidth
                                 sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                             >
-                                {getArea.map((area) => (
-                                    <MenuItem key={area} value={area}>
-                                        {area}
-                                    </MenuItem>
-                                ))}
+                                {getArea &&
+                                    getArea.map((area) => (
+                                        <MenuItem key={area} value={area}>
+                                            {area}
+                                        </MenuItem>
+                                    ))}
                             </Select>
                         </FormControl>
                     </Box>
@@ -221,14 +227,14 @@ const Main = () => {
                     >
                         검색
                     </Button>
-                    <ToastContainer
+                    {/* <ToastContainer
                         toastStyle={{
                             backgroundColor: '#F5F5F5',
                             color: '#575757',
                             opacity: '0.9',
                         }}
-                    />
-                    <TopScrollBtn />
+                    /> */}
+                    {/* <TopScrollBtn /> */}
                 </form>
             </Background>
             <Introduction />

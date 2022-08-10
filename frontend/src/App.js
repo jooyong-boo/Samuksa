@@ -12,6 +12,8 @@ import WritingPage from './pages/WritingPage';
 import PostViewPage from './pages/PostViewPage';
 import ReviewPage from './pages/board/ReviewPage';
 import TipPage from './pages/board/TipPage';
+import ProfilePage from './pages/auth/ProfilePage';
+import UserInfoPage from './pages/auth/UserInfoPage';
 
 const theme = createTheme({
     typography: {
@@ -33,6 +35,8 @@ function App() {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/myinfo" element={<UserInfoPage />} />
+                    <Route path="/myinfo/profile" element={<ProfilePage />} />
                     <Route path="/calculator" element={<CalculatorPage />} />
                     <Route path="/board" element={<BoardPage />}>
                         <Route path="review" element={<ReviewPage />} />

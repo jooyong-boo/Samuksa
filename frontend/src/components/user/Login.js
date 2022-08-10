@@ -1,7 +1,16 @@
-import { Button, Checkbox, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getUserInfo, login } from '../../api/auth';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userIdState, userInfoState } from '../../store/user';
+import KakaoLogin from './KakaoLogin';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -30,8 +39,93 @@ const Card = styled.div`
 `;
 
 const Login = () => {
+    const notifyError = (text) =>
+        toast.error(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const notifySuccess = (text) =>
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const dismissAll = () => toast.dismiss();
+
+    const navigate = useNavigate();
+
+    const userInfo = useSetRecoilState(userInfoState);
+
+    const [userId, setUserId] = useRecoilState(userIdState);
+    const [passwd, setPasswd] = useState('');
+    const [idSaveStatus, setIdSaveStatus] = useState('');
+
+    const getLogin = async () => {
+        login({ userId, passwd })
+            .then((res) => {
+                console.log(res);
+                if (res.message === 'ID REGISTERED') {
+                    dismissAll();
+                    notifyError('아이디가 틀립니다.');
+                } else if (res.message === 'PASSWORD NOT MATCH') {
+                    dismissAll();
+                    notifyError('비밀번호가 틀립니다.');
+                } else if (res) {
+                    navigate('/');
+                }
+                if (idSaveStatus) {
+                    localStorage.setItem('id', userId);
+                }
+            })
+            .then(() => {
+                getUserInfo().then((res) => {
+                    // console.log(res);
+                    if (res.code === 500) {
+                        return;
+                    }
+                    notifySuccess(`${res.userNikName}님 반갑습니다!`);
+                    userInfo(res);
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+                notifyError(e);
+            });
+    };
+
+    const handleChangeUserId = (e) => {
+        setUserId(e.target.value);
+    };
+
+    const handleChangePasswd = (e) => {
+        setPasswd(e.target.value);
+    };
+
+    const handleCheckbox = (e) => {
+        setIdSaveStatus(e.target.checked);
+        if (e.target.checked) {
+            localStorage.setItem('id', userId);
+        } else {
+            localStorage.removeItem('id');
+        }
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem('id')) {
+            setUserId(localStorage.getItem('id'));
+            setIdSaveStatus(true);
+        }
+    }, []);
+
     return (
         <>
+            {/* <ToastContainer
+                toastStyle={{
+                    backgroundColor: '#F5F5F5',
+                    color: '#575757',
+                }}
+            /> */}
             <Background>
                 <Card>
                     <div style={{ width: '100%', textAlign: 'center' }}>
@@ -54,21 +148,25 @@ const Login = () => {
                             </Typography>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>아이디</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="id"
                                 variant="outlined"
                                 size="small"
                                 placeholder="아이디 입력"
+                                onChange={handleChangeUserId}
+                                value={userId}
                                 sx={{}}
                             />
                         </div>
                         <div style={{ paddingTop: '24px' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
                             <TextField
-                                id="outlined-basic"
+                                id="password"
                                 variant="outlined"
+                                type="password"
                                 size="small"
                                 placeholder="비밀번호 입력"
                                 autoComplete="off"
+                                onChange={handleChangePasswd}
                             />
                         </div>
                         <div
@@ -92,7 +190,10 @@ const Login = () => {
                                         borderRadius: '3px',
                                         verticalAlign: 'middle',
                                         marginRight: '0.2rem',
+                                        cursor: 'pointer',
                                     }}
+                                    checked={idSaveStatus}
+                                    onChange={handleCheckbox}
                                 />
                                 아이디 저장
                             </Typography>
@@ -111,10 +212,16 @@ const Login = () => {
                                     color: 'white',
                                     boxShadow: 'none',
                                     width: '40%',
+                                    marginBottom: '0.5rem',
+                                    ':hover': { boxShadow: 'none' },
                                 }}
+                                onClick={getLogin}
                             >
                                 로그인
                             </Button>
+                        </div>
+                        <div>
+                            <KakaoLogin />
                         </div>
                     </div>
                 </Card>

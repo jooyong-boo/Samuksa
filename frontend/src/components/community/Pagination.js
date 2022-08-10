@@ -4,7 +4,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-const Pagination = ({ total, limit, page, setPage }) => {
+const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
     const numPages = Math.ceil(total / limit);
     const [totalPage, setTotalPage] = useState([]);
     const [currentGroup, setCurrentGroup] = useState([]);
@@ -26,25 +26,35 @@ const Pagination = ({ total, limit, page, setPage }) => {
     };
 
     useEffect(() => {
-        setCurrentGroup(pagination(pageArr)[Math.floor((page - 1) / 10)]);
-    }, [totalPage, page]);
+        setCurrentGroup(pagination(pageArr)[Math.floor((postPage - 1) / 10)]);
+    }, [totalPage, postPage]);
 
     // console.log(currentGroup);
 
     return (
         <nav>
             <List sx={{ display: 'flex' }}>
-                <Button onClick={() => setPage(page - 1)} disabled={page === 1}>
+                <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
+                    &lt;&lt;
+                </Button>
+                <Button onClick={() => setPostPage(postPage - 1)} disabled={postPage === 1}>
                     &lt;
                 </Button>
                 {currentGroup &&
                     currentGroup.map((btn, i) => (
-                        <Button key={btn} onClick={() => setPage(btn)} aria-current={page === btn ? 'page' : null}>
+                        <Button
+                            key={btn}
+                            onClick={() => setPostPage(btn)}
+                            aria-current={postPage === btn ? 'page' : null}
+                        >
                             {btn}
                         </Button>
                     ))}
-                <Button onClick={() => setPage(page + 1)} disabled={page === numPages}>
+                <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
                     &gt;
+                </Button>
+                <Button onClick={() => setPostPage(numPages)} disabled={postPage === numPages}>
+                    &gt;&gt;
                 </Button>
             </List>
         </nav>

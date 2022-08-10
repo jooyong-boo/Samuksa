@@ -30,7 +30,7 @@ import {
     selectFishNameState,
     selectFishState,
 } from '../../store/atom';
-import { getFarmType } from '../../api/auth';
+import { getFarmType } from '../../api/recommend';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -431,7 +431,7 @@ const DetailedSearchConditions = () => {
                                 </Button>
                             )}
                         </div>
-                        <ToastContainer />
+                        {/* <ToastContainer /> */}
                     </div>
                 </div>
             </Card>

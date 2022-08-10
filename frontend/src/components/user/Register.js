@@ -2,8 +2,13 @@ import { Button, Checkbox, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { signUp, checkIdAxios, checkNickNameAxios } from '../../api/auth';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useSetRecoilState } from 'recoil';
+import { userIdState } from '../../store/user';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -33,48 +38,71 @@ const Card = styled.div`
 `;
 
 const Register = () => {
+    const navigate = useNavigate();
+    const notify = (text) =>
+        toast.warning(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+
+    const setUserId = useSetRecoilState(userIdState);
+
     const [id, setId] = useState('');
     const [checkId, setCheckId] = useState(true);
-
-    const [password, setPassword] = useState('');
-    const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [checkPw, setCheckPW] = useState(true);
-
-    const [email, setEmail] = useState('');
-    const [checkEmail, setCheckEmail] = useState(false);
+    const [overlappingId, setOverlappingId] = useState('');
 
     const [nickName, setNickName] = useState('');
     const [checkNickName, setCheckNickName] = useState(true);
+    const [overlappingNickName, setOverlappingNickName] = useState('');
+
+    const [password, setPassword] = useState(''); // 비밀번호
+    const [checkPw, setCheckPw] = useState(true);
+    const [passwordConfirm, setPasswordConfirm] = useState(''); //비밀번호 확인
+    const [checkPwConfirm, setCheckPwConfirm] = useState(true);
+
+    const [email, setEmail] = useState('');
+    const [checkEmail, setCheckEmail] = useState(false);
 
     const [authNum, setAuthNum] = useState('');
     const [checkAuthNum, setCheckAuthNum] = useState(false);
 
     const onChange = (change, check, e) => {
         let inputChange = e.target.value;
+        // console.log(check);
         // let reg;
         if (check === id) {
             const IdReg = new RegExp(/^[a-z0-9]{4,12}$/);
             if (IdReg.test(inputChange)) {
                 change(inputChange);
+                setCheckId(false);
+            } else {
+                change(inputChange);
                 setCheckId(true);
             }
         }
         if (check === nickName) {
-            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{2,6}$/);
+            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,6}$/);
             if (nickNameReg.test(inputChange)) {
                 change(inputChange);
+                setCheckNickName(false);
+            } else {
+                change(inputChange);
+                setCheckNickName(true);
             }
         }
         if (check === password) {
             const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
             if (passwordReg.test(inputChange)) {
                 change(inputChange);
+                setCheckPw(false);
             }
         }
         if (check === passwordConfirm) {
             const passwordConfirmReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
-            if (passwordConfirmReg.test(inputChange)) {
-                change(inputChange);
+            change(inputChange);
+            if (passwordConfirmReg.test(inputChange) && password === passwordConfirm) {
+                setCheckPwConfirm(false);
             }
         }
         if (check === email) {
@@ -91,27 +119,56 @@ const Register = () => {
         // console.log(reg.test(inputChange));
     };
 
-    console.log(id, nickName, password, passwordConfirm, email);
+    // console.log(id, nickName, password, passwordConfirm, email);
 
-    const checkOverlappingId = () => {};
+    const checkOverlappingId = () => {
+        checkIdAxios({ id }).then((res) => {
+            setOverlappingId(res);
+            setCheckId(true);
+        });
+    };
+
+    const checkOverlappingNickName = () => {
+        checkNickNameAxios({ nickName }).then((res) => {
+            setOverlappingNickName(res);
+            setCheckNickName(true);
+        });
+    };
 
     const onClickAuth = () => {
+        setCheckEmail(true);
         setCheckAuthNum(true);
     };
 
     const onSignUp = () => {
-        if (id && checkPw && checkAuthNum) {
-            alert('회원가입 완료');
+        if (id && nickName && password && email) {
+            if ((checkId && checkNickName && checkPw && checkPwConfirm) === false && checkEmail === true) {
+                signUp({ id, password, nickName, email }).then(() => {
+                    navigate('/login');
+                    localStorage.removeItem('id');
+                    setUserId(id);
+                });
+            } else {
+                console.log('체크중에 오류');
+            }
         } else {
-            alert('빈칸을 입력해주세요');
+            console.log('입력값 오류');
         }
     };
 
     useEffect(() => {
+        setOverlappingId('');
+    }, [id]);
+
+    useEffect(() => {
+        setOverlappingNickName('');
+    }, [nickName]);
+
+    useEffect(() => {
         if (password !== passwordConfirm) {
-            setCheckPW(false);
+            setCheckPwConfirm(true);
         } else {
-            setCheckPW(true);
+            setCheckPwConfirm(false);
         }
     }, [password, passwordConfirm]);
 
@@ -141,7 +198,7 @@ const Register = () => {
                                 placeholder="아이디 입력"
                                 autoComplete="off"
                                 // fullWidth
-                                color={checkId ? 'primary' : 'error'}
+                                color={checkId ? 'error' : 'primary'}
                                 sx={{}}
                                 onChange={(e) => {
                                     onChange(setId, id, e);
@@ -157,18 +214,21 @@ const Register = () => {
                                     ml: '0.5rem',
                                     ':hover': { boxShadow: 'none' },
                                 }}
+                                disabled={checkId}
+                                onClick={checkOverlappingId}
                             >
                                 중복체크
                             </Button>
-                            {checkId ? (
-                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
-                                    사용 가능한 아이디입니다.
-                                </Typography>
-                            ) : (
+                            {overlappingId === true ? (
                                 <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
                                     이미 존재하는 아이디입니다.
                                 </Typography>
-                            )}
+                            ) : null}
+                            {overlappingId === false ? (
+                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
+                                    사용 가능한 아이디입니다.
+                                </Typography>
+                            ) : null}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>닉네임</Typography>
@@ -178,7 +238,7 @@ const Register = () => {
                                 size="small"
                                 placeholder="한글 또는 영문"
                                 autoComplete="off"
-                                color={checkNickName ? 'primary' : 'error'}
+                                color={checkNickName ? 'error' : 'primary'}
                                 onChange={(e) => {
                                     onChange(setNickName, nickName, e);
                                 }}
@@ -193,18 +253,21 @@ const Register = () => {
                                     ml: '0.5rem',
                                     ':hover': { boxShadow: 'none' },
                                 }}
+                                disabled={checkNickName}
+                                onClick={checkOverlappingNickName}
                             >
                                 중복체크
                             </Button>
-                            {checkNickName ? (
+                            {overlappingNickName === false ? (
                                 <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
                                     사용 가능한 닉네임입니다.
                                 </Typography>
-                            ) : (
+                            ) : null}
+                            {overlappingNickName === true ? (
                                 <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
                                     이미 존재하는 닉네임입니다.
                                 </Typography>
-                            )}
+                            ) : null}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
@@ -215,6 +278,7 @@ const Register = () => {
                                 type="password"
                                 placeholder="8자리 이상 영문, 숫자"
                                 autoComplete="off"
+                                color={checkPw ? 'error' : 'primary'}
                                 onChange={(e) => {
                                     onChange(setPassword, password, e);
                                 }}
@@ -228,15 +292,16 @@ const Register = () => {
                                 type="password"
                                 placeholder="비밀번호 확인"
                                 autoComplete="off"
+                                color={checkPwConfirm ? 'error' : 'primary'}
                                 onChange={(e) => {
                                     onChange(setPasswordConfirm, passwordConfirm, e);
                                 }}
                             />
-                            {checkPw ? null : (
+                            {/* {passwordConfirm ? null : (
                                 <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
                                     비밀번호가 일치하지 않습니다.
                                 </Typography>
-                            )}
+                            )} */}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
                             <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>이메일</Typography>
@@ -246,11 +311,12 @@ const Register = () => {
                                 size="small"
                                 placeholder="이메일 형식을 지켜주세요"
                                 sx={{ width: '14rem' }}
+                                color={checkEmail ? 'primary' : 'error'}
                                 onChange={(e) => {
                                     onChange(setEmail, email, e);
                                 }}
                             />
-                            {checkEmail ? (
+                            {checkEmail && (
                                 <Button
                                     variant="contained"
                                     sx={{
@@ -265,10 +331,10 @@ const Register = () => {
                                 >
                                     인증
                                 </Button>
-                            ) : null}
-                            <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                            )}
+                            {/* <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
                                 이미 등록된 이메일입니다.
-                            </Typography>
+                            </Typography> */}
                         </div>
                         <div></div>
                         <div style={{ paddingTop: '0.1rem' }}>
@@ -324,7 +390,9 @@ const Register = () => {
                                     width: '50%',
                                     ':hover': { boxShadow: 'none' },
                                 }}
-                                onClick={onSignUp}
+                                onClick={() => {
+                                    onSignUp(id, nickName, password, email);
+                                }}
                             >
                                 회원가입
                             </Button>

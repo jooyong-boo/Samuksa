@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getPostState } from '../../store/atom';
+import { getPostState, reviewPostPageState } from '../../store/atom';
 import Pagination from './Pagination';
 
 const Background = styled.div`
@@ -27,7 +27,7 @@ const Background = styled.div`
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    overflow: hidden;
+    overflow: auto;
     margin: auto;
     padding: 30px;
 `;
@@ -73,13 +73,14 @@ const tableTopTextStyle = {
     padding: '16px 0px',
 };
 
-const freeBoardHead = ['No', '제목', '글쓴이', '작성시간', '조회수'];
+const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const ReviewBoard = () => {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
-    const offset = (page - 1) * limit;
+    const [postPage, setPostPage] = useRecoilState(reviewPostPageState);
+    const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
         navigate('/write');
@@ -106,7 +107,7 @@ const ReviewBoard = () => {
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    {freeBoardHead.map((item) => (
+                                    {reviewBoardHead.map((item) => (
                                         <TableCell key={item} sx={tableTopTextStyle}>
                                             {item}
                                         </TableCell>
@@ -138,6 +139,7 @@ const ReviewBoard = () => {
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{createdAt}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -146,13 +148,21 @@ const ReviewBoard = () => {
                     </TableContainer>
                 </ThemeProvider>
                 <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
-                    <Pagination total={posts.length} limit={limit} page={page} setPage={setPage} />
+                    <Pagination
+                        total={posts.length}
+                        limit={limit}
+                        page={page}
+                        setPage={setPage}
+                        postPage={postPage}
+                        setPostPage={setPostPage}
+                    />
                 </Stack>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
                     <Button
                         variant="contained"
                         sx={{
                             backgroundColor: '#6EA5F8',
+                            fontWeight: 900,
                             color: 'white',
                             boxShadow: 'none',
                             width: '15%',
