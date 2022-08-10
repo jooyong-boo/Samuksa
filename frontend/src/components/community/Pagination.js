@@ -34,6 +34,9 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
     return (
         <nav>
             <List sx={{ display: 'flex' }}>
+                <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
+                    &lt;&lt;
+                </Button>
                 <Button onClick={() => setPostPage(postPage - 1)} disabled={postPage === 1}>
                     &lt;
                 </Button>
@@ -49,6 +52,9 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
                     ))}
                 <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
                     &gt;
+                </Button>
+                <Button onClick={() => setPostPage(numPages)} disabled={postPage === numPages}>
+                    &gt;&gt;
                 </Button>
             </List>
         </nav>

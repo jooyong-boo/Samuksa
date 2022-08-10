@@ -21,7 +21,7 @@ const Calculator = () => {
         <>
             <Background>
                 <SearchConditions />
-                <TopScrollBtn />
+                {/* <TopScrollBtn /> */}
                 <BackgroundWave />
             </Background>
         </>

@@ -73,7 +73,7 @@ const tableTopTextStyle = {
     padding: '16px 0px',
 };
 
-const freeBoardHead = ['No', '제목', '글쓴이', '작성시간', '조회수'];
+const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const ReviewBoard = () => {
     const navigate = useNavigate();
@@ -107,7 +107,7 @@ const ReviewBoard = () => {
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    {freeBoardHead.map((item) => (
+                                    {reviewBoardHead.map((item) => (
                                         <TableCell key={item} sx={tableTopTextStyle}>
                                             {item}
                                         </TableCell>
@@ -138,6 +138,7 @@ const ReviewBoard = () => {
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{createdAt}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                         </TableRow>
                                     );
