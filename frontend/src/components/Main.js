@@ -138,7 +138,7 @@ const Main = () => {
                             color: '#6EA5F8',
                             fontWeight: '900',
                             textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
-                            marginLeft: '5px',
+                            marginLeft: '16px',
                         }}
                     >
                         사먹사
