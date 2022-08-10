@@ -13,6 +13,9 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../../store/user';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Background = styled.div`
     background-color: white;
@@ -33,6 +36,7 @@ const PostViewer = () => {
     const navigate = useNavigate();
     const [data, setData] = useState('');
     const [comments, setComments] = useState('');
+    const userInfo = useRecoilValue(userInfoState);
 
     const commentRef = useRef();
 
@@ -123,9 +127,52 @@ const PostViewer = () => {
                         : null}
                 </div>
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
-                <div style={{ margin: '1rem 0' }}>
+                <div style={{ margin: '1rem 0', display: 'flex', width: '100%', flexWrap: 'wrap' }}>
                     <Typography>댓글 작성</Typography>
-                    <TextField sx={{ width: '100%' }} />
+                    {userInfo && (
+                        <AccountCircleIcon
+                            sx={{
+                                color: '#6EA5F8',
+                                verticalAlign: 'middle',
+                                width: '40px',
+                                height: '40px',
+                            }}
+                        />
+                    )}
+                    <Typography>{userInfo && userInfo.userNikName}</Typography>
+                    <TextField sx={{ width: '100%', marginTop: '1rem' }} />
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#6EA5F8',
+                                fontWeight: 900,
+                                color: 'white',
+                                boxShadow: 'none',
+                                width: '10%',
+                                margin: '1rem',
+                                ':hover': { boxShadow: 'none' },
+                            }}
+                            onClick={goList}
+                        >
+                            등록
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#6EA5F8',
+                                fontWeight: 900,
+                                color: 'white',
+                                boxShadow: 'none',
+                                width: '10%',
+                                margin: '1rem 0',
+                                ':hover': { boxShadow: 'none' },
+                            }}
+                            onClick={goList}
+                        >
+                            등록 + 추천
+                        </Button>
+                    </div>
                     <Button
                         variant="contained"
                         sx={{
