@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, reviewPostPageState } from '../../store/atom';
@@ -95,15 +95,7 @@ const ReviewBoard = () => {
             <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
                 <Typography sx={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>리뷰게시판</Typography>
                 <ThemeProvider theme={theme}>
-                    <TableContainer
-                        component={Paper}
-                        sx={{
-                            borderTop: '2px solid #A7A7A7',
-                            borderRadius: 0,
-                            maxHeight: '500px',
-                            padding: '0px 12px',
-                        }}
-                    >
+                    <CustomTableContainer component={Paper}>
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -114,7 +106,7 @@ const ReviewBoard = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody sx={{}}>
+                            <TableBody>
                                 {posts.slice(offset, offset + limit).map((item) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
@@ -129,12 +121,12 @@ const ReviewBoard = () => {
                                         >
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
-                                                <Link
+                                                <NavLink
                                                     to={`post/${id}`}
-                                                    style={{ textDecoration: 'none', color: '#5A5A5A' }}
+                                                    style={{ color: '#5A5A5A', textDecoration: 'none' }}
                                                 >
                                                     {title}
-                                                </Link>
+                                                </NavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{createdAt}</TableCell>
@@ -145,7 +137,7 @@ const ReviewBoard = () => {
                                 })}
                             </TableBody>
                         </Table>
-                    </TableContainer>
+                    </CustomTableContainer>
                 </ThemeProvider>
                 <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
                     <Pagination
@@ -158,20 +150,9 @@ const ReviewBoard = () => {
                     />
                 </Stack>
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: '#6EA5F8',
-                            fontWeight: 900,
-                            color: 'white',
-                            boxShadow: 'none',
-                            width: '15%',
-                            ':hover': { boxShadow: 'none' },
-                        }}
-                        onClick={goWriting}
-                    >
+                    <WriteBtn variant="contained" onClick={goWriting}>
                         글쓰기
-                    </Button>
+                    </WriteBtn>
                 </div>
             </div>
         </Background>
@@ -179,3 +160,21 @@ const ReviewBoard = () => {
 };
 
 export default ReviewBoard;
+
+const WriteBtn = styled(Button)`
+    background-color: #6ea5f8;
+    font-weight: 900;
+    color: white;
+    box-shadow: none;
+    width: 15%;
+    &:hover {
+        box-shadow: none;
+    }
+`;
+
+const CustomTableContainer = styled(TableContainer)`
+    border-top: 2px solid #a7a7a7;
+    border-radius: 0;
+    max-height: 500px;
+    padding: 0px 12px;
+`;
