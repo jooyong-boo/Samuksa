@@ -15,10 +15,13 @@ import {
 import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, reviewPostPageState } from '../../store/atom';
+import { userInfoState } from '../../store/user';
 import Pagination from './Pagination';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Background = styled.div`
     background-color: white;
@@ -76,14 +79,28 @@ const tableTopTextStyle = {
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const ReviewBoard = () => {
+    const notifyError = (text) =>
+        toast.error(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const dismissAll = () => toast.dismiss();
+
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const [postPage, setPostPage] = useRecoilState(reviewPostPageState);
+    const userInfo = useRecoilValue(userInfoState);
     const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
-        navigate('/write');
+        if (userInfo) {
+            navigate('/write');
+        } else {
+            dismissAll();
+            notifyError('글작성을 하려면 로그인해야합니다.');
+        }
     };
 
     const [posts, setPost] = useRecoilState(getPostState);
