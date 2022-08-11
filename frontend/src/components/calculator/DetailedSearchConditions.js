@@ -14,71 +14,24 @@ import {
     Typography,
 } from '@mui/material';
 import React from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import SelectedConditionList from './SelectedConditionList';
-import { errorSelector, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import {
     amountState,
     farmState,
     fishDetailRecommendInfo,
-    getFramTypeState,
     personNumState,
-    recommendListState,
     selectConditions,
-    selectFishNameState,
     selectFishState,
 } from '../../store/atom';
-import { getFarmType } from '../../api/recommend';
 import { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
-
-const Card = styled.div`
-    background-color: white;
-    width: 570px;
-    height: 464px;
-    border-radius: 5px;
-    /* border: 1px solid black; */
-    margin: 1rem;
-`;
-
-const ListItemStyled = styled.div`
-    display: flex;
-    background-color: white;
-    height: 100%;
-    border-bottom: 1px solid #f6f6f6;
-    cursor: pointer;
-    &:hover > div {
-        background-color: #f4f4f4;
-    }
-`;
-
-const listStyle = {
-    width: '100%',
-    // maxWidth: 500,
-    bgcolor: 'background.paper',
-    position: 'relative',
-    overflow: 'overlay',
-    maxHeight: 408,
-    borderRadius: '5px',
-    // borderBottom: '1px solid black'
-    // border: 0,
-    padding: 0,
-    boxShadow: 'none',
-    overflowX: 'hidden',
-    '&::-webkit-scrollbar': {
-        width: '5px',
-        borderRadius: '5px',
-    },
-    '&::-webkit-scrollbar-thumb': {
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-        borderRadius: '5px',
-    },
-};
 
 const DetailedSearchConditions = () => {
     const notify = (text) =>
@@ -129,17 +82,16 @@ const DetailedSearchConditions = () => {
         setSelectFish(fish.filter((fish) => fish.active === true));
     }, [fish]);
 
-    const onSearch = (e) => {
-        e.preventDefault();
-        let searchName = e.target.value;
-        console.log(searchName);
-        if (!searchName) {
-            setFish(fishList);
-        } else {
-            let result = fishList.filter((name) => name.fishName === searchName);
-            setFish(result);
-        }
-    };
+    // const onSearch = (e) => {
+    //     e.preventDefault();
+    //     let searchName = e.target.value;
+    //     if (!searchName) {
+    //         setFish(fishList);
+    //     } else {
+    //         let result = fishList.filter((name) => name.fishName === searchName);
+    //         setFish(result);
+    //     }
+    // };
 
     const onToggle = (id) => {
         setFarmStatus([]);
@@ -202,26 +154,10 @@ const DetailedSearchConditions = () => {
     return (
         <>
             <Card>
-                <Typography
-                    sx={{
-                        color: '#575757',
-                        padding: '18px 0px 13px 19px',
-                        borderBottom: '1px solid #EAEAEA',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    상세 검색 조건
-                </Typography>
+                <CustomTypography>상세 검색 조건</CustomTypography>
                 {/* <div style={{ display: 'flex', height: '100%', opacity: fish.length > 0 ? 1 : 0.4 }}> */}
-                <div style={{ display: 'flex', height: '100%' }}>
-                    <div
-                        style={{
-                            width: '45%',
-                            height: '100%',
-                            borderRight: '1px solid #EAEAEA',
-                            maxHeight: '410px',
-                        }}
-                    >
+                <Container>
+                    <CustomFishListDiv>
                         {/* <FormControl fullWidth>
                             <Input
                                 id="input-with-icon-adornment"
@@ -239,20 +175,9 @@ const DetailedSearchConditions = () => {
                                 disableUnderline={fishList.length > 0 ? false : true}
                             />
                         </FormControl> */}
-                        <Paper
-                            sx={{
-                                p: 2,
-                                margin: 'auto',
-                                maxWidth: 1200,
-                                maxHeight: 700,
-                                flexGrow: 1,
-                                // backgroundColor: '#F8F8F8',
-                                padding: 0,
-                                boxShadow: 'none',
-                            }}
-                        >
+                        <CustomFishListPaper>
                             {fish.length > 0 ? (
-                                <List sx={listStyle} subheader={<li />}>
+                                <CustomList>
                                     {fish.map((item, i) => {
                                         const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
                                         return (
@@ -298,32 +223,16 @@ const DetailedSearchConditions = () => {
                                             </Grow>
                                         );
                                     })}
-                                </List>
+                                </CustomList>
                             ) : (
-                                <Typography
-                                    sx={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        height: 375,
-                                        color: '#AEAEAE',
-                                        fontWeight: 'bold',
-                                        fontSize: 14,
-                                    }}
-                                >
+                                <CustomSearchConditionSelectInfo>
                                     검색 조건을 선택해주세요
-                                </Typography>
+                                </CustomSearchConditionSelectInfo>
                             )}
-                        </Paper>
-                    </div>
-                    <div style={{ width: '55%', maxHeight: '420px' }}>
-                        <div
-                            style={{
-                                width: '70%',
-                                margin: 'auto',
-                                marginTop: '10%',
-                            }}
-                        >
+                        </CustomFishListPaper>
+                    </CustomFishListDiv>
+                    <CustomConditionSettingDiv>
+                        <SelectVolumeDiv>
                             <Typography sx={{ textAlign: 'center' }}>분량</Typography>
                             {selectFish.length > 0 ? (
                                 <Slider
@@ -341,8 +250,8 @@ const DetailedSearchConditions = () => {
                                 <Slider disabled value={0} />
                             )}
                             <Typography sx={{ textAlign: 'center' }}>{amount}인</Typography>
-                        </div>
-                        <div
+                        </SelectVolumeDiv>
+                        <CustomSelectFarmTypeDiv
                             style={{
                                 width: '90%',
                                 height: '30%',
@@ -355,18 +264,13 @@ const DetailedSearchConditions = () => {
                         >
                             <Typography variant="subtitle1">양식 여부</Typography>
                             {farm.length > 0 && selectFish.length > 0 ? (
-                                <Typography
-                                    variant="body2"
-                                    sx={{ fontSize: '14px', color: '#737373', marginTop: '5px', fontWeight: 'medium' }}
-                                >
+                                <CustomSelectFarmTypeTypography sx={{ color: '#737373' }}>
                                     중복 선택이 가능합니다.
-                                </Typography>
+                                </CustomSelectFarmTypeTypography>
                             ) : (
-                                <Typography
-                                    sx={{ fontSize: '14px', color: '#AEAEAE', marginTop: '5px', fontWeight: 'medium' }}
-                                >
+                                <CustomSelectFarmTypeTypography sx={{ color: '#AEAEAE' }}>
                                     어종 선택이 필요합니다.
-                                </Typography>
+                                </CustomSelectFarmTypeTypography>
                             )}
                             {farm.length > 0 && selectFish.length > 0
                                 ? farm.map((item, i) => (
@@ -383,43 +287,27 @@ const DetailedSearchConditions = () => {
                                       </Typography>
                                   ))
                                 : null}
-                        </div>
-                        <div
-                            style={{
-                                width: '90%',
-                                height: '20%',
-                                margin: 'auto',
-                                marginTop: '20px',
-                                position: 'relative',
-                            }}
-                        >
+                        </CustomSelectFarmTypeDiv>
+                        <CustomConditionAddDiv>
                             {selectFish && amount && farmStatus.length > 0 ? (
-                                <Button
+                                <CustomConditionAddBtn
                                     variant="contained"
                                     type="submit"
                                     disableElevation
                                     sx={{
-                                        width: '100%',
-                                        height: '38px',
                                         backgroundColor: '#0098EE',
-                                        fontWeight: 900,
-                                        marginTop: '70px',
                                     }}
                                     onClick={addCondition}
                                 >
                                     조건 추가하기
-                                </Button>
+                                </CustomConditionAddBtn>
                             ) : (
-                                <Button
+                                <CustomConditionAddBtn
                                     variant="contained"
                                     type="submit"
                                     disableElevation
                                     disabled={true}
                                     sx={{
-                                        width: '100%',
-                                        height: '38px',
-                                        fontWeight: 900,
-                                        marginTop: '70px',
                                         ':disabled': {
                                             backgroundColor: 'rgba(0,152,238,0.3)',
                                             color: '#FFFFFF',
@@ -428,12 +316,12 @@ const DetailedSearchConditions = () => {
                                     onClick={addCondition}
                                 >
                                     {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
-                                </Button>
+                                </CustomConditionAddBtn>
                             )}
-                        </div>
+                        </CustomConditionAddDiv>
                         {/* <ToastContainer /> */}
-                    </div>
-                </div>
+                    </CustomConditionSettingDiv>
+                </Container>
             </Card>
             <SelectedConditionList setTotalAmount={setTotalAmount} totalAmount={totalAmount} setAmount={setAmount} />
         </>
@@ -441,3 +329,123 @@ const DetailedSearchConditions = () => {
 };
 
 export default DetailedSearchConditions;
+
+const Card = styled.div`
+    background-color: white;
+    width: 570px;
+    height: 464px;
+    border-radius: 5px;
+    /* border: 1px solid black; */
+    margin: 1rem;
+`;
+
+const CustomTypography = styled(Typography)`
+    color: #575757;
+    padding: 18px 0px 13px 19px;
+    border-bottom: 1px solid #eaeaea;
+    font-weight: bold;
+`;
+
+const Container = styled.div`
+    display: flex;
+    height: 100%;
+`;
+
+const CustomFishListDiv = styled.div`
+    width: 45%;
+    height: 100%;
+    border-right: 1px solid #eaeaea;
+    max-height: 410px;
+`;
+
+const CustomFishListPaper = styled(Paper)`
+    margin: auto;
+    max-width: 1200;
+    max-height: 700;
+    flex-grow: 1;
+    padding: 0;
+    box-shadow: none;
+`;
+
+const ListItemStyled = styled.div`
+    display: flex;
+    background-color: white;
+    height: 100%;
+    border-bottom: 1px solid #f6f6f6;
+    cursor: pointer;
+    &:hover > div {
+        background-color: #f4f4f4;
+    }
+`;
+
+const CustomList = styled(List)`
+    width: 100%;
+    background-color: 'background.paper';
+    position: relative;
+    overflow: overlay;
+    max-height: 408px;
+    border-radius: 5px;
+    padding: 0;
+    box-shadow: none;
+    overflow-x: hidden;
+    ::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+`;
+
+const CustomSearchConditionSelectInfo = styled(Typography)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 375px;
+    color: #aeaeae;
+    font-weight: bold;
+    font-size: 14px;
+`;
+
+const CustomConditionSettingDiv = styled.div`
+    width: 55%;
+    max-height: 420px;
+`;
+
+const SelectVolumeDiv = styled.div`
+    width: 70%;
+    margin: auto;
+    margin-top: 10%;
+`;
+
+const CustomSelectFarmTypeDiv = styled.div`
+    width: 90%;
+    height: 30%;
+    margin: auto;
+    margin-top: 10%;
+    border-top: 1px solid #eaeaea;
+    padding-top: 24px;
+    position: relative;
+`;
+
+const CustomSelectFarmTypeTypography = styled(Typography)`
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: medium;
+`;
+
+const CustomConditionAddDiv = styled.div`
+    width: 90%;
+    height: 20%;
+    margin: auto;
+    margin-top: 20px;
+    position: relative;
+`;
+
+const CustomConditionAddBtn = styled(Button)`
+    width: 100%;
+    height: 38px;
+    font-weight: 900;
+    margin-top: 70px;
+`;
