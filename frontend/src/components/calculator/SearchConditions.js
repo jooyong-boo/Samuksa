@@ -35,13 +35,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 
-const Card = styled.div`
-    background-color: white;
-    width: 295px;
-    height: 464px;
-    border-radius: 5px;
-`;
-
 const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -137,7 +130,6 @@ const SearchConditions = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        // getAreaTotalFishData({ area }).then(res => res ? (setFishList(res), setSelect(false)) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'));
         getAreaTotalFishData({ area }).then((res) =>
             res
                 ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false))
@@ -152,33 +144,9 @@ const SearchConditions = () => {
     return (
         <>
             <Card>
-                <Typography
-                    sx={{
-                        color: '#575757',
-                        padding: '18px 0px 13px 19px',
-                        borderBottom: '1px solid #EAEAEA',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    검색 조건
-                </Typography>
-                <Container
-                    style={{
-                        display: 'flex',
-                        width: '100%',
-                        height: '90%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <form
-                        onSubmit={onSubmit}
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                        }}
-                    >
+                <SearchConditionTypography>검색 조건</SearchConditionTypography>
+                <SearchConditionContainer>
+                    <SearchConditionForm onSubmit={onSubmit}>
                         <Grid container spacing={5} justifyContent="center" alignItems="center">
                             <Grid item xs={10}>
                                 <TextField
@@ -240,43 +208,26 @@ const SearchConditions = () => {
                                 </FormControl>
                             </Grid>
                         </Grid>
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'flex-end',
-                            }}
-                        >
+                        <SearchConditionBtnArea>
                             {select ? (
-                                <Button
+                                <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
                                     disableElevation
                                     sx={{
-                                        mt: 3,
-                                        mb: 2,
-                                        width: '274px',
-                                        height: '38px',
                                         backgroundColor: '#0098EE',
-                                        fontWeight: 900,
                                     }}
                                     onClick={onClick}
                                 >
                                     조건 선택
-                                </Button>
+                                </SearchConditionSelectBtn>
                             ) : (
-                                <Button
+                                <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
                                     disableElevation
                                     disabled={true}
                                     sx={{
-                                        mt: 3,
-                                        mb: 2,
-                                        width: '274px',
-                                        height: '38px',
-                                        // opacity: 0.3,
-                                        fontWeight: 900,
                                         ':disabled': {
                                             backgroundColor: 'rgba(0,152,238,0.3)',
                                             color: '#FFFFFF',
@@ -285,32 +236,20 @@ const SearchConditions = () => {
                                     onClick={onClick}
                                 >
                                     선택 완료
-                                </Button>
+                                </SearchConditionSelectBtn>
                             )}
-                            {/* <ToastContainer
-                                toastStyle={{
-                                    backgroundColor: '#F5F5F5',
-                                    color: '#575757',
-                                }}
-                            /> */}
-                            <Button
+                            <SearchConditionResetBtn
                                 variant="outlined"
                                 onClick={() => {
                                     onReset();
                                     moveTop();
                                 }}
-                                sx={{
-                                    width: '40%',
-                                    borderRadius: '5px',
-                                    borderColor: '#D8D8D8',
-                                    color: '#949494',
-                                }}
                             >
                                 조건 초기화
-                            </Button>
-                        </div>
-                    </form>
-                </Container>
+                            </SearchConditionResetBtn>
+                        </SearchConditionBtnArea>
+                    </SearchConditionForm>
+                </SearchConditionContainer>
             </Card>
             <DetailedSearchConditions />
         </>
@@ -318,3 +257,52 @@ const SearchConditions = () => {
 };
 
 export default SearchConditions;
+
+const Card = styled.div`
+    background-color: white;
+    width: 295px;
+    height: 464px;
+    border-radius: 5px;
+`;
+
+const SearchConditionTypography = styled(Typography)`
+    color: #575757;
+    padding: 18px 0px 13px 19px;
+    border-bottom: 1px solid #eaeaea;
+    font-weight: bold;
+`;
+
+const SearchConditionContainer = styled(Container)`
+    display: flex;
+    width: 100%;
+    height: 90%;
+    justify-content: center;
+    align-items: center;
+`;
+
+const SearchConditionForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
+const SearchConditionBtnArea = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+`;
+
+const SearchConditionSelectBtn = styled(Button)`
+    margin-top: 24px;
+    margin-bottom: 16px;
+    width: 274px;
+    height: 38px;
+    font-weight: 900;
+`;
+
+const SearchConditionResetBtn = styled(Button)`
+    width: 40%;
+    border-radius: 5px;
+    border-color: #d8d8d8;
+    color: #949494;
+`;
