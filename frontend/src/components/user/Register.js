@@ -309,6 +309,7 @@ const Register = () => {
                                 id="outlined-basic"
                                 variant="outlined"
                                 size="small"
+                                // disabled={checkAuthNum}
                                 placeholder="이메일 형식을 지켜주세요"
                                 sx={{ width: '14rem' }}
                                 color={checkEmail ? 'primary' : 'error'}
@@ -319,6 +320,7 @@ const Register = () => {
                             {checkEmail && (
                                 <Button
                                     variant="contained"
+                                    // disabled={checkAuthNum}
                                     sx={{
                                         backgroundColor: '#6EA5F8',
                                         color: 'white',
