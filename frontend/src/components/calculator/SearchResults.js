@@ -204,14 +204,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                 {selectEstimate ? (
                     <Fade in={true}>
                         <SelectedEstimateContainer>
-                            <SelectedEstimateTopMenu
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <SelectedEstimateTopMenu>
                                 <div>
                                     <Typography
                                         sx={{
@@ -373,7 +366,7 @@ const SelectedEstimateContainer = styled.div`
     width: 69%;
     min-width: 300px;
     max-height: 490px;
-    margin: auto;
+    /* margin: auto; */
     overflow: auto;
     padding: 0 20px;
 `;
