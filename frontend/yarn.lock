@@ -5117,7 +5117,7 @@ html-minifier-terser@^6.0.2:
 
 html-react-parser@^3.0.1:
   version "3.0.1"
-  resolved "https://registry.npmjs.org/html-react-parser/-/html-react-parser-3.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-3.0.1.tgz#b5715b6c12fe4d46ad770f0cdae313784d7d120c"
   integrity sha512-TsCwwmpqN8F2JA0EqWK/8U/cN07BfZU7agH3FY5G+RQqLs6HT2z2RNlFZI+Jp8e/nIXIsgYDvt8vqu8Dv9lr6w==
   dependencies:
     domhandler "5.0.3"
