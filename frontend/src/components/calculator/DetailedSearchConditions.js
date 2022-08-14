@@ -251,17 +251,7 @@ const DetailedSearchConditions = () => {
                             )}
                             <Typography sx={{ textAlign: 'center' }}>{amount}인</Typography>
                         </SelectVolumeDiv>
-                        <CustomSelectFarmTypeDiv
-                            style={{
-                                width: '90%',
-                                height: '30%',
-                                margin: 'auto',
-                                marginTop: '10%',
-                                borderTop: '1px solid #EAEAEA',
-                                paddingTop: '24px',
-                                position: 'relative',
-                            }}
-                        >
+                        <CustomSelectFarmTypeDiv>
                             <Typography variant="subtitle1">양식 여부</Typography>
                             {farm.length > 0 && selectFish.length > 0 ? (
                                 <CustomSelectFarmTypeTypography sx={{ color: '#737373' }}>
