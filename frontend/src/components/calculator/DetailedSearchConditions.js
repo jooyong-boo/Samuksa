@@ -95,6 +95,7 @@ const DetailedSearchConditions = () => {
 
     const onToggle = (id) => {
         setFarmStatus([]);
+        setAmount(0);
         setFish(
             fish.map((fish) =>
                 fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false },
