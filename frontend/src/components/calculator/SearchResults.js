@@ -11,74 +11,6 @@ import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
-const Card = styled.div`
-    background-color: white;
-    width: 1193px;
-    height: 550px;
-    min-width: 500px;
-    border-radius: 5px;
-    margin: auto;
-    margin-bottom: 7%;
-    z-index: 3;
-`;
-
-const CustomDiv = styled.div`
-    border-bottom: 1px solid #f6f6f6;
-    border-right: 1px solid #eaeaea;
-    width: 20%;
-    height: 494px;
-    position: relative;
-    overflow: overlay;
-    overflow-x: hidden;
-    border-radius: 5px;
-    min-width: 20%;
-    &::-webkit-scrollbar {
-        width: 5px;
-        border-radius: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 5px;
-    }
-`;
-
-const CustomList = styled.div`
-    width: 11%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 10px;
-    flex-wrap: wrap;
-    background-color: white;
-    border-right: 1px solid #eaeaea;
-    border-bottom: 1px solid #f6f6f6;
-    min-width: 11%;
-    position: relative;
-    overflow: overlay;
-    max-height: 494px;
-    padding: 0;
-    overflow-x: hidden;
-    &::-webkit-scrollbar {
-        width: 5px;
-        border-radius: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 5px;
-    }
-`;
-
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '50px',
-    height: '50px',
-    objectFit: 'cover',
-    margin: 'auto',
-    // padding: '9px 13px',
-});
-
 const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
     const [result, setResult] = useRecoilState(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
@@ -128,16 +60,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
 
     return (
         <Card ref={ref}>
-            <Typography
-                sx={{
-                    color: '#575757',
-                    padding: '18px 0px 13px 19px',
-                    borderBottom: '1px solid #EAEAEA',
-                    fontWeight: 'bold',
-                }}
-            >
-                검색 결과({result.length > 0 ? result.length : null})
-            </Typography>
+            <SearchResultsTypography>검색 결과({result.length})</SearchResultsTypography>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
                     {result.length > 0 && loading === false ? (
@@ -145,22 +68,12 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                             const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                             return (
                                 <Fade in={true} timeout={i * 50} key={i}>
-                                    <CardContent
+                                    <CustomCardContent
                                         onClick={() => {
                                             onRecommendClick(fishRecommendCombinations, combinationName);
                                         }}
                                         sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
                                             backgroundColor: active ? '#F8F8F8' : 'white',
-                                            cursor: 'pointer',
-                                            borderBottom: '1px solid #F6F6F6',
-                                            height: '70px',
-                                            '&:last-child': { pb: 1 },
-                                            padding: '0 10px 0 10px',
-                                            ':hover': {
-                                                backgroundColor: '#F4F4F4',
-                                            },
                                         }}
                                     >
                                         <Grid
@@ -201,16 +114,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                                 />
                                             )}
                                         </Grid>
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                width: '100%',
-                                                height: '100%',
-                                                paddingLeft: '10px',
-                                            }}
-                                        >
+                                        <SearchedCombinationsDiv>
                                             <Typography
                                                 sx={{
                                                     fontSize: 14,
@@ -229,20 +133,18 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                             >
                                                 ({combinationSize})
                                             </Typography>
-                                        </div>
-                                    </CardContent>
+                                        </SearchedCombinationsDiv>
+                                    </CustomCardContent>
                                 </Fade>
                             );
                         })
                     ) : loading === true ? (
-                        <div
-                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}
-                        >
+                        <LoadingSpinner>
                             <img src={Spinner} alt="로딩중" width="30%" />
-                        </div>
+                        </LoadingSpinner>
                     ) : null}
                 </CustomDiv>
-                <CustomList>
+                <CustomListDiv>
                     {selectResult
                         ? selectResult.map((item, i) => {
                               const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
@@ -251,35 +153,19 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                               }
                               return (
                                   <Fade in={true} timeout={i * 300} key={i}>
-                                      <ListItem
+                                      <CustomListItems
                                           onClick={() => {
                                               onEstimateClick(fishRecommendBtDtos, totalPrice, i);
                                           }}
                                           sx={{
-                                              paddingLeft: 0,
                                               backgroundColor: active ? '#F8F8F8' : 'white',
-                                              cursor: 'pointer',
-                                              borderBottom: '1px solid #F6F6F6',
-                                              display: 'flex',
-                                              flexDirection: 'column',
-                                              ':hover': {
-                                                  backgroundColor: '#F4F4F4',
-                                              },
                                           }}
                                       >
                                           {fishRecommendBtDtos
                                               ? fishRecommendBtDtos.map((item, i) => {
                                                     const { fishName, serving } = item;
                                                     return (
-                                                        <div
-                                                            key={i}
-                                                            style={{
-                                                                width: '100%',
-                                                                display: 'flex',
-                                                                justifyContent: 'space-around',
-                                                                flexWrap: 'wrap',
-                                                            }}
-                                                        >
+                                                        <CustomListItem key={i}>
                                                             <Typography
                                                                 sx={{
                                                                     fontSize: '13px',
@@ -294,10 +180,9 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                                                     color: '#979797',
                                                                 }}
                                                             >
-                                                                ({serving}
-                                                                인분)
+                                                                ({serving}인분)
                                                             </Typography>
-                                                        </div>
+                                                        </CustomListItem>
                                                     );
                                                 })
                                               : null}
@@ -310,76 +195,50 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                           >
                                               {totalPrice.toLocaleString('ko-KR')}원
                                           </Typography>
-                                      </ListItem>
+                                      </CustomListItems>
                                   </Fade>
                               );
                           })
                         : null}
-                </CustomList>
+                </CustomListDiv>
                 {selectEstimate ? (
                     <Fade in={true}>
-                        <div
-                            style={{
-                                width: '69%',
-                                height: '100%',
-                                minWidth: '300px',
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: '95%',
-                                    margin: 'auto',
-                                    height: '490px',
-                                    overflow: 'auto',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            width: '250px',
+                        <SelectedEstimateContainer>
+                            <SelectedEstimateTopMenu>
+                                <div>
+                                    <Typography
+                                        sx={{
+                                            color: '#010000',
+                                            paddingTop: '18px',
+                                            fontWeight: 'bold',
+                                            fontSize: '16px',
                                         }}
                                     >
-                                        <Typography
-                                            sx={{
-                                                color: '#010000',
-                                                paddingTop: '18px',
-                                                fontWeight: 'bold',
-                                                fontSize: '16px',
-                                            }}
-                                        >
-                                            수산물 견적
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            sx={{
-                                                color: '#949494',
-                                                fontSize: '11px',
-                                                mb: '11px',
-                                            }}
-                                        >
-                                            실제 시세과 상이할 수 있습니다.
-                                        </Typography>
-                                    </div>
-                                    <div style={{ width: '120px', display: 'flex', justifyContent: 'flex-end' }}>
-                                        {/* {localStorage.getItem('boomark').} */}
-                                        <BookmarkBorderIcon
-                                            fontSize="large"
-                                            onClick={addBookmark(selectEstimate)}
-                                            sx={{ cursor: 'pointer' }}
-                                        />
-                                        <BookmarkAddedIcon fontSize="medium" />
-                                    </div>
+                                        수산물 견적
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            color: '#949494',
+                                            fontSize: '11px',
+                                            mb: '11px',
+                                        }}
+                                    >
+                                        실제 시세과 상이할 수 있습니다.
+                                    </Typography>
                                 </div>
-                                <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
-                            </div>
-                        </div>
+                                {localStorage.getItem('bookmark') ? (
+                                    <BookmarkAddedIcon fontSize="medium" />
+                                ) : (
+                                    <BookmarkBorderIcon
+                                        fontSize="large"
+                                        onClick={addBookmark(selectEstimate)}
+                                        sx={{ cursor: 'pointer' }}
+                                    />
+                                )}
+                            </SelectedEstimateTopMenu>
+                            <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
+                        </SelectedEstimateContainer>
                     </Fade>
                 ) : null}
             </div>
@@ -389,14 +248,143 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
 
 export default React.memo(SearchResults);
 
-// if (i > 3)
-// return (
-//     <Typography
-//         key={item}
-//         sx={{
-//             fontSize: '5px',
-//         }}
-//     >
-//         외 {combinationName.length - i}개
-//     </Typography>
-// ); // 이미지 5개 이상 안나오게
+const Card = styled.div`
+    background-color: white;
+    width: 1193px;
+    height: 550px;
+    min-width: 500px;
+    border-radius: 5px;
+    margin: auto;
+    margin-bottom: 7%;
+    z-index: 3;
+`;
+
+const SearchResultsTypography = styled(Typography)`
+    color: #575757;
+    padding: 18px 0px 13px 19px;
+    border-bottom: 1px solid #eaeaea;
+    font-weight: bold;
+`;
+
+const CustomDiv = styled.div`
+    border-bottom: 1px solid #f6f6f6;
+    border-right: 1px solid #eaeaea;
+    width: 20%;
+    height: 494px;
+    position: relative;
+    overflow: overlay;
+    overflow-x: hidden;
+    border-radius: 5px;
+    min-width: 20%;
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+`;
+
+const CustomCardContent = styled(CardContent)`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid #f6f6f6;
+    height: 70px;
+    &:last-child {
+        padding-bottom: 1;
+    }
+    padding: 0 10px 0 10px;
+    :hover {
+        background-color: #f4f4f4;
+    }
+`;
+
+const SearchedCombinationsDiv = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding-left: 10px;
+`;
+
+const LoadingSpinner = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+`;
+
+const CustomListDiv = styled.div`
+    width: 11%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    flex-wrap: wrap;
+    background-color: white;
+    border-right: 1px solid #eaeaea;
+    border-bottom: 1px solid #f6f6f6;
+    min-width: 11%;
+    position: relative;
+    overflow: overlay;
+    max-height: 494px;
+    padding: 0;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+`;
+
+const CustomListItems = styled(ListItem)`
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    cursor: pointer;
+    border-bottom: 1px solid #f6f6f6;
+    :hover {
+        background-color: #f4f4f4;
+    }
+`;
+
+const CustomListItem = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+`;
+
+const SelectedEstimateContainer = styled.div`
+    width: 69%;
+    min-width: 300px;
+    max-height: 490px;
+    /* margin: auto; */
+    overflow: auto;
+    padding: 0 20px;
+`;
+
+const SelectedEstimateTopMenu = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem 0 0;
+`;
+
+const Img = styled('img')({
+    // margin: '13px 13px 12px 16px ',
+    display: 'block',
+    width: '50px',
+    height: '50px',
+    objectFit: 'cover',
+    margin: 'auto',
+    // padding: '9px 13px',
+});

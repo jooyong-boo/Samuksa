@@ -117,22 +117,8 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                     </Table>
                 </TableContainer>
             </ThemeProvider>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '95%',
-                    margin: 'auto',
-                    marginTop: '1rem',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        width: '50%',
-                        flexDirection: 'column',
-                    }}
-                >
+            <CombinationInfoContainer>
+                <CombinationFishDetailInfo>
                     {selectEstimate
                         ? selectEstimate.map((item, i) => {
                               const { fishName, serving, fishRecommendAlgoWeights, weightPerServing } = item;
@@ -168,49 +154,41 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                                           {(((weightPerServing * serving) / 1000) * 0.5 * serving).toFixed(1)}
                                           kg
                                       </Typography>
-                                      {/* <Typography sx={{ fontSize: 12, color: '#707070', marginRight: 1 }}>{maxWeight? maxWeight / 1000 : minWeight / 1000}kg(무게) X 0.5(수율) X {serving}(수량) =</Typography>
-                            <Typography sx={{ fontSize: 13, fontWeight: 'bold', color: '#707070' }}>{maxWeight ? ((maxWeight * serving / 2) / 1000) : ((minWeight * serving / 2) / 1000)}kg</Typography> */}
                                   </div>
                               );
                           })
                         : null}
-                </div>
-                <div>
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: 6,
+                </CombinationFishDetailInfo>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography
+                        sx={{
+                            fontSize: 14,
+                            fontWeight: 'medium',
+                            marginRight: 1,
                         }}
                     >
-                        {/* <Typography
-                            sx={{
-                                fontSize: 14,
-                                fontWeight: 'medium',
-                                marginRight: 1,
-                            }}
-                        >
-                            총 순살무게:{' '}
-                        </Typography>
-                        <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>?</Typography> */}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography
-                            sx={{
-                                fontSize: 14,
-                                fontWeight: 'medium',
-                                marginRight: 1,
-                            }}
-                        >
-                            총 금액:{' '}
-                        </Typography>
-                        <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>
-                            {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
-                        </Typography>
-                        원
-                    </div>
+                        총 금액:{' '}
+                    </Typography>
+                    <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>
+                        {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
+                    </Typography>
+                    원
                 </div>
-            </div>
+            </CombinationInfoContainer>
         </div>
     );
 }
+
+const CombinationInfoContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: auto;
+    margin: 1rem;
+`;
+
+const CombinationFishDetailInfo = styled.div`
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+`;

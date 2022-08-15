@@ -153,7 +153,7 @@ const Writing = () => {
                     글작성
                 </Typography>
                 <div style={{ display: 'flex', alignItems: 'center', paddingTop: '1rem' }}>
-                    {userInfo ? (
+                    {userInfo && (
                         <AccountCircleIcon
                             sx={{
                                 color: '#6EA5F8',
@@ -162,17 +162,8 @@ const Writing = () => {
                                 height: '40px',
                             }}
                         />
-                    ) : (
-                        <AccountCircleIcon
-                            sx={{
-                                color: '#a2a5a9',
-                                verticalAlign: 'middle',
-                                width: '40px',
-                                height: '40px',
-                            }}
-                        />
                     )}
-                    <Typography>{userInfo ? userInfo.userNikName : '비회원'}</Typography>
+                    <Typography>{userInfo && userInfo.userNikName}</Typography>
                 </div>
                 <FormControl fullWidth>
                     <Select

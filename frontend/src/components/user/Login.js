@@ -64,7 +64,7 @@ const Login = () => {
     const getLogin = async () => {
         login({ userId, passwd })
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (res.message === 'ID REGISTERED') {
                     dismissAll();
                     notifyError('아이디가 틀립니다.');
@@ -120,12 +120,6 @@ const Login = () => {
 
     return (
         <>
-            {/* <ToastContainer
-                toastStyle={{
-                    backgroundColor: '#F5F5F5',
-                    color: '#575757',
-                }}
-            /> */}
             <Background>
                 <Card>
                     <div style={{ width: '100%', textAlign: 'center' }}>

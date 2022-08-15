@@ -7,9 +7,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import Header from './components/Header';
 import setAuthorizationToken from './components/utils/setAuthorizationToken';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TopScrollBtn from './components/common/TopScrollBtn';
+import { StyledEngineProvider } from '@mui/styled-engine';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -18,16 +19,18 @@ root.render(
     <React.StrictMode>
         <RecoilRoot>
             <BrowserRouter>
-                <ToastContainer
-                    toastStyle={{
-                        backgroundColor: '#F5F5F5',
-                        color: '#575757',
-                        opacity: '0.9',
-                    }}
-                />
-                <Header />
-                <App />
-                <TopScrollBtn />
+                <StyledEngineProvider injectFirst>
+                    <ToastContainer
+                        toastStyle={{
+                            backgroundColor: '#F5F5F5',
+                            color: '#575757',
+                            opacity: '0.9',
+                        }}
+                    />
+                    <Header />
+                    <App />
+                    <TopScrollBtn />
+                </StyledEngineProvider>
             </BrowserRouter>
         </RecoilRoot>
     </React.StrictMode>,

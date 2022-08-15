@@ -24,6 +24,7 @@ const Header = () => {
             autoClose: 1000,
             hideProgressBar: true,
         });
+    const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -90,7 +91,7 @@ const Header = () => {
     const logout = (name) => {
         if (name === '로그아웃') {
             localStorage.removeItem('jwtToken');
-            // navigate('/');
+            navigate('/');
             setUserInfoState('');
             setUserIdState('');
             notify('다음에 또 뵈요!');
@@ -127,23 +128,31 @@ const Header = () => {
     }, [loginConfirm]);
 
     useEffect(() => {
-        getUserInfo().then((res) => {
-            if (res) {
-                if (res.code === 500) {
-                    localStorage.removeItem('jwtToken');
-                    setUserInfoState('');
-                    // notify(
-                    //     <p>
-                    //         아이디 인증시간이 만료되었습니다.
-                    //         <br /> 재로그인 해주세요
-                    //     </p>,
-                    // );
-                } else {
-                    setUserInfoState(res);
-                }
-            }
-        });
-    }, []);
+        if (loginStatus) {
+            getUserInfo()
+                .then((res) => {
+                    if (res) {
+                        if (res.code === 500) {
+                            localStorage.removeItem('jwtToken');
+                            setLoginStatus(false);
+                            setUserInfoState('');
+                            setUserIdState('');
+                            // notify(
+                            //     <p>
+                            //         아이디 인증시간이 만료되었습니다.
+                            //         <br /> 재로그인 해주세요
+                            //     </p>,
+                            // );
+                        } else {
+                            setUserInfoState(res);
+                        }
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        }
+    }, [location]);
 
     // useEffect(() => {
     //     if (loginStatus) {

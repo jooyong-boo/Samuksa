@@ -16,30 +16,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';
 import { useState } from 'react';
 
-const Card = styled.div`
-    background-color: white;
-    width: 295px;
-    height: 464px;
-    border-radius: 5px;
-    /* margin: 30px 100px; */
-    position: relative;
-`;
-
-const CustomForm = styled.form`
-    position: relative;
-    height: 340px;
-    overflow: overlay;
-    overflow-x: hidden;
-    &::-webkit-scrollbar {
-        width: 5px;
-        border-radius: 5px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 5px;
-    }
-`;
-
 const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
     const notify = (text) =>
         toast.warning(text, {
@@ -77,30 +53,13 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
     return (
         <>
             <Card>
-                <Typography
-                    sx={{
-                        color: '#575757',
-                        padding: '18px 0px 13px 19px',
-                        borderBottom: '1px solid #EAEAEA',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    선택한 조건 목록
-                </Typography>
-                <CustomForm>
+                <SelectedConditionListTypography>선택한 조건 목록</SelectedConditionListTypography>
+                <SelectedConditionLists>
                     {selectCondition.map((select) => {
-                        {
-                            /* console.log(select) */
-                        }
                         const { id, selectFish, amount, farmStatus, imgUrl } = select;
                         return (
                             <Slide key={id} direction="right" in={true} timeout={400}>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        borderBottom: '1px solid #F6F6F6',
-                                    }}
-                                >
+                                <ListItem>
                                     {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
                                     <Avatar
                                         alt={selectFish}
@@ -179,41 +138,29 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                                             <ToastContainer />
                                         </CardActions>
                                     </div>
-                                </div>
+                                </ListItem>
                             </Slide>
                         );
                     })}
-                </CustomForm>
-                <div style={{ width: '100%', height: '17%', display: 'flex' }}>
+                </SelectedConditionLists>
+                <CombinationSearchBtnDiv>
                     {selectCondition.length > 0 ? (
-                        <Button
+                        <CombinationSearchBtn
                             variant="contained"
                             disableElevation
                             sx={{
-                                mt: 3,
-                                mb: 2,
-                                width: '274px',
-                                height: '38px',
                                 backgroundColor: '#0098EE',
-                                fontWeight: 900,
-                                margin: 'auto',
                             }}
                             onClick={onClick}
                         >
                             조합 검색
-                        </Button>
+                        </CombinationSearchBtn>
                     ) : (
-                        <Button
+                        <CombinationSearchBtn
                             variant="contained"
                             disableElevation
                             disabled={true}
                             sx={{
-                                mt: 3,
-                                mb: 2,
-                                width: '274px',
-                                height: '38px',
-                                fontWeight: 900,
-                                margin: 'auto',
                                 ':disabled': {
                                     backgroundColor: 'rgba(0,152,238,0.3)',
                                     color: '#FFFFFF',
@@ -222,9 +169,9 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
                             onClick={onClick}
                         >
                             선택한 조합이 없어요
-                        </Button>
+                        </CombinationSearchBtn>
                     )}
-                </div>
+                </CombinationSearchBtnDiv>
             </Card>
             <SearchResults ref={contactRef} loading={loading} setLoading={setLoading} />
         </>
@@ -232,3 +179,52 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
 };
 
 export default SelectedConditionList;
+
+const Card = styled.div`
+    background-color: white;
+    width: 295px;
+    height: 464px;
+    border-radius: 5px;
+    /* margin: 30px 100px; */
+    position: relative;
+`;
+
+const SelectedConditionListTypography = styled(Typography)`
+    color: #575757;
+    padding: 18px 0px 13px 19px;
+    border-bottom: 1px solid #eaeaea;
+    font-weight: bold;
+`;
+
+const SelectedConditionLists = styled.form`
+    position: relative;
+    height: 340px;
+    overflow: overlay;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
+`;
+
+const ListItem = styled.div`
+    display: flex;
+    border-bottom: 1px solid #f6f6f6;
+`;
+
+const CombinationSearchBtnDiv = styled.div`
+    width: 100%;
+    height: 17%;
+    display: flex;
+`;
+
+const CombinationSearchBtn = styled(Button)`
+    width: 92%;
+    height: 38px;
+    font-weight: 900;
+    margin: auto;
+`;

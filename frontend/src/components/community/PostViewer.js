@@ -13,11 +13,16 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../../store/user';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { getPostState } from '../../store/atom';
 
 const Background = styled.div`
     background-color: white;
-    width: 95%;
-    height: 90%;
+    width: 95vw;
+    height: 90vh;
     padding-top: 70px;
     /* display: flex; */
     /* flex-wrap: wrap; */
@@ -31,12 +36,13 @@ const Background = styled.div`
 const PostViewer = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const params = useParams();
     const [data, setData] = useState('');
     const [comments, setComments] = useState('');
+    const userInfo = useRecoilValue(userInfoState);
+    const postList = useRecoilValue(getPostState);
 
     const commentRef = useRef();
-
-    // console.log(id);
 
     const getPostsId = async (id) => {
         try {
@@ -60,15 +66,27 @@ const PostViewer = () => {
         commentRef.current?.scrollIntoView({ block: 'start' });
     };
 
+    const handlePrevPost = () => {
+        if (Number(params.id) - 1 > 0) {
+            navigate(`/board/review/post/${Number(params.id) - 1}`);
+        }
+    };
+
+    const handleNextPost = () => {
+        if (Number(params.id) < postList.length) {
+            navigate(`/board/review/post/${Number(params.id) + 1}`);
+        }
+    };
+
     useEffect(() => {
         getPostsId(id);
         getComment(id);
     }, [id]);
     // console.log(data);
-    console.log(comments);
+    // console.log(comments);
 
     const goList = () => {
-        navigate(-1);
+        navigate('/board/review');
     };
 
     return (
@@ -95,8 +113,13 @@ const PostViewer = () => {
                     </div>
                     <div>
                         <Typography sx={{ cursor: 'pointer' }} onClick={moveComment}>
-                            <CommentIcon sx={{ margin: '0 0.2rem' }} />
+                            조회
+                            <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
+                            <CommentIcon sx={{ margin: '0 0.5rem' }} />
                             댓글
+                            <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
+                            <ThumbUpIcon sx={{ margin: '0 0.5rem' }} />
+                            추천
                             <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
                         </Typography>
                     </div>
@@ -114,8 +137,11 @@ const PostViewer = () => {
                     {comments !== ''
                         ? comments.map((comment) => {
                               return (
-                                  <div key={comment.id} ref={commentRef}>
-                                      <Typography>닉네임: {comment.UserId}</Typography>
+                                  <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
+                                      <Typography>닉네임: {comment.id}</Typography>
+                                      <Typography fontSize={14} color="#979797">
+                                          {comment.createdAt}
+                                      </Typography>
                                       <Typography>{comment.content}</Typography>
                                   </div>
                               );
@@ -123,24 +149,115 @@ const PostViewer = () => {
                         : null}
                 </div>
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
-                <div style={{ margin: '1rem 0' }}>
-                    <Typography>댓글 작성</Typography>
-                    <TextField sx={{ width: '100%' }} />
-                    <Button
-                        variant="contained"
-                        sx={{
-                            backgroundColor: '#6EA5F8',
-                            fontWeight: 900,
-                            color: 'white',
-                            boxShadow: 'none',
-                            width: '10%',
-                            margin: '1rem 0',
-                            ':hover': { boxShadow: 'none' },
+                <div style={{ margin: '1rem 0', display: 'flex', width: '100%', flexWrap: 'wrap' }}>
+                    {/* <Typography>댓글 작성</Typography> */}
+                    {userInfo && (
+                        <AccountCircleIcon
+                            sx={{
+                                color: '#6EA5F8',
+                                verticalAlign: 'middle',
+                                width: '40px',
+                                height: '40px',
+                            }}
+                        />
+                    )}
+                    <Typography>{userInfo && userInfo.userNikName}</Typography>
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            flexWrap: 'wrap',
+                            padding: '1rem',
+                            marginTop: '1rem',
+                            border: '2px solid rgba(0, 0, 0, 0.1)',
+                            borderRadius: '5px',
                         }}
-                        onClick={goList}
                     >
-                        목록
-                    </Button>
+                        <TextField sx={{ width: '100%' }} placeholder="댓글을 남겨보세요" />
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#6EA5F8',
+                                fontWeight: 900,
+                                color: 'white',
+                                boxShadow: 'none',
+                                width: '10%',
+                                margin: '1rem',
+                                ':hover': { boxShadow: 'none' },
+                            }}
+                            onClick={goList}
+                        >
+                            등록
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#6EA5F8',
+                                fontWeight: 900,
+                                color: 'white',
+                                boxShadow: 'none',
+                                width: '10%',
+                                margin: '1rem 0',
+                                ':hover': { boxShadow: 'none' },
+                            }}
+                            onClick={goList}
+                        >
+                            등록 + 추천
+                        </Button>
+                    </div>
+                    <div style={{ display: 'flex', width: '63%', justifyContent: 'space-between' }}>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                backgroundColor: '#6EA5F8',
+                                fontWeight: 900,
+                                color: 'white',
+                                boxShadow: 'none',
+                                width: '8rem',
+                                height: '40px',
+                                margin: '1rem 0',
+                                ':hover': { boxShadow: 'none' },
+                            }}
+                            onClick={goList}
+                        >
+                            목록
+                        </Button>
+                        <div>
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#6EA5F8',
+                                    fontWeight: 900,
+                                    color: 'white',
+                                    boxShadow: 'none',
+                                    width: '8rem',
+                                    height: '40px',
+                                    margin: '1rem',
+                                    ':hover': { boxShadow: 'none' },
+                                }}
+                                onClick={handlePrevPost}
+                            >
+                                이전글
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    backgroundColor: '#6EA5F8',
+                                    fontWeight: 900,
+                                    color: 'white',
+                                    boxShadow: 'none',
+                                    width: '8rem',
+                                    height: '40px',
+                                    margin: '1rem 0',
+                                    ':hover': { boxShadow: 'none' },
+                                }}
+                                onClick={handleNextPost}
+                            >
+                                다음글
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </Paper>
             {/* <Paper sx={{ height: '75%', width: '80%', margin: 'auto', padding: '2rem', marginBottom: '1rem' }}> */}
