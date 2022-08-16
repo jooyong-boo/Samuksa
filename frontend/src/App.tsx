@@ -1,6 +1,6 @@
 import './App.css';
-import React, { Suspense } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { Suspense } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import { createTheme, ThemeProvider } from '@mui/material';
 import CalculatorPage from './pages/CalculatorPage';

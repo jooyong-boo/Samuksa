@@ -1,5 +1,4 @@
 import { Grid, Typography } from '@mui/material';
-import React from 'react';
 import styled from 'styled-components';
 import introduce1 from '../components/assets/img/introduce1.png';
 import introduce2 from '../components/assets/img/introduce2.png';
