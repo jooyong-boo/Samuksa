@@ -12,32 +12,6 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
 
-const Background = styled.div`
-    background-color: #ebecee;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 70px;
-    overflow: hidden;
-`;
-
-const Card = styled.div`
-    background-color: white;
-    width: 30rem;
-    height: 35rem;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    border: 1px solid #eaeaea;
-`;
-
 const Login = () => {
     const notifyError = (text) =>
         toast.error(text, {
@@ -124,23 +98,13 @@ const Login = () => {
                 <Card>
                     <div style={{ width: '100%', textAlign: 'center' }}>
                         {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
-                        <Typography
-                            sx={{
-                                fontSize: '1.5rem',
-                                fontWeight: 'bold',
-                                borderBottom: '1px solid #EAEAEA',
-                                paddingBottom: '24px',
-                                textAlign: 'center',
-                            }}
-                        >
-                            로그인
-                        </Typography>
+                        <LoginTitle>로그인</LoginTitle>
                         {/* </div> */}
                         <div style={{ paddingTop: '24px', display: 'inline-flex', flexDirection: 'column' }}>
                             <Typography sx={{ fontSize: '12px', mb: '1rem', fontWeight: 'bold' }}>
                                 원활한 서비스 이용을 위해 로그인해주세요.
                             </Typography>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>아이디</Typography>
+                            <CustomTypography>아이디</CustomTypography>
                             <TextField
                                 id="id"
                                 variant="outlined"
@@ -148,11 +112,10 @@ const Login = () => {
                                 placeholder="아이디 입력"
                                 onChange={handleChangeUserId}
                                 value={userId}
-                                sx={{}}
                             />
                         </div>
                         <div style={{ paddingTop: '24px' }}>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
+                            <CustomTypography>비밀번호</CustomTypography>
                             <TextField
                                 id="password"
                                 variant="outlined"
@@ -174,21 +137,7 @@ const Login = () => {
                             }}
                         >
                             <Typography fontSize={12} color="#969696">
-                                <input
-                                    type="checkbox"
-                                    style={{
-                                        width: '16px',
-                                        height: '16px',
-                                        backgroundColor: 'white',
-                                        border: '1px solid #D9D9D9',
-                                        borderRadius: '3px',
-                                        verticalAlign: 'middle',
-                                        marginRight: '0.2rem',
-                                        cursor: 'pointer',
-                                    }}
-                                    checked={idSaveStatus}
-                                    onChange={handleCheckbox}
-                                />
+                                <SaveIdCheckbox type="checkbox" checked={idSaveStatus} onChange={handleCheckbox} />
                                 아이디 저장
                             </Typography>
                             <Typography fontSize={12} fontWeight="bold">
@@ -198,21 +147,9 @@ const Login = () => {
                             </Typography>
                         </div>
                         <div>
-                            <Button
-                                variant="contained"
-                                type="submit"
-                                sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                    width: '40%',
-                                    marginBottom: '0.5rem',
-                                    ':hover': { boxShadow: 'none' },
-                                }}
-                                onClick={getLogin}
-                            >
+                            <LoginBtn variant="contained" type="submit" onClick={getLogin}>
                                 로그인
-                            </Button>
+                            </LoginBtn>
                         </div>
                         <div>
                             <KakaoLogin />
@@ -225,3 +162,65 @@ const Login = () => {
 };
 
 export default Login;
+
+const Background = styled.div`
+    background-color: #ebecee;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+    overflow: hidden;
+`;
+
+const Card = styled.div`
+    background-color: white;
+    width: 30rem;
+    height: 35rem;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #eaeaea;
+`;
+
+const LoginTitle = styled(Typography)`
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 24px;
+    text-align: center;
+`;
+
+const CustomTypography = styled(Typography)`
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+`;
+
+const SaveIdCheckbox = styled.input`
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 0.2rem;
+    cursor: pointer;
+`;
+
+const LoginBtn = styled(Button)`
+    background-color: #6ea5f8;
+    color: white;
+    box-shadow: none;
+    width: 40%;
+    margin-bottom: 0.5rem;
+    :hover {
+        box-shadow: none;
+    }
+`;

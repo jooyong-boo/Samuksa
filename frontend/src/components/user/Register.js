@@ -10,33 +10,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
 import { userIdState } from '../../store/user';
 
-const Background = styled.div`
-    background-color: #ebecee;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 70px;
-    overflow: hidden;
-`;
-
-const Card = styled.div`
-    background-color: white;
-    width: 30rem;
-    height: 45rem;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    border: 1px solid #eaeaea;
-    overflow: auto;
-`;
-
 const Register = () => {
     const navigate = useNavigate();
     const notify = (text) =>
@@ -177,20 +150,10 @@ const Register = () => {
             <Background>
                 <Card>
                     <div style={{ width: '100%', textAlign: 'center' }}>
-                        <Typography
-                            sx={{
-                                fontSize: '1.5rem',
-                                fontWeight: 'bold',
-                                borderBottom: '1px solid #EAEAEA',
-                                paddingBottom: '24px',
-                                textAlign: 'center',
-                            }}
-                        >
-                            회원가입
-                        </Typography>
+                        <RegisterTitle>회원가입</RegisterTitle>
                         {/* </div> */}
                         <div style={{ paddingTop: '1rem' }}>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>아이디</Typography>
+                            <CustomTypography>아이디</CustomTypography>
                             <TextField
                                 id="id"
                                 variant="outlined"
@@ -204,21 +167,14 @@ const Register = () => {
                                     onChange(setId, id, e);
                                 }}
                             />
-                            <Button
+                            <CustomBtn
                                 variant="contained"
-                                sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                    marginTop: '0.2rem',
-                                    ml: '0.5rem',
-                                    ':hover': { boxShadow: 'none' },
-                                }}
                                 disabled={checkId}
                                 onClick={checkOverlappingId}
+                                sx={{ marginLeft: '0.5rem' }}
                             >
                                 중복체크
-                            </Button>
+                            </CustomBtn>
                             {overlappingId === true ? (
                                 <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
                                     이미 존재하는 아이디입니다.
@@ -231,7 +187,7 @@ const Register = () => {
                             ) : null}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>닉네임</Typography>
+                            <CustomTypography>닉네임</CustomTypography>
                             <TextField
                                 id="nickName"
                                 variant="outlined"
@@ -243,21 +199,14 @@ const Register = () => {
                                     onChange(setNickName, nickName, e);
                                 }}
                             />
-                            <Button
+                            <CustomBtn
                                 variant="contained"
-                                sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                    marginTop: '0.2rem',
-                                    ml: '0.5rem',
-                                    ':hover': { boxShadow: 'none' },
-                                }}
                                 disabled={checkNickName}
                                 onClick={checkOverlappingNickName}
+                                sx={{ marginLeft: '0.5rem' }}
                             >
                                 중복체크
-                            </Button>
+                            </CustomBtn>
                             {overlappingNickName === false ? (
                                 <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
                                     사용 가능한 닉네임입니다.
@@ -270,7 +219,7 @@ const Register = () => {
                             ) : null}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>비밀번호</Typography>
+                            <CustomTypography>비밀번호</CustomTypography>
                             <TextField
                                 id="password"
                                 variant="outlined"
@@ -304,7 +253,7 @@ const Register = () => {
                             )} */}
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
-                            <Typography sx={{ fontSize: '16px', fontWeight: 'bold', mb: 0.5 }}>이메일</Typography>
+                            <CustomTypography>이메일</CustomTypography>
                             <TextField
                                 id="outlined-basic"
                                 variant="outlined"
@@ -318,28 +267,20 @@ const Register = () => {
                                 }}
                             />
                             {checkEmail && (
-                                <Button
+                                <CustomBtn
                                     variant="contained"
                                     // disabled={checkAuthNum}
-                                    sx={{
-                                        backgroundColor: '#6EA5F8',
-                                        color: 'white',
-                                        boxShadow: 'none',
-                                        marginTop: '0.2rem',
-                                        ml: '0.5rem',
-                                        ':hover': { boxShadow: 'none' },
-                                    }}
+                                    sx={{ marginLeft: '0.5rem' }}
                                     onClick={onClickAuth}
                                 >
                                     인증
-                                </Button>
+                                </CustomBtn>
                             )}
                             {/* <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
                                 이미 등록된 이메일입니다.
                             </Typography> */}
                         </div>
-                        <div></div>
-                        <div style={{ paddingTop: '0.1rem' }}>
+                        <div style={{ paddingTop: '0.5rem' }}>
                             {checkAuthNum ? (
                                 <>
                                     {/* <Typography sx={{ fontSize: '16px', mb: 0.5 }}>인증번호를 입력해주세요</Typography> */}
@@ -350,19 +291,9 @@ const Register = () => {
                                         autoComplete="off"
                                         placeholder="인증번호"
                                     />
-                                    <Button
-                                        variant="contained"
-                                        sx={{
-                                            backgroundColor: '#6EA5F8',
-                                            color: 'white',
-                                            boxShadow: 'none',
-                                            marginTop: '0.2rem',
-                                            ml: '0.5rem',
-                                            ':hover': { boxShadow: 'none' },
-                                        }}
-                                    >
+                                    <CustomBtn variant="contained" sx={{ marginLeft: '0.5rem' }}>
                                         확인
-                                    </Button>
+                                    </CustomBtn>
                                 </>
                             ) : null}
                         </div>
@@ -382,22 +313,16 @@ const Register = () => {
                             </Typography>
                         </div>
                         <div>
-                            <Button
+                            <CustomBtn
                                 variant="contained"
                                 type="submit"
-                                sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                    width: '50%',
-                                    ':hover': { boxShadow: 'none' },
-                                }}
+                                sx={{ width: '50%' }}
                                 onClick={() => {
                                     onSignUp(id, nickName, password, email);
                                 }}
                             >
                                 회원가입
-                            </Button>
+                            </CustomBtn>
                         </div>
                     </div>
                 </Card>
@@ -407,3 +332,53 @@ const Register = () => {
 };
 
 export default Register;
+
+const Background = styled.div`
+    background-color: #ebecee;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+    overflow: hidden;
+`;
+
+const Card = styled.div`
+    background-color: white;
+    width: 30rem;
+    height: 45rem;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid #eaeaea;
+    overflow: auto;
+`;
+
+const RegisterTitle = styled(Typography)`
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 24px;
+    text-align: center;
+`;
+
+const CustomTypography = styled(Typography)`
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+`;
+
+const CustomBtn = styled(Button)`
+    background-color: #6ea5f8;
+    color: white;
+    box-shadow: none;
+    :hover {
+        box-shadow: none;
+    }
+`;

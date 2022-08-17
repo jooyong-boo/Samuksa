@@ -19,20 +19,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 
-const Background = styled.div`
-    background-color: white;
-    width: 95vw;
-    height: 90vh;
-    padding-top: 70px;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    overflow: auto;
-    margin: auto;
-`;
-
 const PostViewer = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -91,10 +77,7 @@ const PostViewer = () => {
 
     return (
         <Background>
-            <Paper
-                elevation={1}
-                sx={{ height: '95%', width: '80%', margin: 'auto', padding: '2rem', overflow: 'auto' }}
-            >
+            <PostViewerPaper>
                 <Typography sx={{ fontSize: '1.3rem', fontWeight: 'medium' }}>{data.title}</Typography>
                 <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -162,104 +145,60 @@ const PostViewer = () => {
                         />
                     )}
                     <Typography>{userInfo && userInfo.userNikName}</Typography>
-                    <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            flexWrap: 'wrap',
-                            padding: '1rem',
-                            marginTop: '1rem',
-                            border: '2px solid rgba(0, 0, 0, 0.1)',
-                            borderRadius: '5px',
-                        }}
-                    >
+                    <CommentBox>
                         <TextField sx={{ width: '100%' }} placeholder="댓글을 남겨보세요" />
-                        <Button
+                        <CustomBtn
                             variant="contained"
                             sx={{
-                                backgroundColor: '#6EA5F8',
-                                fontWeight: 900,
-                                color: 'white',
-                                boxShadow: 'none',
-                                width: '10%',
                                 margin: '1rem',
-                                ':hover': { boxShadow: 'none' },
                             }}
                             onClick={goList}
                         >
                             등록
-                        </Button>
-                        <Button
+                        </CustomBtn>
+                        <CustomBtn
                             variant="contained"
                             sx={{
-                                backgroundColor: '#6EA5F8',
-                                fontWeight: 900,
-                                color: 'white',
-                                boxShadow: 'none',
-                                width: '10%',
                                 margin: '1rem 0',
-                                ':hover': { boxShadow: 'none' },
                             }}
                             onClick={goList}
                         >
                             등록 + 추천
-                        </Button>
-                    </div>
+                        </CustomBtn>
+                    </CommentBox>
                     <div style={{ display: 'flex', width: '63%', justifyContent: 'space-between' }}>
-                        <Button
+                        <CustomBtn
                             variant="contained"
                             sx={{
-                                backgroundColor: '#6EA5F8',
-                                fontWeight: 900,
-                                color: 'white',
-                                boxShadow: 'none',
-                                width: '8rem',
-                                height: '40px',
                                 margin: '1rem 0',
-                                ':hover': { boxShadow: 'none' },
                             }}
                             onClick={goList}
                         >
                             목록
-                        </Button>
+                        </CustomBtn>
                         <div>
-                            <Button
+                            <CustomBtn
                                 variant="contained"
                                 sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    fontWeight: 900,
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                    width: '8rem',
-                                    height: '40px',
                                     margin: '1rem',
-                                    ':hover': { boxShadow: 'none' },
                                 }}
                                 onClick={handlePrevPost}
                             >
                                 이전글
-                            </Button>
-                            <Button
+                            </CustomBtn>
+                            <CustomBtn
                                 variant="contained"
                                 sx={{
-                                    backgroundColor: '#6EA5F8',
-                                    fontWeight: 900,
-                                    color: 'white',
-                                    boxShadow: 'none',
-                                    width: '8rem',
-                                    height: '40px',
                                     margin: '1rem 0',
-                                    ':hover': { boxShadow: 'none' },
                                 }}
                                 onClick={handleNextPost}
                             >
                                 다음글
-                            </Button>
+                            </CustomBtn>
                         </div>
                     </div>
                 </div>
-            </Paper>
+            </PostViewerPaper>
             {/* <Paper sx={{ height: '75%', width: '80%', margin: 'auto', padding: '2rem', marginBottom: '1rem' }}> */}
             {/* </Paper> */}
         </Background>
@@ -267,3 +206,48 @@ const PostViewer = () => {
 };
 
 export default PostViewer;
+
+const Background = styled.div`
+    background-color: white;
+    width: 95vw;
+    height: 90vh;
+    padding-top: 70px;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    overflow: auto;
+    margin: auto;
+`;
+
+const PostViewerPaper = styled(Paper)`
+    height: 95%;
+    width: 80%;
+    margin: auto;
+    padding: 2rem;
+    overflow: auto;
+`;
+
+const CommentBox = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+`;
+
+const CustomBtn = styled(Button)`
+    background-color: #6ea5f8;
+    font-weight: 900;
+    color: white;
+    box-shadow: none;
+    width: 7rem;
+    height: 2.5rem;
+    :hover {
+        box-shadow: none;
+    }
+`;

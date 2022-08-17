@@ -23,59 +23,6 @@ import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Background = styled.div`
-    background-color: white;
-    width: 95%;
-    height: 90%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    overflow: auto;
-    margin: auto;
-    padding: 30px;
-`;
-
-const theme = createTheme({
-    typography: {
-        fontSize: 12,
-        fontFamily: 'Pretendard',
-    },
-    palette: {
-        primary: {
-            main: '#5A5A5A',
-        },
-    },
-});
-
-const tableTextStyle = {
-    padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
-    textAlign: 'center',
-    fontSize: '0.9rem',
-    // maxWidth: '800px',
-};
-
-const titleTextStyle = {
-    padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
-    fontSize: '0.9rem',
-    textAlign: 'center',
-    maxWidth: '200px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    ':hover': {
-        fontWeight: 'bold',
-    },
-};
-
-const tableTopTextStyle = {
-    color: '#5A5A5A',
-    textAlign: 'center',
-    fontSize: '1rem',
-    padding: '16px 0px',
-};
-
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const ReviewBoard = () => {
@@ -177,6 +124,59 @@ const ReviewBoard = () => {
 };
 
 export default ReviewBoard;
+
+const Background = styled.div`
+    background-color: white;
+    width: 95%;
+    height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    overflow: auto;
+    margin: auto;
+    padding: 30px;
+`;
+
+const theme = createTheme({
+    typography: {
+        fontSize: 12,
+        fontFamily: 'Pretendard',
+    },
+    palette: {
+        primary: {
+            main: '#5A5A5A',
+        },
+    },
+});
+
+const tableTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A',
+    textAlign: 'center',
+    fontSize: '0.9rem',
+    // maxWidth: '800px',
+};
+
+const titleTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A',
+    fontSize: '0.9rem',
+    textAlign: 'center',
+    maxWidth: '200px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    ':hover': {
+        fontWeight: 'bold',
+    },
+};
+
+const tableTopTextStyle = {
+    color: '#5A5A5A',
+    textAlign: 'center',
+    fontSize: '1rem',
+    padding: '16px 0px',
+};
 
 const WriteBtn = styled(Button)`
     background-color: #6ea5f8;
