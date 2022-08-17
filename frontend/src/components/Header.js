@@ -41,7 +41,7 @@ const Header = () => {
             path: '/calculator',
         },
         {
-            id: 3,
+            id: 2,
             name: '게시판',
             path: '/board',
         },
@@ -51,6 +51,30 @@ const Header = () => {
         //     path: '/register',
         // },
     ]);
+
+    const [NON_USER_NAV_ITEMS, setNON_USER_NAV_ITEMS] = useState([
+        {
+            id: 1,
+            name: '수산물 계산기',
+            path: '/calculator',
+        },
+        {
+            id: 2,
+            name: '게시판',
+            path: '/board',
+        },
+        {
+            id: 3,
+            name: '로그인',
+            path: '/login',
+        },
+        {
+            id: 4,
+            name: '회원가입',
+            path: '/register',
+        },
+    ]);
+
     const USERS_ITEMS = [
         {
             id: 1,
@@ -94,7 +118,7 @@ const Header = () => {
             navigate('/');
             setUserInfoState('');
             setUserIdState('');
-            notify('다음에 또 뵈요!');
+            notify('다음에 또 만나요!');
         }
     };
 
@@ -109,13 +133,21 @@ const Header = () => {
     }, [location]);
 
     useEffect(() => {
-        setNAV_ITEMS(
-            NAV_ITEMS.map((item) =>
-                location.pathname === item.path || location.pathname.includes(`${item.path}`)
-                    ? { ...item, active: true }
-                    : { ...item, active: false },
-            ),
-        );
+        loginConfirm
+            ? setNAV_ITEMS(
+                  NAV_ITEMS.map((item) =>
+                      location.pathname === item.path || location.pathname.includes(`${item.path}`)
+                          ? { ...item, active: true }
+                          : { ...item, active: false },
+                  ),
+              )
+            : setNON_USER_NAV_ITEMS(
+                  NON_USER_NAV_ITEMS.map((item) =>
+                      location.pathname === item.path || location.pathname.includes(`${item.path}`)
+                          ? { ...item, active: true }
+                          : { ...item, active: false },
+                  ),
+              );
     }, [location]);
 
     useEffect(() => {
@@ -149,7 +181,7 @@ const Header = () => {
                     }
                 })
                 .catch((e) => {
-                    console.log(e);
+                    console.log('123');
                 });
         }
     }, [location]);
@@ -208,36 +240,67 @@ const Header = () => {
                         </Typography>
                     </div>
                     <div>
-                        {NAV_ITEMS.map(({ id, name, path, active }) => {
-                            return (
-                                <Typography
-                                    key={id}
-                                    variant="button"
-                                    sx={{
-                                        mr: 2,
-                                        ':hover': {
-                                            color: '#7A7A7A',
-                                            fontWeight: 'bold',
-                                            borderBottom: '1px solid #A7A7A7',
-                                        },
-                                    }}
-                                >
-                                    <NavLink
-                                        to={`${path}`}
-                                        // onClick={() => {
-                                        //     onClick(id);
-                                        // }}
-                                        style={{
-                                            textDecoration: 'none',
-                                            color: '#7A7A7A',
-                                            fontWeight: active ? 'bold' : '',
-                                        }}
-                                    >
-                                        {name}
-                                    </NavLink>
-                                </Typography>
-                            );
-                        })}
+                        {loginConfirm
+                            ? NAV_ITEMS.map(({ id, name, path, active }) => {
+                                  return (
+                                      <Typography
+                                          key={id}
+                                          variant="button"
+                                          sx={{
+                                              mr: 2,
+                                              ':hover': {
+                                                  color: '#7A7A7A',
+                                                  fontWeight: 'bold',
+                                                  borderBottom: '1px solid #A7A7A7',
+                                              },
+                                          }}
+                                      >
+                                          <NavLink
+                                              to={`${path}`}
+                                              // onClick={() => {
+                                              //     onClick(id);
+                                              // }}
+                                              style={{
+                                                  textDecoration: 'none',
+                                                  color: '#7A7A7A',
+                                                  fontWeight: active ? 'bold' : '',
+                                              }}
+                                          >
+                                              {name}
+                                          </NavLink>
+                                      </Typography>
+                                  );
+                              })
+                            : NON_USER_NAV_ITEMS.map(({ id, name, path, active }) => {
+                                  return (
+                                      <Typography
+                                          key={id}
+                                          variant="button"
+                                          sx={{
+                                              mr: 2,
+                                              ':hover': {
+                                                  color: '#7A7A7A',
+                                                  fontWeight: 'bold',
+                                                  borderBottom: '1px solid #A7A7A7',
+                                              },
+                                          }}
+                                      >
+                                          <NavLink
+                                              to={`${path}`}
+                                              // onClick={() => {
+                                              //     onClick(id);
+                                              // }}
+                                              style={{
+                                                  textDecoration: 'none',
+                                                  color: '#7A7A7A',
+                                                  fontWeight: active ? 'bold' : '',
+                                              }}
+                                          >
+                                              {name}
+                                          </NavLink>
+                                      </Typography>
+                                  );
+                              })}
                         <Tooltip title="User">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 {loginStatus ? (
