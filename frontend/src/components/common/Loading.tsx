@@ -1,4 +1,3 @@
-import React from 'react';
 import { Background, LoadingText } from '../Styles';
 import Spinner from '../../components/assets/spinner/Spinner.gif';
 

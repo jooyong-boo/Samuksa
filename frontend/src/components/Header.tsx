@@ -12,13 +12,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getUserInfo } from '../api/auth';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../store/user';
 
 const Header = () => {
-    const notify = (text) =>
+    const notify = (text: string) =>
         toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -39,11 +39,13 @@ const Header = () => {
             id: 1,
             name: '수산물 계산기',
             path: '/calculator',
+            active: false,
         },
         {
             id: 2,
             name: '게시판',
             path: '/board',
+            active: false,
         },
         // {
         //     id: 2,
@@ -57,21 +59,25 @@ const Header = () => {
             id: 1,
             name: '수산물 계산기',
             path: '/calculator',
+            active: false,
         },
         {
             id: 2,
             name: '게시판',
             path: '/board',
+            active: false,
         },
         {
             id: 3,
             name: '로그인',
             path: '/login',
+            active: false,
         },
         {
             id: 4,
             name: '회원가입',
             path: '/register',
+            active: false,
         },
     ]);
 
@@ -112,7 +118,7 @@ const Header = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const logout = (name) => {
+    const logout = (name: string) => {
         if (name === '로그아웃') {
             localStorage.removeItem('jwtToken');
             navigate('/');
@@ -122,7 +128,7 @@ const Header = () => {
         }
     };
 
-    const goNavigate = (path) => {
+    const goNavigate = (path: string) => {
         navigate(`${path}`);
     };
 
@@ -181,7 +187,7 @@ const Header = () => {
                     }
                 })
                 .catch((e) => {
-                    console.log('123');
+                    console.log(e);
                 });
         }
     }, [location]);
@@ -196,9 +202,9 @@ const Header = () => {
 
     // console.log(location);
 
-    const [anchorElUser, setAnchorElUser] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState<HTMLButtonElement | null>(null);
 
-    const handleOpenUserMenu = (event) => {
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorElUser(event.currentTarget);
     };
 
@@ -303,27 +309,15 @@ const Header = () => {
                               })}
                         <Tooltip title="User">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                {loginStatus ? (
-                                    <AccountCircleIcon
-                                        sx={{
-                                            color: '#6EA5F8',
-                                            verticalAlign: 'middle',
-                                            width: '40px',
-                                            height: '40px',
-                                            cursor: 'pointer',
-                                        }}
-                                    />
-                                ) : (
-                                    <AccountCircleIcon
-                                        sx={{
-                                            color: '#a2a5a9',
-                                            verticalAlign: 'middle',
-                                            width: '40px',
-                                            height: '40px',
-                                            cursor: 'pointer',
-                                        }}
-                                    />
-                                )}
+                                <AccountCircleIcon
+                                    sx={{
+                                        color: loginStatus ? '#6EA5F8' : '#a2a5a9',
+                                        verticalAlign: 'middle',
+                                        width: '40px',
+                                        height: '40px',
+                                        cursor: 'pointer',
+                                    }}
+                                />
                             </IconButton>
                         </Tooltip>
                         <Menu
