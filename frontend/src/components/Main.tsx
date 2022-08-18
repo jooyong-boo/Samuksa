@@ -188,10 +188,8 @@ const Main = () => {
                         />
                         <FormControl fullWidth>
                             <Select
-                                labelId="local"
-                                placeholder="지역"
-                                defaultValue="노량진"
-                                value={area ? area : ''}
+                                // labelId="local"
+                                value={area ? area : '노량진'}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}
@@ -200,7 +198,7 @@ const Main = () => {
                                 sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                             >
                                 {getArea &&
-                                    getArea.map((area) => (
+                                    getArea.map((area: string) => (
                                         <MenuItem key={area} value={area}>
                                             {area}
                                         </MenuItem>
