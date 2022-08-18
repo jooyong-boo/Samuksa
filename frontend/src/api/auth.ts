@@ -1,5 +1,12 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
+type Register = {
+    id: string;
+    password: string;
+    nickName: string;
+    email: string;
+};
+
 const axiosConfig: AxiosRequestConfig = {
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
 };
@@ -17,7 +24,7 @@ instance.interceptors.request.use((config) => {
     return config;
 });
 
-export const signUp = async ({ id, password, nickName, email }) => {
+export const signUp = async ({ id, password, nickName, email }: Register) => {
     try {
         const { data } = await instance.post('/user/signUp', null, {
             params: {
@@ -34,7 +41,7 @@ export const signUp = async ({ id, password, nickName, email }) => {
     }
 };
 
-export const login = async ({ userId, passwd }) => {
+export const login = async ({ userId, passwd }: { userId: string; passwd: string }) => {
     try {
         const { data } = await instance.get('/user/login', {
             params: {
@@ -53,7 +60,7 @@ export const login = async ({ userId, passwd }) => {
     }
 };
 
-export const checkIdAxios = async ({ id }) => {
+export const checkIdAxios = async ({ id }: { id: string }) => {
     try {
         const { data } = await instance.post('/user/signUp/existence-id', null, {
             params: { userId: id },
@@ -65,7 +72,7 @@ export const checkIdAxios = async ({ id }) => {
     }
 };
 
-export const checkNickNameAxios = async ({ nickName }) => {
+export const checkNickNameAxios = async ({ nickName }: { nickName: string }) => {
     try {
         const { data } = await instance.post('/user/signUp/existence-name', null, {
             params: { userName: nickName },

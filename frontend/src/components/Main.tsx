@@ -1,6 +1,4 @@
-import React from 'react';
 import styled from 'styled-components';
-import TopScrollBtn from './common/TopScrollBtn';
 import image from '../components/assets/img/mainImage.jpg';
 import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { getAreaTotalFishData } from '../api/recommend';
@@ -13,19 +11,18 @@ import {
     personNumState,
     selectState,
 } from '../store/atom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
+import React from 'react';
 
 const Background = styled.div`
-    /* background-color: #ebecee; */
     background-image: url(${image});
     background-size: cover;
     background-position: center;
     width: 100vw;
     height: 100vh;
-    /* padding-top: 104px; */
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
@@ -47,7 +44,7 @@ const MenuProps = {
 };
 
 const Main = () => {
-    const notify = (text) =>
+    const notify = (text: string) =>
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -66,53 +63,54 @@ const Main = () => {
     // 검색조건 선택 여부 체크
     const [select, setSelect] = useRecoilState(selectState);
 
-    const handlePersonNumChange = (e) => {
+    const handlePersonNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
-        if (e.target.value >= 35) {
+        if (Number(value) >= 35) {
             // alert('인원은 1 이상으로 해주세요');
             dismissAll();
             notify('인원수는 35명 이하로 해주세요');
-            setPersonNum(35);
+            setPersonNum(String(35));
         }
     };
 
-    const handleMoneyChange = (e) => {
+    const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
-        if (e.target.value > 10000000) {
+        if (Number(value) > 10000000) {
             dismissAll();
             notify('가격은 천만원 이하로 해주세요');
-            setMoney(10000000);
+            setMoney(String(10000000));
         }
     };
 
-    const onClick = (e) => {
-        if (personNum <= 0) {
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+        if (Number(personNum) <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
             dismissAll();
             notify('인원을 입력해주세요');
             // setPersonNum(1);
             return;
-        } else if (money < 50000) {
+        } else if (Number(money) < 50000) {
             e.preventDefault();
             // alert('가격은 50000이상으로 해주세요');
             dismissAll();
             notify('가격을 50000이상으로 해주세요');
-            setMoney(50000);
+            setMoney(String(50000));
             return;
         }
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // getAreaTotalFishData({ area }).then(res => res ? (setFishList(res), setSelect(false)) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'));
         getAreaTotalFishData({ area }).then((res) =>
             res
-                ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false))
+                ? (setFishList(res.map((item: {}) => (item ? { ...item, active: false } : { ...item }))),
+                  setSelect(false))
                 : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'),
         );
         navigate('/calculator');
@@ -127,7 +125,7 @@ const Main = () => {
                             fontSize: '54px',
                             fontWeight: '900',
                             color: 'white',
-                            textShadow: '-1px 0px #A7A7A7, 0px 1px #A7A7A7, 1px 0px #A7A7A7, 0px -1px #A7A7A7',
+                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
                         }}
                     >
                         모두가 편히 떠먹는 그날까지,
@@ -160,8 +158,6 @@ const Main = () => {
                         sx={{
                             '& > :not(style)': { m: 1, width: '10rem' },
                         }}
-                        noValidate
-                        autoComplete="off"
                     >
                         <TextField
                             id="person"
@@ -192,10 +188,8 @@ const Main = () => {
                         />
                         <FormControl fullWidth>
                             <Select
-                                labelId="local"
-                                placeholder="지역"
-                                defaultValue="노량진"
-                                value={area ? area : ''}
+                                // labelId="local"
+                                value={area ? area : '노량진'}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}
@@ -204,7 +198,7 @@ const Main = () => {
                                 sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                             >
                                 {getArea &&
-                                    getArea.map((area) => (
+                                    getArea.map((area: string) => (
                                         <MenuItem key={area} value={area}>
                                             {area}
                                         </MenuItem>
@@ -227,14 +221,6 @@ const Main = () => {
                     >
                         검색
                     </Button>
-                    {/* <ToastContainer
-                        toastStyle={{
-                            backgroundColor: '#F5F5F5',
-                            color: '#575757',
-                            opacity: '0.9',
-                        }}
-                    /> */}
-                    {/* <TopScrollBtn /> */}
                 </form>
             </Background>
             <Introduction />

@@ -13,13 +13,13 @@ import { userIdState, userInfoState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
 
 const Login = () => {
-    const notifyError = (text) =>
+    const notifyError = (text: string) =>
         toast.error(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
-    const notifySuccess = (text) =>
+    const notifySuccess = (text: string) =>
         toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -33,7 +33,7 @@ const Login = () => {
 
     const [userId, setUserId] = useRecoilState(userIdState);
     const [passwd, setPasswd] = useState('');
-    const [idSaveStatus, setIdSaveStatus] = useState('');
+    const [idSaveStatus, setIdSaveStatus] = useState<boolean>(false);
 
     const getLogin = async () => {
         login({ userId, passwd })
@@ -68,15 +68,15 @@ const Login = () => {
             });
     };
 
-    const handleChangeUserId = (e) => {
+    const handleChangeUserId = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserId(e.target.value);
     };
 
-    const handleChangePasswd = (e) => {
+    const handleChangePasswd = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPasswd(e.target.value);
     };
 
-    const handleCheckbox = (e) => {
+    const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIdSaveStatus(e.target.checked);
         if (e.target.checked) {
             localStorage.setItem('id', userId);
@@ -87,7 +87,7 @@ const Login = () => {
 
     useEffect(() => {
         if (localStorage.getItem('id')) {
-            setUserId(localStorage.getItem('id'));
+            setUserId(localStorage.getItem('id') || '');
             setIdSaveStatus(true);
         }
     }, []);

@@ -1,7 +1,5 @@
-import { Box, Button, Fab } from '@mui/material';
-import React from 'react';
+import { Box, Fab } from '@mui/material';
 import { styled } from '@mui/material';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useEffect } from 'react';
 import { useState } from 'react';

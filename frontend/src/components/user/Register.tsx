@@ -12,7 +12,7 @@ import { userIdState } from '../../store/user';
 
 const Register = () => {
     const navigate = useNavigate();
-    const notify = (text) =>
+    const notify = (text: string) =>
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -23,11 +23,11 @@ const Register = () => {
 
     const [id, setId] = useState('');
     const [checkId, setCheckId] = useState(true);
-    const [overlappingId, setOverlappingId] = useState('');
+    const [overlappingId, setOverlappingId] = useState<string | boolean>('');
 
     const [nickName, setNickName] = useState('');
     const [checkNickName, setCheckNickName] = useState(true);
-    const [overlappingNickName, setOverlappingNickName] = useState('');
+    const [overlappingNickName, setOverlappingNickName] = useState<string | boolean>('');
 
     const [password, setPassword] = useState(''); // 비밀번호
     const [checkPw, setCheckPw] = useState(true);
@@ -40,7 +40,11 @@ const Register = () => {
     const [authNum, setAuthNum] = useState('');
     const [checkAuthNum, setCheckAuthNum] = useState(false);
 
-    const onChange = (change, check, e) => {
+    const onChange = (
+        change: (value: string) => void,
+        check: string,
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
         let inputChange = e.target.value;
         // console.log(check);
         // let reg;
@@ -318,7 +322,7 @@ const Register = () => {
                                 type="submit"
                                 sx={{ width: '50%' }}
                                 onClick={() => {
-                                    onSignUp(id, nickName, password, email);
+                                    onSignUp();
                                 }}
                             >
                                 회원가입
