@@ -1,17 +1,19 @@
-import axios from 'axios';
-import { reject } from 'lodash';
+import axios, { AxiosRequestConfig } from 'axios';
 
-const instance = axios.create({
+const axiosConfig: AxiosRequestConfig = {
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
-});
+};
 
-instance.interceptors.request.use(function (config) {
+const instance = axios.create(axiosConfig);
+
+instance.interceptors.request.use((config) => {
     const token = localStorage.getItem('jwtToken');
-    if (!token) {
-        config.headers['X-AUTH-TOKEN'] = null;
-        return config;
+    if (token) {
+        config.headers = {
+            ...config.headers,
+            'X-AUTH-TOKEN': token,
+        };
     }
-    config.headers['X-AUTH-TOKEN'] = `${token}`;
     return config;
 });
 

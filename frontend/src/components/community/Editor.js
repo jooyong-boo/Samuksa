@@ -16,20 +16,6 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Background = styled.div`
-    background-color: #ebecee;
-    width: 100vw;
-    height: 100vh;
-    padding-top: 70px;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    overflow: hidden;
-    margin: auto;
-`;
-
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -132,38 +118,22 @@ const Writing = () => {
 
     return (
         <Background>
-            <Paper
-                sx={{
-                    width: '80%',
-                    height: '95%',
-                    margin: 'auto',
-                    marginTop: '30px',
-                    padding: '20px',
-                    overflow: 'auto',
-                }}
-            >
-                <Typography
-                    sx={{
-                        color: '#575757',
-                        padding: '0px 0px 13px 19px',
-                        borderBottom: '1px solid #EAEAEA',
-                        fontSize: '1.5rem',
-                    }}
-                >
-                    글작성
-                </Typography>
+            <EditorPaper>
+                <EditorTypography>글작성</EditorTypography>
                 <div style={{ display: 'flex', alignItems: 'center', paddingTop: '1rem' }}>
                     {userInfo && (
-                        <AccountCircleIcon
-                            sx={{
-                                color: '#6EA5F8',
-                                verticalAlign: 'middle',
-                                width: '40px',
-                                height: '40px',
-                            }}
-                        />
+                        <>
+                            <AccountCircleIcon
+                                sx={{
+                                    color: '#6EA5F8',
+                                    verticalAlign: 'middle',
+                                    width: '40px',
+                                    height: '40px',
+                                }}
+                            />
+                            <Typography>{userInfo.userNikName}</Typography>
+                        </>
                     )}
-                    <Typography>{userInfo && userInfo.userNikName}</Typography>
                 </div>
                 <FormControl fullWidth>
                     <Select
@@ -246,9 +216,39 @@ const Writing = () => {
                         뒤로가기
                     </Button>
                 </div>
-            </Paper>
+            </EditorPaper>
         </Background>
     );
 };
 
 export default Writing;
+
+const Background = styled.div`
+    background-color: #ebecee;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 70px;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    overflow: hidden;
+    margin: auto;
+`;
+
+const EditorPaper = styled(Paper)`
+    width: 80%;
+    height: 95%;
+    margin: auto;
+    margin-top: 30px;
+    padding: 20px;
+    overflow: auto;
+`;
+
+const EditorTypography = styled(Typography)`
+    color: #575757;
+    padding: 0px 0px 13px 19px;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 1.5rem;
+`;
