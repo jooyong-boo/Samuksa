@@ -12,7 +12,7 @@ export const getPosts = async () => {
 };
 
 // 선택한 게시물 조회
-export const getPostsId = async (id) => {
+export const getPostsId = async (id: number) => {
     try {
         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
         console.log(data);
