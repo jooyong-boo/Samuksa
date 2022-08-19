@@ -4,6 +4,15 @@ import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+// interface pagination {
+//     total: number;
+//     limit: number;
+//     page: number;
+//     setPage: number;
+//     postPage: number;
+//     setPostPage: number;
+// }
+
 const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
     const numPages = Math.ceil(total / limit);
     const [totalPage, setTotalPage] = useState([]);
