@@ -13,7 +13,7 @@ export const userIdState = atom({
 
 export const userInfoState = atom({
     key: 'userInfoState',
-    default: '',
+    default: {},
 });
 
 // export const userInfoSelector = selector({
