@@ -1,13 +1,8 @@
 import { Box, Tab, Tabs } from '@mui/material';
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { tabState } from '../../store/atom';
-import ReviewBoard from './ReviewBoard';
-import TipBoard from './TipBoard';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -48,11 +43,11 @@ const Board = () => {
     //     setSelectTab(...tab.filter((item) => item.id === id));
     // };
 
-    const changePage = (path) => {
+    const changePage = (path: string) => {
         navigate(path);
     };
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
         setSelectTab(newValue);
     };
 

@@ -2,9 +2,7 @@ import {
     Avatar,
     Button,
     Checkbox,
-    FormControl,
     Grow,
-    Input,
     List,
     ListItem,
     ListItemAvatar,
@@ -13,7 +11,6 @@ import {
     Slider,
     Typography,
 } from '@mui/material';
-import React from 'react';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
@@ -34,23 +31,23 @@ import { useMemo } from 'react';
 import { useCallback } from 'react';
 
 const DetailedSearchConditions = () => {
-    const notify = (text) =>
+    const notify = (text: string) =>
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
 
-    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
-    const [selectFish, setSelectFish] = useRecoilState(selectFishState);
+    const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
+    const [selectFish, setSelectFish] = useRecoilState<any[]>(selectFishState);
     const resetSelectFish = useResetRecoilState(selectFishState);
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [totalAmount, setTotalAmount] = useState(0);
-    const [fish, setFish] = useState(fishList);
+    const [fish, setFish] = useState<any[]>(fishList);
     const [amount, setAmount] = useRecoilState(amountState);
     const [farm, setFarm] = useRecoilState(farmState);
-    const [farmStatus, setFarmStatus] = useState([]);
+    const [farmStatus, setFarmStatus] = useState<string[]>([]);
 
     useMemo(() => {
         setFish(fishList);
@@ -93,7 +90,7 @@ const DetailedSearchConditions = () => {
     //     }
     // };
 
-    const onToggle = (id) => {
+    const onToggle = (id: number) => {
         setFarmStatus([]);
         setAmount(0);
         setFish(
@@ -105,13 +102,13 @@ const DetailedSearchConditions = () => {
         // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
     };
 
-    const changeAmount = useCallback((event, newAmount) => {
+    const changeAmount = useCallback((event: MouseEvent, newAmount: number) => {
         event.preventDefault();
         setAmount(newAmount);
         // console.log(amount)
     }, []);
 
-    const changeHandler = (checked, id) => {
+    const changeHandler = (checked: boolean, id: string) => {
         if (checked) {
             setFarmStatus([...farmStatus, id]);
         } else {
@@ -188,7 +185,7 @@ const DetailedSearchConditions = () => {
                                                         backgroundColor: active ? '#F8F8F8' : 'white',
                                                     }}
                                                     onClick={() => {
-                                                        onToggle(fishInfoId, active);
+                                                        onToggle(fishInfoId);
                                                     }}
                                                 >
                                                     <ListItemAvatar

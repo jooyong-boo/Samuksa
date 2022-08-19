@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import {
     Button,
     FormControl,
@@ -6,12 +5,11 @@ import {
     InputAdornment,
     InputLabel,
     MenuItem,
-    Paper,
     Select,
     TextField,
     Typography,
 } from '@mui/material';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { Container } from '@mui/system';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
@@ -19,7 +17,6 @@ import {
     areaState,
     farmState,
     fishDetailRecommendInfo,
-    fishPriceAllState,
     getAreaState,
     moneyState,
     personNumState,
@@ -31,9 +28,9 @@ import {
 } from '../../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../../api/recommend';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from 'react';
+import React from 'react';
 
 const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;
@@ -46,8 +43,16 @@ const MenuProps = {
     },
 };
 
+interface FishInfo {
+    farmTypes: string;
+    fishInfoId: 0;
+    fishName: string;
+    fishYield: 0;
+    imgUrl: string;
+}
+
 const SearchConditions = () => {
-    const notify = (text) =>
+    const notify = (text: string) =>
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -74,37 +79,37 @@ const SearchConditions = () => {
     // 검색조건 선택 여부 체크
     const [select, setSelect] = useRecoilState(selectState);
 
-    const handlePersonNumChange = (e) => {
+    const handlePersonNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
-        if (e.target.value >= 35) {
+        if (Number(value) >= 35) {
             dismissAll();
             notify('인원수는 35명 이하로 해주세요');
-            setPersonNum(35);
+            setPersonNum(String(35));
         }
     };
 
-    const handleMoneyChange = (e) => {
+    const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
-        if (e.target.value > 10000000) {
+        if (Number(value) > 10000000) {
             dismissAll();
             notify('가격은 천만원 이하로 해주세요');
-            setMoney(10000000);
+            setMoney(String(10000000));
         }
     };
 
-    const onClick = (e) => {
-        if (money < 50000) {
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+        if (Number(money) < 50000) {
             e.preventDefault();
             // alert('가격은 50000이상으로 해주세요');
             dismissAll();
             notify('가격을 50000이상으로 해주세요');
-            setMoney(50000);
+            setMoney(String(50000));
             return;
-        } else if (personNum <= 0) {
+        } else if (Number(personNum) <= 0) {
             e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
             dismissAll();
@@ -114,9 +119,9 @@ const SearchConditions = () => {
         }
     };
 
-    const onReset = (e) => {
+    const onReset = () => {
         setPersonNum('');
-        setMoney(50000);
+        setMoney(String(50000));
         setArea('노량진');
         resetFishDetailRecommendInfo();
         resetSelectCondition();
@@ -128,11 +133,11 @@ const SearchConditions = () => {
         setSelect(true);
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         getAreaTotalFishData({ area }).then((res) =>
             res
-                ? (setFishList(res.map((item) => (item ? { ...item, active: false } : { ...item }))), setSelect(false))
+                ? (setFishList(res.map((item: FishInfo) => ({ ...item, active: false }))), setSelect(false))
                 : (dismissAll(), notify('해당 가격으론 찾을 수 있는 조합이 없어요!')),
         );
     };
@@ -199,7 +204,7 @@ const SearchConditions = () => {
                                         disabled={select ? false : true}
                                     >
                                         {getArea &&
-                                            getArea.map((area, i) => (
+                                            getArea.map((area: string, i: number) => (
                                                 <MenuItem key={i} value={area}>
                                                     {area}
                                                 </MenuItem>

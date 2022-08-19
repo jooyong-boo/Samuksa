@@ -1,4 +1,3 @@
-import * as React from 'react';
 import styled from '@emotion/styled';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import image from '../../components/assets/img/contemplative-reptile.jpeg';
-import { Avatar, Button, createTheme, ThemeProvider, Typography } from '@mui/material';
+import { Avatar, createTheme, ThemeProvider, Typography } from '@mui/material';
 
 const Img = styled('img')({
     // margin: '13px 13px 12px 16px ',
@@ -37,9 +36,12 @@ const tableTextStyle = {
 
 const tableTop = ['', '수산물 명', '원산지', '양식여부', '무게', '수량', '가격', '순살 무게', '합계'];
 
-// const tableTopText = styled('Typo')
+interface estimate {
+    selectEstimate: any;
+    totalPrice?: number;
+}
 
-export default function SearchResultTable({ selectEstimate, totalPrice }) {
+export default function SearchResultTable({ selectEstimate, totalPrice }: estimate) {
     // console.log(selectEstimate, totalPrice)
     return (
         <div>
@@ -47,7 +49,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                 <TableContainer component={Paper} sx={{ borderTop: '2px solid #A7A7A7', borderRadius: 0 }}>
                     <Table sx={{ minWidth: 700 }} aria-label="simple table">
                         <TableHead>
-                            <TableRow theme={theme}>
+                            <TableRow>
                                 {tableTop.map((item) => (
                                     <TableCell key={item} sx={tableTextStyle}>
                                         {item}
@@ -57,7 +59,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
                         </TableHead>
                         <TableBody sx={{}}>
                             {selectEstimate
-                                ? selectEstimate.map((item, i) => {
+                                ? selectEstimate.map((item: any, i: number) => {
                                       const {
                                           fishName,
                                           weightPerServing,
@@ -120,7 +122,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }) {
             <CombinationInfoContainer>
                 <CombinationFishDetailInfo>
                     {selectEstimate
-                        ? selectEstimate.map((item, i) => {
+                        ? selectEstimate.map((item: any, i: number) => {
                               const { fishName, serving, fishRecommendAlgoWeights, weightPerServing } = item;
                               const [{ maxWeight, minWeight }] = [...fishRecommendAlgoWeights];
                               return (

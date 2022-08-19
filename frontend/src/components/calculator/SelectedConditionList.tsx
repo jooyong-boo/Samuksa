@@ -1,52 +1,51 @@
 import { Avatar, Button, CardActions, CardContent, Slide, Typography } from '@mui/material';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import {
-    areaState,
-    isLoading,
-    moneyState,
-    personNumState,
-    recommendListState,
-    selectConditions,
-} from '../../store/atom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';
 import { useState } from 'react';
 
-const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }) => {
-    const notify = (text) =>
+interface amount {
+    setTotalAmount: React.Dispatch<React.SetStateAction<number>>;
+    totalAmount: number;
+    setAmount: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amount) => {
+    const notify = (text: string) =>
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
-    const contactRef = useRef(null);
+    const contactRef = useRef<HTMLDivElement>(null);
 
-    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
+    const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
     // console.log(selectCondition)
 
-    const deleteContidion = (id, plusAmount) => {
+    const deleteContidion = (id: number, plusAmount: number) => {
         setSelectCondition(selectCondition.filter((item) => item.id !== id));
         setTotalAmount(totalAmount + plusAmount);
         setAmount(0);
     };
 
-    const onClick = (e) => {
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (selectCondition.length === 0) {
             notify('선택한 조건이 없습니다.');
         } else {
             setLoading(true);
             getFishRecommendData({ personNum, money, area }).then((res) => setRecommendList(res.fishRecommendUnions));
-            contactRef.current.scrollIntoView({ behavior: 'smooth' });
+            contactRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
     };
 

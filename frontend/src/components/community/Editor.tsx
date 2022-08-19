@@ -29,7 +29,7 @@ const MenuProps = {
 const totalBoard = ['리뷰게시판', '꿀팁게시판'];
 
 const Writing = () => {
-    const notify = (text) =>
+    const notify = (text: string) =>
         toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -38,23 +38,23 @@ const Writing = () => {
     const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
-
+    const editorRef: any = useRef(null);
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(null);
     const [board, setBoard] = useState('');
 
-    const userInfo = useRecoilValue(userInfoState);
+    const userInfo = useRecoilValue<any>(userInfoState);
 
     const goBack = () => {
         navigate(-1);
     };
 
-    const onTitleChange = (e) => {
+    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
 
     const onChange = () => {
-        const data = editorRef.current.getInstance().getHTML();
+        const data = editorRef.current?.getInstance().getHTML();
         setContent(data);
     };
     console.log(title, content, board);
@@ -92,7 +92,7 @@ const Writing = () => {
         }
     };
 
-    const onSave = ({ title, content }) => {
+    const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         const date = new Date();
         const data = {
             date: date,
@@ -100,11 +100,10 @@ const Writing = () => {
             content: content,
         };
     };
-    const editorRef = useRef(content);
 
     useEffect(() => {
         if (localStorage.getItem('transientStorage')) {
-            const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage'))[0];
+            const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage') || '{}')[0];
             if (window.confirm('임시저장된 글을 불러올까요?')) {
                 setTitle(title);
                 setContent(content);
@@ -179,7 +178,7 @@ const Writing = () => {
                     height="450px" // 에디터 창 높이
                     initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                     useCommandShortcut={false}
-                    hideModeSwitch="true"
+                    // hideModeSwitch="true"
                     initialValue={content ? content : ''}
                     toolbarItems={[
                         // 툴바 옵션 설정

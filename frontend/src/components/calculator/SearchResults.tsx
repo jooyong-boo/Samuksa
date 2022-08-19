@@ -5,24 +5,29 @@ import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import image from '../../components/assets/img/contemplative-reptile.jpeg';
-import { fishDataState, recommendListState, selectConditions } from '../../store/atom';
+import { recommendListState, selectConditions } from '../../store/atom';
 import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 
-const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
-    const [result, setResult] = useRecoilState(recommendListState);
+interface loadingStats {
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const [result, setResult] = useRecoilState<any[]>(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
     // console.log(result);
 
-    const [selectResult, setSelectResult] = useState();
-    const [selectEstimate, setSelectEstimate] = useState();
-    const [totalPrice, setTotalPrice] = useState();
+    const [selectResult, setSelectResult] = useState<null | any>();
+    const [selectEstimate, setSelectEstimate] = useState<null | any[]>();
+    const [totalPrice, setTotalPrice] = useState<number>();
 
     useEffect(() => {
-        setSelectResult();
-        setSelectEstimate();
+        setSelectResult(null);
+        setSelectEstimate(null);
         setResult([]);
     }, [selectCondition]);
 
@@ -30,19 +35,19 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
         setLoading(false);
     }, [result]);
 
-    const onRecommendClick = (item, id) => {
+    const onRecommendClick = (item: any[], id: number) => {
         setSelectResult(item);
         setResult(
             result.map((item) =>
                 item.combinationName === id ? { ...item, active: !item.active } : { ...item, active: false },
             ),
         );
-        setSelectEstimate();
+        setSelectEstimate(null);
     };
 
-    const onEstimateClick = (item, price, selectId) => {
+    const onEstimateClick = (item: any[], price: number, selectId: number) => {
         setSelectResult(
-            selectResult.map((item, id) =>
+            selectResult.map((item: any, id: number) =>
                 id === selectId ? { ...item, active: !item.active } : { ...item, active: false },
             ),
         );
@@ -50,11 +55,11 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
         setTotalPrice(price);
     };
 
-    const addBookmark = (item) => {
-        let localStorageBookmark = JSON.parse(localStorage.getItem('bookmark'));
-        let newBookmark = { ...localStorageBookmark, item };
-        localStorage.setItem('bookmark', JSON.stringify(newBookmark));
-    };
+    // const addBookmark = (item: any, e: React.MouseEvent<HTMLButtonElement>) => {
+    //     let localStorageBookmark = JSON.parse(localStorage.getItem('bookmark') || '{}');
+    //     let newBookmark = { ...localStorageBookmark, item };
+    //     localStorage.setItem('bookmark', JSON.stringify(newBookmark));
+    // };
 
     // console.log(localStorage.length);
 
@@ -84,7 +89,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                             sx={{ width: '40%' }}
                                         >
                                             {combinationName.length > 1 ? (
-                                                combinationName.map((item, i) => {
+                                                combinationName.map((item: string, i: number) => {
                                                     if (i > 3) return null;
 
                                                     return (
@@ -146,7 +151,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                 </CustomDiv>
                 <CustomListDiv>
                     {selectResult
-                        ? selectResult.map((item, i) => {
+                        ? selectResult.map((item: any, i: number) => {
                               const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
                               {
                                   /* console.log(item) */
@@ -162,29 +167,31 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                           }}
                                       >
                                           {fishRecommendBtDtos
-                                              ? fishRecommendBtDtos.map((item, i) => {
-                                                    const { fishName, serving } = item;
-                                                    return (
-                                                        <CustomListItem key={i}>
-                                                            <Typography
-                                                                sx={{
-                                                                    fontSize: '13px',
-                                                                    color: '#545454',
-                                                                }}
-                                                            >
-                                                                {fishName}
-                                                            </Typography>
-                                                            <Typography
-                                                                sx={{
-                                                                    fontSize: '13px',
-                                                                    color: '#979797',
-                                                                }}
-                                                            >
-                                                                ({serving}인분)
-                                                            </Typography>
-                                                        </CustomListItem>
-                                                    );
-                                                })
+                                              ? fishRecommendBtDtos.map(
+                                                    (item: { fishName: string; serving: number }, i: number) => {
+                                                        const { fishName, serving } = item;
+                                                        return (
+                                                            <CustomListItem key={i}>
+                                                                <Typography
+                                                                    sx={{
+                                                                        fontSize: '13px',
+                                                                        color: '#545454',
+                                                                    }}
+                                                                >
+                                                                    {fishName}
+                                                                </Typography>
+                                                                <Typography
+                                                                    sx={{
+                                                                        fontSize: '13px',
+                                                                        color: '#979797',
+                                                                    }}
+                                                                >
+                                                                    ({serving}인분)
+                                                                </Typography>
+                                                            </CustomListItem>
+                                                        );
+                                                    },
+                                                )
                                               : null}
                                           <Typography
                                               sx={{
@@ -232,7 +239,7 @@ const SearchResults = forwardRef(({ loading, setLoading }, ref) => {
                                 ) : (
                                     <BookmarkBorderIcon
                                         fontSize="large"
-                                        onClick={addBookmark(selectEstimate)}
+                                        // onClick={addBookmark(selectEstimate)}
                                         sx={{ cursor: 'pointer' }}
                                     />
                                 )}

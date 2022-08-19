@@ -33,7 +33,14 @@ const Card = styled.div`
 
 const Profile = () => {
     const userInfo = useRecoilValue(userInfoState);
-    console.log(userInfo);
+
+    interface userInfos {
+        userId?: string;
+        userNikName?: string;
+        userEmail?: string;
+    }
+    const { userId, userNikName, userEmail }: userInfos = userInfo;
+
     return (
         <Background>
             <Card>
@@ -62,9 +69,9 @@ const Profile = () => {
                                 alignItems: 'flex-start',
                             }}
                         >
-                            <Typography>아이디: {userInfo.userId}</Typography>
-                            <Typography>닉네임: {userInfo.userNikName}</Typography>
-                            <Typography>이메일: {userInfo.userEmail}</Typography>
+                            <Typography>아이디: {userId}</Typography>
+                            <Typography>닉네임: {userNikName}</Typography>
+                            <Typography>이메일: {userEmail}</Typography>
                         </div>
                     </div>
                     {/* <Typography sx={{ height: '10rem', padding: '5rem' }}>Profile</Typography> */}
