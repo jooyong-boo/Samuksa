@@ -14,7 +14,7 @@ export const moneyState = atom({
 
 export const areaState = atom({
     key: 'areaState',
-    default: '',
+    default: '노량진',
 });
 
 // 조건부 스타일링용
