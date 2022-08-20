@@ -194,8 +194,8 @@ const SearchConditions = () => {
                                     <Select
                                         labelId="local"
                                         label="지역"
-                                        defaultValue={area}
-                                        value={area ? area : ''}
+                                        // defaultValue={getArea && getArea[0]}
+                                        value={getArea ? area : ''}
                                         onChange={(e) => {
                                             setArea(e.target.value);
                                         }}
