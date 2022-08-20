@@ -4,21 +4,21 @@ import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-// interface pagination {
-//     total: number;
-//     limit: number;
-//     page: number;
-//     setPage: number;
-//     postPage: number;
-//     setPostPage: number;
-// }
+interface pagination {
+    total: number;
+    limit: number;
+    page: number;
+    setPage: React.Dispatch<React.SetStateAction<number>>;
+    postPage: number;
+    setPostPage: React.Dispatch<React.SetStateAction<number>>;
+}
 
-const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
+const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagination) => {
     const numPages = Math.ceil(total / limit);
-    const [totalPage, setTotalPage] = useState([]);
-    const [currentGroup, setCurrentGroup] = useState([]);
+    const [totalPage, setTotalPage] = useState<any>([]);
+    const [currentGroup, setCurrentGroup] = useState<any>([]);
 
-    let pageArray = [];
+    let pageArray: number[] = [];
     useEffect(() => {
         for (let i = 1; i <= numPages; i++) {
             pageArray.push(i);
@@ -26,7 +26,7 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
         setTotalPage([...pageArray]);
     }, [numPages]);
 
-    let pageArr = [];
+    let pageArr: number[] = [];
     const pagination = () => {
         for (let i = 0; i < totalPage.length; i += 10) {
             pageArr.push(totalPage.slice(i, i + 10));
@@ -35,7 +35,7 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
     };
 
     useEffect(() => {
-        setCurrentGroup(pagination(pageArr)[Math.floor((postPage - 1) / 10)]);
+        setCurrentGroup(pagination()[Math.floor((postPage - 1) / 10)]);
     }, [totalPage, postPage]);
 
     // console.log(currentGroup);
@@ -50,11 +50,11 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }) => {
                     &lt;
                 </Button>
                 {currentGroup &&
-                    currentGroup.map((btn, i) => (
+                    currentGroup.map((btn: number, i: number) => (
                         <Button
                             key={btn}
                             onClick={() => setPostPage(btn)}
-                            aria-current={postPage === btn ? 'page' : null}
+                            aria-current={postPage === btn ? 'page' : undefined}
                         >
                             {btn}
                         </Button>

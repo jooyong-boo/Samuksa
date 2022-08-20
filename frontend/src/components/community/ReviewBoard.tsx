@@ -26,7 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const ReviewBoard = () => {
-    const notifyError = (text) =>
+    const notifyError = (text: string) =>
         toast.error(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -36,8 +36,8 @@ const ReviewBoard = () => {
 
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState(1);
-    const [postPage, setPostPage] = useRecoilState(reviewPostPageState);
+    const [page, setPage] = useState<any>(1);
+    const [postPage, setPostPage] = useRecoilState<any>(reviewPostPageState);
     const userInfo = useRecoilValue(userInfoState);
     const offset = (postPage - 1) * limit;
 
@@ -50,7 +50,7 @@ const ReviewBoard = () => {
         }
     };
 
-    const [posts, setPost] = useRecoilState(getPostState);
+    const posts = useRecoilValue(getPostState);
 
     // console.log(posts);
 
@@ -59,7 +59,7 @@ const ReviewBoard = () => {
             <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
                 <Typography sx={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>리뷰게시판</Typography>
                 <ThemeProvider theme={theme}>
-                    <CustomTableContainer component={Paper}>
+                    <CustomTableContainer>
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -71,7 +71,7 @@ const ReviewBoard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {posts.slice(offset, offset + limit).map((item) => {
+                                {posts.slice(offset, offset + limit).map((item: any) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
                                         <TableRow
