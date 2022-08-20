@@ -9,12 +9,13 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userInfoState } from '../../store/user';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { getUserInfo } from '../../api/auth';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -43,7 +44,8 @@ const Writing = () => {
     const [content, setContent] = useState(null);
     const [board, setBoard] = useState('');
 
-    const userInfo = useRecoilValue<any>(userInfoState);
+    const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
+    console.log(userInfo);
 
     const goBack = () => {
         navigate(-1);
@@ -95,9 +97,9 @@ const Writing = () => {
     const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         const date = new Date();
         const data = {
-            date: date,
-            title: title,
-            content: content,
+            date,
+            title,
+            content,
         };
     };
 
@@ -113,6 +115,22 @@ const Writing = () => {
                 return;
             }
         }
+    }, []);
+
+    useEffect(() => {
+        getUserInfo()
+            .then((res) => {
+                if (res) {
+                    if (res.code === 500) {
+                        localStorage.removeItem('jwtToken');
+                    } else {
+                        setUserInfo(res);
+                    }
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     }, []);
 
     return (
@@ -178,7 +196,7 @@ const Writing = () => {
                     height="450px" // 에디터 창 높이
                     initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
                     useCommandShortcut={false}
-                    // hideModeSwitch="true"
+                    hideModeSwitch={true}
                     initialValue={content ? content : ''}
                     toolbarItems={[
                         // 툴바 옵션 설정
@@ -205,12 +223,20 @@ const Writing = () => {
                     >
                         등록
                     </Button>
-                    <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
-                        <Button onClick={transientStorage}>임시저장</Button>
-                        {localStorage.getItem('transientStorage') ? (
+                    {localStorage.getItem('transientStorage') ? (
+                        <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
+                            <Button onClick={transientStorage}>임시저장</Button>
                             <Button onClick={transientStorageDelete}>삭제</Button>
-                        ) : null}
-                    </ButtonGroup>
+                        </ButtonGroup>
+                    ) : (
+                        <Button
+                            variant="outlined"
+                            sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}
+                            onClick={transientStorage}
+                        >
+                            임시저장
+                        </Button>
+                    )}
                     <Button variant="outlined" sx={{ width: '7rem', height: '3rem' }} onClick={goBack}>
                         뒤로가기
                     </Button>
