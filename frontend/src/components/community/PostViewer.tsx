@@ -1,5 +1,3 @@
-import React from 'react';
-import { Viewer } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styled from 'styled-components';
 import { Button, Paper, TextField, Typography } from '@mui/material';
@@ -20,17 +18,17 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 
 const PostViewer = () => {
-    const { id } = useParams();
+    const { id } = useParams<{ id?: string }>();
     const navigate = useNavigate();
     const params = useParams();
-    const [data, setData] = useState('');
-    const [comments, setComments] = useState('');
-    const userInfo = useRecoilValue(userInfoState);
+    const [data, setData] = useState<any>('');
+    const [comments, setComments] = useState<any[]>([]);
+    const userInfo = useRecoilValue<any>(userInfoState);
     const postList = useRecoilValue(getPostState);
 
-    const commentRef = useRef();
+    const commentRef = useRef<null | HTMLDivElement>(null);
 
-    const getPostsId = async (id) => {
+    const getPostsId = async (id: string | undefined) => {
         try {
             const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
             setData(data);
@@ -39,7 +37,7 @@ const PostViewer = () => {
         }
     };
 
-    const getComment = async (id) => {
+    const getComment = async (id: string | undefined) => {
         try {
             const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
             setComments(data);
@@ -116,20 +114,19 @@ const PostViewer = () => {
                 ) : null}
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
                 <div style={{ margin: '1rem 0' }}>
-                    <Typography fontSize={20}>댓글</Typography>
-                    {comments !== ''
-                        ? comments.map((comment) => {
-                              return (
-                                  <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
-                                      <Typography>닉네임: {comment.id}</Typography>
-                                      <Typography fontSize={14} color="#979797">
-                                          {comment.createdAt}
-                                      </Typography>
-                                      <Typography>{comment.content}</Typography>
-                                  </div>
-                              );
-                          })
-                        : null}
+                    <Typography fontSize={20}>댓글 {comments.length}</Typography>
+                    {comments &&
+                        comments.map((comment) => {
+                            return (
+                                <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
+                                    <Typography>닉네임: {comment.id}</Typography>
+                                    <Typography fontSize={14} color="#979797">
+                                        {comment.createdAt}
+                                    </Typography>
+                                    <Typography>{comment.content}</Typography>
+                                </div>
+                            );
+                        })}
                 </div>
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
                 <div style={{ margin: '1rem 0', display: 'flex', width: '100%', flexWrap: 'wrap' }}>

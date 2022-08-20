@@ -15,7 +15,7 @@ import {
 import React from 'react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, tipPostPageState } from '../../store/atom';
 import Pagination from './Pagination';
@@ -25,15 +25,15 @@ const tipBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', 
 const TipBoard = () => {
     const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState(1);
-    const [postPage, setPostPage] = useRecoilState(tipPostPageState);
+    const [page, setPage] = useState<any>(1);
+    const [postPage, setPostPage] = useRecoilState<any>(tipPostPageState);
     const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
         navigate('/write');
     };
 
-    const [posts, setPost] = useRecoilState(getPostState);
+    const posts = useRecoilValue(getPostState);
 
     // console.log(posts);
 
@@ -42,7 +42,7 @@ const TipBoard = () => {
             <div style={{ width: '70%', textAlign: 'center', margin: 'auto', overflow: 'auto' }}>
                 <Typography sx={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>꿀팁게시판</Typography>
                 <ThemeProvider theme={theme}>
-                    <CustomTableContainer component={Paper}>
+                    <CustomTableContainer>
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -54,7 +54,7 @@ const TipBoard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody sx={{}}>
-                                {posts.slice(offset, offset + limit).map((item) => {
+                                {posts.slice(offset, offset + limit).map((item: any) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
                                         <TableRow

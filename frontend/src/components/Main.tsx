@@ -1,6 +1,16 @@
 import styled from 'styled-components';
 import image from '../components/assets/img/mainImage.jpg';
-import { Box, Button, FormControl, InputAdornment, MenuItem, Select, TextField, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    FormControl,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    Typography,
+} from '@mui/material';
 import { getAreaTotalFishData } from '../api/recommend';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -187,9 +197,10 @@ const Main = () => {
                             sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                         />
                         <FormControl fullWidth>
+                            {/* <InputLabel id="local">지역</InputLabel> */}
                             <Select
                                 // labelId="local"
-                                value={area ? area : '노량진'}
+                                value={getArea ? area : ''}
                                 onChange={(e) => {
                                     setArea(e.target.value);
                                 }}
