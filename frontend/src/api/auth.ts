@@ -94,3 +94,12 @@ export const getUserInfo = async () => {
         return err.response.data;
     }
 };
+
+export const withdrawal = async () => {
+    try {
+        const { data } = await instance.delete('/user/user-info');
+        return data;
+    } catch (e) {
+        console.log(e);
+    }
+};

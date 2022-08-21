@@ -165,6 +165,33 @@ const Header = () => {
         }
     }, [loginConfirm]);
 
+    // useEffect(() => {
+    //     if (loginStatus) {
+    //         getUserInfo()
+    //             .then((res) => {
+    //                 if (res) {
+    //                     if (res.code === 500) {
+    //                         localStorage.removeItem('jwtToken');
+    //                         setLoginStatus(false);
+    //                         setUserInfoState('');
+    //                         setUserIdState('');
+    //                         // notify(
+    //                         //     <p>
+    //                         //         아이디 인증시간이 만료되었습니다.
+    //                         //         <br /> 재로그인 해주세요
+    //                         //     </p>,
+    //                         // );
+    //                     } else {
+    //                         setUserInfoState(res);
+    //                     }
+    //                 }
+    //             })
+    //             .catch((e) => {
+    //                 console.log(e);
+    //             });
+    //     }
+    // }, [location]);
+
     useEffect(() => {
         if (loginStatus) {
             getUserInfo()
@@ -190,7 +217,7 @@ const Header = () => {
                     console.log(e);
                 });
         }
-    }, [location]);
+    });
 
     // useEffect(() => {
     //     if (loginStatus) {

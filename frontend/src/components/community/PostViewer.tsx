@@ -75,7 +75,7 @@ const PostViewer = () => {
 
     return (
         <Background>
-            <PostViewerPaper>
+            <PostViewerPaper elevation={0}>
                 <Typography sx={{ fontSize: '1.3rem', fontWeight: 'medium' }}>{data.title}</Typography>
                 <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -207,8 +207,8 @@ export default PostViewer;
 const Background = styled.div`
     background-color: white;
     width: 95vw;
-    height: 90vh;
-    padding-top: 70px;
+    height: 90%;
+    /* padding-top: 30px; */
     /* display: flex; */
     /* flex-wrap: wrap; */
     /* flex-direction: column; */
@@ -219,11 +219,12 @@ const Background = styled.div`
 `;
 
 const PostViewerPaper = styled(Paper)`
-    height: 95%;
     width: 80%;
+    height: 95%;
     margin: auto;
     padding: 2rem;
     overflow: auto;
+    border: 1px solid rgb(225, 225, 225);
 `;
 
 const CommentBox = styled.div`

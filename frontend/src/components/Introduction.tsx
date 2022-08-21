@@ -1,8 +1,8 @@
 import { Grid, Typography } from '@mui/material';
 import styled from 'styled-components';
-import introduce1 from '../components/assets/img/introduce1.png';
-import introduce2 from '../components/assets/img/introduce2.png';
-import introduce3 from '../components/assets/img/introduce3.png';
+import introduce1 from '../components/assets/img/introduce1.jpg';
+import introduce2 from '../components/assets/img/introduce2.jpg';
+import introduce3 from '../components/assets/img/introduce3.jpg';
 
 const Background = styled.div`
     background-color: #ebecee;

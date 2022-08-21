@@ -135,7 +135,7 @@ const Writing = () => {
 
     return (
         <Background>
-            <EditorPaper>
+            <EditorPaper elevation={0}>
                 <EditorTypography>글작성</EditorTypography>
                 <div style={{ display: 'flex', alignItems: 'center', paddingTop: '1rem' }}>
                     {userInfo && (
@@ -269,6 +269,7 @@ const EditorPaper = styled(Paper)`
     margin-top: 30px;
     padding: 20px;
     overflow: auto;
+    border: 1px solid rgb(225, 225, 225);
 `;
 
 const EditorTypography = styled(Typography)`

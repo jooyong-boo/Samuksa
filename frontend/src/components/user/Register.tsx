@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
 import { userIdState } from '../../store/user';
-import KakaoLogin from './KakaoLogin';
+import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -150,11 +150,13 @@ const Register = () => {
         }
     }, [password, passwordConfirm]);
 
-    let params = new URL(window.location.href).searchParams;
-    let code = params.get('code');
+    let code = new URL(window.location.href).searchParams.get('code');
     useEffect(() => {
-        KakaoLogin();
-    }, [params]);
+        if (code) {
+            kakaoLogin(code);
+            kakaoUserInfo();
+        }
+    }, [code]);
 
     return (
         <>

@@ -1,15 +1,31 @@
 import axios from 'axios';
 
-const CLIENT_ID = '25f4989e35bd6c16dc5896e4c3ca5eaf';
+const CLIENT_ID = process.env.REACT_APP_Kakao_Client_Id;
 const REDIRECT_URI = 'http://localhost:3000/register';
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-export const kakaoLogin = async (code: string) => {
+export const kakaoLogin = async (code: string | null) => {
     try {
-        let data = await axios.post('https://kauth.kakao.com/oauth/token', null, {
+        let { data } = await axios.post('https://kauth.kakao.com/oauth/token', null, {
             params: {
-                CLIENT_ID,
-                REDIRECT_URI,
+                grant_type: 'authorization_code',
+                client_id: CLIENT_ID,
+                redirect_uri: REDIRECT_URI,
                 code,
+            },
+        });
+        console.log(data);
+        localStorage.setItem('kakaoAuth', data.access_token);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const kakaoUserInfo = async () => {
+    let kakaoToken = localStorage.getItem('kakaoAuth');
+    try {
+        let { data } = await axios.get('https://kapi.kakao.com/v2/user/me', {
+            headers: {
+                Authorization: `Bearer ${kakaoToken}`,
             },
         });
         console.log(data);
