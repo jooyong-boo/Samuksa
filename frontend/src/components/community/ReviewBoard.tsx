@@ -56,8 +56,12 @@ const ReviewBoard = () => {
 
     return (
         <Background>
+            <Typography
+                sx={{ fontSize: '2rem', fontWeight: 'bold', width: '70%', margin: 'auto', marginBottom: '1rem' }}
+            >
+                리뷰게시판
+            </Typography>
             <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
-                <Typography sx={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>리뷰게시판</Typography>
                 <ThemeProvider theme={theme}>
                     <CustomTableContainer>
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
