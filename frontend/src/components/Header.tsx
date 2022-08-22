@@ -16,10 +16,17 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../store/user';
+import { ReactElement } from 'react';
 
 const Header = () => {
-    const notify = (text: string) =>
+    const notify = (text: ReactElement | string) =>
         toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const notifyError = (text: ReactElement | string) =>
+        toast.error(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
@@ -197,19 +204,19 @@ const Header = () => {
             getUserInfo()
                 .then((res) => {
                     if (res) {
-                        if (res.code === 500) {
+                        if (res.code === 200) {
+                            setUserInfoState(res);
+                        } else if (res.code === 500) {
                             localStorage.removeItem('jwtToken');
                             setLoginStatus(false);
                             setUserInfoState('');
                             setUserIdState('');
-                            // notify(
-                            //     <p>
-                            //         아이디 인증시간이 만료되었습니다.
-                            //         <br /> 재로그인 해주세요
-                            //     </p>,
-                            // );
-                        } else {
-                            setUserInfoState(res);
+                            notifyError(
+                                <p>
+                                    아이디 인증시간이 만료되었습니다.
+                                    <br /> 재로그인 해주세요
+                                </p>,
+                            );
                         }
                     }
                 })
