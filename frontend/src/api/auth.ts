@@ -95,7 +95,7 @@ export const getUserInfo = async () => {
     }
 };
 
-export const withdrawal = async () => {
+export const getWithdrawal = async () => {
     try {
         const { data } = await instance.delete('/user/user-info');
         return data;
