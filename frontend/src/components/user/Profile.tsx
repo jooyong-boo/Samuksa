@@ -2,11 +2,11 @@ import { Avatar, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { userInfoState } from '../../store/user';
-import { withdrawal } from '../../api/auth';
+import { userInfoSelector, userInfoState } from '../../store/user';
+import { getWithdrawal } from '../../api/auth';
 import { useRef, useState } from 'react';
-import { render } from '@testing-library/react';
 import Loading from '../common/Loading';
+import imageCompression from 'browser-image-compression';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -23,7 +23,7 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 25rem;
+    width: 30rem;
     height: 80vh;
     margin: 0 auto;
     display: flex;
@@ -36,7 +36,8 @@ const Card = styled.div`
 `;
 
 const Profile = () => {
-    const userInfo = useRecoilValue(userInfoState);
+    // const userInfo = useRecoilValue(userInfoState);
+    const userInfo = useRecoilValue(userInfoSelector);
     const [image, setImage] = useState<any>('/broken-image.jpg');
     const fileInput = useRef<HTMLInputElement | null>(null);
 
@@ -52,7 +53,7 @@ const Profile = () => {
     const withdrawal = () => {
         let confirmWithdrawal = window.confirm('정말 탈퇴하시겠어요?');
         if (confirmWithdrawal) {
-            // withdrawal();
+            // getWithdrawal();
             alert('탈퇴 완료');
             navigate('/');
         } else {
@@ -60,6 +61,7 @@ const Profile = () => {
         }
     };
 
+    // 이미지 업로드
     const onChange = (e: any) => {
         const value = e?.target?.files[0];
         if (value) {
@@ -71,22 +73,41 @@ const Profile = () => {
         }
         //화면에 프로필 사진 표시
         const reader = new FileReader();
-        reader.onload = () => {
-            if (reader.readyState === 1) {
-                return <Loading />;
-            }
-            if (reader.readyState === 2) {
-                setImage(reader.result);
-            }
-        };
-        reader.readAsDataURL(value);
+        actionImgCompress(value)
+            .then((result: File) => {
+                reader.readAsDataURL(result);
+            })
+            .then(() => {
+                reader.onload = () => {
+                    const base64data = reader.result;
+                    if (reader.readyState === 2) {
+                        setImage(base64data);
+                    }
+                };
+            });
     };
-    console.log(image);
+
+    // 이미지 압축
+    const actionImgCompress = async (fileSrc: any) => {
+        console.log('압축 시작');
+
+        const options = {
+            maxSizeMb: 1,
+            maxWidthOrHeight: 200,
+            useWebWorker: true,
+        };
+        try {
+            const compressedFile = await imageCompression(fileSrc, options);
+            return compressedFile;
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <Background>
             <Card>
-                <div style={{ width: '100%', height: '100%' }}>
+                <div style={{ width: '90%', height: '100%' }}>
                     <Typography
                         sx={{
                             fontSize: '1.5rem',
@@ -112,7 +133,7 @@ const Profile = () => {
                             <div>
                                 <Avatar
                                     src={String(image)}
-                                    sx={{ width: '6rem', height: '6rem' }}
+                                    sx={{ width: '6rem', height: '6rem', cursor: 'pointer' }}
                                     onClick={() => {
                                         fileInput.current?.click();
                                     }}
@@ -125,6 +146,15 @@ const Profile = () => {
                                     onChange={onChange}
                                     ref={fileInput}
                                 />
+                            </div>
+                            <div>
+                                <Button
+                                    onClick={() => {
+                                        fileInput.current?.click();
+                                    }}
+                                >
+                                    이미지 변경
+                                </Button>
                             </div>
                             <div>
                                 <Typography>아이디</Typography>

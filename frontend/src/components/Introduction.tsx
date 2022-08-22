@@ -23,7 +23,7 @@ const Img = styled('img')({
     height: '340px',
     objectFit: 'cover',
     margin: 'auto',
-    // padding: '9px 13px',
+    borderRadius: '5px',
 });
 
 const Introduction = () => {
@@ -40,7 +40,7 @@ const Introduction = () => {
             </div>
             <Grid container sx={{ textAlign: 'center', marginBottom: '80px' }} justifyContent="space-evenly">
                 <Grid item>
-                    <Img src={introduce1} alt="" />
+                    <Img src={introduce1} alt="생선을 들고있는 어부" />
                     <Typography fontSize={20} fontWeight="bold" color="#373737">
                         사용자 대상
                     </Typography>
@@ -49,7 +49,7 @@ const Introduction = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Img src={introduce2} alt="" />
+                    <Img src={introduce2} alt="수산물시장 수조" />
                     <Typography fontSize={20} fontWeight="bold" color="#373737">
                         목표
                     </Typography>
@@ -58,7 +58,7 @@ const Introduction = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Img src={introduce3} alt="" />
+                    <Img src={introduce3} alt="접시에 담긴 회" />
                     <Typography fontSize={20} fontWeight="bold" color="#373737">
                         만든 이유
                     </Typography>
