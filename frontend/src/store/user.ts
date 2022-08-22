@@ -16,6 +16,15 @@ export const userInfoState = atom({
     default: {},
 });
 
+export const userInfoSelector = selector({
+    key: 'userInfoSelector',
+    get: async ({ get }) => {
+        const response = await getUserInfo();
+        // console.log(response)
+        return response;
+    },
+});
+
 // export const userInfoSelector = selector({
 //     key: 'userInfoSelector',
 //     get: async ({ get }) => {
