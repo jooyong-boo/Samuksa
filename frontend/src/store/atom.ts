@@ -1,6 +1,18 @@
 import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts, getPostsId } from '../api/post';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const notifyError = (text: string) => {
+    dismissAll();
+    toast.error(text, {
+        position: 'top-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+    });
+};
+const dismissAll = () => toast.dismiss();
 
 export const personNumState = atom({
     key: 'personNumState',
@@ -82,7 +94,10 @@ export const getAreaState = selector({
     key: 'getAreaState',
     get: async ({ get }) => {
         const response = await getArea();
-        // console.log(response)
+        if (response.code === 'ERR_NETWORK') {
+            notifyError('서버와 연결이 끊겼습니다.');
+            return '';
+        }
         return response;
     },
 });
