@@ -55,11 +55,17 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
         setTotalPrice(price);
     };
 
-    // const addBookmark = (item: any, e: React.MouseEvent<HTMLButtonElement>) => {
-    //     let localStorageBookmark = JSON.parse(localStorage.getItem('bookmark') || '{}');
-    //     let newBookmark = { ...localStorageBookmark, item };
-    //     localStorage.setItem('bookmark', JSON.stringify(newBookmark));
-    // };
+    const addBookmark = (item: any) => {
+        // console.log(localStorageBookmark);
+        // if (localStorageBookmark) {
+        // let newBookmark = [...localStorageBookmark, item];
+        localStorage.setItem('bookmark', JSON.stringify(item));
+        let localStorageBookmark = JSON.parse(localStorage.getItem('bookmark') || '{}');
+        console.log(localStorageBookmark);
+        // } else {
+        //     localStorage.setItem('bookmark', item);
+        // }
+    };
 
     // console.log(localStorage.length);
 
@@ -153,9 +159,6 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                     {selectResult
                         ? selectResult.map((item: any, i: number) => {
                               const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
-                              {
-                                  /* console.log(item) */
-                              }
                               return (
                                   <Fade in={true} timeout={i * 300} key={i}>
                                       <CustomListItems
@@ -234,17 +237,28 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         실제 시세과 상이할 수 있습니다.
                                     </Typography>
                                 </div>
-                                {localStorage.getItem('bookmark') ? (
-                                    <BookmarkAddedIcon fontSize="medium" />
+                                {JSON.parse(localStorage.getItem('bookmark') || '{}') !== null ? (
+                                    <BookmarkAddedIcon
+                                        fontSize="medium"
+                                        sx={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                            addBookmark(selectEstimate);
+                                        }}
+                                    />
                                 ) : (
                                     <BookmarkBorderIcon
-                                        fontSize="large"
-                                        // onClick={addBookmark(selectEstimate)}
+                                        fontSize="medium"
                                         sx={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                            addBookmark(selectEstimate);
+                                        }}
                                     />
                                 )}
                             </SelectedEstimateTopMenu>
                             <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
+                            {/* <div style={{ position: 'relative', textAlign: 'center', top: '0%' }}>
+                                <ExpandMoreIcon />
+                            </div> */}
                         </SelectedEstimateContainer>
                     </Fade>
                 ) : null}
@@ -371,6 +385,7 @@ const CustomListItem = styled.div`
 
 const SelectedEstimateContainer = styled.div`
     width: 69%;
+    height: auto;
     min-width: 300px;
     max-height: 490px;
     /* margin: auto; */
