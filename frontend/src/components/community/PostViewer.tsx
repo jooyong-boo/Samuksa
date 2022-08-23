@@ -106,10 +106,9 @@ const PostViewer = () => {
                     </div>
                 </div>
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
-                {/* {data !== '' ? <Viewer initialValue={data.content} /> : null} */}
                 {data !== '' ? (
-                    <div style={{ padding: '1rem' }}>
-                        <Typography>{parse(DOMPurify.sanitize(data.content))}</Typography>
+                    <div style={{ padding: '1rem', minHeight: '10rem' }}>
+                        <Typography sx={{ lineHeight: '170%' }}>{parse(DOMPurify.sanitize(data.content))}</Typography>
                     </div>
                 ) : null}
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
