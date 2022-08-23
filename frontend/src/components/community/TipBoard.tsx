@@ -34,8 +34,9 @@ const TipBoard = () => {
     };
 
     const posts = useRecoilValue(getPostState);
+    const reversePosts = [...posts].reverse();
 
-    // console.log(posts);
+    console.log(reversePosts);
 
     return (
         <Background>
@@ -58,7 +59,7 @@ const TipBoard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody sx={{}}>
-                                {posts.slice(offset, offset + limit).map((item: any) => {
+                                {reversePosts.slice(offset, offset + limit).map((item: any) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
                                         <TableRow
