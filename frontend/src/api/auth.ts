@@ -56,7 +56,7 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
         }
     } catch (err) {
         console.log(err);
-        return err.response.data;
+        return err;
     }
 };
 
@@ -90,8 +90,7 @@ export const getUserInfo = async () => {
         // console.log(data);
         return data;
     } catch (err) {
-        // console.log(err);
-        return err.response.data;
+        return err;
     }
 };
 
