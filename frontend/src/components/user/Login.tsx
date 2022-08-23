@@ -1,10 +1,10 @@
 import { Button, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserInfo, login } from '../../api/auth';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
@@ -13,18 +13,22 @@ import { userIdState, userInfoState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
 
 const Login = () => {
-    const notifyError = (text: string) =>
+    const notifyError = (text: ReactElement | string) => {
+        dismissAll();
         toast.error(text, {
             position: 'top-center',
-            autoClose: 1000,
+            autoClose: 2000,
             hideProgressBar: true,
         });
-    const notifySuccess = (text: string) =>
+    };
+    const notifySuccess = (text: ReactElement | string) => {
+        dismissAll();
         toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
+    };
     const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
@@ -36,16 +40,19 @@ const Login = () => {
     const [idSaveStatus, setIdSaveStatus] = useState<boolean>(false);
 
     const getLogin = async () => {
+        if (userId === '') {
+            notifyError('아이디를 입력해주세요');
+            return;
+        } else if (passwd === '') {
+            notifyError('비밀번호를 입력해주세요');
+            return;
+        }
         login({ userId, passwd })
             .then((res) => {
-                // console.log(res);
-                if (res.message === 'ID REGISTERED') {
-                    dismissAll();
-                    notifyError('아이디가 틀립니다.');
-                } else if (res.message === 'PASSWORD NOT MATCH') {
-                    dismissAll();
-                    notifyError('비밀번호가 틀립니다.');
-                } else if (res) {
+                if (!!res.code) {
+                    throw res;
+                }
+                if (res) {
                     navigate('/');
                 }
                 if (idSaveStatus) {
@@ -54,7 +61,7 @@ const Login = () => {
             })
             .then(() => {
                 getUserInfo().then((res) => {
-                    // console.log(res);
+                    console.log(res);
                     if (res.code === 500) {
                         return;
                     }
@@ -63,8 +70,21 @@ const Login = () => {
                 });
             })
             .catch((e) => {
-                console.log(e);
-                notifyError(e);
+                if (e.code === 'ERR_NETWORK') {
+                    notifyError('서버와의 연결이 끊겼습니다.');
+                }
+                if (e.code === 'ERR_BAD_REQUEST') {
+                    if (e.response.data.message === 'ID REGISTERED') {
+                        notifyError('존재하지 않는 아이디입니다.');
+                    } else if (e.response.data.message === 'PASSWORD NOT MATCH') {
+                        notifyError(
+                            <p>
+                                아이디 또는 비밀번호가 틀립니다.
+                                <br /> 입력하신 내용을 다시 확인해주세요.
+                            </p>,
+                        );
+                    }
+                }
             });
     };
 

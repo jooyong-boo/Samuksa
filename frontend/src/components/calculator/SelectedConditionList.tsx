@@ -1,5 +1,5 @@
 import { Avatar, Button, CardActions, CardContent, Slide, Typography } from '@mui/material';
-import React, { useRef } from 'react';
+import React, { ReactElement, useRef } from 'react';
 import styled from 'styled-components';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -16,7 +16,7 @@ interface amount {
 }
 
 const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amount) => {
-    const notify = (text: string) =>
+    const notify = (text: ReactElement | string) =>
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
@@ -44,8 +44,27 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
             notify('선택한 조건이 없습니다.');
         } else {
             setLoading(true);
-            getFishRecommendData({ personNum, money, area }).then((res) => setRecommendList(res.fishRecommendUnions));
-            contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+            getFishRecommendData({ personNum, money, area })
+                .then((res) => {
+                    // 조합이 없을 경우
+                    if (res.recommendTotalCount < 1) {
+                        throw new Error('조합 없음');
+                    }
+                    // 조합이 있는 경우
+                    setLoading(false);
+                    setRecommendList(res.fishRecommendUnions);
+                    contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+                })
+                .catch((e) => {
+                    setLoading(false);
+                    notify(
+                        <p>
+                            찾을 수 있는 조합이 없습니다.
+                            <br /> 예산을 다시 설정해주세요.
+                        </p>,
+                    );
+                    return;
+                });
         }
     };
 

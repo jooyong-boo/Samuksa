@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
+import { AxiosError } from 'axios';
 
 const Header = () => {
     const notify = (text: ReactElement | string) =>
@@ -206,22 +207,37 @@ const Header = () => {
                     if (res) {
                         if (res.code === 200) {
                             setUserInfoState(res);
-                        } else if (res.code === 500) {
-                            localStorage.removeItem('jwtToken');
-                            setLoginStatus(false);
-                            setUserInfoState('');
-                            setUserIdState('');
-                            notifyError(
-                                <p>
-                                    아이디 인증시간이 만료되었습니다.
-                                    <br /> 재로그인 해주세요
-                                </p>,
-                            );
+                        } else {
+                            throw res;
                         }
                     }
                 })
                 .catch((e) => {
-                    console.log(e);
+                    if (e.code === 'ERR_NETWORK') {
+                        localStorage.removeItem('jwtToken');
+                        setLoginStatus(false);
+                        setUserInfoState('');
+                        setUserIdState('');
+                        notifyError(
+                            <p>
+                                서버와 연결이 끊겼습니다.
+                                <br /> 새로고침을 하거나
+                                <br /> 인터넷 연결을 확인해주세요.
+                            </p>,
+                        );
+                    }
+                    if (e.code === 500) {
+                        localStorage.removeItem('jwtToken');
+                        setLoginStatus(false);
+                        setUserInfoState('');
+                        setUserIdState('');
+                        notifyError(
+                            <p>
+                                아이디 인증시간이 만료되었습니다.
+                                <br /> 재로그인 해주세요
+                            </p>,
+                        );
+                    }
                 });
         }
     });

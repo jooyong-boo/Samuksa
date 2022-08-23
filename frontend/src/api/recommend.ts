@@ -16,10 +16,9 @@ export const getFishRecommendData = async ({ personNum, money, area }: recommend
         const { data } = await instance.get('/fish/recommend', {
             params: { personNumber: parseInt(personNum), money: parseInt(money), saleArea: area },
         });
-        // console.log(data)
         return data;
     } catch (err) {
-        console.log(err.response);
+        console.log(err);
     }
 };
 
@@ -40,7 +39,7 @@ export const getArea = async () => {
         const { data } = await instance.get('/fish/area');
         return data;
     } catch (err) {
-        console.log(err.response);
+        return err;
     }
 };
 

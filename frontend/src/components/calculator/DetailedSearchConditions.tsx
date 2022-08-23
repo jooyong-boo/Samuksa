@@ -262,7 +262,18 @@ const DetailedSearchConditions = () => {
                             )}
                             {farm.length > 0 && selectFish.length > 0
                                 ? farm.map((item, i) => (
-                                      <Typography key={i} sx={{ fontSize: '14px' }}>
+                                      <Typography
+                                          key={i}
+                                          sx={{
+                                              fontSize: '14px',
+                                              width: '90px',
+                                              ':hover': { backgroundColor: 'rgba(99, 99, 99, 0.1)' },
+                                              borderRadius: '5px',
+                                          }}
+                                          onClick={() => {
+                                              changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
+                                          }}
+                                      >
                                           <Checkbox
                                               id={item}
                                               sx={{ color: '#E1E1E1' }}
