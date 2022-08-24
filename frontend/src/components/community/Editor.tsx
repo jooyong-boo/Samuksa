@@ -268,8 +268,16 @@ const EditorPaper = styled(Paper)`
     margin: auto;
     margin-top: 30px;
     padding: 20px;
-    overflow: auto;
+    overflow: overlay;
     border: 1px solid rgb(225, 225, 225);
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
 `;
 
 const EditorTypography = styled(Typography)`
