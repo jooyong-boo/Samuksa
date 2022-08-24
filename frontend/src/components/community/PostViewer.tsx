@@ -222,8 +222,16 @@ const PostViewerPaper = styled(Paper)`
     height: 95%;
     margin: auto;
     padding: 2rem;
-    overflow: auto;
+    overflow: overlay;
     border: 1px solid rgb(225, 225, 225);
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
 `;
 
 const CommentBox = styled.div`
