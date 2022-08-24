@@ -56,15 +56,13 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
     };
 
     const addBookmark = (item: any) => {
-        // console.log(localStorageBookmark);
-        // if (localStorageBookmark) {
-        // let newBookmark = [...localStorageBookmark, item];
-        localStorage.setItem('bookmark', JSON.stringify(item));
-        let localStorageBookmark = JSON.parse(localStorage.getItem('bookmark') || '{}');
-        console.log(localStorageBookmark);
-        // } else {
-        //     localStorage.setItem('bookmark', item);
-        // }
+        let bookmark: any = localStorage.getItem('bookmark');
+        if (bookmark?.length) {
+            let newBookmark: any = [...JSON.parse(bookmark), item];
+            localStorage.setItem('bookmark', JSON.stringify(newBookmark));
+        } else {
+            localStorage.setItem('bookmark', JSON.stringify([item]));
+        }
     };
 
     // console.log(localStorage.length);
@@ -237,8 +235,8 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         실제 시세과 상이할 수 있습니다.
                                     </Typography>
                                 </div>
-                                {JSON.parse(localStorage.getItem('bookmark') || '{}') !== null ? (
-                                    <BookmarkAddedIcon
+                                {JSON.parse(localStorage.getItem('bookmark') || '{}') ? (
+                                    <BookmarkBorderIcon
                                         fontSize="medium"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() => {
@@ -246,7 +244,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         }}
                                     />
                                 ) : (
-                                    <BookmarkBorderIcon
+                                    <BookmarkAddedIcon
                                         fontSize="medium"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() => {
@@ -389,8 +387,16 @@ const SelectedEstimateContainer = styled.div`
     min-width: 300px;
     max-height: 490px;
     /* margin: auto; */
-    overflow: auto;
+    overflow: overlay;
     padding: 0 20px;
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
 `;
 
 const SelectedEstimateTopMenu = styled.div`
