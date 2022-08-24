@@ -153,8 +153,9 @@ const Register = () => {
     let code = new URL(window.location.href).searchParams.get('code');
     useEffect(() => {
         if (code) {
-            kakaoLogin(code);
-            kakaoUserInfo();
+            kakaoLogin(code).then(() => {
+                kakaoUserInfo();
+            });
         }
     }, [code]);
 

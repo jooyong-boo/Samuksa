@@ -26,12 +26,14 @@ import 'react-toastify/dist/ReactToastify.css';
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const ReviewBoard = () => {
-    const notifyError = (text: string) =>
+    const notifyError = (text: string) => {
+        dismissAll();
         toast.error(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
+    };
     const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
@@ -45,7 +47,7 @@ const ReviewBoard = () => {
         if (userInfo) {
             navigate('/write');
         } else {
-            dismissAll();
+            navigate('/login');
             notifyError('글작성을 하려면 로그인해야합니다.');
         }
     };
@@ -136,9 +138,17 @@ const Background = styled.div`
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    overflow: auto;
+    overflow: overlay;
     margin: auto;
     padding: 30px;
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
 `;
 
 const theme = createTheme({

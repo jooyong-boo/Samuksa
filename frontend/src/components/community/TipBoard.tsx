@@ -18,19 +18,38 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, tipPostPageState } from '../../store/atom';
+import { userInfoState } from '../../store/user';
 import Pagination from './Pagination';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const tipBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
 const TipBoard = () => {
+    const notifyError = (text: string) => {
+        dismissAll();
+        toast.error(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    };
+    const dismissAll = () => toast.dismiss();
+
     const navigate = useNavigate();
+    const userInfo = useRecoilValue(userInfoState);
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState<any>(1);
     const [postPage, setPostPage] = useRecoilState<any>(tipPostPageState);
     const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
-        navigate('/write');
+        if (userInfo) {
+            navigate('/write');
+        } else {
+            navigate('/login');
+            notifyError('글작성을 하려면 로그인해야합니다.');
+        }
     };
 
     const posts = useRecoilValue(getPostState);
@@ -120,9 +139,17 @@ const Background = styled.div`
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    overflow: auto;
+    overflow: overlay;
     margin: auto;
     padding: 30px;
+    &::-webkit-scrollbar {
+        width: 5px;
+        border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+    }
 `;
 
 const theme = createTheme({
