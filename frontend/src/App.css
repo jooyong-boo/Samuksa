@@ -47,7 +47,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    /* overflow: overlay; */
+    overflow: overlay;
 }
 
 code {
@@ -55,17 +55,10 @@ code {
 }
 
 body::-webkit-scrollbar {
-    /* width: 8px;
-    background: #f5f5f5; */
-    display: none;
+    width: 5px;
+    border-radius: 5px;
 }
-
 body::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-}
-
-/* // quill 툴바 2번 나오는 오류 */
-.quill > .ql-toolbar:first-child {
-    display: none !important;
+    border-radius: 5px;
 }
