@@ -12,7 +12,7 @@ import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userInfoState } from '../../store/user';
+import { userInfoSelector, userInfoState } from '../../store/user';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
@@ -23,7 +23,8 @@ const PostViewer = () => {
     const params = useParams();
     const [data, setData] = useState<any>('');
     const [comments, setComments] = useState<any[]>([]);
-    const userInfo = useRecoilValue<any>(userInfoState);
+    // const userInfo = useRecoilValue<any>(userInfoState);
+    const userInfo = useRecoilValue(userInfoSelector);
     const postList = useRecoilValue(getPostState);
 
     const commentRef = useRef<null | HTMLDivElement>(null);
