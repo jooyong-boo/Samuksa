@@ -39,8 +39,8 @@ const TipBoard = () => {
     const navigate = useNavigate();
     const userInfo = useRecoilValue(userInfoState);
     const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState<any>(1);
-    const [postPage, setPostPage] = useRecoilState<any>(tipPostPageState);
+    const [page, setPage] = useState<number>(1);
+    const [postPage, setPostPage] = useRecoilState<number>(tipPostPageState);
     const offset = (postPage - 1) * limit;
 
     const goWriting = () => {
