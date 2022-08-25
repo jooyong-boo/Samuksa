@@ -14,31 +14,35 @@ import { useEffect } from 'react';
 import { getUserInfo } from '../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
 import { AxiosError } from 'axios';
 
 const Header = () => {
-    const notify = (text: ReactElement | string) =>
+    const notify = (text: ReactElement | string) => {
+        dismissAll();
         toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
-    const notifyError = (text: ReactElement | string) =>
+    };
+    const notifyError = (text: ReactElement | string) => {
+        dismissAll();
         toast.error(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
+    };
     const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const [loginStatus, setLoginStatus] = useState(false);
-    const setUserInfoState = useSetRecoilState(userInfoState);
+    const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
     const setUserIdState = useSetRecoilState(userIdState);
     let loginConfirm = localStorage.getItem('jwtToken');
 
@@ -105,6 +109,11 @@ const Header = () => {
             name: '회원 정보',
             path: '/myinfo',
         },
+        {
+            id: 4,
+            name: '즐겨찾기',
+            path: '/',
+        },
     ];
 
     const NON_USERS_ITEMS = [
@@ -130,7 +139,7 @@ const Header = () => {
         if (name === '로그아웃') {
             localStorage.removeItem('jwtToken');
             navigate('/');
-            setUserInfoState('');
+            setUserInfo('');
             setUserIdState('');
             notify('다음에 또 만나요!');
         }
@@ -165,58 +174,27 @@ const Header = () => {
     }, [location]);
 
     useEffect(() => {
-        if (loginConfirm) {
+        if (!!loginConfirm) {
             setLoginStatus(true);
         } else {
             setLoginStatus(false);
-            setUserInfoState('');
+            setUserInfo('');
         }
     }, [loginConfirm]);
-
-    // useEffect(() => {
-    //     if (loginStatus) {
-    //         getUserInfo()
-    //             .then((res) => {
-    //                 if (res) {
-    //                     if (res.code === 500) {
-    //                         localStorage.removeItem('jwtToken');
-    //                         setLoginStatus(false);
-    //                         setUserInfoState('');
-    //                         setUserIdState('');
-    //                         // notify(
-    //                         //     <p>
-    //                         //         아이디 인증시간이 만료되었습니다.
-    //                         //         <br /> 재로그인 해주세요
-    //                         //     </p>,
-    //                         // );
-    //                     } else {
-    //                         setUserInfoState(res);
-    //                     }
-    //                 }
-    //             })
-    //             .catch((e) => {
-    //                 console.log(e);
-    //             });
-    //     }
-    // }, [location]);
 
     useEffect(() => {
         if (loginStatus) {
             getUserInfo()
                 .then((res) => {
                     if (res) {
-                        if (res.code === 200) {
-                            setUserInfoState(res);
-                        } else {
-                            throw res;
-                        }
+                        setUserInfo(res);
                     }
                 })
                 .catch((e) => {
                     if (e.code === 'ERR_NETWORK') {
                         localStorage.removeItem('jwtToken');
                         setLoginStatus(false);
-                        setUserInfoState('');
+                        setUserInfo('');
                         setUserIdState('');
                         notifyError(
                             <p>
@@ -229,7 +207,7 @@ const Header = () => {
                     if (e.code === 500) {
                         localStorage.removeItem('jwtToken');
                         setLoginStatus(false);
-                        setUserInfoState('');
+                        setUserInfo('');
                         setUserIdState('');
                         notifyError(
                             <p>
@@ -240,7 +218,7 @@ const Header = () => {
                     }
                 });
         }
-    });
+    }, [location]);
 
     // useEffect(() => {
     //     if (loginStatus) {
@@ -261,6 +239,8 @@ const Header = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    console.log(userInfo);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -366,8 +346,10 @@ const Header = () => {
                                         width: '40px',
                                         height: '40px',
                                         cursor: 'pointer',
+                                        marginRight: '0.3rem',
                                     }}
                                 />
+                                <Typography sx={{ fontWeight: 'bold' }}>{userInfo.userNikName}님</Typography>
                             </IconButton>
                         </Tooltip>
                         <Menu

@@ -87,7 +87,6 @@ export const checkNickNameAxios = async ({ nickName }: { nickName: string }) => 
 export const getUserInfo = async () => {
     try {
         const { data } = await instance.post('/user/user-info');
-        // console.log(data);
         return data;
     } catch (err) {
         return err;
