@@ -45,7 +45,7 @@ const ReviewBoard = () => {
 
     const goWriting = () => {
         if (userInfo) {
-            navigate('/write');
+            navigate('/write', { state: '/review' });
         } else {
             navigate('/login');
             notifyError('글작성을 하려면 로그인해야합니다.');
