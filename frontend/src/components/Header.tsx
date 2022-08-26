@@ -9,15 +9,14 @@ import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Tooltip } from '@mui/material';
+import { Avatar, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getUserInfo } from '../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userIdState, userInfoState } from '../store/user';
+import { userIdState, userImageState, userInfoSelector, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
-import { AxiosError } from 'axios';
 
 const Header = () => {
     const notify = (text: ReactElement | string) => {
@@ -42,7 +41,9 @@ const Header = () => {
     const location = useLocation();
 
     const [loginStatus, setLoginStatus] = useState(false);
-    const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
+    const setUserInfo = useSetRecoilState<any>(userInfoState);
+    const userInfo = useRecoilValue(userInfoSelector);
+    const [image, setImage] = useRecoilState<any>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
     let loginConfirm = localStorage.getItem('jwtToken');
 
@@ -141,6 +142,7 @@ const Header = () => {
             navigate('/');
             setUserInfo('');
             setUserIdState('');
+            setImage('/broken-image.jpg');
             notify('다음에 또 만나요!');
         }
     };
@@ -186,8 +188,10 @@ const Header = () => {
         if (loginStatus) {
             getUserInfo()
                 .then((res) => {
-                    if (res) {
+                    if (res.code === 200) {
                         setUserInfo(res);
+                    } else {
+                        throw res;
                     }
                 })
                 .catch((e) => {
@@ -196,6 +200,7 @@ const Header = () => {
                         setLoginStatus(false);
                         setUserInfo('');
                         setUserIdState('');
+                        setImage('/broken-image.jpg');
                         notifyError(
                             <p>
                                 서버와 연결이 끊겼습니다.
@@ -209,6 +214,7 @@ const Header = () => {
                         setLoginStatus(false);
                         setUserInfo('');
                         setUserIdState('');
+                        setImage('/broken-image.jpg');
                         notifyError(
                             <p>
                                 아이디 인증시간이 만료되었습니다.
@@ -239,8 +245,6 @@ const Header = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-
-    console.log(userInfo);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -339,9 +343,11 @@ const Header = () => {
                               })}
                         <Tooltip title="User">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <AccountCircleIcon
+                                <Avatar
+                                    src={image}
                                     sx={{
-                                        color: loginStatus ? '#6EA5F8' : '#a2a5a9',
+                                        bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
+                                        color: 'white',
                                         verticalAlign: 'middle',
                                         width: '40px',
                                         height: '40px',
@@ -349,7 +355,9 @@ const Header = () => {
                                         marginRight: '0.3rem',
                                     }}
                                 />
-                                <Typography sx={{ fontWeight: 'bold' }}>{userInfo.userNikName}님</Typography>
+                                <Typography sx={{ fontWeight: 'bold' }}>
+                                    {loginStatus ? `${userInfo.userNikName}님` : null}
+                                </Typography>
                             </IconButton>
                         </Tooltip>
                         <Menu
