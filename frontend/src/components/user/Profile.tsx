@@ -1,8 +1,8 @@
 import { Avatar, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { userInfoSelector, userInfoState } from '../../store/user';
+import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import { getWithdrawal } from '../../api/auth';
 import { useRef, useState } from 'react';
 import Loading from '../common/Loading';
@@ -38,7 +38,7 @@ const Card = styled.div`
 const Profile = () => {
     // const userInfo = useRecoilValue(userInfoState);
     const userInfo = useRecoilValue(userInfoSelector);
-    const [image, setImage] = useState<any>('/broken-image.jpg');
+    const [image, setImage] = useRecoilState<any>(userImageState);
     const fileInput = useRef<HTMLInputElement | null>(null);
 
     const navigate = useNavigate();
@@ -141,7 +141,7 @@ const Profile = () => {
                                 <input
                                     type="file"
                                     style={{ display: 'none' }}
-                                    accept="image/jpg,impge/png,image/jpeg"
+                                    accept="image/jpg,image/png,image/jpeg"
                                     name="profile_img"
                                     onChange={onChange}
                                     ref={fileInput}
