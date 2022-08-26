@@ -1,6 +1,6 @@
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styled from 'styled-components';
-import { Button, Paper, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Paper, TextField, Typography } from '@mui/material';
 // import { getPostsId } from '../../api/post';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -12,7 +12,7 @@ import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userInfoSelector, userInfoState } from '../../store/user';
+import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
@@ -26,6 +26,7 @@ const PostViewer = () => {
     // const userInfo = useRecoilValue<any>(userInfoState);
     const userInfo = useRecoilValue(userInfoSelector);
     const postList = useRecoilValue(getPostState);
+    const userImage = useRecoilValue(userImageState);
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -131,17 +132,22 @@ const PostViewer = () => {
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
                 <div style={{ margin: '1rem 0', display: 'flex', width: '100%', flexWrap: 'wrap' }}>
                     {/* <Typography>댓글 작성</Typography> */}
-                    {userInfo && (
-                        <AccountCircleIcon
-                            sx={{
-                                color: '#6EA5F8',
-                                verticalAlign: 'middle',
-                                width: '40px',
-                                height: '40px',
-                            }}
-                        />
-                    )}
-                    <Typography>{userInfo && userInfo.userNikName}</Typography>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {userInfo && (
+                            <Avatar
+                                src={userImage}
+                                sx={{
+                                    bgcolor: '#6EA5F8',
+                                    color: 'white',
+                                    verticalAlign: 'middle',
+                                    width: '40px',
+                                    height: '40px',
+                                    marginRight: '0.5rem',
+                                }}
+                            />
+                        )}
+                        <Typography>{userInfo && userInfo.userNikName}</Typography>
+                    </div>
                     <CommentBox>
                         <TextField sx={{ width: '100%' }} placeholder="댓글을 남겨보세요" />
                         <CustomBtn
