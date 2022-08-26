@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, FormControl, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
+import { Avatar, Button, ButtonGroup, FormControl, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -10,8 +10,8 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userInfoState } from '../../store/user';
-import { useNavigate } from 'react-router-dom';
+import { userImageState, userInfoState } from '../../store/user';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,7 +45,10 @@ const Writing = () => {
     const [board, setBoard] = useState('');
 
     const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
-    console.log(userInfo);
+    const userImage = useRecoilValue(userImageState);
+
+    const location = useLocation();
+    const prevLocation = location.state;
 
     const goBack = () => {
         navigate(-1);
@@ -106,7 +109,7 @@ const Writing = () => {
     useEffect(() => {
         if (localStorage.getItem('transientStorage')) {
             const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage') || '{}')[0];
-            if (window.confirm('임시저장된 글을 불러올까요?')) {
+            if (window.confirm('임시저장된 글이 있습니다. 불러올까요?')) {
                 setTitle(title);
                 setContent(content);
                 editorRef.current.getInstance().setHTML(content);
@@ -133,6 +136,15 @@ const Writing = () => {
             });
     }, []);
 
+    useEffect(() => {
+        if (prevLocation === '/review' && !localStorage.getItem('transientStorage')) {
+            setBoard('리뷰게시판');
+        }
+        if (prevLocation === '/tip' && !localStorage.getItem('transientStorage')) {
+            setBoard('꿀팁게시판');
+        }
+    }, []);
+
     return (
         <Background>
             <EditorPaper elevation={0}>
@@ -140,12 +152,15 @@ const Writing = () => {
                 <div style={{ display: 'flex', alignItems: 'center', paddingTop: '1rem' }}>
                     {userInfo && (
                         <>
-                            <AccountCircleIcon
+                            <Avatar
+                                src={userImage}
                                 sx={{
-                                    color: '#6EA5F8',
+                                    bgcolor: '#6EA5F8',
+                                    color: 'white',
                                     verticalAlign: 'middle',
                                     width: '40px',
                                     height: '40px',
+                                    marginRight: '0.3rem',
                                 }}
                             />
                             <Typography>{userInfo.userNikName}</Typography>
