@@ -42,20 +42,17 @@ const TipBoard = () => {
     const [page, setPage] = useState<number>(1);
     const [postPage, setPostPage] = useRecoilState<number>(tipPostPageState);
     const offset = (postPage - 1) * limit;
+    const posts = useRecoilValue(getPostState);
+    const reversePosts = [...posts].reverse();
 
     const goWriting = () => {
         if (userInfo) {
-            navigate('/write');
+            navigate('/write', { state: '/tip' });
         } else {
             navigate('/login');
             notifyError('글작성을 하려면 로그인해야합니다.');
         }
     };
-
-    const posts = useRecoilValue(getPostState);
-    const reversePosts = [...posts].reverse();
-
-    console.log(reversePosts);
 
     return (
         <Background>

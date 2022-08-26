@@ -16,6 +16,11 @@ export const userInfoState = atom({
     default: {},
 });
 
+export const userImageState = atom({
+    key: 'userImageState',
+    default: '/broken-image.jpg',
+});
+
 export const userInfoSelector = selector({
     key: 'userInfoSelector',
     get: async ({ get }) => {

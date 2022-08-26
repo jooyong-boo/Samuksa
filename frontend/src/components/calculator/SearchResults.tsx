@@ -1,4 +1,4 @@
-import { Avatar, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
+import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -69,7 +69,10 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
 
     return (
         <Card ref={ref}>
-            <SearchResultsTypography>검색 결과({result.length})</SearchResultsTypography>
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '0.5rem' }}>
+                <SearchResultsTypography>검색 결과({result.length})</SearchResultsTypography>
+                <Button>즐겨찾기 {JSON.parse(localStorage.getItem('bookmark') || '[]')?.length}</Button>
+            </div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
                     {result.length > 0 && loading === false ? (
