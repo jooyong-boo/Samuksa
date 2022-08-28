@@ -341,56 +341,60 @@ const Header = () => {
                                       </Typography>
                                   );
                               })}
-                        <Tooltip title="User">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar
-                                    src={image}
-                                    sx={{
-                                        bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
-                                        color: 'white',
-                                        verticalAlign: 'middle',
-                                        width: '40px',
-                                        height: '40px',
-                                        cursor: 'pointer',
-                                        marginRight: '0.3rem',
+                        {loginStatus ? (
+                            <>
+                                <Tooltip title="User">
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                        <Avatar
+                                            src={image}
+                                            sx={{
+                                                bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
+                                                color: 'white',
+                                                verticalAlign: 'middle',
+                                                width: '40px',
+                                                height: '40px',
+                                                cursor: 'pointer',
+                                                marginRight: '0.3rem',
+                                            }}
+                                        />
+                                        <Typography sx={{ fontWeight: 'bold' }}>
+                                            {loginStatus ? `${userInfo.userNikName}님` : null}
+                                        </Typography>
+                                    </IconButton>
+                                </Tooltip>
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
                                     }}
-                                />
-                                <Typography sx={{ fontWeight: 'bold' }}>
-                                    {loginStatus ? `${userInfo.userNikName}님` : null}
-                                </Typography>
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {(loginStatus ? USERS_ITEMS : NON_USERS_ITEMS).map(({ id, name, path }) => (
-                                <MenuItem
-                                    key={id}
-                                    onClick={() => {
-                                        handleCloseUserMenu();
-                                        goNavigate(path);
-                                        logout(name);
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
                                     }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
                                 >
-                                    <Typography textAlign="center" variant="button" color="#7A7A7A">
-                                        {name}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
+                                    {(loginStatus ? USERS_ITEMS : NON_USERS_ITEMS).map(({ id, name, path }) => (
+                                        <MenuItem
+                                            key={id}
+                                            onClick={() => {
+                                                handleCloseUserMenu();
+                                                goNavigate(path);
+                                                logout(name);
+                                            }}
+                                        >
+                                            <Typography textAlign="center" variant="button" color="#7A7A7A">
+                                                {name}
+                                            </Typography>
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </>
+                        ) : null}
                     </div>
                 </Toolbar>
             </AppBar>
