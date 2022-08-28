@@ -61,7 +61,6 @@ const Login = () => {
             })
             .then(() => {
                 getUserInfo().then((res) => {
-                    console.log(res);
                     if (res.code === 500) {
                         return;
                     }
