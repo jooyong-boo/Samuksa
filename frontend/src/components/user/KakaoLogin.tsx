@@ -1,3 +1,4 @@
+import styled from 'styled-components';
 import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
 
 const KakaoLogin = () => {
@@ -8,10 +9,18 @@ const KakaoLogin = () => {
     return (
         <div>
             <a href={KAKAO_AUTH_URL}>
-                <img src={kakaoBtn} width="190" alt="카카오 로그인" />
+                <KakaoImg src={kakaoBtn} width="190" alt="카카오 로그인" />
             </a>
         </div>
     );
 };
 
 export default KakaoLogin;
+
+const KakaoImg = styled.img`
+    width: 190px;
+    border-radius: 5px;
+    &:hover {
+        opacity: 0.9;
+    }
+`;

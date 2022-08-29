@@ -159,7 +159,7 @@ const Login = () => {
                                 <SaveIdCheckbox type="checkbox" checked={idSaveStatus} onChange={handleCheckbox} />
                                 아이디 저장
                             </Typography>
-                            <Typography fontSize={12} fontWeight="bold">
+                            <Typography fontSize={12} sx={{ ':hover': { fontWeight: 'bold' } }}>
                                 <NavLink to={`/register`} style={{ textDecoration: 'none', color: 'black' }}>
                                     회원가입
                                 </NavLink>

@@ -41,8 +41,8 @@ const Header = () => {
     const location = useLocation();
 
     const [loginStatus, setLoginStatus] = useState(false);
-    const setUserInfo = useSetRecoilState<any>(userInfoState);
-    const userInfo = useRecoilValue(userInfoSelector);
+    const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
+    // const userInfo = useRecoilValue(userInfoSelector);
     const [image, setImage] = useRecoilState<any>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
     let loginConfirm = localStorage.getItem('jwtToken');
@@ -341,60 +341,58 @@ const Header = () => {
                                       </Typography>
                                   );
                               })}
-                        {loginStatus ? (
-                            <>
-                                <Tooltip title="User">
-                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                        <Avatar
-                                            src={image}
-                                            sx={{
-                                                bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
-                                                color: 'white',
-                                                verticalAlign: 'middle',
-                                                width: '40px',
-                                                height: '40px',
-                                                cursor: 'pointer',
-                                                marginRight: '0.3rem',
-                                            }}
-                                        />
-                                        <Typography sx={{ fontWeight: 'bold' }}>
-                                            {loginStatus ? `${userInfo.userNikName}님` : null}
+                        <>
+                            <Tooltip title="User">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar
+                                        src={image}
+                                        sx={{
+                                            bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
+                                            color: 'white',
+                                            verticalAlign: 'middle',
+                                            width: '40px',
+                                            height: '40px',
+                                            cursor: 'pointer',
+                                            marginRight: '0.3rem',
+                                        }}
+                                    />
+                                    <Typography sx={{ fontWeight: 'bold' }}>
+                                        {loginStatus ? `${userInfo.userNikName}님` : null}
+                                    </Typography>
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {(loginStatus ? USERS_ITEMS : NON_USERS_ITEMS).map(({ id, name, path }) => (
+                                    <MenuItem
+                                        key={id}
+                                        onClick={() => {
+                                            handleCloseUserMenu();
+                                            goNavigate(path);
+                                            logout(name);
+                                        }}
+                                    >
+                                        <Typography textAlign="center" variant="button" color="#7A7A7A">
+                                            {name}
                                         </Typography>
-                                    </IconButton>
-                                </Tooltip>
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
-                                    {(loginStatus ? USERS_ITEMS : NON_USERS_ITEMS).map(({ id, name, path }) => (
-                                        <MenuItem
-                                            key={id}
-                                            onClick={() => {
-                                                handleCloseUserMenu();
-                                                goNavigate(path);
-                                                logout(name);
-                                            }}
-                                        >
-                                            <Typography textAlign="center" variant="button" color="#7A7A7A">
-                                                {name}
-                                            </Typography>
-                                        </MenuItem>
-                                    ))}
-                                </Menu>
-                            </>
-                        ) : null}
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </>
                     </div>
                 </Toolbar>
             </AppBar>

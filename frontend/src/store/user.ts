@@ -3,7 +3,7 @@ import { getUserInfo } from '../api/auth';
 
 export const loginStatusState = atom({
     key: 'loginStatusState',
-    default: '',
+    default: false,
 });
 
 export const userIdState = atom({
@@ -29,13 +29,3 @@ export const userInfoSelector = selector({
         return response;
     },
 });
-
-// export const userInfoSelector = selector({
-//     key: 'userInfoSelector',
-//     get: async ({ get }) => {
-//         let userInfo = get(userInfoState);
-//         userInfo = await getUserInfo();
-//         console.log(userInfo);
-//         return userInfo;
-//     },
-// });

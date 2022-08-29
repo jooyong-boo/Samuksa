@@ -62,7 +62,7 @@ const Writing = () => {
         const data = editorRef.current?.getInstance().getHTML();
         setContent(data);
     };
-    console.log(title, content, board);
+    // console.log(title, content, board);
 
     // 임시저장 테스트중
     const transientStorage = () => {

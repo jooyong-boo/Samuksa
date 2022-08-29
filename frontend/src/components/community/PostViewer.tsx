@@ -12,10 +12,11 @@ import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
+import { loginStatusState, userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
+import timeForToday from '../utils/TimeForToday';
 
 const PostViewer = () => {
     const { id } = useParams<{ id?: string }>();
@@ -25,6 +26,7 @@ const PostViewer = () => {
     const [comments, setComments] = useState<any[]>([]);
     // const userInfo = useRecoilValue<any>(userInfoState);
     const userInfo = useRecoilValue(userInfoSelector);
+    const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
 
@@ -91,7 +93,9 @@ const PostViewer = () => {
                         />
                         <div style={{ display: 'inline-flex', flexDirection: 'column', marginLeft: '0.5rem' }}>
                             <Typography sx={{ fontSize: '15px', fontWeight: '700' }}>{data.UserId}</Typography>
-                            <Typography sx={{ fontSize: '14px', color: '#979797' }}>{data.createdAt}</Typography>
+                            <Typography sx={{ fontSize: '14px', color: '#979797' }}>
+                                {timeForToday(data.createdAt)}
+                            </Typography>
                         </div>
                     </div>
                     <div>
@@ -122,7 +126,7 @@ const PostViewer = () => {
                                 <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
                                     <Typography>닉네임: {comment.id}</Typography>
                                     <Typography fontSize={14} color="#979797">
-                                        {comment.createdAt}
+                                        {timeForToday(comment.createdAt)}
                                     </Typography>
                                     <Typography>{comment.content}</Typography>
                                 </div>
@@ -132,43 +136,55 @@ const PostViewer = () => {
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
                 <div style={{ margin: '1rem 0', display: 'flex', width: '100%', flexWrap: 'wrap' }}>
                     {/* <Typography>댓글 작성</Typography> */}
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {userInfo && (
-                            <Avatar
-                                src={userImage}
-                                sx={{
-                                    bgcolor: '#6EA5F8',
-                                    color: 'white',
-                                    verticalAlign: 'middle',
-                                    width: '40px',
-                                    height: '40px',
-                                    marginRight: '0.5rem',
-                                }}
+                    <div
+                        style={{
+                            width: '100%',
+                            border: '2px solid rgba(0, 0, 0, 0.1)',
+                            borderRadius: '5px',
+                            padding: '1rem',
+                        }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            {userInfo && (
+                                <Avatar
+                                    src={userImage}
+                                    sx={{
+                                        bgcolor: '#6EA5F8',
+                                        color: 'white',
+                                        verticalAlign: 'middle',
+                                        width: '40px',
+                                        height: '40px',
+                                        marginRight: '0.5rem',
+                                    }}
+                                />
+                            )}
+                            <Typography>{userInfo && userInfo.userNikName}</Typography>
+                        </div>
+                        <CommentBox>
+                            <TextField
+                                sx={{ width: '100%' }}
+                                placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
                             />
-                        )}
-                        <Typography>{userInfo && userInfo.userNikName}</Typography>
+                            <CustomBtn
+                                variant="contained"
+                                sx={{
+                                    margin: '1rem',
+                                }}
+                                onClick={goList}
+                            >
+                                등록
+                            </CustomBtn>
+                            <CustomBtn
+                                variant="contained"
+                                sx={{
+                                    margin: '1rem 0',
+                                }}
+                                onClick={goList}
+                            >
+                                등록 + 추천
+                            </CustomBtn>
+                        </CommentBox>
                     </div>
-                    <CommentBox>
-                        <TextField sx={{ width: '100%' }} placeholder="댓글을 남겨보세요" />
-                        <CustomBtn
-                            variant="contained"
-                            sx={{
-                                margin: '1rem',
-                            }}
-                            onClick={goList}
-                        >
-                            등록
-                        </CustomBtn>
-                        <CustomBtn
-                            variant="contained"
-                            sx={{
-                                margin: '1rem 0',
-                            }}
-                            onClick={goList}
-                        >
-                            등록 + 추천
-                        </CustomBtn>
-                    </CommentBox>
                     <div style={{ display: 'flex', width: '63%', justifyContent: 'space-between' }}>
                         <CustomBtn
                             variant="contained"
