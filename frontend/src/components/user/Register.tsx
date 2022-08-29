@@ -320,7 +320,7 @@ const Register = () => {
                                 height: '20px',
                             }}
                         >
-                            <Typography fontSize={14}>
+                            <Typography fontSize={14} sx={{ ':hover': { fontWeight: 'bold' } }}>
                                 <NavLink to={`/login`} style={{ textDecoration: 'none', color: '#969696' }}>
                                     로그인
                                 </NavLink>
