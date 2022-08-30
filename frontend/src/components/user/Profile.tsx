@@ -82,6 +82,7 @@ const Profile = () => {
                     const base64data = reader.result;
                     if (reader.readyState === 2) {
                         setImage(base64data);
+                        console.log(base64data);
                     }
                 };
             });
@@ -98,6 +99,7 @@ const Profile = () => {
         };
         try {
             const compressedFile = await imageCompression(fileSrc, options);
+            console.log(compressedFile);
             return compressedFile;
         } catch (error) {
             console.log(error);
@@ -174,7 +176,9 @@ const Profile = () => {
                             <div style={{ border: '1px solid rgb(225, 225, 225)', padding: '1rem', width: '90%' }}>
                                 <Typography>{userEmail}</Typography>
                             </div>
-                            <Button variant="outlined">정보 수정</Button>
+                            <Button variant="outlined" sx={{ margin: '10px 0' }}>
+                                정보 수정
+                            </Button>
                             <Button variant="outlined" onClick={withdrawal}>
                                 회원 탈퇴
                             </Button>

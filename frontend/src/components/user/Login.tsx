@@ -115,25 +115,26 @@ const Login = () => {
         <>
             <Background>
                 <Card>
-                    <div style={{ width: '100%', textAlign: 'center' }}>
-                        {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
-                        <LoginTitle>로그인</LoginTitle>
-                        {/* </div> */}
-                        <div style={{ paddingTop: '24px', display: 'inline-flex', flexDirection: 'column' }}>
-                            <Typography sx={{ fontSize: '12px', mb: '1rem', fontWeight: 'bold' }}>
-                                원활한 서비스 이용을 위해 로그인해주세요.
-                            </Typography>
+                    {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
+                    {/* </div> */}
+                    <LoginTitle>로그인</LoginTitle>
+                    <Typography sx={{ fontSize: '1rem', mt: '1rem', fontWeight: 'bold' }}>
+                        원활한 서비스 이용을 위해 로그인해주세요.
+                    </Typography>
+                    <div style={{ paddingTop: '24px', height: '70%', margin: 'auto', width: '60%' }}>
+                        <div>
                             <CustomTypography>아이디</CustomTypography>
                             <TextField
                                 id="id"
                                 variant="outlined"
                                 size="small"
                                 placeholder="아이디 입력"
+                                fullWidth
                                 onChange={handleChangeUserId}
                                 value={userId}
                             />
                         </div>
-                        <div style={{ paddingTop: '24px' }}>
+                        <div style={{ paddingTop: '1rem' }}>
                             <CustomTypography>비밀번호</CustomTypography>
                             <TextField
                                 id="password"
@@ -141,6 +142,7 @@ const Login = () => {
                                 type="password"
                                 size="small"
                                 placeholder="비밀번호 입력"
+                                fullWidth
                                 autoComplete="off"
                                 onChange={handleChangePasswd}
                             />
@@ -152,25 +154,26 @@ const Login = () => {
                                 alignItems: 'center',
                                 padding: '1.5rem 0',
                                 height: '20px',
-                                width: '40%',
+                                width: '100%',
                             }}
                         >
-                            <Typography fontSize={12} color="#969696">
+                            <Typography sx={{ fontSize: '0.8rem', color: '#969696' }}>
                                 <SaveIdCheckbox type="checkbox" checked={idSaveStatus} onChange={handleCheckbox} />
                                 아이디 저장
                             </Typography>
-                            <Typography fontSize={12} sx={{ ':hover': { fontWeight: 'bold' } }}>
-                                <NavLink to={`/register`} style={{ textDecoration: 'none', color: 'black' }}>
+                            <Typography sx={{ fontSize: '0.8rem', ':hover': { fontWeight: 'bold' } }}>
+                                <NavLink
+                                    to={`/register`}
+                                    style={{ textDecoration: 'none', color: 'black', fontSize: '0.8rem' }}
+                                >
                                     회원가입
                                 </NavLink>
                             </Typography>
                         </div>
-                        <div>
+                        <div style={{ width: '100%', height: '3rem', margin: '1rem auto' }}>
                             <LoginBtn variant="contained" type="submit" onClick={getLogin}>
                                 로그인
                             </LoginBtn>
-                        </div>
-                        <div>
                             <KakaoLogin />
                         </div>
                     </div>
@@ -197,18 +200,22 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 30rem;
-    height: 35rem;
+    width: 30vw;
+    height: 80vh;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    padding: 5rem 0;
+    flex-direction: column;
     align-items: center;
     border-radius: 5px;
     border: 1px solid #eaeaea;
+    text-align: center;
 `;
 
 const LoginTitle = styled(Typography)`
+    width: 80%;
+    height: 10%;
     font-size: 1.5rem;
     font-weight: bold;
     border-bottom: 1px solid #eaeaea;
@@ -217,14 +224,15 @@ const LoginTitle = styled(Typography)`
 `;
 
 const CustomTypography = styled(Typography)`
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     margin-bottom: 0.3rem;
+    text-align: left;
 `;
 
 const SaveIdCheckbox = styled.input`
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
     background-color: white;
     border: 1px solid #d9d9d9;
     border-radius: 3px;
@@ -237,7 +245,7 @@ const LoginBtn = styled(Button)`
     background-color: #6ea5f8;
     color: white;
     box-shadow: none;
-    width: 40%;
+    width: 100%;
     margin-bottom: 0.5rem;
     :hover {
         box-shadow: none;
