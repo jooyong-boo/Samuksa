@@ -166,7 +166,7 @@ const Main = () => {
                 <form onSubmit={onSubmit} style={{ textAlign: 'center' }}>
                     <Box
                         sx={{
-                            '& > :not(style)': { m: 1, width: '10rem' },
+                            '& > :not(style)': { m: 1, width: '11rem' },
                         }}
                     >
                         <TextField
@@ -227,7 +227,7 @@ const Main = () => {
                             backgroundColor: '#6EA5F8',
                             color: 'white',
                             boxShadow: 'none',
-                            width: '500px',
+                            width: '35rem',
                         }}
                     >
                         검색

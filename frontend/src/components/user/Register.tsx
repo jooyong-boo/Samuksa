@@ -60,7 +60,7 @@ const Register = () => {
             }
         }
         if (check === nickName) {
-            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,6}$/);
+            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,8}$/);
             if (nickNameReg.test(inputChange)) {
                 change(inputChange);
                 setCheckNickName(false);
@@ -74,6 +74,9 @@ const Register = () => {
             if (passwordReg.test(inputChange)) {
                 change(inputChange);
                 setCheckPw(false);
+            } else {
+                change(inputChange);
+                setCheckPw(true);
             }
         }
         if (check === passwordConfirm) {
@@ -81,6 +84,8 @@ const Register = () => {
             change(inputChange);
             if (passwordConfirmReg.test(inputChange) && password === passwordConfirm) {
                 setCheckPwConfirm(false);
+            } else {
+                setCheckPwConfirm(true);
             }
         }
         if (check === email) {
@@ -163,7 +168,7 @@ const Register = () => {
         <>
             <Background>
                 <Card>
-                    <div style={{ width: '100%', textAlign: 'center' }}>
+                    <div style={{ width: '70%', textAlign: 'center' }}>
                         <RegisterTitle>회원가입</RegisterTitle>
                         {/* </div> */}
                         <div style={{ paddingTop: '1rem' }}>
@@ -172,11 +177,10 @@ const Register = () => {
                                 id="id"
                                 variant="outlined"
                                 size="small"
-                                placeholder="아이디 입력"
+                                placeholder="4~12자 영문, 숫자"
                                 autoComplete="off"
-                                // fullWidth
                                 color={checkId ? 'error' : 'primary'}
-                                sx={{}}
+                                sx={{ width: '70%' }}
                                 onChange={(e) => {
                                     onChange(setId, id, e);
                                 }}
@@ -206,7 +210,8 @@ const Register = () => {
                                 id="nickName"
                                 variant="outlined"
                                 size="small"
-                                placeholder="한글 또는 영문"
+                                placeholder="2~9자 한글 또는 영문"
+                                sx={{ width: '70%' }}
                                 autoComplete="off"
                                 color={checkNickName ? 'error' : 'primary'}
                                 onChange={(e) => {
@@ -239,7 +244,7 @@ const Register = () => {
                                 variant="outlined"
                                 size="small"
                                 type="password"
-                                placeholder="8자리 이상 영문, 숫자"
+                                placeholder="8~16자리 영문, 숫자"
                                 autoComplete="off"
                                 color={checkPw ? 'error' : 'primary'}
                                 onChange={(e) => {
@@ -320,8 +325,11 @@ const Register = () => {
                                 height: '20px',
                             }}
                         >
-                            <Typography fontSize={14} sx={{ ':hover': { fontWeight: 'bold' } }}>
-                                <NavLink to={`/login`} style={{ textDecoration: 'none', color: '#969696' }}>
+                            <Typography sx={{ ':hover': { fontWeight: 'bold' } }}>
+                                <NavLink
+                                    to={`/login`}
+                                    style={{ textDecoration: 'none', color: '#969696', fontSize: '0.875rem' }}
+                                >
                                     로그인
                                 </NavLink>
                             </Typography>
@@ -363,8 +371,8 @@ const Background = styled.div`
 const Card = styled.div`
     background-color: white;
     width: 30rem;
-    height: 45rem;
-    margin: 0 auto;
+    height: 40rem;
+    margin: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -383,7 +391,8 @@ const RegisterTitle = styled(Typography)`
 `;
 
 const CustomTypography = styled(Typography)`
-    font-size: 16px;
+    margin: auto;
+    font-size: 1rem;
     font-weight: bold;
     margin-bottom: 0.3rem;
 `;

@@ -2,7 +2,7 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import styled from 'styled-components';
 import { Avatar, Button, Paper, TextField, Typography } from '@mui/material';
 // import { getPostsId } from '../../api/post';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -80,32 +80,32 @@ const PostViewer = () => {
     return (
         <Background>
             <PostViewerPaper elevation={0}>
-                <Typography sx={{ fontSize: '1.3rem', fontWeight: 'medium' }}>{data.title}</Typography>
+                <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium' }}>{data.title}</Typography>
                 <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <AccountCircle
                             sx={{
                                 color: '#a2a5a9',
                                 verticalAlign: 'middle',
-                                width: '40px',
-                                height: '40px',
+                                width: '3rem',
+                                height: '3rem',
                             }}
                         />
                         <div style={{ display: 'inline-flex', flexDirection: 'column', marginLeft: '0.5rem' }}>
-                            <Typography sx={{ fontSize: '15px', fontWeight: '700' }}>{data.UserId}</Typography>
-                            <Typography sx={{ fontSize: '14px', color: '#979797' }}>
+                            <Typography sx={{ fontSize: '1rem', fontWeight: '700' }}>{data.UserId}</Typography>
+                            <Typography sx={{ fontSize: '0.875rem', color: '#979797' }}>
                                 {timeForToday(data.createdAt)}
                             </Typography>
                         </div>
                     </div>
-                    <div>
-                        <Typography sx={{ cursor: 'pointer' }} onClick={moveComment}>
+                    <div style={{ margin: 'auto 0' }}>
+                        <Typography sx={{ cursor: 'pointer', fontSize: '0.775rem' }} onClick={moveComment}>
                             조회
                             <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
-                            <CommentIcon sx={{ margin: '0 0.5rem' }} />
+                            <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
                             댓글
                             <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
-                            <ThumbUpIcon sx={{ margin: '0 0.5rem' }} />
+                            <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
                             추천
                             <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
                         </Typography>
@@ -119,17 +119,34 @@ const PostViewer = () => {
                 ) : null}
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
                 <div style={{ margin: '1rem 0' }}>
-                    <Typography fontSize={20}>댓글 {comments.length}</Typography>
+                    <Typography fontSize={18}>댓글 {comments.length}</Typography>
                     {comments &&
-                        comments.map((comment) => {
+                        comments.map((comment, i) => {
                             return (
-                                <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
-                                    <Typography>닉네임: {comment.id}</Typography>
-                                    <Typography fontSize={14} color="#979797">
-                                        {timeForToday(comment.createdAt)}
-                                    </Typography>
-                                    <Typography>{comment.content}</Typography>
-                                </div>
+                                <React.Fragment key={i}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <Avatar
+                                            src={userImage}
+                                            sx={{
+                                                bgcolor: '#6EA5F8',
+                                                color: 'white',
+                                                verticalAlign: 'middle',
+                                                width: '40px',
+                                                height: '40px',
+                                                marginRight: '0.5rem',
+                                            }}
+                                        />
+                                        <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
+                                            <Typography sx={{ color: 'rgb(75 85 99)', fontWeight: 'medium' }}>
+                                                닉네임: {comment.id}
+                                            </Typography>
+                                            <Typography fontSize={12} color="#979797">
+                                                {timeForToday(comment.createdAt)}
+                                            </Typography>
+                                        </div>
+                                    </div>
+                                    <Typography sx={{ color: 'rgb(55 65 81)' }}>{comment.content}</Typography>
+                                </React.Fragment>
                             );
                         })}
                 </div>

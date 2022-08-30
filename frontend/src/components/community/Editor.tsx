@@ -163,7 +163,9 @@ const Writing = () => {
                                     marginRight: '0.3rem',
                                 }}
                             />
-                            <Typography>{userInfo.userNikName}</Typography>
+                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'medium' }}>
+                                {userInfo.userNikName}
+                            </Typography>
                         </>
                     )}
                 </div>
@@ -182,7 +184,8 @@ const Writing = () => {
                             backgroundColor: 'white',
                             borderRadius: '5px',
                             opacity: '0.8',
-                            width: '13rem',
+                            width: '10rem',
+                            height: '3rem',
                             margin: '0.5rem 0',
                         }}
                     >
@@ -281,7 +284,7 @@ const EditorPaper = styled(Paper)`
     width: 80%;
     height: 95%;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 20px;
     padding: 20px;
     overflow: overlay;
     border: 1px solid rgb(225, 225, 225);
@@ -299,5 +302,6 @@ const EditorTypography = styled(Typography)`
     color: #575757;
     padding: 0px 0px 13px 19px;
     border-bottom: 1px solid #eaeaea;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: bold;
 `;

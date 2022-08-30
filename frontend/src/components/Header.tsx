@@ -42,7 +42,7 @@ const Header = () => {
 
     const [loginStatus, setLoginStatus] = useState(false);
     const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
-    // const userInfo = useRecoilValue(userInfoSelector);
+    console.log(userInfo);
     const [image, setImage] = useRecoilState<any>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
     let loginConfirm = localStorage.getItem('jwtToken');
@@ -188,19 +188,19 @@ const Header = () => {
         if (loginStatus) {
             getUserInfo()
                 .then((res) => {
-                    if (res.code === 200) {
+                    if (res.userId) {
                         setUserInfo(res);
                     } else {
                         throw res;
                     }
                 })
                 .catch((e) => {
+                    localStorage.removeItem('jwtToken');
+                    setLoginStatus(false);
+                    setUserInfo('');
+                    setUserIdState('');
+                    setImage('/broken-image.jpg');
                     if (e.code === 'ERR_NETWORK') {
-                        localStorage.removeItem('jwtToken');
-                        setLoginStatus(false);
-                        setUserInfo('');
-                        setUserIdState('');
-                        setImage('/broken-image.jpg');
                         notifyError(
                             <p>
                                 서버와 연결이 끊겼습니다.
@@ -210,11 +210,6 @@ const Header = () => {
                         );
                     }
                     if (e.code === 500) {
-                        localStorage.removeItem('jwtToken');
-                        setLoginStatus(false);
-                        setUserInfo('');
-                        setUserIdState('');
-                        setImage('/broken-image.jpg');
                         notifyError(
                             <p>
                                 아이디 인증시간이 만료되었습니다.
@@ -226,15 +221,15 @@ const Header = () => {
         }
     }, [location]);
 
-    // useEffect(() => {
-    //     if (loginStatus) {
-    //         setUserInfoState(getUserInfo());
-    //     } else {
-    //         setUserInfoState('비회원');
-    //     }
-    // }, [loginStatus]);
-
-    // console.log(location);
+    useEffect(() => {
+        if (Object.keys(userInfo).length === 0) {
+            getUserInfo().then((res) => {
+                if (res.userId) {
+                    setUserInfo(res);
+                }
+            });
+        }
+    }, []);
 
     const [anchorElUser, setAnchorElUser] = useState<HTMLButtonElement | null>(null);
 
@@ -248,11 +243,11 @@ const Header = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="fixed" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }} style={{ width: '100vw' }}>
-                <Toolbar
-                    sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto' }}
-                    style={{ width: '95vw' }}
-                >
+            <AppBar
+                position="fixed"
+                sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none', width: '100vw', height: '4.2rem' }}
+            >
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto', width: '95vw' }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <SetMealIcon
                             onClick={goMain}
@@ -260,7 +255,7 @@ const Header = () => {
                                 display: { xs: 'flex' },
                                 mr: 1,
                                 color: '#6EA5F8',
-                                fontSize: '2.5rem',
+                                fontSize: '2.875rem',
                                 cursor: 'pointer',
                             }}
                         />
@@ -271,7 +266,7 @@ const Header = () => {
                             sx={{
                                 color: '#6EA5F8',
                                 fontWeight: '900',
-                                fontSize: '1.7rem',
+                                fontSize: '1.875rem',
                                 cursor: 'pointer',
                                 fontFamily: 'sans-serif',
                             }}
@@ -292,6 +287,7 @@ const Header = () => {
                                                   color: '#7A7A7A',
                                                   fontWeight: 'bold',
                                                   borderBottom: '1px solid #A7A7A7',
+                                                  fontSize: '0.875rem',
                                               },
                                           }}
                                       >
@@ -304,6 +300,7 @@ const Header = () => {
                                                   textDecoration: 'none',
                                                   color: '#7A7A7A',
                                                   fontWeight: active ? 'bold' : '',
+                                                  fontSize: '0.9rem',
                                               }}
                                           >
                                               {name}
@@ -334,6 +331,7 @@ const Header = () => {
                                                   textDecoration: 'none',
                                                   color: '#7A7A7A',
                                                   fontWeight: active ? 'bold' : '',
+                                                  fontSize: '0.875rem',
                                               }}
                                           >
                                               {name}
@@ -350,8 +348,8 @@ const Header = () => {
                                             bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
                                             color: 'white',
                                             verticalAlign: 'middle',
-                                            width: '40px',
-                                            height: '40px',
+                                            width: '2.5rem',
+                                            height: '2.5rem',
                                             cursor: 'pointer',
                                             marginRight: '0.3rem',
                                         }}

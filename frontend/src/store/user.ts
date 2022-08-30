@@ -24,8 +24,14 @@ export const userImageState = atom({
 export const userInfoSelector = selector({
     key: 'userInfoSelector',
     get: async ({ get }) => {
-        const response = await getUserInfo();
-        // console.log(response)
-        return response;
+        try {
+            const response = await getUserInfo();
+            return response;
+        } catch (err) {
+            throw err;
+        }
+    },
+    set: ({ set }, newValue) => {
+        set(userInfoState, newValue);
     },
 });
