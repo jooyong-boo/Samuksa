@@ -438,7 +438,7 @@ const CustomConditionAddDiv = styled.div`
     width: 90%;
     height: 20%;
     margin: auto;
-    margin-top: 20px;
+    margin-top: 26px;
     position: relative;
 `;
 
