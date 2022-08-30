@@ -42,7 +42,6 @@ const Header = () => {
 
     const [loginStatus, setLoginStatus] = useState(false);
     const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
-    console.log(userInfo);
     const [image, setImage] = useRecoilState<any>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
     let loginConfirm = localStorage.getItem('jwtToken');
