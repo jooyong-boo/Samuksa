@@ -74,7 +74,7 @@ const TipBoard = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody sx={{}}>
+                            <TableBody>
                                 {reversePosts.slice(offset, offset + limit).map((item: any) => {
                                     const { id, title, UserId, content, createdAt, updatedAt } = item;
                                     return (
@@ -91,7 +91,11 @@ const TipBoard = () => {
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
                                                 <Link
                                                     to={`post/${id}`}
-                                                    style={{ textDecoration: 'none', color: '#5A5A5A' }}
+                                                    style={{
+                                                        textDecoration: 'none',
+                                                        color: '#5A5A5A',
+                                                        fontSize: '0.875rem',
+                                                    }}
                                                 >
                                                     {title}
                                                 </Link>
@@ -138,7 +142,7 @@ const Background = styled.div`
     flex-direction: row;
     overflow: overlay;
     margin: auto;
-    padding: 30px;
+    padding: 10px;
     &::-webkit-scrollbar {
         width: 5px;
         border-radius: 5px;
@@ -151,7 +155,7 @@ const Background = styled.div`
 
 const theme = createTheme({
     typography: {
-        fontSize: 12,
+        fontSize: 10,
         fontFamily: 'Pretendard',
     },
     palette: {
@@ -165,14 +169,12 @@ const tableTextStyle = {
     padding: '8px 16px 8px 16px',
     color: '#5A5A5A',
     textAlign: 'center',
-    fontSize: '0.9rem',
-    // maxWidth: '800px',
+    fontSize: '0.875rem',
 };
 
 const titleTextStyle = {
     padding: '8px 16px 8px 16px',
     color: '#5A5A5A',
-    fontSize: '0.9rem',
     textAlign: 'center',
     maxWidth: '200px',
     textOverflow: 'ellipsis',
@@ -186,8 +188,8 @@ const titleTextStyle = {
 const tableTopTextStyle = {
     color: '#5A5A5A',
     textAlign: 'center',
-    fontSize: '1rem',
-    padding: '16px 0px',
+    fontSize: '0.875rem',
+    padding: '12px 0px',
 };
 
 const WriteBtn = styled(Button)`
@@ -203,6 +205,7 @@ const WriteBtn = styled(Button)`
 
 const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
+    border-bottom: 2px solid #a7a7a7;
     border-radius: 0;
     max-height: 500px;
     padding: 0px 12px;
