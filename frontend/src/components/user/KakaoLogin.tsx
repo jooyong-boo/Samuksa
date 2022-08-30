@@ -9,7 +9,7 @@ const KakaoLogin = () => {
     return (
         <div>
             <a href={KAKAO_AUTH_URL}>
-                <KakaoImg src={kakaoBtn} width="190" alt="카카오 로그인" />
+                <KakaoImg src={kakaoBtn} alt="카카오 로그인" />
             </a>
         </div>
     );
@@ -18,7 +18,7 @@ const KakaoLogin = () => {
 export default KakaoLogin;
 
 const KakaoImg = styled.img`
-    width: 190px;
+    width: 150px;
     border-radius: 5px;
     &:hover {
         opacity: 0.9;
