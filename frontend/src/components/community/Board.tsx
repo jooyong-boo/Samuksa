@@ -54,7 +54,7 @@ const Board = () => {
     return (
         <Background>
             <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white', margin: 'auto', borderRadius: '10px' }}>
-                <Tabs value={selectTab} onChange={handleChange} centered sx={{ marginBottom: '1rem' }}>
+                <Tabs value={selectTab} onChange={handleChange} centered>
                     {tab.map(({ id, label, path }) => {
                         return (
                             <Tab
