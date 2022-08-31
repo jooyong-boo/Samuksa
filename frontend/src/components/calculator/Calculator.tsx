@@ -1,7 +1,5 @@
-import React from 'react';
 import SearchConditions from './SearchConditions';
 import styled from 'styled-components';
-import TopScrollBtn from '../common/TopScrollBtn';
 import BackgroundWave from '../BackgroundWave';
 
 const Background = styled.div`

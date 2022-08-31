@@ -101,16 +101,14 @@ const SearchConditions = () => {
         }
     };
 
-    const onClick = (e: React.MouseEvent<HTMLElement>) => {
+    const searchForFishByRegion = () => {
         if (Number(money) < 50000) {
-            e.preventDefault();
             // alert('가격은 50000이상으로 해주세요');
             dismissAll();
             notify('가격을 50000이상으로 해주세요');
             setMoney(String(50000));
             return;
         } else if (Number(personNum) <= 0) {
-            e.preventDefault();
             // alert('인원은 1 이상으로 해주세요');
             dismissAll();
             notify('인원을 입력해주세요');
@@ -146,6 +144,12 @@ const SearchConditions = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const handleEnterPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            searchForFishByRegion();
+        }
+    };
+
     return (
         <>
             <Card>
@@ -168,6 +172,9 @@ const SearchConditions = () => {
                                         endAdornment: <InputAdornment position="end">명</InputAdornment>,
                                     }}
                                     disabled={select ? false : true}
+                                    onKeyPress={(e) => {
+                                        handleEnterPress(e);
+                                    }}
                                     // size="small"
                                 />
                             </Grid>
@@ -185,6 +192,9 @@ const SearchConditions = () => {
                                         endAdornment: <InputAdornment position="end">원</InputAdornment>,
                                     }}
                                     disabled={select ? false : true}
+                                    onKeyPress={(e) => {
+                                        handleEnterPress(e);
+                                    }}
                                     // size="small"
                                 />
                             </Grid>
@@ -222,7 +232,7 @@ const SearchConditions = () => {
                                     sx={{
                                         backgroundColor: '#0098EE',
                                     }}
-                                    onClick={onClick}
+                                    onClick={searchForFishByRegion}
                                 >
                                     조건 선택
                                 </SearchConditionSelectBtn>
@@ -238,7 +248,7 @@ const SearchConditions = () => {
                                             color: '#FFFFFF',
                                         },
                                     }}
-                                    onClick={onClick}
+                                    onClick={searchForFishByRegion}
                                 >
                                     선택 완료
                                 </SearchConditionSelectBtn>

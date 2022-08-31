@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import introduce1 from '../components/assets/img/introduce1.jpg';
 import introduce2 from '../components/assets/img/introduce2.jpg';
 import introduce3 from '../components/assets/img/introduce3.jpg';
+import BackgroundWave from './BackgroundWave';
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -10,9 +11,9 @@ const Background = styled.div`
     height: 100vh;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    padding-top: 37px;
     overflow: hidden;
 `;
 
@@ -29,7 +30,7 @@ const Img = styled('img')({
 const Introduction = () => {
     return (
         <Background>
-            <div style={{ display: 'inline-flex' }}>
+            <div style={{ display: 'inline-flex', marginTop: '36px' }}>
                 <Typography fontSize={60} mr={1}>
                     What is
                 </Typography>
@@ -38,7 +39,7 @@ const Introduction = () => {
                 </Typography>
                 <Typography fontSize={60}>?</Typography>
             </div>
-            <Grid container sx={{ textAlign: 'center', marginBottom: '80px' }} justifyContent="space-evenly">
+            <Grid container sx={{ textAlign: 'center', marginBottom: '30px' }} justifyContent="space-evenly">
                 <Grid item>
                     <Img src={introduce1} alt="생선을 들고있는 어부" />
                     <Typography fontSize={20} fontWeight="bold" color="#373737">
@@ -66,6 +67,7 @@ const Introduction = () => {
                         좋아하는 것을 만들어보기로 공통의 관심사 ‘회’
                     </Typography>
                 </Grid>
+                <BackgroundWave />
             </Grid>
         </Background>
     );

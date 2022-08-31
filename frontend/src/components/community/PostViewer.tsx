@@ -17,6 +17,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../utils/TimeForToday';
+import { randomUserId } from '../../api/post';
 
 const PostViewer = () => {
     const { id } = useParams<{ id?: string }>();
@@ -83,7 +84,8 @@ const PostViewer = () => {
                 <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium' }}>{data.title}</Typography>
                 <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                        <AccountCircle
+                        <Avatar
+                            src={`https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`}
                             sx={{
                                 color: '#a2a5a9',
                                 verticalAlign: 'middle',
@@ -126,7 +128,10 @@ const PostViewer = () => {
                                 <React.Fragment key={i}>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <Avatar
-                                            src={userImage}
+                                            src={`https://randomuser.me/api/portraits/men/${getRandomNumber(
+                                                1,
+                                                98,
+                                            )}.jpg`}
                                             sx={{
                                                 bgcolor: '#6EA5F8',
                                                 color: 'white',
@@ -242,6 +247,10 @@ const PostViewer = () => {
 };
 
 export default PostViewer;
+
+export const getRandomNumber = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (Number(max) - Number(min) + 2));
+};
 
 const Background = styled.div`
     background-color: white;

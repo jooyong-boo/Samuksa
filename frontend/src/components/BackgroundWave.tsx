@@ -4,9 +4,9 @@ const Background = styled.div`
     width: 100vw;
     height: 100%;
     position: relative;
-    /* overflow: hidden; */
+    /* overflow: auto; */
     background-color: #ebecee;
-    box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1);
+    /* box-shadow: 4px 8px 16px 0 rgba(0, 0, 0, 0.1); */
     transform: translate3d(0, 0, 0);
     z-index: 1;
 `;
