@@ -11,6 +11,7 @@ import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
+import { textAlign } from '@mui/system';
 
 const Login = () => {
     const notifyError = (text: ReactElement | string) => {
@@ -104,6 +105,12 @@ const Login = () => {
         }
     };
 
+    const handleEnterLogin = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            getLogin();
+        }
+    };
+
     useEffect(() => {
         if (localStorage.getItem('id')) {
             setUserId(localStorage.getItem('id') || '');
@@ -118,7 +125,7 @@ const Login = () => {
                     {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
                     {/* </div> */}
                     <LoginTitle>로그인</LoginTitle>
-                    <Typography sx={{ fontSize: '1rem', mt: '1rem', fontWeight: 'bold' }}>
+                    <Typography sx={{ fontSize: '1rem', mt: '1rem', fontWeight: 'medium' }}>
                         원활한 서비스 이용을 위해 로그인해주세요.
                     </Typography>
                     <div style={{ paddingTop: '24px', height: '70%', margin: 'auto', width: '60%' }}>
@@ -132,6 +139,9 @@ const Login = () => {
                                 fullWidth
                                 onChange={handleChangeUserId}
                                 value={userId}
+                                onKeyPress={(e) => {
+                                    handleEnterLogin(e);
+                                }}
                             />
                         </div>
                         <div style={{ paddingTop: '1rem' }}>
@@ -145,6 +155,9 @@ const Login = () => {
                                 fullWidth
                                 autoComplete="off"
                                 onChange={handleChangePasswd}
+                                onKeyPress={(e) => {
+                                    handleEnterLogin(e);
+                                }}
                             />
                         </div>
                         <div
@@ -174,8 +187,9 @@ const Login = () => {
                             <LoginBtn variant="contained" type="submit" onClick={getLogin}>
                                 로그인
                             </LoginBtn>
-                            <KakaoLogin />
                         </div>
+                        <div style={{ borderTop: '1px solid #eaeaea', marginBottom: '1rem' }}></div>
+                        <KakaoLogin />
                     </div>
                 </Card>
             </Background>
@@ -200,8 +214,8 @@ const Background = styled.div`
 
 const Card = styled.div`
     background-color: white;
-    width: 30vw;
-    height: 80vh;
+    width: 30rem;
+    height: 42rem;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -214,7 +228,7 @@ const Card = styled.div`
 `;
 
 const LoginTitle = styled(Typography)`
-    width: 80%;
+    width: 60%;
     height: 10%;
     font-size: 1.5rem;
     font-weight: bold;
