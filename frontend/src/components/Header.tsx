@@ -233,6 +233,7 @@ const Header = () => {
     const [anchorElUser, setAnchorElUser] = useState<HTMLButtonElement | null>(null);
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
         setAnchorElUser(event.currentTarget);
     };
 
@@ -340,7 +341,7 @@ const Header = () => {
                               })}
                         <>
                             <Tooltip title="User">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <IconButton onClick={handleOpenUserMenu} onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <Avatar
                                         src={image}
                                         sx={{

@@ -381,8 +381,8 @@ const CustomList = styled(List)`
     width: 100%;
     background-color: 'background.paper';
     position: relative;
-    overflow: overlay;
-    max-height: 408px;
+    overflow: auto;
+    max-height: 411px;
     border-radius: 5px;
     padding: 0;
     box-shadow: none;
@@ -435,7 +435,7 @@ const CustomSelectFarmTypeTypography = styled(Typography)`
 `;
 
 const CustomConditionAddDiv = styled.div`
-    width: 90%;
+    width: 92%;
     height: 20%;
     margin: auto;
     margin-top: 26px;

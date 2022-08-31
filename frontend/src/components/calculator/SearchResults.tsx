@@ -24,6 +24,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
     const [selectResult, setSelectResult] = useState<null | any>();
     const [selectEstimate, setSelectEstimate] = useState<null | any[]>();
     const [totalPrice, setTotalPrice] = useState<number>();
+    const [bookmark, setBookmark] = useState([]);
 
     useEffect(() => {
         setSelectResult(null);
@@ -59,19 +60,38 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
         let bookmark: any = localStorage.getItem('bookmark');
         if (bookmark?.length) {
             let newBookmark: any = [...JSON.parse(bookmark), item];
+            setBookmark(newBookmark);
             localStorage.setItem('bookmark', JSON.stringify(newBookmark));
         } else {
+            setBookmark(item);
             localStorage.setItem('bookmark', JSON.stringify([item]));
         }
     };
+
+    useEffect(() => {
+        let bookmark = localStorage.getItem('bookmark');
+        if (bookmark) {
+            setBookmark(JSON.parse(bookmark));
+        }
+    }, []);
 
     // console.log(localStorage.length);
 
     return (
         <Card ref={ref}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '0.5rem' }}>
-                <SearchResultsTypography>검색 결과({result.length})</SearchResultsTypography>
-                <Button>즐겨찾기 {JSON.parse(localStorage.getItem('bookmark') || '[]')?.length}</Button>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    paddingRight: '0.5rem',
+                    borderBottom: '1px solid #eaeaea',
+                }}
+            >
+                {/* <SearchResultsTypography>검색 결과({result.length})</SearchResultsTypography> */}
+                <SearchResultsTypography>
+                    검색 결과{result.length > 0 ? `(${result.length})` : null}
+                </SearchResultsTypography>
+                <Button>즐겨찾기 {bookmark.length}</Button>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
                 <CustomDiv>
@@ -272,7 +292,7 @@ export default React.memo(SearchResults);
 
 const Card = styled.div`
     background-color: white;
-    width: 1193px;
+    width: 1190px;
     height: 550px;
     min-width: 500px;
     border-radius: 5px;
@@ -284,7 +304,6 @@ const Card = styled.div`
 const SearchResultsTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
     font-weight: bold;
 `;
 
@@ -292,11 +311,11 @@ const CustomDiv = styled.div`
     border-bottom: 1px solid #f6f6f6;
     border-right: 1px solid #eaeaea;
     width: 20%;
-    height: 494px;
+    height: 497px;
     position: relative;
     overflow: overlay;
     overflow-x: hidden;
-    border-radius: 5px;
+    border-bottom-left-radius: 5px;
     min-width: 20%;
     &::-webkit-scrollbar {
         width: 5px;
@@ -349,11 +368,11 @@ const CustomListDiv = styled.div`
     flex-wrap: wrap;
     background-color: white;
     border-right: 1px solid #eaeaea;
-    border-bottom: 1px solid #f6f6f6;
+    /* border-bottom: 1px solid #f6f6f6; */
     min-width: 11%;
     position: relative;
     overflow: overlay;
-    max-height: 494px;
+    max-height: 497px;
     padding: 0;
     overflow-x: hidden;
     &::-webkit-scrollbar {
@@ -388,7 +407,7 @@ const SelectedEstimateContainer = styled.div`
     width: 69%;
     height: auto;
     min-width: 300px;
-    max-height: 490px;
+    max-height: 494px;
     /* margin: auto; */
     overflow: overlay;
     padding: 0 20px;
