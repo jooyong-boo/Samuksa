@@ -17,9 +17,20 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../utils/TimeForToday';
-import { randomUserId } from '../../api/post';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PostViewer = () => {
+    const notifySuccess = (text: string) => {
+        dismissAll();
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    };
+    const dismissAll = () => toast.dismiss();
+
     const { id } = useParams<{ id?: string }>();
     const navigate = useNavigate();
     const params = useParams();
@@ -64,6 +75,16 @@ const PostViewer = () => {
     const handleNextPost = () => {
         if (Number(params.id) < postList.length) {
             navigate(`/board/review/post/${Number(params.id) + 1}`);
+        }
+    };
+
+    const CommentRegister = () => {
+        if (userInfo) {
+            dismissAll();
+            notifySuccess('등록 성공');
+        } else {
+            dismissAll();
+            notifySuccess('로그인 해주세요');
         }
     };
 
@@ -192,7 +213,7 @@ const PostViewer = () => {
                                 sx={{
                                     margin: '1rem',
                                 }}
-                                onClick={goList}
+                                onClick={CommentRegister}
                             >
                                 등록
                             </CustomBtn>
@@ -201,7 +222,7 @@ const PostViewer = () => {
                                 sx={{
                                     margin: '1rem 0',
                                 }}
-                                onClick={goList}
+                                onClick={CommentRegister}
                             >
                                 등록 + 추천
                             </CustomBtn>
