@@ -26,9 +26,13 @@ export const userInfoSelector = selector({
     get: async ({ get }) => {
         try {
             const response = await getUserInfo();
-            return response;
+            if (response.userId) {
+                return response;
+            } else {
+                throw response;
+            }
         } catch (err) {
-            throw err;
+            console.log(err);
         }
     },
     set: ({ set }, newValue) => {

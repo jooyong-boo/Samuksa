@@ -138,6 +138,7 @@ const Header = () => {
     const logout = (name: string) => {
         if (name === '로그아웃') {
             localStorage.removeItem('jwtToken');
+            localStorage.removeItem('kakaoAuth');
             navigate('/');
             setUserInfo('');
             setUserIdState('');
@@ -195,6 +196,7 @@ const Header = () => {
                 })
                 .catch((e) => {
                     localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('kakaoAuth');
                     setLoginStatus(false);
                     setUserInfo('');
                     setUserIdState('');
@@ -341,7 +343,11 @@ const Header = () => {
                               })}
                         <>
                             <Tooltip title="User">
-                                <IconButton onClick={handleOpenUserMenu} onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    onMouseEnter={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
                                     <Avatar
                                         src={image}
                                         sx={{

@@ -1,4 +1,4 @@
-import { Button, Checkbox, TextField, Typography } from '@mui/material';
+import { Button, Checkbox, Link, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -34,6 +34,7 @@ const Register = () => {
     const [checkPw, setCheckPw] = useState(true);
     const [passwordConfirm, setPasswordConfirm] = useState(''); //비밀번호 확인
     const [checkPwConfirm, setCheckPwConfirm] = useState(true);
+    const [passwordView, setPasswordView] = useState(false);
 
     const [email, setEmail] = useState('');
     const [checkEmail, setCheckEmail] = useState(false);
@@ -139,6 +140,10 @@ const Register = () => {
         }
     };
 
+    const ClickViewPassword = () => {
+        setPasswordView(!passwordView);
+    };
+
     useEffect(() => {
         setOverlappingId('');
     }, [id]);
@@ -148,7 +153,7 @@ const Register = () => {
     }, [nickName]);
 
     useEffect(() => {
-        if (password !== passwordConfirm) {
+        if (password !== passwordConfirm || passwordConfirm === '') {
             setCheckPwConfirm(true);
         } else {
             setCheckPwConfirm(false);
@@ -190,7 +195,7 @@ const Register = () => {
                                     variant="contained"
                                     disabled={checkId}
                                     onClick={checkOverlappingId}
-                                    sx={{ marginLeft: '0.5rem' }}
+                                    sx={{ marginLeft: '0.5rem', marginTop: '0.1rem' }}
                                 >
                                     중복체크
                                 </CustomBtn>
@@ -223,7 +228,7 @@ const Register = () => {
                                     variant="contained"
                                     disabled={checkNickName}
                                     onClick={checkOverlappingNickName}
-                                    sx={{ marginLeft: '0.5rem' }}
+                                    sx={{ marginLeft: '0.5rem', marginTop: '0.1rem' }}
                                 >
                                     중복체크
                                 </CustomBtn>
@@ -244,7 +249,7 @@ const Register = () => {
                                     id="password"
                                     variant="outlined"
                                     size="small"
-                                    type="password"
+                                    type={passwordView ? '' : 'password'}
                                     placeholder="8~16자리 영문, 숫자"
                                     autoComplete="off"
                                     fullWidth
@@ -259,7 +264,7 @@ const Register = () => {
                                     id="passwordConfirm"
                                     variant="outlined"
                                     size="small"
-                                    type="password"
+                                    type={passwordView ? '' : 'password'}
                                     placeholder="비밀번호 확인"
                                     autoComplete="off"
                                     fullWidth
@@ -268,13 +273,20 @@ const Register = () => {
                                         onChange(setPasswordConfirm, passwordConfirm, e);
                                     }}
                                 />
-                                {/* {passwordConfirm ? null : (
-                                <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
-                                    비밀번호가 일치하지 않습니다.
-                                </Typography>
-                            )} */}
+                                <Button onClick={ClickViewPassword}>
+                                    {passwordView ? '비밀번호 가리기' : '비밀번호 보기'}
+                                </Button>
+                                {/* {passwordConfirm ? (
+                                    <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
+                                        비밀번호 일치
+                                    </Typography>
+                                ) : (
+                                    <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
+                                        비밀번호가 일치하지 않습니다.
+                                    </Typography>
+                                )} */}
                             </div>
-                            <div style={{ paddingTop: '1rem' }}>
+                            <div style={{ paddingTop: '0.5rem' }}>
                                 <CustomTypography>이메일</CustomTypography>
                                 <TextField
                                     id="outlined-basic"
@@ -289,13 +301,12 @@ const Register = () => {
                                         onChange(setEmail, email, e);
                                     }}
                                 />
-
                                 <CustomBtn
                                     variant="contained"
                                     // disabled={checkAuthNum}
-                                    sx={{ marginLeft: '0.5rem' }}
                                     onClick={onClickAuth}
                                     disabled={checkEmail ? false : true}
+                                    sx={{ marginLeft: '0.5rem', marginTop: '0.1rem' }}
                                 >
                                     인증
                                 </CustomBtn>
@@ -343,13 +354,22 @@ const Register = () => {
                                 height: '20px',
                             }}
                         >
-                            <Typography sx={{ ':hover': { fontWeight: 'bold' } }}>
-                                <NavLink
+                            <Typography>
+                                <span style={{ color: '#969696', fontSize: '0.875rem', marginRight: '0.3rem' }}>
+                                    이미 회원이신가요?
+                                </span>
+                                <Link
+                                    component={NavLink}
                                     to={`/login`}
-                                    style={{ textDecoration: 'none', color: '#969696', fontSize: '0.875rem' }}
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: '#6ea5f8',
+                                        fontSize: '0.875rem',
+                                        ':hover': { fontWeight: 'bold' },
+                                    }}
                                 >
                                     로그인
-                                </NavLink>
+                                </Link>
                             </Typography>
                         </div>
                     </div>
