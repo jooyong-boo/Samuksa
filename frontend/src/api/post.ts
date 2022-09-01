@@ -22,12 +22,12 @@ export const getPostsId = async (id: number) => {
     }
 };
 
-export const randomUserId = async () => {
-    try {
-        const data = await axios.get(`https://randomuser.me/api/?inc=name`);
-        console.log(data);
-        return data;
-    } catch (err) {
-        console.log(err.response);
-    }
-};
+// export const randomUserId = async () => {
+//     try {
+//         const data = await axios.get(`https://randomuser.me/api/?inc=name`);
+//         console.log(data);
+//         return data;
+//     } catch (err) {
+//         console.log(err.response);
+//     }
+// };
