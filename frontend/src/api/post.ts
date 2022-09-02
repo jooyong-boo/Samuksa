@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getRandomNumber } from '../components/community/PostViewer';
 
 // 전체 게시물 목록
 export const getPosts = async () => {
@@ -21,13 +22,3 @@ export const getPostsId = async (id: number) => {
         console.log(err.response);
     }
 };
-
-// export const randomUserId = async () => {
-//     try {
-//         const data = await axios.get(`https://randomuser.me/api/?inc=name`);
-//         console.log(data);
-//         return data;
-//     } catch (err) {
-//         console.log(err.response);
-//     }
-// };
