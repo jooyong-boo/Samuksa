@@ -110,8 +110,8 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                     >
                                         <Grid
                                             container
-                                            spacing={0}
-                                            rowSpacing={0}
+                                            spacing={0.5}
+                                            rowSpacing={0.2}
                                             justifyContent="center"
                                             sx={{ width: '40%' }}
                                         >
@@ -149,7 +149,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         <SearchedCombinationsDiv>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 14,
+                                                    fontSize: '1rem',
                                                     color: '#4A4A4A',
                                                     fontWeight: 'bold',
                                                 }}
@@ -158,7 +158,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                             </Typography>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 14,
+                                                    fontSize: '1rem',
                                                     color: '#A5A5A5',
                                                 }}
                                                 color="text.secondary"
@@ -198,7 +198,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                                             <CustomListItem key={i}>
                                                                 <Typography
                                                                     sx={{
-                                                                        fontSize: '13px',
+                                                                        fontSize: '0.92rem',
                                                                         color: '#545454',
                                                                     }}
                                                                 >
@@ -206,7 +206,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                                                 </Typography>
                                                                 <Typography
                                                                     sx={{
-                                                                        fontSize: '13px',
+                                                                        fontSize: '0.92rem',
                                                                         color: '#979797',
                                                                     }}
                                                                 >
@@ -219,7 +219,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                               : null}
                                           <Typography
                                               sx={{
-                                                  fontSize: '15px',
+                                                  fontSize: '1rem',
                                                   mt: 1,
                                                   fontWeight: 'bold',
                                               }}
@@ -242,7 +242,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                             color: '#010000',
                                             paddingTop: '18px',
                                             fontWeight: 'bold',
-                                            fontSize: '16px',
+                                            fontSize: '1.14rem',
                                         }}
                                     >
                                         수산물 견적
@@ -251,7 +251,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         variant="body2"
                                         sx={{
                                             color: '#949494',
-                                            fontSize: '11px',
+                                            fontSize: '0.78rem',
                                             mb: '11px',
                                         }}
                                     >
@@ -334,7 +334,7 @@ const CustomCardContent = styled(CardContent)`
     border-bottom: 1px solid #f6f6f6;
     height: 70px;
     &:last-child {
-        padding-bottom: 1;
+        padding-bottom: 0;
     }
     padding: 0 10px 0 10px;
     :hover {
