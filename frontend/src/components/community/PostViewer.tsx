@@ -17,9 +17,21 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../utils/TimeForToday';
-import { randomUserId } from '../../api/post';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { RandomNickname } from '../common/RandomNickname';
 
 const PostViewer = () => {
+    const notifySuccess = (text: string) => {
+        dismissAll();
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    };
+    const dismissAll = () => toast.dismiss();
+
     const { id } = useParams<{ id?: string }>();
     const navigate = useNavigate();
     const params = useParams();
@@ -67,10 +79,21 @@ const PostViewer = () => {
         }
     };
 
+    const CommentRegister = () => {
+        if (userInfo) {
+            dismissAll();
+            notifySuccess('등록 성공');
+        } else {
+            dismissAll();
+            notifySuccess('로그인 해주세요');
+        }
+    };
+
     useEffect(() => {
         getPostsId(id);
         getComment(id);
     }, [id]);
+
     // console.log(data);
     // console.log(comments);
 
@@ -94,7 +117,7 @@ const PostViewer = () => {
                             }}
                         />
                         <div style={{ display: 'inline-flex', flexDirection: 'column', marginLeft: '0.5rem' }}>
-                            <Typography sx={{ fontSize: '1rem', fontWeight: '700' }}>{data.UserId}</Typography>
+                            <Typography sx={{ fontSize: '1rem', fontWeight: '700' }}>{RandomNickname()}</Typography>
                             <Typography sx={{ fontSize: '0.875rem', color: '#979797' }}>
                                 {timeForToday(data.createdAt)}
                             </Typography>
@@ -120,7 +143,7 @@ const PostViewer = () => {
                     </div>
                 ) : null}
                 <div style={{ borderBottom: '1px solid #EAEAEA' }} />
-                <div style={{ margin: '1rem 0' }}>
+                <div style={{ margin: '1rem 0' }} ref={commentRef}>
                     <Typography fontSize={18}>댓글 {comments.length}</Typography>
                     {comments &&
                         comments.map((comment, i) => {
@@ -141,9 +164,9 @@ const PostViewer = () => {
                                                 marginRight: '0.5rem',
                                             }}
                                         />
-                                        <div key={comment.id} ref={commentRef} style={{ margin: '1rem 0' }}>
+                                        <div key={comment.id} style={{ margin: '1rem 0' }}>
                                             <Typography sx={{ color: 'rgb(75 85 99)', fontWeight: 'medium' }}>
-                                                닉네임: {comment.id}
+                                                {RandomNickname()}
                                             </Typography>
                                             <Typography fontSize={12} color="#979797">
                                                 {timeForToday(comment.createdAt)}
@@ -192,7 +215,7 @@ const PostViewer = () => {
                                 sx={{
                                     margin: '1rem',
                                 }}
-                                onClick={goList}
+                                onClick={CommentRegister}
                             >
                                 등록
                             </CustomBtn>
@@ -201,22 +224,22 @@ const PostViewer = () => {
                                 sx={{
                                     margin: '1rem 0',
                                 }}
-                                onClick={goList}
+                                onClick={CommentRegister}
                             >
                                 등록 + 추천
                             </CustomBtn>
                         </CommentBox>
                     </div>
-                    <div style={{ display: 'flex', width: '63%', justifyContent: 'space-between' }}>
-                        <CustomBtn
-                            variant="contained"
-                            sx={{
-                                margin: '1rem 0',
-                            }}
-                            onClick={goList}
-                        >
-                            목록
-                        </CustomBtn>
+                    <CustomBtn
+                        variant="contained"
+                        sx={{
+                            margin: '1rem 0',
+                        }}
+                        onClick={goList}
+                    >
+                        목록
+                    </CustomBtn>
+                    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
                         <div>
                             <CustomBtn
                                 variant="contained"

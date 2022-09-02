@@ -102,12 +102,13 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 padding: '16px 0px',
+                                                justifyContent: 'center',
                                             }}
                                         >
                                             <div style={{ display: 'flex' }}>
                                                 <Typography
                                                     sx={{
-                                                        fontSize: 14,
+                                                        fontSize: '1rem',
                                                         color: '#4A4A4A',
                                                         fontWeight: 'bold',
                                                     }}
@@ -116,7 +117,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                                                 </Typography>
                                                 <Typography
                                                     sx={{
-                                                        fontSize: 13,
+                                                        fontSize: '0.9rem',
                                                         color: '#A5A5A5',
                                                         fontWeight: 'medium',
                                                         marginLeft: 1,
@@ -127,7 +128,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                                             </div>
                                             <Typography
                                                 sx={{
-                                                    fontSize: 13,
+                                                    fontSize: '0.9rem',
                                                     color: '#A5A5A5',
                                                     fontWeight: 'medium',
                                                 }}
@@ -144,7 +145,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                                                     borderRadius: '1px',
                                                     color: '#949494',
                                                     borderColor: '#D8D8D8',
-                                                    fontSize: 12,
+                                                    fontSize: '0.8rem',
                                                     marginRight: '12px',
                                                 }}
                                                 onClick={() => {

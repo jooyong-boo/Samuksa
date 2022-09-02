@@ -129,20 +129,31 @@ const Main = () => {
     return (
         <>
             <Background>
-                <div style={{ display: 'inline-flex' }}>
+                <div style={{ display: 'flex', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
                     <Typography
                         sx={{
-                            fontSize: '54px',
+                            fontSize: '3.85rem',
                             fontWeight: '900',
                             color: 'white',
                             textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
                         }}
                     >
-                        모두가 편히 떠먹는 그날까지,
+                        모두가 편히
                     </Typography>
                     <Typography
                         sx={{
-                            fontSize: '54px',
+                            fontSize: '3.85rem',
+                            fontWeight: '900',
+                            color: 'white',
+                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
+                            marginLeft: '1rem',
+                        }}
+                    >
+                        떠먹는 그날까지,
+                    </Typography>
+                    <Typography
+                        sx={{
+                            fontSize: '3.85rem',
                             color: '#6EA5F8',
                             fontWeight: '900',
                             textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
@@ -154,7 +165,7 @@ const Main = () => {
                 </div>
                 <Typography
                     sx={{
-                        fontSize: '25px',
+                        fontSize: '1.78rem',
                         color: 'white',
                         fontWeight: '600',
                         textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',

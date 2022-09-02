@@ -33,6 +33,10 @@
         url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf') format('truetype');
 }
 
+:root {
+    background-color: #ebecee;
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -42,12 +46,18 @@
         BlinkMacSystemFont, 'Segoe UI', 'Oxygen';
 }
 
-body {
+body,
+html {
     margin: 0;
+    font-size: 14px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     overflow: overlay;
+    -webkit-text-size-adjust: none; /* 크롬, 사파리, 오페라(신) */
+    -ms-text-size-adjust: none; /* IE */
+    -moz-text-size-adjust: none; /* 파이어폭스 */
+    -o-text-size-adjust: none; /* 오페라(구)*/
 }
 
 code {
@@ -61,4 +71,34 @@ body::-webkit-scrollbar {
 body::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
+}
+
+@media (max-width: 300px) {
+    html {
+        font-size: 0.6rem;
+    }
+}
+
+@media (min-width: 500px) {
+    html {
+        font-size: 0.7rem;
+    }
+}
+
+@media (min-width: 700px) {
+    html {
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    html {
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 1600px) {
+    html {
+        font-size: 1rem;
+    }
 }

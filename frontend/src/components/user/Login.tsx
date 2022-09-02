@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, Link, TextField, Typography } from '@mui/material';
 import React, { ReactElement } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -175,20 +175,53 @@ const Login = () => {
                                 아이디 저장
                             </Typography>
                             <Typography sx={{ fontSize: '0.8rem', ':hover': { fontWeight: 'bold' } }}>
-                                <NavLink
+                                <Link
+                                    component={NavLink}
                                     to={`/register`}
-                                    style={{ textDecoration: 'none', color: 'black', fontSize: '0.8rem' }}
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: '#6ea5f8',
+                                        fontSize: '0.8rem',
+                                        ':hover': { fontWeight: 'bold' },
+                                    }}
                                 >
-                                    회원가입
-                                </NavLink>
+                                    계정찾기
+                                </Link>
                             </Typography>
                         </div>
-                        <div style={{ width: '100%', height: '3rem', margin: '1rem auto' }}>
+                        <div style={{ width: '100%', margin: '1rem auto' }}>
                             <LoginBtn variant="contained" type="submit" onClick={getLogin}>
                                 로그인
                             </LoginBtn>
+                            <Typography>
+                                <span style={{ color: '#969696', fontSize: '0.875rem', marginRight: '0.3rem' }}>
+                                    아직 회원이 아니신가요?
+                                </span>
+                                <Link
+                                    component={NavLink}
+                                    to={`/register`}
+                                    sx={{
+                                        textDecoration: 'none',
+                                        color: '#6ea5f8',
+                                        fontSize: '0.875rem',
+                                        ':hover': { fontWeight: 'bold' },
+                                    }}
+                                >
+                                    회원가입
+                                </Link>
+                            </Typography>
                         </div>
-                        <div style={{ borderTop: '1px solid #eaeaea', marginBottom: '1rem' }}></div>
+                        <div style={{ borderTop: '1px solid #eaeaea', marginBottom: '0.5rem' }}></div>
+                        <Typography
+                            sx={{
+                                marginBottom: '0.5rem',
+                                color: 'rgb(75 85 99)',
+                                fontSize: '0.875rem',
+                                fontWeight: 'medium',
+                            }}
+                        >
+                            SNS로그인
+                        </Typography>
                         <KakaoLogin />
                     </div>
                 </Card>

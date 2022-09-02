@@ -12,7 +12,7 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -22,6 +22,8 @@ import { userInfoState } from '../../store/user';
 import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import timeForToday from '../utils/TimeForToday';
+import { RandomNickname } from '../common/RandomNickname';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -40,8 +42,10 @@ const ReviewBoard = () => {
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState<number>(1);
     const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState);
-    const userInfo = useRecoilValue(userInfoState);
     const offset = (postPage - 1) * limit;
+    const userInfo = useRecoilValue(userInfoState);
+    const posts = useRecoilValue(getPostState);
+    const [usePosts, setUsePosts] = useState<any[]>([]);
 
     const goWriting = () => {
         if (userInfo) {
@@ -52,18 +56,36 @@ const ReviewBoard = () => {
         }
     };
 
-    const posts = useRecoilValue(getPostState);
+    const AddReadPost = (id: any) => {
+        let readPost: any = localStorage.getItem('reviewReadPost');
+        if (readPost?.length) {
+            let newReadPost: any = [...JSON.parse(readPost), id];
+            localStorage.setItem('reviewReadPost', JSON.stringify(newReadPost));
+        } else {
+            localStorage.setItem('reviewReadPost', JSON.stringify([id]));
+        }
+    };
 
-    // console.log(posts);
+    useEffect(() => {
+        const readPost = localStorage.getItem('reviewReadPost');
+        const newPosts = posts.map((item: any) => {
+            if (readPost?.includes(item.id)) {
+                return Object.assign({}, item, { read: true });
+            } else {
+                return item;
+            }
+        });
+        setUsePosts(newPosts);
+    }, [posts]);
 
     return (
         <Background>
             <Typography
-                sx={{ fontSize: '2rem', fontWeight: 'bold', width: '70%', margin: 'auto', marginBottom: '1rem' }}
+                sx={{ fontSize: '2rem', fontWeight: 'bold', width: '80%', margin: 'auto', marginBottom: '1rem' }}
             >
                 리뷰게시판
             </Typography>
-            <div style={{ width: '70%', textAlign: 'center', margin: 'auto' }}>
+            <div style={{ width: '80%', textAlign: 'center', margin: 'auto' }}>
                 <ThemeProvider theme={theme}>
                     <CustomTableContainer>
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
@@ -77,8 +99,12 @@ const ReviewBoard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {posts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, content, createdAt, updatedAt } = item;
+                                {usePosts.slice(offset, offset + limit).map((item: any) => {
+                                    const { id, title, UserId, createdAt, read } = item;
+                                    const newCreateAt = new Date(createdAt);
+                                    const year = newCreateAt.getFullYear();
+                                    const month = newCreateAt.getMonth();
+                                    const date = newCreateAt.getDate();
                                     return (
                                         <TableRow
                                             key={id}
@@ -94,16 +120,21 @@ const ReviewBoard = () => {
                                                 <NavLink
                                                     to={`post/${id}`}
                                                     style={{
-                                                        color: '#5A5A5A',
+                                                        color: read ? '#770088' : '#5A5A5A',
                                                         textDecoration: 'none',
                                                         fontSize: '0.875rem',
+                                                    }}
+                                                    onClick={() => {
+                                                        AddReadPost(id);
                                                     }}
                                                 >
                                                     {title}
                                                 </NavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{UserId}</TableCell>
-                                            <TableCell sx={tableTextStyle}>{createdAt}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
+                                            <TableCell
+                                                sx={tableTextStyle}
+                                            >{`${year}년 ${month}월 ${date}일`}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                         </TableRow>

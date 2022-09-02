@@ -138,6 +138,7 @@ const Header = () => {
     const logout = (name: string) => {
         if (name === '로그아웃') {
             localStorage.removeItem('jwtToken');
+            localStorage.removeItem('kakaoAuth');
             navigate('/');
             setUserInfo('');
             setUserIdState('');
@@ -195,6 +196,7 @@ const Header = () => {
                 })
                 .catch((e) => {
                     localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('kakaoAuth');
                     setLoginStatus(false);
                     setUserInfo('');
                     setUserIdState('');
@@ -243,11 +245,16 @@ const Header = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar
-                position="fixed"
-                sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none', width: '100vw', height: '4.2rem' }}
-            >
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto', width: '95vw' }}>
+            <AppBar position="fixed" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none', width: '100vw' }}>
+                <Toolbar
+                    disableGutters
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        margin: 'auto',
+                        width: '94vw',
+                    }}
+                >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <SetMealIcon
                             onClick={goMain}
@@ -341,7 +348,11 @@ const Header = () => {
                               })}
                         <>
                             <Tooltip title="User">
-                                <IconButton onClick={handleOpenUserMenu} onMouseOver={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    onMouseEnter={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
                                     <Avatar
                                         src={image}
                                         sx={{

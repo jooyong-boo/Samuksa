@@ -107,7 +107,6 @@ export const getPostState = selector({
     key: 'getPostState',
     get: async ({ get }) => {
         const response = await getPosts();
-        // console.log(response)
         return response;
     },
 });
