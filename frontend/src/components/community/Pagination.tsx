@@ -38,62 +38,64 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
         setCurrentGroup(pagination()[Math.floor((postPage - 1) / 10)]);
     }, [totalPage, postPage]);
 
-    // console.log(currentGroup);
-
     return (
-        <nav>
-            <List sx={{ display: 'flex' }}>
-                <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
-                    &lt;&lt;
-                </Button>
-                <Button onClick={() => setPostPage(postPage - 1)} disabled={postPage === 1}>
-                    &lt;
-                </Button>
-                {currentGroup &&
-                    currentGroup.map((btn: number, i: number) => (
-                        <Button
-                            key={btn}
-                            onClick={() => setPostPage(btn)}
-                            aria-current={postPage === btn ? 'page' : undefined}
-                        >
-                            {btn}
-                        </Button>
-                    ))}
-                <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
-                    &gt;
-                </Button>
-                <Button onClick={() => setPostPage(numPages)} disabled={postPage === numPages}>
-                    &gt;&gt;
-                </Button>
+        <>
+            <List sx={{ display: 'flex', justifyContent: 'center' }}>
+                <div>
+                    <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
+                        &lt;&lt;
+                    </Button>
+                    <Button onClick={() => setPostPage(postPage - 1)} disabled={postPage === 1}>
+                        &lt;
+                    </Button>
+                </div>
+                <div style={{ width: '20rem' }}>
+                    {currentGroup &&
+                        currentGroup.map((btn: number, i: number) => (
+                            <Button
+                                key={btn}
+                                onClick={() => setPostPage(btn)}
+                                aria-current={postPage === btn ? 'page' : undefined}
+                            >
+                                {btn}
+                            </Button>
+                        ))}
+                </div>
+                <div>
+                    <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
+                        &gt;
+                    </Button>
+                    <Button onClick={() => setPostPage(numPages)} disabled={postPage === numPages}>
+                        &gt;&gt;
+                    </Button>
+                </div>
             </List>
-        </nav>
+        </>
     );
 };
 
 const Button = styled.button`
     border: none;
-    border-radius: 10px;
-    padding: 8px;
+    padding: 0px 5px;
     margin: 0;
-    background: #6ea5f8;
-    color: white;
+    background: white;
+    color: #5a5a5a;
     font-size: 1rem;
-    margin: 0 1px;
 
     &:hover {
-        background: #6ea5f8;
+        font-weight: bold;
         cursor: pointer;
-        transform: translateY(-2px);
+        transform: translateY(-1px);
     }
 
     &[disabled] {
-        background: grey;
+        font-weight: bold;
         cursor: revert;
         transform: revert;
     }
 
     &[aria-current] {
-        background: #0098ee;
+        color: #6ea5f8;
         font-weight: bold;
         cursor: revert;
         transform: revert;
