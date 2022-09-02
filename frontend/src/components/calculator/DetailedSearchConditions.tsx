@@ -265,7 +265,7 @@ const DetailedSearchConditions = () => {
                                       <Typography
                                           key={i}
                                           sx={{
-                                              fontSize: '14px',
+                                              fontSize: '1rem',
                                               width: '90px',
                                               ':hover': { backgroundColor: 'rgba(99, 99, 99, 0.1)' },
                                               borderRadius: '5px',
@@ -429,7 +429,7 @@ const CustomSelectFarmTypeDiv = styled.div`
 `;
 
 const CustomSelectFarmTypeTypography = styled(Typography)`
-    font-size: 14px;
+    font-size: 1rem;
     margin-top: 5px;
     font-weight: medium;
 `;
