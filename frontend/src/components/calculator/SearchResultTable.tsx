@@ -130,7 +130,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                   <div key={i} style={{ display: 'flex' }}>
                                       <Typography
                                           sx={{
-                                              fontSize: 12,
+                                              fontSize: '0.8rem',
                                               color: '#707070',
                                               marginRight: 1,
                                           }}
@@ -139,7 +139,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                       </Typography>
                                       <Typography
                                           sx={{
-                                              fontSize: 12,
+                                              fontSize: '0.8rem',
                                               color: '#707070',
                                               marginRight: 1,
                                           }}
@@ -149,7 +149,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                       </Typography>
                                       <Typography
                                           sx={{
-                                              fontSize: 13,
+                                              fontSize: '0.9rem',
                                               fontWeight: '700',
                                               color: '#707070',
                                           }}
@@ -165,14 +165,14 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Typography
                         sx={{
-                            fontSize: 14,
+                            fontSize: '1rem',
                             fontWeight: 'medium',
                             marginRight: 1,
                         }}
                     >
                         총 금액:{' '}
                     </Typography>
-                    <Typography sx={{ fontSize: 16, fontWeight: 'bold' }}>
+                    <Typography sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>
                         {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
                     </Typography>
                     원
