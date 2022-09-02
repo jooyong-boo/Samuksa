@@ -245,11 +245,16 @@ const Header = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar
-                position="fixed"
-                sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none', width: '100vw', height: '4.2rem' }}
-            >
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', margin: 'auto', width: '95vw' }}>
+            <AppBar position="fixed" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none', width: '100vw' }}>
+                <Toolbar
+                    disableGutters
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        margin: 'auto',
+                        width: '94vw',
+                    }}
+                >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <SetMealIcon
                             onClick={goMain}

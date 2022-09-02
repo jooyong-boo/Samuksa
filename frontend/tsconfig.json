@@ -10,7 +10,9 @@
         // "strict": false,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
     "types": ["react/next", "react-dom/next"],
     "include": ["./src/"]
