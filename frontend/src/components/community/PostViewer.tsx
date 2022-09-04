@@ -203,7 +203,7 @@ const PostViewer = () => {
                                     }}
                                 />
                             )}
-                            <Typography>{userInfo && userInfo.userNikName}</Typography>
+                            <Typography>{userInfo && userInfo.userNickName}</Typography>
                         </div>
                         <CommentBox>
                             <TextField
