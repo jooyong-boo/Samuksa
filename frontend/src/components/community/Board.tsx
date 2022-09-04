@@ -53,7 +53,19 @@ const Board = () => {
 
     return (
         <Background>
-            <Box sx={{ width: '95%', height: '95%', backgroundColor: 'white', margin: 'auto', borderRadius: '10px' }}>
+            <Box
+                sx={{
+                    width: '95%',
+                    height: '95%',
+                    backgroundColor: 'white',
+                    margin: 'auto',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                }}
+            >
                 <Tabs value={selectTab} onChange={handleChange} centered>
                     {tab.map(({ id, label, path }) => {
                         return (
