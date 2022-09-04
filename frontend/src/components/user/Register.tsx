@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { signUp, checkIdAxios, checkNickNameAxios } from '../../api/auth';
+import { signUp, checkIdAxios, checkNickNameAxios, checkEmailAxios, checkEmailAuthAxios } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
@@ -36,9 +36,11 @@ const Register = () => {
     const [checkPwConfirm, setCheckPwConfirm] = useState(true);
     const [passwordView, setPasswordView] = useState(false);
 
+    // 이메일
     const [email, setEmail] = useState('');
     const [checkEmail, setCheckEmail] = useState(false);
 
+    // 이메일 인증번호
     const [authNum, setAuthNum] = useState('');
     const [checkAuthNum, setCheckAuthNum] = useState(false);
 
@@ -71,7 +73,7 @@ const Register = () => {
             }
         }
         if (check === password) {
-            const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            const passwordReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/);
             if (passwordReg.test(inputChange)) {
                 change(inputChange);
                 setCheckPw(false);
@@ -81,7 +83,7 @@ const Register = () => {
             }
         }
         if (check === passwordConfirm) {
-            const passwordConfirmReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            const passwordConfirmReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/);
             change(inputChange);
             if (passwordConfirmReg.test(inputChange) && password === passwordConfirm) {
                 setCheckPwConfirm(false);
@@ -91,13 +93,22 @@ const Register = () => {
         }
         if (check === email) {
             const emailReg = new RegExp(
-                /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+                /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
             );
             if (emailReg.test(inputChange)) {
-                setCheckEmail(true);
+                setCheckEmail(false);
                 change(inputChange);
             } else {
-                setCheckEmail(false);
+                setCheckEmail(true);
+            }
+        }
+        if (check === authNum) {
+            const emailAuthReg = new RegExp(/^[0-9a-zA-Z]{8}$/);
+            if (emailAuthReg.test(inputChange)) {
+                setCheckAuthNum(false);
+                change(inputChange);
+            } else {
+                setCheckAuthNum(true);
             }
         }
         // console.log(reg.test(inputChange));
@@ -119,9 +130,25 @@ const Register = () => {
         });
     };
 
-    const onClickAuth = () => {
-        setCheckEmail(true);
-        setCheckAuthNum(true);
+    const onClickEmailAuth = () => {
+        checkEmailAxios({ email }).then((res) => {
+            console.log(res);
+            if (res?.data && res?.status === 201) {
+                setCheckEmail(true);
+            } else {
+                setCheckEmail(false);
+            }
+        });
+        // setCheckAuthNum(true);
+    };
+
+    const onClickEmailAuthCheck = () => {
+        checkEmailAuthAxios({ authNum, email }).then((res) => {
+            console.log(res);
+            if (res?.data === 'success') {
+                setCheckAuthNum(true);
+            }
+        });
     };
 
     const onSignUp = () => {
@@ -296,7 +323,7 @@ const Register = () => {
                                     placeholder="이메일 형식을 지켜주세요"
                                     fullWidth
                                     sx={{ width: '70%' }}
-                                    color={checkEmail ? 'primary' : 'error'}
+                                    color={checkEmail ? 'error' : 'primary'}
                                     onChange={(e) => {
                                         onChange(setEmail, email, e);
                                     }}
@@ -304,8 +331,8 @@ const Register = () => {
                                 <CustomBtn
                                     variant="contained"
                                     // disabled={checkAuthNum}
-                                    onClick={onClickAuth}
-                                    disabled={checkEmail ? false : true}
+                                    onClick={onClickEmailAuth}
+                                    disabled={checkEmail}
                                     sx={{ marginLeft: '0.5rem', marginTop: '0.1rem' }}
                                 >
                                     인증
@@ -315,7 +342,7 @@ const Register = () => {
                             </Typography> */}
                             </div>
                             <div style={{ paddingTop: '0.5rem' }}>
-                                {checkAuthNum ? (
+                                {checkEmail ? (
                                     <>
                                         {/* <Typography sx={{ fontSize: '16px', mb: 0.5 }}>인증번호를 입력해주세요</Typography> */}
                                         <TextField
@@ -325,8 +352,16 @@ const Register = () => {
                                             autoComplete="off"
                                             placeholder="인증번호"
                                             sx={{ width: '70%' }}
+                                            onChange={(e) => {
+                                                onChange(setAuthNum, authNum, e);
+                                            }}
                                         />
-                                        <CustomBtn variant="contained" sx={{ marginLeft: '0.5rem' }}>
+                                        <CustomBtn
+                                            variant="contained"
+                                            sx={{ marginLeft: '0.5rem' }}
+                                            onClick={onClickEmailAuthCheck}
+                                            disabled={checkAuthNum}
+                                        >
                                             확인
                                         </CustomBtn>
                                     </>
