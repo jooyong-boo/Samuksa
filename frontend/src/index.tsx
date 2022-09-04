@@ -11,6 +11,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TopScrollBtn from './components/common/TopScrollBtn';
 import { StyledEngineProvider } from '@mui/styled-engine';
+import { ThemeProvider } from '@mui/material';
+import { theme } from './components/Styles';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -27,9 +29,11 @@ root.render(
                             opacity: '0.9',
                         }}
                     />
-                    <Header />
-                    <App />
-                    <TopScrollBtn />
+                    <ThemeProvider theme={theme}>
+                        <Header />
+                        <App />
+                        <TopScrollBtn />
+                    </ThemeProvider>
                 </StyledEngineProvider>
             </BrowserRouter>
         </RecoilRoot>
