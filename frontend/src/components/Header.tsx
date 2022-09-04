@@ -140,7 +140,7 @@ const Header = () => {
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('kakaoAuth');
             navigate('/');
-            setUserInfo('');
+            setUserInfo({});
             setUserIdState('');
             setImage('/broken-image.jpg');
             notify('다음에 또 만나요!');
@@ -176,11 +176,11 @@ const Header = () => {
     }, [location]);
 
     useEffect(() => {
-        if (!!loginConfirm) {
+        if (loginConfirm) {
             setLoginStatus(true);
         } else {
             setLoginStatus(false);
-            setUserInfo('');
+            setUserInfo({});
         }
     }, [loginConfirm]);
 
@@ -198,11 +198,11 @@ const Header = () => {
                     localStorage.removeItem('jwtToken');
                     localStorage.removeItem('kakaoAuth');
                     setLoginStatus(false);
-                    setUserInfo('');
+                    setUserInfo({});
                     setUserIdState('');
                     setImage('/broken-image.jpg');
                     if (e.code === 'ERR_NETWORK') {
-                        notifyError(
+                        return notifyError(
                             <p>
                                 서버와 연결이 끊겼습니다.
                                 <br /> 새로고침을 하거나
@@ -211,7 +211,7 @@ const Header = () => {
                         );
                     }
                     if (e.code === 500) {
-                        notifyError(
+                        return notifyError(
                             <p>
                                 아이디 인증시간이 만료되었습니다.
                                 <br /> 재로그인 해주세요
@@ -220,7 +220,7 @@ const Header = () => {
                     }
                 });
         }
-    }, [location]);
+    }, [location, loginStatus]);
 
     useEffect(() => {
         if (Object.keys(userInfo).length === 0) {
@@ -272,10 +272,10 @@ const Header = () => {
                             onClick={goMain}
                             sx={{
                                 color: '#6EA5F8',
-                                fontWeight: '900',
+                                fontWeight: '700',
                                 fontSize: '1.875rem',
                                 cursor: 'pointer',
-                                fontFamily: 'sans-serif',
+                                // fontFamily: 'sans-serif',
                             }}
                         >
                             SAMUKSA
@@ -350,7 +350,7 @@ const Header = () => {
                             <Tooltip title="User">
                                 <IconButton
                                     onClick={handleOpenUserMenu}
-                                    onMouseEnter={handleOpenUserMenu}
+                                    // onMouseEnter={handleOpenUserMenu}
                                     sx={{ p: 0 }}
                                 >
                                     <Avatar
@@ -363,10 +363,11 @@ const Header = () => {
                                             height: '2.5rem',
                                             cursor: 'pointer',
                                             marginRight: '0.3rem',
+                                            ':hover': { transform: 'scale(1.1)' },
                                         }}
                                     />
                                     <Typography sx={{ fontWeight: 'bold' }}>
-                                        {loginStatus ? `${userInfo.userNikName}님` : null}
+                                        {loginStatus ? `${userInfo.userNickName}님` : null}
                                     </Typography>
                                 </IconButton>
                             </Tooltip>

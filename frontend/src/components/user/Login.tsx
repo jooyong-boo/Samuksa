@@ -50,10 +50,10 @@ const Login = () => {
         }
         login({ userId, passwd })
             .then((res) => {
-                if (!!res.code) {
+                if (res.status !== 201) {
                     throw res;
                 }
-                if (res) {
+                if (res.status === 201) {
                     navigate('/');
                 }
                 if (idSaveStatus) {
@@ -65,8 +65,10 @@ const Login = () => {
                     if (res.code === 500) {
                         return;
                     }
-                    notifySuccess(`${res.userNikName}님 반갑습니다!`);
-                    userInfo(res);
+                    if (res.userNickName) {
+                        notifySuccess(`${res.userNickName}님 반갑습니다!`);
+                        userInfo(res);
+                    }
                 });
             })
             .catch((e) => {

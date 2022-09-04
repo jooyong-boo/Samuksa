@@ -34,7 +34,7 @@ const Introduction = () => {
                 <Typography sx={{ fontSize: '4.28rem' }} mr={1}>
                     What is
                 </Typography>
-                <Typography sx={{ fontSize: '4.28rem' }} color="#6EA5F8" fontWeight="bold">
+                <Typography sx={{ fontSize: '4.28rem' }} color="#6EA5F8" fontWeight="600">
                     Samuksa
                 </Typography>
                 <Typography sx={{ fontSize: '4.28rem' }}>?</Typography>

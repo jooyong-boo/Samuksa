@@ -164,7 +164,7 @@ const Writing = () => {
                                 }}
                             />
                             <Typography sx={{ fontSize: '1.2rem', fontWeight: 'medium' }}>
-                                {userInfo.userNikName}
+                                {userInfo.userNickName}
                             </Typography>
                         </>
                     )}
