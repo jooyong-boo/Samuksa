@@ -45,10 +45,10 @@ const Profile = () => {
 
     interface userInfos {
         userId?: string;
-        userNikName?: string;
+        userNickName?: string;
         userEmail?: string;
     }
-    const { userId, userNikName, userEmail }: userInfos = userInfo;
+    const { userId, userNickName, userEmail }: userInfos = userInfo;
 
     const withdrawal = () => {
         let confirmWithdrawal = window.confirm('정말 탈퇴하시겠어요?');
@@ -168,7 +168,7 @@ const Profile = () => {
                                 <Typography>닉네임</Typography>
                             </div>
                             <div style={{ border: '1px solid rgb(225, 225, 225)', padding: '1rem', width: '90%' }}>
-                                <Typography>{userNikName}</Typography>
+                                <Typography>{userNickName}</Typography>
                             </div>
                             <div>
                                 <Typography>이메일</Typography>
