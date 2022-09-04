@@ -80,12 +80,22 @@ const TipBoard = () => {
 
     return (
         <Background>
-            <Typography
-                sx={{ fontSize: '2rem', fontWeight: 'bold', width: '80%', margin: 'auto', marginBottom: '1rem' }}
+            <div
+                style={{
+                    width: '80%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '0.5rem',
+                    margin: 'auto',
+                }}
             >
-                꿀팁게시판
-            </Typography>
-            <div style={{ width: '80%', textAlign: 'center', margin: 'auto', overflow: 'auto' }}>
+                <Typography sx={{ fontSize: '2rem', fontWeight: 'bold' }}>Tip게시판</Typography>
+                <WriteBtn variant="contained" onClick={goWriting}>
+                    글쓰기
+                </WriteBtn>
+            </div>
+            <div style={{ width: '80%', textAlign: 'center', overflow: 'auto' }}>
                 <ThemeProvider theme={theme}>
                     <CustomTableContainer>
                         <Table sx={{ minWidth: 700 }} aria-label="simple table">
@@ -154,11 +164,6 @@ const TipBoard = () => {
                         setPostPage={setPostPage}
                     />
                 </Stack>
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', height: '3rem' }}>
-                    <WriteBtn variant="contained" onClick={goWriting}>
-                        글쓰기
-                    </WriteBtn>
-                </div>
             </div>
         </Background>
     );
@@ -169,10 +174,11 @@ export default TipBoard;
 const Background = styled.div`
     background-color: white;
     width: 95%;
-    height: 90%;
+    height: 95%;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
     overflow: overlay;
     margin: auto;
     padding: 10px;
@@ -230,7 +236,8 @@ const WriteBtn = styled(Button)`
     font-weight: 900;
     color: white;
     box-shadow: none;
-    width: 15%;
+    width: 6rem;
+    height: 2.5rem;
     &:hover {
         box-shadow: none;
     }
