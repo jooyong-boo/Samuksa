@@ -26,8 +26,8 @@ export const userInfoSelector = selector({
     get: async ({ get }) => {
         try {
             const response = await getUserInfo();
-            if (response.userId) {
-                return response;
+            if (response?.data?.userId) {
+                return response.data;
             } else {
                 throw response;
             }
