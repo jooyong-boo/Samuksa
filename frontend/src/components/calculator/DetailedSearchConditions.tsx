@@ -265,7 +265,7 @@ const DetailedSearchConditions = () => {
                                       <Typography
                                           key={i}
                                           sx={{
-                                              fontSize: '1rem',
+                                              fontSize: '0.9rem',
                                               width: '90px',
                                               ':hover': { backgroundColor: 'rgba(99, 99, 99, 0.1)' },
                                               borderRadius: '5px',
@@ -414,37 +414,34 @@ const CustomConditionSettingDiv = styled.div`
 
 const SelectVolumeDiv = styled.div`
     width: 70%;
+    height: 80px;
     margin: auto;
-    margin-top: 10%;
+    margin-top: 28px;
 `;
 
 const CustomSelectFarmTypeDiv = styled.div`
     width: 90%;
-    height: 30%;
+    height: 225px;
     margin: auto;
-    margin-top: 10%;
+    margin-top: 28px;
     border-top: 1px solid #eaeaea;
     padding-top: 24px;
-    position: relative;
 `;
 
 const CustomSelectFarmTypeTypography = styled(Typography)`
-    font-size: 1rem;
-    margin-top: 5px;
+    font-size: 0.9rem;
+    margin-top: 3px;
     font-weight: medium;
 `;
 
 const CustomConditionAddDiv = styled.div`
-    width: 92%;
-    height: 20%;
-    margin: auto;
-    margin-top: 26px;
-    position: relative;
+    width: 100%;
+    display: flex;
 `;
 
 const CustomConditionAddBtn = styled(Button)`
-    width: 100%;
+    width: 92%;
     height: 38px;
     font-weight: 900;
-    margin-top: 70px;
+    margin: auto;
 `;

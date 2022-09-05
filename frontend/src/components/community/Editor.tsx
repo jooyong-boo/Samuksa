@@ -10,7 +10,7 @@ import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-sy
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { userImageState, userInfoState } from '../../store/user';
+import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -29,6 +29,12 @@ const MenuProps = {
 };
 const totalBoard = ['리뷰게시판', '꿀팁게시판'];
 
+interface userInfos {
+    userId?: string;
+    userNickName?: string;
+    userEmail?: string;
+}
+
 const Writing = () => {
     const notify = (text: string) =>
         toast.success(text, {
@@ -44,7 +50,9 @@ const Writing = () => {
     const [content, setContent] = useState(null);
     const [board, setBoard] = useState('');
 
-    const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
+    const userInfo = useRecoilValue(userInfoState);
+
+    const { userNickName }: userInfos = userInfo;
     const userImage = useRecoilValue(userImageState);
 
     const location = useLocation();
@@ -121,22 +129,6 @@ const Writing = () => {
     }, []);
 
     useEffect(() => {
-        getUserInfo()
-            .then((res) => {
-                if (res) {
-                    if (res.code === 500) {
-                        localStorage.removeItem('jwtToken');
-                    } else {
-                        setUserInfo(res);
-                    }
-                }
-            })
-            .catch((e) => {
-                console.log(e);
-            });
-    }, []);
-
-    useEffect(() => {
         if (prevLocation === '/review' && !localStorage.getItem('transientStorage')) {
             setBoard('리뷰게시판');
         }
@@ -163,9 +155,7 @@ const Writing = () => {
                                     marginRight: '0.3rem',
                                 }}
                             />
-                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'medium' }}>
-                                {userInfo.userNickName}
-                            </Typography>
+                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'medium' }}>{userNickName}</Typography>
                         </>
                     )}
                 </div>

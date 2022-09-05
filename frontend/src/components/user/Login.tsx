@@ -7,11 +7,9 @@ import { getUserInfo, login } from '../../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
-import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userIdState, userInfoState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
-import { textAlign } from '@mui/system';
 
 const Login = () => {
     const notifyError = (text: ReactElement | string) => {
@@ -50,6 +48,7 @@ const Login = () => {
         }
         login({ userId, passwd })
             .then((res) => {
+                console.log(res);
                 if (res.status !== 201) {
                     throw res;
                 }
@@ -65,9 +64,9 @@ const Login = () => {
                     if (res.code === 500) {
                         return;
                     }
-                    if (res.userNickName) {
-                        notifySuccess(`${res.userNickName}님 반갑습니다!`);
-                        userInfo(res);
+                    if (res.data.userNickName) {
+                        notifySuccess(`${res.data.userNickName}님 반갑습니다!`);
+                        userInfo(res.data);
                     }
                 });
             })

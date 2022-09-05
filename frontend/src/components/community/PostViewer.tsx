@@ -21,6 +21,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../common/RandomNickname';
 
+interface userInfos {
+    userId?: string;
+    userNickName?: string;
+    userEmail?: string;
+}
+
 const PostViewer = () => {
     const notifySuccess = (text: string) => {
         dismissAll();
@@ -38,10 +44,12 @@ const PostViewer = () => {
     const [data, setData] = useState<any>('');
     const [comments, setComments] = useState<any[]>([]);
     // const userInfo = useRecoilValue<any>(userInfoState);
-    const userInfo = useRecoilValue(userInfoSelector);
+    const userInfo = useRecoilValue(userInfoState);
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
+
+    const { userId, userNickName, userEmail }: userInfos = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -203,7 +211,7 @@ const PostViewer = () => {
                                     }}
                                 />
                             )}
-                            <Typography>{userInfo && userInfo.userNickName}</Typography>
+                            <Typography>{userInfo && userNickName}</Typography>
                         </div>
                         <CommentBox>
                             <TextField

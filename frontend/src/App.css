@@ -79,7 +79,7 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
-@media (min-width: 500px) {
+@media (300px < width < 700px) {
     html {
         font-size: 0.7rem;
     }

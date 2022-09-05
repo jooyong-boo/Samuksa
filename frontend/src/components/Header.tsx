@@ -11,11 +11,11 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Avatar, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
-import { getUserInfo } from '../api/auth';
+import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userIdState, userImageState, userInfoSelector, userInfoState } from '../store/user';
+import { loginStatusState, userIdState, userImageState, userInfoSelector, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
 
 const Header = () => {
@@ -40,7 +40,7 @@ const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [loginStatus, setLoginStatus] = useState(false);
+    const [loginStatus, setLoginStatus] = useRecoilState(loginStatusState);
     const [userInfo, setUserInfo] = useRecoilState<any>(userInfoState);
     const [image, setImage] = useRecoilState<any>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
@@ -135,9 +135,12 @@ const Header = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const logout = (name: string) => {
+    const handleLogout = (name: string) => {
         if (name === '로그아웃') {
+            const AToken = localStorage.getItem('jwtToken') || '';
+            logout({ AToken });
             localStorage.removeItem('jwtToken');
+            localStorage.removeItem('refreshToken');
             localStorage.removeItem('kakaoAuth');
             navigate('/');
             setUserInfo({});
@@ -188,35 +191,99 @@ const Header = () => {
         if (loginStatus) {
             getUserInfo()
                 .then((res) => {
-                    if (res.userId) {
-                        setUserInfo(res);
+                    if (res?.data?.userId) {
+                        setUserInfo(res.data);
                     } else {
                         throw res;
                     }
                 })
                 .catch((e) => {
-                    localStorage.removeItem('jwtToken');
-                    localStorage.removeItem('kakaoAuth');
-                    setLoginStatus(false);
-                    setUserInfo({});
-                    setUserIdState('');
-                    setImage('/broken-image.jpg');
                     if (e.code === 'ERR_NETWORK') {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('refreshToken');
+                        localStorage.removeItem('kakaoAuth');
+                        setLoginStatus(false);
+                        setUserInfo({});
+                        setUserIdState('');
+                        setImage('/broken-image.jpg');
                         return notifyError(
                             <p>
-                                서버와 연결이 끊겼습니다.
+                                서버와의 연결이 원활하지 않습니다.
                                 <br /> 새로고침을 하거나
                                 <br /> 인터넷 연결을 확인해주세요.
                             </p>,
                         );
-                    }
-                    if (e.code === 500) {
-                        return notifyError(
-                            <p>
-                                아이디 인증시간이 만료되었습니다.
-                                <br /> 재로그인 해주세요
-                            </p>,
-                        );
+                    } else {
+                        const AToken = localStorage.getItem('jwtToken') || '';
+                        const RToken = localStorage.getItem('refreshToken') || '';
+                        getTokenReissuance({ AToken, RToken })
+                            .then((res) => {
+                                if (res?.data?.accessToken && res.data.refreshToken) {
+                                    localStorage.setItem('jwtToken', res.data.accessToken);
+                                    localStorage.setItem('refreshToken', res.data.refreshToken);
+                                }
+                            })
+                            .then(() => {
+                                getUserInfo()
+                                    .then((res) => {
+                                        if (res?.data?.userId) {
+                                            setUserInfo(res.data);
+                                        } else {
+                                            throw res;
+                                        }
+                                    })
+                                    .catch((e) => {
+                                        if (e.code === 'ERR_NETWORK') {
+                                            localStorage.removeItem('jwtToken');
+                                            localStorage.removeItem('refreshToken');
+                                            localStorage.removeItem('kakaoAuth');
+                                            setLoginStatus(false);
+                                            setUserInfo({});
+                                            setUserIdState('');
+                                            setImage('/broken-image.jpg');
+                                            return notifyError(
+                                                <p>
+                                                    서버와의 연결이 원활하지 않습니다.
+                                                    <br /> 새로고침을 하거나
+                                                    <br /> 인터넷 연결을 확인해주세요.
+                                                </p>,
+                                            );
+                                        }
+                                    });
+                            })
+                            .catch((e) => {
+                                console.log(e);
+                                if (e.response.data.code === 401 && e.response.data.message === 'INVALID_TOKEN') {
+                                    localStorage.removeItem('jwtToken');
+                                    localStorage.removeItem('refreshToken');
+                                    localStorage.removeItem('kakaoAuth');
+                                    setLoginStatus(false);
+                                    setUserInfo({});
+                                    setUserIdState('');
+                                    setImage('/broken-image.jpg');
+                                    return notifyError(
+                                        <p>
+                                            아이디 인증시간이 만료되었습니다.
+                                            <br /> 재로그인 해주세요
+                                        </p>,
+                                    );
+                                } else if (e.code === 'ERR_NETWORK') {
+                                    localStorage.removeItem('jwtToken');
+                                    localStorage.removeItem('refreshToken');
+                                    localStorage.removeItem('kakaoAuth');
+                                    setLoginStatus(false);
+                                    setUserInfo({});
+                                    setUserIdState('');
+                                    setImage('/broken-image.jpg');
+                                    return notifyError(
+                                        <p>
+                                            서버와의 연결이 원활하지 않습니다.
+                                            <br /> 새로고침을 하거나
+                                            <br /> 인터넷 연결을 확인해주세요.
+                                        </p>,
+                                    );
+                                }
+                            });
                     }
                 });
         }
@@ -224,11 +291,86 @@ const Header = () => {
 
     useEffect(() => {
         if (Object.keys(userInfo).length === 0) {
-            getUserInfo().then((res) => {
-                if (res.userId) {
-                    setUserInfo(res);
-                }
-            });
+            getUserInfo()
+                .then((res) => {
+                    if (res?.data?.userId) {
+                        setUserInfo(res.data);
+                        // 상단처럼 처리하고 불가시 리프레쉬 토큰으로 재발급처리
+                    } else {
+                        throw res;
+                    }
+                })
+                .catch((e) => {
+                    if (e.code === 'ERR_NETWORK') {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('refreshToken');
+                        localStorage.removeItem('kakaoAuth');
+                        setLoginStatus(false);
+                        setUserInfo({});
+                        setUserIdState('');
+                        setImage('/broken-image.jpg');
+                        return notifyError(
+                            <p>
+                                서버와의 연결이 원활하지 않습니다.
+                                <br /> 새로고침을 하거나
+                                <br /> 인터넷 연결을 확인해주세요.
+                            </p>,
+                        );
+                    } else {
+                        const AToken = localStorage.getItem('jwtToken') || '';
+                        const RToken = localStorage.getItem('refreshToken') || '';
+                        getTokenReissuance({ AToken, RToken })
+                            .then((res) => {
+                                if (res?.data?.accessToken && res.data.refreshToken) {
+                                    localStorage.setItem('jwtToken', res.data.accessToken);
+                                    localStorage.setItem('refreshToken', res.data.refreshToken);
+                                }
+                            })
+                            .then(() => {
+                                getUserInfo()
+                                    .then((res) => {
+                                        if (res.data.userId) {
+                                            setUserInfo(res.data);
+                                        }
+                                    })
+                                    .catch((e) => {
+                                        if (e.code === 'ERR_NETWORK') {
+                                            localStorage.removeItem('jwtToken');
+                                            localStorage.removeItem('refreshToken');
+                                            localStorage.removeItem('kakaoAuth');
+                                            setLoginStatus(false);
+                                            setUserInfo({});
+                                            setUserIdState('');
+                                            setImage('/broken-image.jpg');
+                                            return notifyError(
+                                                <p>
+                                                    서버와의 연결이 원활하지 않습니다.
+                                                    <br /> 새로고침을 하거나
+                                                    <br /> 인터넷 연결을 확인해주세요.
+                                                </p>,
+                                            );
+                                        }
+                                    });
+                            })
+                            .catch((e) => {
+                                if (e.response?.data?.code === 401 && e.response?.data?.message === 'INVALID_TOKEN') {
+                                    localStorage.removeItem('jwtToken');
+                                    localStorage.removeItem('refreshToken');
+                                    localStorage.removeItem('kakaoAuth');
+                                    setLoginStatus(false);
+                                    setUserInfo({});
+                                    setUserIdState('');
+                                    setImage('/broken-image.jpg');
+                                    return notifyError(
+                                        <p>
+                                            아이디 인증시간이 만료되었습니다.
+                                            <br /> 재로그인 해주세요
+                                        </p>,
+                                    );
+                                }
+                            });
+                    }
+                });
         }
     }, []);
 
@@ -393,7 +535,7 @@ const Header = () => {
                                         onClick={() => {
                                             handleCloseUserMenu();
                                             goNavigate(path);
-                                            logout(name);
+                                            handleLogout(name);
                                         }}
                                     >
                                         <Typography textAlign="center" variant="button" color="#7A7A7A">

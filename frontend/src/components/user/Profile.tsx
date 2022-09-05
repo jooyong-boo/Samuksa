@@ -1,4 +1,4 @@
-import { Avatar, Button, Typography } from '@mui/material';
+import { Avatar, Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -36,10 +36,11 @@ const Card = styled.div`
 `;
 
 const Profile = () => {
-    // const userInfo = useRecoilValue(userInfoState);
-    const userInfo = useRecoilValue(userInfoSelector);
+    const userInfo = useRecoilValue(userInfoState);
+    // const userInfo = useRecoilValue(userInfoSelector);
     const [image, setImage] = useRecoilState<any>(userImageState);
     const fileInput = useRef<HTMLInputElement | null>(null);
+    const [nickname, setNickname] = useState(true);
 
     const navigate = useNavigate();
 
@@ -106,6 +107,10 @@ const Profile = () => {
         }
     };
 
+    const infoModify = () => {
+        setNickname(false);
+    };
+
     return (
         <Background>
             <Card>
@@ -161,9 +166,14 @@ const Profile = () => {
                             <div>
                                 <Typography>아이디</Typography>
                             </div>
-                            <div style={{ border: '1px solid rgb(225, 225, 225)', padding: '1rem', width: '90%' }}>
-                                <Typography>{userId}</Typography>
-                            </div>
+
+                            <TextField
+                                value={userId}
+                                disabled={nickname}
+                                onClick={infoModify}
+                                sx={{ width: '90%' }}
+                            ></TextField>
+
                             <div>
                                 <Typography>닉네임</Typography>
                             </div>

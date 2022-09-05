@@ -49,12 +49,25 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
                 passwd: passwd,
             },
         });
-        console.log(result);
         if (result.status === 201) {
             localStorage.setItem('jwtToken', result.data.accessToken);
             localStorage.setItem('refreshToken', result.data.refreshToken);
             return result;
         }
+    } catch (err) {
+        console.log(err);
+        return err;
+    }
+};
+
+export const logout = async ({ AToken }: { AToken: string }) => {
+    try {
+        const result = await instance.delete('/user/login', {
+            params: {
+                'A-Token': AToken,
+            },
+        });
+        console.log(result);
     } catch (err) {
         console.log(err);
         return err;
@@ -112,8 +125,12 @@ export const checkEmailAuthAxios = async ({ authNum, email }: { authNum: string;
 
 export const getUserInfo = async () => {
     try {
-        const { data } = await instance.get('/user/user-info');
-        return data;
+        const result = await instance.get('/user/user-info');
+        if (result.data) {
+            return result;
+        } else {
+            throw result;
+        }
     } catch (err) {
         return err;
     }
@@ -130,13 +147,18 @@ export const getWithdrawal = async () => {
 
 export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; RToken: string }) => {
     try {
-        const data = await instance.post('/user/refresh-token', null, {
+        const result = await instance.post('/user/refresh-token', null, {
             params: {
-                AToken: AToken,
-                RToken: RToken,
+                'A-Token': AToken,
+                'R-Token': RToken,
             },
         });
-    } catch (e) {
-        console.log(e);
+        console.log(result);
+        if (result.status === 200) {
+            return result;
+        }
+    } catch (err) {
+        console.log(err);
+        return err;
     }
 };
