@@ -13,8 +13,14 @@ import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 
 const Register = () => {
     const navigate = useNavigate();
-    const notify = (text: string) =>
+    const notifyError = (text: string) =>
         toast.warning(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const notifySuccess = (text: string) =>
+        toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
@@ -93,7 +99,7 @@ const Register = () => {
         }
         if (check === email) {
             const emailReg = new RegExp(
-                /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+                /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
             );
             if (emailReg.test(inputChange)) {
                 setCheckEmail(false);
@@ -147,23 +153,33 @@ const Register = () => {
             console.log(res);
             if (res?.data === 'success') {
                 setCheckAuthNum(true);
+            } else {
+                setCheckAuthNum(false);
             }
         });
     };
 
     const onSignUp = () => {
         if (id && nickName && password && email) {
-            if ((checkId && checkNickName && checkPw && checkPwConfirm) === false && checkEmail === true) {
-                signUp({ id, password, nickName, email }).then(() => {
-                    navigate('/login');
-                    localStorage.removeItem('id');
-                    setUserId(id);
-                });
+            if (
+                (checkId && checkNickName && checkPw && checkPwConfirm) === false &&
+                checkEmail === true &&
+                checkAuthNum === true
+            ) {
+                signUp({ id, password, nickName, email })
+                    .then(() => {
+                        navigate('/login');
+                    })
+                    .then(() => {
+                        localStorage.setItem('id', id);
+                        setUserId(id);
+                        notifySuccess('회원가입을 축하합니다!');
+                    });
             } else {
-                console.log('체크중에 오류');
+                notifyError('확인이 안된 항목이 있습니다.');
             }
         } else {
-            console.log('입력값 오류');
+            notifyError('입력하지 않은칸이 있습니다.');
         }
     };
 
@@ -303,15 +319,6 @@ const Register = () => {
                                 <Button onClick={ClickViewPassword}>
                                     {passwordView ? '비밀번호 가리기' : '비밀번호 보기'}
                                 </Button>
-                                {/* {passwordConfirm ? (
-                                    <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
-                                        비밀번호 일치
-                                    </Typography>
-                                ) : (
-                                    <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
-                                        비밀번호가 일치하지 않습니다.
-                                    </Typography>
-                                )} */}
                             </div>
                             <div style={{ paddingTop: '0.5rem' }}>
                                 <CustomTypography>이메일</CustomTypography>
@@ -319,7 +326,6 @@ const Register = () => {
                                     id="outlined-basic"
                                     variant="outlined"
                                     size="small"
-                                    // disabled={checkAuthNum}
                                     placeholder="이메일 형식을 지켜주세요"
                                     fullWidth
                                     sx={{ width: '70%' }}
@@ -330,7 +336,6 @@ const Register = () => {
                                 />
                                 <CustomBtn
                                     variant="contained"
-                                    // disabled={checkAuthNum}
                                     onClick={onClickEmailAuth}
                                     disabled={checkEmail}
                                     sx={{ marginLeft: '0.5rem', marginTop: '0.1rem' }}
@@ -350,7 +355,7 @@ const Register = () => {
                                             variant="outlined"
                                             size="small"
                                             autoComplete="off"
-                                            placeholder="인증번호"
+                                            placeholder="메일로 발송된 인증번호를 입력해주세요"
                                             sx={{ width: '70%' }}
                                             onChange={(e) => {
                                                 onChange(setAuthNum, authNum, e);
