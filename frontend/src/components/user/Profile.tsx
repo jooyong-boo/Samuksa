@@ -1,10 +1,10 @@
-import { Avatar, Button, Typography } from '@mui/material';
+import { Avatar, Button, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import { getWithdrawal } from '../../api/auth';
-import { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Loading from '../common/Loading';
 import imageCompression from 'browser-image-compression';
 
@@ -36,19 +36,22 @@ const Card = styled.div`
 `;
 
 const Profile = () => {
-    // const userInfo = useRecoilValue(userInfoState);
-    const userInfo = useRecoilValue(userInfoSelector);
+    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [image, setImage] = useRecoilState<any>(userImageState);
     const fileInput = useRef<HTMLInputElement | null>(null);
+    const { userId, userNickName, userEmail }: userInfos = userInfo;
+    const [nickname, setNickname] = useState('');
+    const [email, setEmail] = useState('');
+    const [nicknameModify, setNicknameModify] = useState(true);
+    const [emailModify, setEmailModify] = useState(true);
 
     const navigate = useNavigate();
 
     interface userInfos {
         userId?: string;
-        userNikName?: string;
+        userNickName?: string;
         userEmail?: string;
     }
-    const { userId, userNikName, userEmail }: userInfos = userInfo;
 
     const withdrawal = () => {
         let confirmWithdrawal = window.confirm('정말 탈퇴하시겠어요?');
@@ -106,6 +109,33 @@ const Profile = () => {
         }
     };
 
+    const handleModifyNickname = () => {
+        if (nicknameModify === false) {
+            setUserInfo({ ...userInfo, userNickName: nickname });
+        }
+        setNicknameModify(!nicknameModify);
+    };
+
+    const handleModifyEmail = () => {
+        if (emailModify === false) {
+            setUserInfo({ ...userInfo, userEmail: email });
+        }
+        setEmailModify(!emailModify);
+    };
+
+    const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNickname(e.target.value);
+    };
+
+    const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+    };
+
+    useEffect(() => {
+        setNickname(userNickName || '');
+        setEmail(userEmail || '');
+    }, [userInfo]);
+
     return (
         <Background>
             <Card>
@@ -133,9 +163,8 @@ const Profile = () => {
                             }}
                         >
                             <div>
-                                <Avatar
+                                <ProfileAvatar
                                     src={String(image)}
-                                    sx={{ width: '6rem', height: '6rem', cursor: 'pointer' }}
                                     onClick={() => {
                                         fileInput.current?.click();
                                     }}
@@ -158,27 +187,27 @@ const Profile = () => {
                                     이미지 변경
                                 </Button>
                             </div>
-                            <div>
-                                <Typography>아이디</Typography>
-                            </div>
-                            <div style={{ border: '1px solid rgb(225, 225, 225)', padding: '1rem', width: '90%' }}>
-                                <Typography>{userId}</Typography>
-                            </div>
-                            <div>
-                                <Typography>닉네임</Typography>
-                            </div>
-                            <div style={{ border: '1px solid rgb(225, 225, 225)', padding: '1rem', width: '90%' }}>
-                                <Typography>{userNikName}</Typography>
-                            </div>
-                            <div>
-                                <Typography>이메일</Typography>
-                            </div>
-                            <div style={{ border: '1px solid rgb(225, 225, 225)', padding: '1rem', width: '90%' }}>
-                                <Typography>{userEmail}</Typography>
-                            </div>
-                            <Button variant="outlined" sx={{ margin: '10px 0' }}>
-                                정보 수정
-                            </Button>
+                            <ModifyDiv>
+                                <CustomTypography>아이디</CustomTypography>
+                                <ProfileInput disabled={true} value={userId || ''} />
+                            </ModifyDiv>
+
+                            <ModifyDiv>
+                                <CustomTypography>닉네임</CustomTypography>
+                                <ProfileInput
+                                    disabled={nicknameModify}
+                                    value={nickname || ''}
+                                    onChange={changeNickname}
+                                />
+                                <ModifyButton onClick={handleModifyNickname}>
+                                    {nicknameModify ? '수정' : '확인'}
+                                </ModifyButton>
+                            </ModifyDiv>
+                            <ModifyDiv>
+                                <CustomTypography>이메일</CustomTypography>
+                                <ProfileInput disabled={emailModify} value={email || ''} onChange={changeEmail} />
+                                <ModifyButton onClick={handleModifyEmail}>{emailModify ? '수정' : '확인'}</ModifyButton>
+                            </ModifyDiv>
                             <Button variant="outlined" onClick={withdrawal}>
                                 회원 탈퇴
                             </Button>
@@ -191,3 +220,42 @@ const Profile = () => {
 };
 
 export default Profile;
+
+const CustomTypography = styled(Typography)`
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+    text-align: left;
+    width: 100%;
+`;
+
+const ProfileAvatar = styled(Avatar)`
+    width: 6rem;
+    height: 6rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        opacity: 0.8;
+        transition: all 0.3s;
+    }
+`;
+
+const ProfileInput = styled.input`
+    padding: 1rem;
+    flex-grow: 1;
+`;
+
+const ModifyDiv = styled.div`
+    width: 90%;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+`;
+
+const ModifyButton = styled(Button)`
+    border: 1px solid #eaeaea;
+    font-weight: bold;
+    color: black;
+    margin-left: 0.5rem;
+`;

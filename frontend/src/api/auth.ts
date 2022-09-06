@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { stubString } from 'lodash';
 
 type Register = {
     id: string;
@@ -26,7 +27,7 @@ instance.interceptors.request.use((config) => {
 
 export const signUp = async ({ id, password, nickName, email }: Register) => {
     try {
-        const { data } = await instance.post('/user/signUp', null, {
+        const { data } = await instance.post('/signup', null, {
             params: {
                 userId: id,
                 userName: nickName,
@@ -34,7 +35,6 @@ export const signUp = async ({ id, password, nickName, email }: Register) => {
                 userEmail: email,
             },
         });
-        console.log(data);
         return data;
     } catch (err) {
         return err;
@@ -43,17 +43,30 @@ export const signUp = async ({ id, password, nickName, email }: Register) => {
 
 export const login = async ({ userId, passwd }: { userId: string; passwd: string }) => {
     try {
-        const { data } = await instance.get('/user/login', {
+        const result = await instance.post('/user/login', null, {
             params: {
                 userId: userId,
                 passwd: passwd,
             },
         });
-        // console.log(data);
-        if (data) {
-            localStorage.setItem('jwtToken', data);
-            return data;
+        if (result.status === 201) {
+            localStorage.setItem('jwtToken', result.data.accessToken);
+            localStorage.setItem('refreshToken', result.data.refreshToken);
+            return result;
         }
+    } catch (err) {
+        return err;
+    }
+};
+
+export const logout = async ({ AToken }: { AToken: string }) => {
+    try {
+        const result = await instance.delete('/user/login', {
+            params: {
+                'A-Token': AToken,
+            },
+        });
+        console.log(result);
     } catch (err) {
         console.log(err);
         return err;
@@ -62,10 +75,9 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
 
 export const checkIdAxios = async ({ id }: { id: string }) => {
     try {
-        const { data } = await instance.post('/user/signUp/existence-id', null, {
+        const { data } = await instance.get('/signup/existence-id', {
             params: { userId: id },
         });
-        console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
@@ -74,10 +86,36 @@ export const checkIdAxios = async ({ id }: { id: string }) => {
 
 export const checkNickNameAxios = async ({ nickName }: { nickName: string }) => {
     try {
-        const { data } = await instance.post('/user/signUp/existence-name', null, {
+        const { data } = await instance.get('/signup/existence-name', {
             params: { userName: nickName },
         });
-        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err.response);
+    }
+};
+
+export const checkEmailAxios = async ({ email }: { email: string }) => {
+    try {
+        const data = await instance.post('/signup/message', null, {
+            params: {
+                userEmail: email,
+            },
+        });
+        return data;
+    } catch (err) {
+        console.log(err.response);
+    }
+};
+
+export const checkEmailAuthAxios = async ({ authNum, email }: { authNum: string; email: string }) => {
+    try {
+        const data = await instance.post('/signup/message-auth', null, {
+            params: {
+                Key: authNum,
+                userEmail: email,
+            },
+        });
         return data;
     } catch (err) {
         console.log(err.response);
@@ -86,18 +124,45 @@ export const checkNickNameAxios = async ({ nickName }: { nickName: string }) => 
 
 export const getUserInfo = async () => {
     try {
-        const { data } = await instance.post('/user/user-info');
-        return data;
+        const result = await instance.get('/user/user-info');
+        if (result.data) {
+            return result;
+        } else {
+            throw result;
+        }
     } catch (err) {
         return err;
     }
 };
 
-export const getWithdrawal = async () => {
+export const getWithdrawal = async (userId: string, passwd: string) => {
     try {
-        const { data } = await instance.delete('/user/user-info');
+        const { data } = await instance.delete('/user/user-info', {
+            params: {
+                userId,
+                passwd,
+            },
+        });
         return data;
     } catch (e) {
         console.log(e);
+    }
+};
+
+export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; RToken: string }) => {
+    try {
+        const result = await instance.post('/user/refresh-token', null, {
+            params: {
+                'A-Token': AToken,
+                'R-Token': RToken,
+            },
+        });
+        // console.log(result);
+        if (result.status === 200) {
+            return result;
+        }
+    } catch (err) {
+        console.log(err);
+        return err;
     }
 };

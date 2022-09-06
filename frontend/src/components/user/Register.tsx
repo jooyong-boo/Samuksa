@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { signUp, checkIdAxios, checkNickNameAxios } from '../../api/auth';
+import { signUp, checkIdAxios, checkNickNameAxios, checkEmailAxios, checkEmailAuthAxios } from '../../api/auth';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
@@ -13,8 +13,14 @@ import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 
 const Register = () => {
     const navigate = useNavigate();
-    const notify = (text: string) =>
+    const notifyError = (text: string) =>
         toast.warning(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    const notifySuccess = (text: string) =>
+        toast.success(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
@@ -36,9 +42,11 @@ const Register = () => {
     const [checkPwConfirm, setCheckPwConfirm] = useState(true);
     const [passwordView, setPasswordView] = useState(false);
 
+    // 이메일
     const [email, setEmail] = useState('');
     const [checkEmail, setCheckEmail] = useState(false);
 
+    // 이메일 인증번호
     const [authNum, setAuthNum] = useState('');
     const [checkAuthNum, setCheckAuthNum] = useState(false);
 
@@ -71,7 +79,7 @@ const Register = () => {
             }
         }
         if (check === password) {
-            const passwordReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            const passwordReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/);
             if (passwordReg.test(inputChange)) {
                 change(inputChange);
                 setCheckPw(false);
@@ -81,7 +89,7 @@ const Register = () => {
             }
         }
         if (check === passwordConfirm) {
-            const passwordConfirmReg = new RegExp(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/);
+            const passwordConfirmReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/);
             change(inputChange);
             if (passwordConfirmReg.test(inputChange) && password === passwordConfirm) {
                 setCheckPwConfirm(false);
@@ -91,13 +99,22 @@ const Register = () => {
         }
         if (check === email) {
             const emailReg = new RegExp(
-                /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
+                /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
             );
             if (emailReg.test(inputChange)) {
-                setCheckEmail(true);
+                setCheckEmail(false);
                 change(inputChange);
             } else {
-                setCheckEmail(false);
+                setCheckEmail(true);
+            }
+        }
+        if (check === authNum) {
+            const emailAuthReg = new RegExp(/^[0-9a-zA-Z]{8}$/);
+            if (emailAuthReg.test(inputChange)) {
+                setCheckAuthNum(false);
+                change(inputChange);
+            } else {
+                setCheckAuthNum(true);
             }
         }
         // console.log(reg.test(inputChange));
@@ -119,24 +136,50 @@ const Register = () => {
         });
     };
 
-    const onClickAuth = () => {
-        setCheckEmail(true);
-        setCheckAuthNum(true);
+    const onClickEmailAuth = () => {
+        checkEmailAxios({ email }).then((res) => {
+            console.log(res);
+            if (res?.data && res?.status === 201) {
+                setCheckEmail(true);
+            } else {
+                setCheckEmail(false);
+            }
+        });
+        // setCheckAuthNum(true);
+    };
+
+    const onClickEmailAuthCheck = () => {
+        checkEmailAuthAxios({ authNum, email }).then((res) => {
+            console.log(res);
+            if (res?.data === 'success') {
+                setCheckAuthNum(true);
+            } else {
+                setCheckAuthNum(false);
+            }
+        });
     };
 
     const onSignUp = () => {
         if (id && nickName && password && email) {
-            if ((checkId && checkNickName && checkPw && checkPwConfirm) === false && checkEmail === true) {
-                signUp({ id, password, nickName, email }).then(() => {
-                    navigate('/login');
-                    localStorage.removeItem('id');
-                    setUserId(id);
-                });
+            if (
+                (checkId && checkNickName && checkPw && checkPwConfirm) === false &&
+                checkEmail === true &&
+                checkAuthNum === true
+            ) {
+                signUp({ id, password, nickName, email })
+                    .then(() => {
+                        navigate('/login');
+                    })
+                    .then(() => {
+                        localStorage.setItem('id', id);
+                        setUserId(id);
+                        notifySuccess('회원가입을 축하합니다!');
+                    });
             } else {
-                console.log('체크중에 오류');
+                notifyError('확인이 안된 항목이 있습니다.');
             }
         } else {
-            console.log('입력값 오류');
+            notifyError('입력하지 않은칸이 있습니다.');
         }
     };
 
@@ -250,7 +293,7 @@ const Register = () => {
                                     variant="outlined"
                                     size="small"
                                     type={passwordView ? '' : 'password'}
-                                    placeholder="8~16자리 영문, 숫자"
+                                    placeholder="8~16자리 영문, 숫자 조합"
                                     autoComplete="off"
                                     fullWidth
                                     color={checkPw ? 'error' : 'primary'}
@@ -276,15 +319,6 @@ const Register = () => {
                                 <Button onClick={ClickViewPassword}>
                                     {passwordView ? '비밀번호 가리기' : '비밀번호 보기'}
                                 </Button>
-                                {/* {passwordConfirm ? (
-                                    <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'green' }}>
-                                        비밀번호 일치
-                                    </Typography>
-                                ) : (
-                                    <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium', color: 'red' }}>
-                                        비밀번호가 일치하지 않습니다.
-                                    </Typography>
-                                )} */}
                             </div>
                             <div style={{ paddingTop: '0.5rem' }}>
                                 <CustomTypography>이메일</CustomTypography>
@@ -292,20 +326,18 @@ const Register = () => {
                                     id="outlined-basic"
                                     variant="outlined"
                                     size="small"
-                                    // disabled={checkAuthNum}
                                     placeholder="이메일 형식을 지켜주세요"
                                     fullWidth
                                     sx={{ width: '70%' }}
-                                    color={checkEmail ? 'primary' : 'error'}
+                                    color={checkEmail ? 'error' : 'primary'}
                                     onChange={(e) => {
                                         onChange(setEmail, email, e);
                                     }}
                                 />
                                 <CustomBtn
                                     variant="contained"
-                                    // disabled={checkAuthNum}
-                                    onClick={onClickAuth}
-                                    disabled={checkEmail ? false : true}
+                                    onClick={onClickEmailAuth}
+                                    disabled={checkEmail}
                                     sx={{ marginLeft: '0.5rem', marginTop: '0.1rem' }}
                                 >
                                     인증
@@ -315,7 +347,7 @@ const Register = () => {
                             </Typography> */}
                             </div>
                             <div style={{ paddingTop: '0.5rem' }}>
-                                {checkAuthNum ? (
+                                {checkEmail ? (
                                     <>
                                         {/* <Typography sx={{ fontSize: '16px', mb: 0.5 }}>인증번호를 입력해주세요</Typography> */}
                                         <TextField
@@ -323,10 +355,18 @@ const Register = () => {
                                             variant="outlined"
                                             size="small"
                                             autoComplete="off"
-                                            placeholder="인증번호"
+                                            placeholder="메일로 발송된 인증번호를 입력해주세요"
                                             sx={{ width: '70%' }}
+                                            onChange={(e) => {
+                                                onChange(setAuthNum, authNum, e);
+                                            }}
                                         />
-                                        <CustomBtn variant="contained" sx={{ marginLeft: '0.5rem' }}>
+                                        <CustomBtn
+                                            variant="contained"
+                                            sx={{ marginLeft: '0.5rem' }}
+                                            onClick={onClickEmailAuthCheck}
+                                            disabled={checkAuthNum}
+                                        >
                                             확인
                                         </CustomBtn>
                                     </>

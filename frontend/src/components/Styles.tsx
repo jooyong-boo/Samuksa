@@ -1,3 +1,4 @@
+import { createTheme } from '@mui/material';
 import styled from 'styled-components';
 
 export const Background = styled.div`
@@ -18,3 +19,25 @@ export const LoadingText = styled.div`
     font: 1rem 'Noto Sans KR';
     text-align: center;
 `;
+
+export const theme = createTheme({
+    typography: {
+        fontFamily: [
+            'Pretendard',
+            'NanumBarunGothic',
+            'Noto Sans KR',
+            'nanumsquare',
+            'sans-serif',
+            '-apple-system',
+            'BlinkMacSystemFont',
+            'Segoe UI',
+            'Oxygen',
+        ].join(','),
+        fontSize: 14,
+    },
+    mixins: {
+        toolbar: {
+            minHeight: '4rem',
+        },
+    },
+});

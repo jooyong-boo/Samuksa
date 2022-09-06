@@ -21,6 +21,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../common/RandomNickname';
 
+interface userInfos {
+    userId?: string;
+    userNickName?: string;
+    userEmail?: string;
+}
+
 const PostViewer = () => {
     const notifySuccess = (text: string) => {
         dismissAll();
@@ -38,10 +44,12 @@ const PostViewer = () => {
     const [data, setData] = useState<any>('');
     const [comments, setComments] = useState<any[]>([]);
     // const userInfo = useRecoilValue<any>(userInfoState);
-    const userInfo = useRecoilValue(userInfoSelector);
+    const userInfo = useRecoilValue(userInfoState);
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
+
+    const { userId, userNickName, userEmail }: userInfos = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -104,7 +112,9 @@ const PostViewer = () => {
     return (
         <Background>
             <PostViewerPaper elevation={0}>
-                <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium' }}>{data.title}</Typography>
+                <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium', padding: '0 1rem' }}>
+                    {data.title}
+                </Typography>
                 <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Avatar
@@ -203,7 +213,7 @@ const PostViewer = () => {
                                     }}
                                 />
                             )}
-                            <Typography>{userInfo && userInfo.userNikName}</Typography>
+                            <Typography>{userInfo && userNickName}</Typography>
                         </div>
                         <CommentBox>
                             <TextField
