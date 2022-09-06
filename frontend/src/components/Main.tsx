@@ -183,6 +183,7 @@ const Main = () => {
                         <TextField
                             id="person"
                             placeholder="인원"
+                            title="인원"
                             type="string"
                             variant="outlined"
                             value={personNum}
@@ -197,6 +198,7 @@ const Main = () => {
                         <TextField
                             id="money"
                             placeholder="예산"
+                            title="예산"
                             type="string"
                             variant="outlined"
                             value={money}
@@ -210,7 +212,8 @@ const Main = () => {
                         <FormControl fullWidth>
                             {/* <InputLabel id="local">지역</InputLabel> */}
                             <Select
-                                // labelId="local"
+                                labelId="지역"
+                                title="지역"
                                 value={getArea ? area : ''}
                                 onChange={(e) => {
                                     setArea(e.target.value);
@@ -238,7 +241,7 @@ const Main = () => {
                             backgroundColor: '#6EA5F8',
                             color: 'white',
                             boxShadow: 'none',
-                            width: '35rem',
+                            width: '96%',
                         }}
                     >
                         검색
