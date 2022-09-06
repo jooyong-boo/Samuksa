@@ -55,7 +55,6 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
             return result;
         }
     } catch (err) {
-        console.log(err);
         return err;
     }
 };
@@ -136,9 +135,14 @@ export const getUserInfo = async () => {
     }
 };
 
-export const getWithdrawal = async () => {
+export const getWithdrawal = async (userId: string, passwd: string) => {
     try {
-        const { data } = await instance.delete('/user/user-info');
+        const { data } = await instance.delete('/user/user-info', {
+            params: {
+                userId,
+                passwd,
+            },
+        });
         return data;
     } catch (e) {
         console.log(e);
@@ -153,7 +157,7 @@ export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; R
                 'R-Token': RToken,
             },
         });
-        console.log(result);
+        // console.log(result);
         if (result.status === 200) {
             return result;
         }
