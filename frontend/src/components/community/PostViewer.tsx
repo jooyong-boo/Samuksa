@@ -112,7 +112,9 @@ const PostViewer = () => {
     return (
         <Background>
             <PostViewerPaper elevation={0}>
-                <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium' }}>{data.title}</Typography>
+                <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium', padding: '0 1rem' }}>
+                    {data.title}
+                </Typography>
                 <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
                         <Avatar
