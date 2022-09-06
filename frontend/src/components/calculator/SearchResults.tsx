@@ -21,10 +21,11 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
     const selectCondition = useRecoilValue(selectConditions);
     // console.log(result);
 
-    const [selectResult, setSelectResult] = useState<null | any>();
-    const [selectEstimate, setSelectEstimate] = useState<null | any[]>();
+    const [selectResult, setSelectResult] = useState<null | any>(null);
+    const [selectEstimate, setSelectEstimate] = useState<any>(null);
     const [totalPrice, setTotalPrice] = useState<number>();
     const [bookmark, setBookmark] = useState([]);
+    const [newSelectEstimate, setNewSelectEstimate] = useState<any[]>([]);
 
     useEffect(() => {
         setSelectResult(null);
@@ -68,6 +69,16 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
         }
     };
 
+    const handleDeleteBookmark = (deleteItem: any) => {
+        let bookmark: any[] = JSON.parse(localStorage.getItem('bookmark') || '[]');
+        if (bookmark?.length) {
+            let newBookmark: any = bookmark.filter((item) => JSON.stringify(item) !== JSON.stringify(deleteItem));
+            setBookmark(newBookmark);
+            setNewSelectEstimate([]);
+            localStorage.setItem('bookmark', JSON.stringify(newBookmark));
+        }
+    };
+
     useEffect(() => {
         let bookmark = localStorage.getItem('bookmark');
         if (bookmark) {
@@ -75,7 +86,17 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
         }
     }, []);
 
-    // console.log(localStorage.length);
+    useEffect(() => {
+        let bookmark: Array<string> = JSON.parse(localStorage.getItem('bookmark') || '{}');
+        if (Object.keys(bookmark).length > 0) {
+            let newSelect = bookmark?.filter((item) => {
+                if (JSON.stringify(item) === JSON.stringify(selectEstimate)) {
+                    return [...selectEstimate];
+                }
+            });
+            setNewSelectEstimate(newSelect);
+        }
+    }, [selectEstimate, bookmark]);
 
     return (
         <Card ref={ref}>
@@ -99,7 +120,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                         result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
                             return (
-                                <Fade in={true} timeout={i * 50} key={i}>
+                                <Fade in={true} timeout={200} key={i}>
                                     <CustomCardContent
                                         onClick={() => {
                                             onRecommendClick(fishRecommendCombinations, combinationName);
@@ -181,7 +202,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                         ? selectResult.map((item: any, i: number) => {
                               const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
                               return (
-                                  <Fade in={true} timeout={i * 300} key={i}>
+                                  <Fade in={true} timeout={300} key={i}>
                                       <CustomListItems
                                           onClick={() => {
                                               onEstimateClick(fishRecommendBtDtos, totalPrice, i);
@@ -233,7 +254,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                         : null}
                 </CustomListDiv>
                 {selectEstimate ? (
-                    <Fade in={true}>
+                    <Fade in={true} timeout={300}>
                         <SelectedEstimateContainer>
                             <SelectedEstimateTopMenu>
                                 <div>
@@ -258,16 +279,16 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         실제 시세과 상이할 수 있습니다.
                                     </Typography>
                                 </div>
-                                {JSON.parse(localStorage.getItem('bookmark') || '{}') ? (
-                                    <BookmarkBorderIcon
+                                {newSelectEstimate?.length > 0 ? (
+                                    <BookmarkAddedIcon
                                         fontSize="medium"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() => {
-                                            addBookmark(selectEstimate);
+                                            handleDeleteBookmark(selectEstimate);
                                         }}
                                     />
                                 ) : (
-                                    <BookmarkAddedIcon
+                                    <BookmarkBorderIcon
                                         fontSize="medium"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() => {
