@@ -48,7 +48,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
         <div>
             <ThemeProvider theme={theme}>
                 <TableContainer component={Paper} sx={{ borderTop: '2px solid #A7A7A7', borderRadius: 0 }}>
-                    <Table sx={{ minWidth: 700 }} aria-label="simple table">
+                    <Table sx={{ minWidth: 700 }} aria-label="조합 상세리스트">
                         <TableHead>
                             <TableRow>
                                 {tableTop.map((item) => (
@@ -80,7 +80,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                           >
                                               <TableCell>
                                                   <Avatar
-                                                      // alt={`Avatar n°${value + 1}`}
+                                                      alt={fishName}
                                                       src={image}
                                                       variant="square"
                                                       style={{

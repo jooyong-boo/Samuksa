@@ -71,6 +71,7 @@ const Login = () => {
                 });
             })
             .catch((e) => {
+                setPasswd('');
                 if (e.code === 'ERR_NETWORK') {
                     notifyError('서버와의 연결이 끊겼습니다.');
                 }
@@ -156,6 +157,7 @@ const Login = () => {
                                 fullWidth
                                 autoComplete="off"
                                 onChange={handleChangePasswd}
+                                value={passwd}
                                 onKeyPress={(e) => {
                                     handleEnterLogin(e);
                                 }}

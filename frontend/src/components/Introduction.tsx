@@ -46,7 +46,7 @@ const Introduction = () => {
                 justifyContent="space-evenly"
             >
                 <Grid item>
-                    <Img src={introduce1} alt="생선을 들고있는 어부" />
+                    <Img src={introduce1} alt="생선을 들고있는 어부" loading="lazy" />
                     <Typography sx={{ fontSize: '1.42rem' }} fontWeight="bold" color="#373737">
                         사용자 대상
                     </Typography>
@@ -55,7 +55,7 @@ const Introduction = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Img src={introduce2} alt="수산물시장 수조" />
+                    <Img src={introduce2} alt="수산물시장 수조" loading="lazy" />
                     <Typography sx={{ fontSize: '1.42rem' }} fontWeight="bold" color="#373737">
                         목표
                     </Typography>
@@ -64,7 +64,7 @@ const Introduction = () => {
                     </Typography>
                 </Grid>
                 <Grid item>
-                    <Img src={introduce3} alt="접시에 담긴 회" />
+                    <Img src={introduce3} alt="접시에 담긴 회" loading="lazy" />
                     <Typography sx={{ fontSize: '1.42rem' }} fontWeight="bold" color="#373737">
                         만든 이유
                     </Typography>

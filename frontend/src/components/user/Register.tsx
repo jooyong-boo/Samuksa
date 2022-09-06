@@ -293,7 +293,7 @@ const Register = () => {
                                     variant="outlined"
                                     size="small"
                                     type={passwordView ? '' : 'password'}
-                                    placeholder="8~16자리 영문, 숫자"
+                                    placeholder="8~16자리 영문, 숫자 조합"
                                     autoComplete="off"
                                     fullWidth
                                     color={checkPw ? 'error' : 'primary'}

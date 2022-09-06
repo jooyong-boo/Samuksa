@@ -295,7 +295,6 @@ const Header = () => {
                 .then((res) => {
                     if (res?.data?.userId) {
                         setUserInfo(res.data);
-                        // 상단처럼 처리하고 불가시 리프레쉬 토큰으로 재발급처리
                     } else {
                         throw res;
                     }
@@ -509,7 +508,7 @@ const Header = () => {
                                         }}
                                     />
                                     <Typography sx={{ fontWeight: 'bold' }}>
-                                        {loginStatus ? `${userInfo.userNickName}님` : null}
+                                        {loginStatus ? `${userInfo.userNickName} 님` : null}
                                     </Typography>
                                 </IconButton>
                             </Tooltip>

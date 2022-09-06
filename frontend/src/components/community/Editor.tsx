@@ -192,7 +192,7 @@ const Writing = () => {
                         placeholder="제목을 입력해 주세요"
                         value={title}
                         fullWidth
-                        sx={{ width: '70rem', fontSize: '1.5rem', marginBottom: '0.5rem' }}
+                        sx={{ width: '50rem', fontSize: '1.5rem', marginBottom: '0.5rem' }}
                         onChange={onTitleChange}
                     />
                 </FormControl>
@@ -277,6 +277,7 @@ const EditorPaper = styled(Paper)`
     margin-top: 20px;
     padding: 20px;
     overflow: overlay;
+    overflow-x: hidden;
     border: 1px solid rgb(225, 225, 225);
     &::-webkit-scrollbar {
         width: 5px;
