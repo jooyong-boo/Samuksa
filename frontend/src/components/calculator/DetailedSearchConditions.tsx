@@ -153,7 +153,6 @@ const DetailedSearchConditions = () => {
         <>
             <Card>
                 <CustomTypography>상세 검색 조건</CustomTypography>
-                {/* <div style={{ display: 'flex', height: '100%', opacity: fish.length > 0 ? 1 : 0.4 }}> */}
                 <Container>
                     <CustomFishListDiv>
                         {/* <FormControl fullWidth>
@@ -180,44 +179,22 @@ const DetailedSearchConditions = () => {
                                         const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
                                         return (
                                             <Grow in={true} timeout={i * 200} key={fishInfoId}>
-                                                <ListItemStyled
-                                                    style={{
-                                                        backgroundColor: active ? '#F8F8F8' : 'white',
-                                                    }}
+                                                <ListItemDiv
                                                     onClick={() => {
                                                         onToggle(fishInfoId);
                                                     }}
+                                                    active={active}
                                                 >
-                                                    <ListItemAvatar
-                                                        sx={{
-                                                            padding: '9px 13px 9px 16px',
-                                                        }}
-                                                    >
-                                                        <Avatar
-                                                            alt={fishName}
-                                                            src={imgUrl}
-                                                            variant="square"
-                                                            style={{
-                                                                height: '50px',
-                                                                width: '50px',
-                                                                borderRadius: '3px',
-                                                            }}
-                                                        />
-                                                    </ListItemAvatar>
-                                                    <ListItem
-                                                        sx={{
-                                                            paddingLeft: 0,
-                                                            ':hover': { backgroundColor: '#f4f4f4' },
-                                                        }}
-                                                    >
+                                                    <ListItemAvaterStyled>
+                                                        <AvaterStyled alt={fishName} src={imgUrl} />
+                                                    </ListItemAvaterStyled>
+                                                    <ListItemStyled>
                                                         <ListItemText
                                                             primary={fishName}
                                                             secondary={`(수율: ${fishYield}%)`}
                                                         />
-                                                        {/* <Typography>{fishName}</Typography>
-                                                <Typography>{fishYield}</Typography> */}
-                                                    </ListItem>
-                                                </ListItemStyled>
+                                                    </ListItemStyled>
+                                                </ListItemDiv>
                                             </Grow>
                                         );
                                     })}
@@ -318,7 +295,6 @@ const DetailedSearchConditions = () => {
                                 </CustomConditionAddBtn>
                             )}
                         </CustomConditionAddDiv>
-                        {/* <ToastContainer /> */}
                     </CustomConditionSettingDiv>
                 </Container>
             </Card>
@@ -366,13 +342,34 @@ const CustomFishListPaper = styled(Paper)`
     box-shadow: none;
 `;
 
-const ListItemStyled = styled.div`
+interface ListItemStyledProps {
+    active?: boolean;
+}
+
+const ListItemDiv = styled.div<ListItemStyledProps>`
     display: flex;
-    background-color: white;
+    background-color: ${(props) => (props.active ? '#F8F8F8' : 'white')};
     height: 100%;
     border-bottom: 1px solid #f6f6f6;
     cursor: pointer;
-    &:hover > div {
+    &:hover {
+        background-color: #f4f4f4;
+    }
+`;
+
+const ListItemAvaterStyled = styled(ListItemAvatar)`
+    padding: 9px 13px 9px 16px;
+`;
+
+const AvaterStyled = styled(Avatar)`
+    height: 50px;
+    width: 50px;
+    border-radius: 3px;
+`;
+
+const ListItemStyled = styled(ListItem)`
+    padding-left: 0;
+    &:hover {
         background-color: #f4f4f4;
     }
 `;
