@@ -2,7 +2,7 @@ import { Button, Link, TextField, Typography } from '@mui/material';
 import React, { ReactElement } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { getUserInfo, login } from '../../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -124,14 +124,10 @@ const Login = () => {
         <>
             <Background>
                 <Card>
-                    {/* <div style={{ borderBottom: '1px solid #EAEAEA', height: '10%', width: '60%', display: 'flex', justifyContent: 'center', margin: 'auto' }}> */}
-                    {/* </div> */}
                     <LoginTitle>로그인</LoginTitle>
-                    <Typography sx={{ fontSize: '1rem', mt: '1rem', fontWeight: 'medium' }}>
-                        원활한 서비스 이용을 위해 로그인해주세요.
-                    </Typography>
-                    <div style={{ paddingTop: '24px', height: '70%', margin: 'auto', width: '60%' }}>
-                        <div>
+                    <LoginSubTitle>원활한 서비스 이용을 위해 로그인해주세요.</LoginSubTitle>
+                    <LoginBox>
+                        <>
                             <CustomTypography>아이디</CustomTypography>
                             <TextField
                                 id="id"
@@ -145,8 +141,8 @@ const Login = () => {
                                     handleEnterLogin(e);
                                 }}
                             />
-                        </div>
-                        <div style={{ paddingTop: '1rem' }}>
+                        </>
+                        <PasswdDiv>
                             <CustomTypography>비밀번호</CustomTypography>
                             <TextField
                                 id="password"
@@ -162,59 +158,23 @@ const Login = () => {
                                     handleEnterLogin(e);
                                 }}
                             />
-                        </div>
-                        <div
-                            style={{
-                                display: 'inline-flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                padding: '1.5rem 0',
-                                height: '20px',
-                                width: '100%',
-                            }}
-                        >
-                            <Typography sx={{ fontSize: '0.8rem', color: '#969696' }}>
+                        </PasswdDiv>
+                        <IdSaveAndLoginBox>
+                            <SaveIdTypography>
                                 <SaveIdCheckbox type="checkbox" checked={idSaveStatus} onChange={handleCheckbox} />
                                 아이디 저장
-                            </Typography>
-                            <Typography sx={{ fontSize: '0.8rem', ':hover': { fontWeight: 'bold' } }}>
-                                <Link
-                                    component={NavLink}
-                                    to={`/register`}
-                                    sx={{
-                                        textDecoration: 'none',
-                                        color: '#6ea5f8',
-                                        fontSize: '0.8rem',
-                                        ':hover': { fontWeight: 'bold' },
-                                    }}
-                                >
-                                    계정찾기
-                                </Link>
-                            </Typography>
-                        </div>
-                        <div style={{ width: '100%', margin: '1rem auto' }}>
+                            </SaveIdTypography>
+                            <CustomNavLink to={`/register`}>계정찾기</CustomNavLink>
+                        </IdSaveAndLoginBox>
+                        <LoginBtnDiv>
                             <LoginBtn variant="contained" type="submit" onClick={getLogin}>
                                 로그인
                             </LoginBtn>
                             <Typography>
-                                <span style={{ color: '#969696', fontSize: '0.875rem', marginRight: '0.3rem' }}>
-                                    아직 회원이 아니신가요?
-                                </span>
-                                <Link
-                                    component={NavLink}
-                                    to={`/register`}
-                                    sx={{
-                                        textDecoration: 'none',
-                                        color: '#6ea5f8',
-                                        fontSize: '0.875rem',
-                                        ':hover': { fontWeight: 'bold' },
-                                    }}
-                                >
-                                    회원가입
-                                </Link>
+                                <AskingSpan>아직 회원이 아니신가요?</AskingSpan>
+                                <CustomNavLink to={`/register`}>회원가입</CustomNavLink>
                             </Typography>
-                        </div>
-                        <div style={{ borderTop: '1px solid #eaeaea', marginBottom: '0.5rem' }}></div>
+                        </LoginBtnDiv>
                         <Typography
                             sx={{
                                 marginBottom: '0.5rem',
@@ -226,7 +186,7 @@ const Login = () => {
                             SNS로그인
                         </Typography>
                         <KakaoLogin />
-                    </div>
+                    </LoginBox>
                 </Card>
             </Background>
         </>
@@ -273,11 +233,37 @@ const LoginTitle = styled(Typography)`
     text-align: center;
 `;
 
+const LoginSubTitle = styled(Typography)`
+    margin-top: 1rem;
+    font-weight: medium;
+`;
+
+const LoginBox = styled.div`
+    width: 60%;
+    height: 70%;
+    padding-top: 1.7rem;
+    margin: auto;
+`;
+
+const PasswdDiv = styled.div`
+    padding-top: 1rem;
+`;
+
 const CustomTypography = styled(Typography)`
-    font-size: 1rem;
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '1rem')};
+    color: ${(props) => (props.color ? `${props.color}` : 'black')};
     font-weight: bold;
     margin-bottom: 0.3rem;
     text-align: left;
+`;
+
+const IdSaveAndLoginBox = styled.div`
+    width: 100%;
+    height: 20px;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
 `;
 
 const SaveIdCheckbox = styled.input`
@@ -291,6 +277,27 @@ const SaveIdCheckbox = styled.input`
     cursor: pointer;
 `;
 
+const SaveIdTypography = styled(Typography)`
+    font-size: 0.8rem;
+    color: #969696;
+`;
+
+const CustomNavLink = styled(NavLink)`
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #6ea5f8;
+    &:hover {
+        font-weight: bold;
+    }
+`;
+
+const LoginBtnDiv = styled.div`
+    width: 100%;
+    margin: 1rem auto;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 0.5rem;
+`;
+
 const LoginBtn = styled(Button)`
     background-color: #6ea5f8;
     color: white;
@@ -300,4 +307,10 @@ const LoginBtn = styled(Button)`
     :hover {
         box-shadow: none;
     }
+`;
+
+const AskingSpan = styled.span`
+    color: #969696;
+    font-size: 0.875rem;
+    margin-right: 0.3rem;
 `;
