@@ -8,15 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import image from '../../components/assets/img/contemplative-reptile.jpeg';
 import { Avatar, createTheme, ThemeProvider, Typography } from '@mui/material';
-import { useEffect } from 'react';
-
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '66px',
-    height: '66px',
-    objectFit: 'cover',
-});
 
 const theme = createTheme({
     typography: {
