@@ -22,14 +22,15 @@ root.render(
         <RecoilRoot>
             <BrowserRouter>
                 <StyledEngineProvider injectFirst>
-                    <ToastContainer
-                        toastStyle={{
-                            backgroundColor: '#F5F5F5',
-                            color: '#575757',
-                            opacity: '0.9',
-                        }}
-                    />
                     <ThemeProvider theme={theme}>
+                        <ToastContainer
+                            toastStyle={{
+                                backgroundColor: '#F5F5F5',
+                                color: '#575757',
+                                opacity: '0.9',
+                                boxShadow: 'none',
+                            }}
+                        />
                         <Header />
                         <App />
                         <TopScrollBtn />
