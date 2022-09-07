@@ -1,4 +1,3 @@
-import React from 'react';
 import NicknameDate from './NicknameDate.json';
 
 export const RandomNickname = () => {

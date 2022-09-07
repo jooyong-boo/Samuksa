@@ -1,6 +1,5 @@
 import { List } from '@mui/material';
-import usePagination from '@mui/material/usePagination/usePagination';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 

@@ -1,39 +1,11 @@
-import { Avatar, Button, TextField, Typography } from '@mui/material';
+import { Avatar, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
+import { userImageState, userInfoState } from '../../store/user';
 import { getWithdrawal } from '../../api/auth';
 import React, { useEffect, useRef, useState } from 'react';
-import Loading from '../common/Loading';
 import imageCompression from 'browser-image-compression';
-
-const Background = styled.div`
-    background-color: #ebecee;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 70px;
-    overflow: hidden;
-`;
-
-const Card = styled.div`
-    background-color: white;
-    width: 30rem;
-    height: 80vh;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    /* justify-content: center; */
-    align-items: center;
-    border-radius: 5px;
-    border: 1px solid rgb(225, 225, 225);
-`;
 
 const Profile = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
@@ -139,87 +111,129 @@ const Profile = () => {
     return (
         <Background>
             <Card>
-                <div style={{ width: '90%', height: '100%' }}>
-                    <Typography
-                        sx={{
-                            fontSize: '1.5rem',
-                            fontWeight: 'bold',
-                            borderBottom: '1px solid #EAEAEA',
-                            padding: '24px',
-                            textAlign: 'center',
-                        }}
-                    >
-                        프로필
-                    </Typography>
-                    <div style={{ height: '100%', paddingTop: '24px' }}>
-                        <div
-                            style={{
-                                height: '80%',
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'space-evenly',
-                            }}
-                        >
-                            <div>
-                                <ProfileAvatar
-                                    src={String(image)}
-                                    onClick={() => {
-                                        fileInput.current?.click();
-                                    }}
-                                />
-                                <input
-                                    type="file"
-                                    style={{ display: 'none' }}
-                                    accept="image/jpg,image/png,image/jpeg"
-                                    name="profile_img"
-                                    onChange={onChange}
-                                    ref={fileInput}
-                                />
-                            </div>
-                            <div>
-                                <Button
-                                    onClick={() => {
-                                        fileInput.current?.click();
-                                    }}
-                                >
-                                    이미지 변경
-                                </Button>
-                            </div>
-                            <ModifyDiv>
-                                <CustomTypography>아이디</CustomTypography>
-                                <ProfileInput disabled={true} value={userId || ''} />
-                            </ModifyDiv>
-
-                            <ModifyDiv>
-                                <CustomTypography>닉네임</CustomTypography>
-                                <ProfileInput
-                                    disabled={nicknameModify}
-                                    value={nickname || ''}
-                                    onChange={changeNickname}
-                                />
-                                <ModifyButton onClick={handleModifyNickname}>
-                                    {nicknameModify ? '수정' : '확인'}
-                                </ModifyButton>
-                            </ModifyDiv>
-                            <ModifyDiv>
-                                <CustomTypography>이메일</CustomTypography>
-                                <ProfileInput disabled={emailModify} value={email || ''} onChange={changeEmail} />
-                                <ModifyButton onClick={handleModifyEmail}>{emailModify ? '수정' : '확인'}</ModifyButton>
-                            </ModifyDiv>
-                            <Button variant="outlined" onClick={withdrawal}>
-                                회원 탈퇴
+                <ProfileContainer>
+                    <TitleTypography>프로필</TitleTypography>
+                    <UserInfoDiv>
+                        <div>
+                            <ProfileAvatar
+                                src={String(image)}
+                                onClick={() => {
+                                    fileInput.current?.click();
+                                }}
+                            />
+                            <input
+                                type="file"
+                                style={{ display: 'none' }}
+                                accept="image/jpg,image/png,image/jpeg"
+                                name="profile_img"
+                                onChange={onChange}
+                                ref={fileInput}
+                            />
+                        </div>
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    fileInput.current?.click();
+                                }}
+                            >
+                                이미지 변경
                             </Button>
                         </div>
-                    </div>
-                </div>
+                        <ModifyDiv>
+                            <CustomTypography>아이디</CustomTypography>
+                            <ProfileInput disabled={true} value={userId || ''} />
+                        </ModifyDiv>
+
+                        <ModifyDiv>
+                            <CustomTypography>닉네임</CustomTypography>
+                            <ProfileInput
+                                disabled={nicknameModify}
+                                value={nickname || ''}
+                                onChange={changeNickname}
+                                placeholder="2~9자 한글 또는 영문"
+                            />
+                            <ModifyButton onClick={handleModifyNickname}>
+                                {nicknameModify ? '수정' : '확인'}
+                            </ModifyButton>
+                        </ModifyDiv>
+                        <ModifyDiv>
+                            <CustomTypography>이메일</CustomTypography>
+                            <ProfileInput
+                                marginBottom={'0.5rem'}
+                                disabled={emailModify}
+                                value={email || ''}
+                                onChange={changeEmail}
+                            />
+                            <ModifyButton marginBottom={'0.5rem'} onClick={handleModifyEmail}>
+                                {emailModify ? '수정' : '확인'}
+                            </ModifyButton>
+                            {emailModify ? null : (
+                                <>
+                                    <ProfileInput placeholder="인증번호 입력" />
+                                    <ModifyButton>확인</ModifyButton>
+                                </>
+                            )}
+                        </ModifyDiv>
+                        <Button variant="outlined" onClick={withdrawal}>
+                            회원 탈퇴
+                        </Button>
+                    </UserInfoDiv>
+                </ProfileContainer>
             </Card>
         </Background>
     );
 };
 
 export default Profile;
+
+const Background = styled.div`
+    background-color: #ebecee;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+    overflow: hidden;
+`;
+
+const Card = styled.div`
+    background-color: white;
+    width: 30rem;
+    height: 85vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    /* justify-content: center; */
+    align-items: center;
+    border-radius: 5px;
+    border: 1px solid rgb(225, 225, 225);
+`;
+
+const ProfileContainer = styled.div`
+    width: 90%;
+    height: 100%;
+`;
+
+const TitleTypography = styled(Typography)`
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-bottom: 1px solid #eaeaea;
+    padding: 24px;
+    text-align: center;
+`;
+
+const UserInfoDiv = styled.div`
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+`;
 
 const CustomTypography = styled(Typography)`
     font-size: 1rem;
@@ -241,9 +255,14 @@ const ProfileAvatar = styled(Avatar)`
     }
 `;
 
-const ProfileInput = styled.input`
-    padding: 1rem;
+interface ProfileInputProps {
+    marginBottom?: any;
+}
+
+const ProfileInput = styled.input<ProfileInputProps>`
+    padding: 0.8rem;
     flex-grow: 1;
+    margin-bottom: ${(props) => (props.marginBottom ? `${props.marginBottom}` : '0')};
 `;
 
 const ModifyDiv = styled.div`
@@ -253,9 +272,14 @@ const ModifyDiv = styled.div`
     flex-wrap: wrap;
 `;
 
-const ModifyButton = styled(Button)`
+interface ModifyButtonProps {
+    marginBottom?: any;
+}
+
+const ModifyButton = styled(Button)<ModifyButtonProps>`
     border: 1px solid #eaeaea;
     font-weight: bold;
     color: black;
     margin-left: 0.5rem;
+    margin-bottom: ${(props) => (props.marginBottom ? `${props.marginBottom}` : '0')};
 `;

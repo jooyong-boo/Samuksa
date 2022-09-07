@@ -1,5 +1,5 @@
 import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ReactElement } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -10,6 +10,8 @@ import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface loadingStats {
     loading: boolean;
@@ -17,6 +19,24 @@ interface loadingStats {
 }
 
 const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const notifyError = (text: ReactElement | string) => {
+        dismissAll();
+        toast.error(text, {
+            position: 'top-center',
+            autoClose: 2000,
+            hideProgressBar: true,
+        });
+    };
+    const notifySuccess = (text: ReactElement | string) => {
+        dismissAll();
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    };
+    const dismissAll = () => toast.dismiss();
+
     const [result, setResult] = useRecoilState<any[]>(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
     // console.log(result);
@@ -67,6 +87,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
             setBookmark(item);
             localStorage.setItem('bookmark', JSON.stringify([item]));
         }
+        notifySuccess('즐겨찾기 추가완료');
     };
 
     const handleDeleteBookmark = (deleteItem: any) => {
@@ -77,6 +98,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
             setNewSelectEstimate([]);
             localStorage.setItem('bookmark', JSON.stringify(newBookmark));
         }
+        notifySuccess('즐겨찾기 삭제완료');
     };
 
     useEffect(() => {

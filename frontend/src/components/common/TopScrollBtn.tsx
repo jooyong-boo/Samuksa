@@ -29,16 +29,6 @@ const TopScrollBtn = () => {
         };
     }, []);
 
-    // const handleScroll = () => {
-    //     // 스크롤이 Top에서 200px 이상 내려오면 true값을 useState에 넣어줌
-    //     if (window.scrollY >= 200) {
-    //         setScroll(true);
-    //     } else {
-    //         // 스크롤이 50px 미만일경우 false를 넣어줌
-    //         setScroll(false);
-    //     }
-    // };
-
     const handleScroll = useMemo(
         () =>
             throttle(() => {
