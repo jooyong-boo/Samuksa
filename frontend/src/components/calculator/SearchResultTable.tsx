@@ -8,19 +8,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import image from '../../components/assets/img/contemplative-reptile.jpeg';
 import { Avatar, createTheme, ThemeProvider, Typography } from '@mui/material';
-import { useEffect } from 'react';
-
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '66px',
-    height: '66px',
-    objectFit: 'cover',
-});
 
 const theme = createTheme({
     typography: {
-        fontSize: 12,
+        fontSize: 13,
         fontFamily: 'Pretendard',
     },
     palette: {
@@ -47,7 +38,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
     return (
         <div>
             <ThemeProvider theme={theme}>
-                <TableContainer component={Paper} sx={{ borderTop: '2px solid #A7A7A7', borderRadius: 0 }}>
+                <CustomTableContainer>
                     <Table sx={{ minWidth: 700 }} aria-label="조합 상세리스트">
                         <TableHead>
                             <TableRow>
@@ -79,16 +70,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                               }}
                                           >
                                               <TableCell>
-                                                  <Avatar
-                                                      alt={fishName}
-                                                      src={image}
-                                                      variant="square"
-                                                      style={{
-                                                          height: '60px',
-                                                          width: '60px',
-                                                          borderRadius: '3px',
-                                                      }}
-                                                  />
+                                                  <CustomAvatar alt={fishName} src={image} />
                                               </TableCell>
                                               <TableCell component="th" scope="row" sx={tableTextStyle}>
                                                   {fishName}
@@ -118,7 +100,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                 : null}
                         </TableBody>
                     </Table>
-                </TableContainer>
+                </CustomTableContainer>
             </ThemeProvider>
             <CombinationInfoContainer>
                 <CombinationFishDetailInfo>
@@ -127,7 +109,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                               const { fishName, serving, fishRecommendAlgoWeights, weightPerServing } = item;
                               const [{ maxWeight, minWeight }] = [...fishRecommendAlgoWeights];
                               return (
-                                  <div key={i} style={{ display: 'flex' }}>
+                                  <CombinationDetailDiv key={i}>
                                       <Typography
                                           sx={{
                                               fontSize: '0.8rem',
@@ -137,50 +119,52 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                       >
                                           {fishName}
                                       </Typography>
-                                      <Typography
-                                          sx={{
-                                              fontSize: '0.8rem',
-                                              color: '#707070',
-                                              marginRight: 1,
-                                          }}
+                                      <CombinationDetailTypography
+                                          fontSize={'0.8rem'}
+                                          color={'#707070'}
+                                          marginRight={'0.5rem'}
                                       >
                                           {(weightPerServing * serving) / 1000}
                                           kg(무게) X 0.5(수율) X {serving}(수량){' '}
-                                      </Typography>
-                                      <Typography
-                                          sx={{
-                                              fontSize: '0.9rem',
-                                              fontWeight: '700',
-                                              color: '#707070',
-                                          }}
+                                      </CombinationDetailTypography>
+                                      <CombinationDetailTypography
+                                          fontSize={'0.9rem'}
+                                          fontWeight={'700'}
+                                          color={'#707070'}
                                       >
                                           {(((weightPerServing * serving) / 1000) * 0.5 * serving).toFixed(1)}
                                           kg
-                                      </Typography>
-                                  </div>
+                                      </CombinationDetailTypography>
+                                  </CombinationDetailDiv>
                               );
                           })
                         : null}
                 </CombinationFishDetailInfo>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography
-                        sx={{
-                            fontSize: '1rem',
-                            fontWeight: 'medium',
-                            marginRight: 1,
-                        }}
-                    >
+                <DetailWeightPriceDiv>
+                    <CombinationDetailTypography fontSize={'1rem'} fontWeight={'medium'} marginRight={'0.5rem'}>
                         총 금액:{' '}
-                    </Typography>
-                    <Typography sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>
+                    </CombinationDetailTypography>
+                    <CombinationDetailTypography fontSize={'1.1rem'} fontWeight={'bold'}>
                         {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
-                    </Typography>
+                    </CombinationDetailTypography>
                     원
-                </div>
+                </DetailWeightPriceDiv>
             </CombinationInfoContainer>
         </div>
     );
 }
+
+const CustomTableContainer = styled(TableContainer)`
+    border-top: 2px solid #a7a7a7;
+    border-bottom: 2px solid #a7a7a7;
+    border-radius: 0;
+`;
+
+const CustomAvatar = styled(Avatar)`
+    height: 3.9rem;
+    width: 3.9rem;
+    border-radius: 3px;
+`;
 
 const CombinationInfoContainer = styled.div`
     display: flex;
@@ -194,4 +178,27 @@ const CombinationFishDetailInfo = styled.div`
     display: flex;
     width: 50%;
     flex-direction: column;
+`;
+
+interface CombinationDetailTypographyProps {
+    fontSize: any;
+    color?: any;
+    marginRight?: any;
+    fontWeight?: any;
+}
+
+const CombinationDetailDiv = styled.div`
+    display: flex;
+`;
+
+const CombinationDetailTypography = styled(Typography)<CombinationDetailTypographyProps>`
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '1rem')};
+    color: ${(props) => (props.color ? `${props.color}` : 'black')};
+    margin-right: ${(props) => (props.marginRight ? `${props.marginRight}` : '0')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
+`;
+
+const DetailWeightPriceDiv = styled.div`
+    display: flex;
+    align-items: center;
 `;

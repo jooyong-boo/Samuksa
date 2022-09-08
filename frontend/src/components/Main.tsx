@@ -1,13 +1,13 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import image from '../components/assets/img/mainImage.jpg';
 import {
     Box,
     Button,
     FormControl,
     InputAdornment,
-    InputLabel,
     MenuItem,
     Select,
+    SelectChangeEvent,
     TextField,
     Typography,
 } from '@mui/material';
@@ -26,21 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 import React from 'react';
-
-const Background = styled.div`
-    background-image: url(${image});
-    background-size: cover;
-    background-position: center;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    margin: auto;
-`;
+import { typography } from '@mui/system';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -83,6 +69,10 @@ const Main = () => {
             notify('인원수는 35명 이하로 해주세요');
             setPersonNum(String(35));
         }
+    };
+
+    const handleAreaChange = (e: SelectChangeEvent) => {
+        setArea(e.target.value as string);
     };
 
     const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,58 +119,19 @@ const Main = () => {
     return (
         <>
             <Background>
-                <div style={{ display: 'flex', width: '100%', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <Typography
-                        sx={{
-                            fontSize: '3.85rem',
-                            fontWeight: '900',
-                            color: 'white',
-                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
-                        }}
-                    >
-                        모두가 편히
-                    </Typography>
-                    <Typography
-                        sx={{
-                            fontSize: '3.85rem',
-                            fontWeight: '900',
-                            color: 'white',
-                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
-                            marginLeft: '1rem',
-                        }}
-                    >
-                        떠먹는 그날까지,
-                    </Typography>
-                    <Typography
-                        sx={{
-                            fontSize: '3.85rem',
-                            color: '#6EA5F8',
-                            fontWeight: '900',
-                            textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
-                            marginLeft: '16px',
-                        }}
-                    >
+                <Container>
+                    <MainTitle>모두가 편히</MainTitle>
+                    <MainTitle marginLeft={'1rem'}>떠먹는 그날까지,</MainTitle>
+                    <MainTitle color={'#6EA5F8'} marginLeft={'1rem'}>
                         사먹사
-                    </Typography>
-                </div>
-                <Typography
-                    sx={{
-                        fontSize: '1.78rem',
-                        color: 'white',
-                        fontWeight: '600',
-                        textShadow: '-1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black',
-                        marginBottom: '2rem',
-                    }}
-                >
+                    </MainTitle>
+                </Container>
+                <MainTitle marginBottom={'2rem'} fontSize={'1.78rem'} fontWeight={'600'}>
                     고민하지말고 편하게 추천 받아보세요.
-                </Typography>
-                <form onSubmit={onSubmit} style={{ textAlign: 'center' }}>
-                    <Box
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '11rem' },
-                        }}
-                    >
-                        <TextField
+                </MainTitle>
+                <SearchForm onSubmit={onSubmit}>
+                    <CustomBox>
+                        <CustomTextField
                             id="person"
                             placeholder="인원"
                             title="인원"
@@ -193,9 +144,8 @@ const Main = () => {
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">명</InputAdornment>,
                             }}
-                            sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                         />
-                        <TextField
+                        <CustomTextField
                             id="money"
                             placeholder="예산"
                             title="예산"
@@ -207,20 +157,16 @@ const Main = () => {
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">원</InputAdornment>,
                             }}
-                            sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                         />
                         <FormControl fullWidth>
                             {/* <InputLabel id="local">지역</InputLabel> */}
-                            <Select
+                            <AreaSelect
                                 labelId="지역"
                                 title="지역"
                                 value={getArea ? area : ''}
-                                onChange={(e) => {
-                                    setArea(e.target.value);
-                                }}
+                                onChange={handleAreaChange}
                                 MenuProps={MenuProps}
                                 fullWidth
-                                sx={{ backgroundColor: 'white', borderRadius: '5px', opacity: '0.8' }}
                             >
                                 {getArea &&
                                     getArea.map((area: string) => (
@@ -228,25 +174,13 @@ const Main = () => {
                                             {area}
                                         </MenuItem>
                                     ))}
-                            </Select>
+                            </AreaSelect>
                         </FormControl>
-                    </Box>
-                    <Button
-                        variant="contained"
-                        type="submit"
-                        onClick={onClick}
-                        sx={{
-                            mt: 2,
-                            opacity: '0.9',
-                            backgroundColor: '#6EA5F8',
-                            color: 'white',
-                            boxShadow: 'none',
-                            width: '96%',
-                        }}
-                    >
+                    </CustomBox>
+                    <SubmitBtn variant="contained" type="submit" onClick={onClick}>
                         검색
-                    </Button>
-                </form>
+                    </SubmitBtn>
+                </SearchForm>
             </Background>
             <Introduction />
         </>
@@ -254,3 +188,74 @@ const Main = () => {
 };
 
 export default Main;
+
+const Background = styled.div`
+    background-image: url(${image});
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: auto;
+`;
+
+const Container = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+`;
+
+interface MainTitleProps {
+    fontSize?: any;
+    fontWeight?: any;
+    color?: any;
+    marginLeft?: any;
+    marginBottom?: any;
+}
+
+const MainTitle = styled(Typography)<MainTitleProps>`
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '3.85rem')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '900')};
+    text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
+    color: ${(props) => (props.color ? `${props.color}` : 'white')};
+    margin-left: ${(props) => (props.marginLeft ? `${props.marginLeft}` : '0')};
+    margin-bottom: ${(props) => (props.marginBottom ? `${props.marginBottom}` : '0')};
+`;
+
+const SearchForm = styled.form`
+    text-align: center;
+`;
+
+const CustomBox = styled(Box)`
+    & > :not(style) {
+        margin: 0.5rem;
+        width: 11rem;
+    }
+`;
+
+const CustomTextField = styled(TextField)`
+    background-color: white;
+    border-radius: 5px;
+    opacity: 0.8;
+`;
+
+const AreaSelect = styled(Select)`
+    background-color: white;
+    border-radius: 5px;
+    opacity: 0.8;
+`;
+
+const SubmitBtn = styled(Button)`
+    margin-top: 1rem;
+    opacity: 0.9;
+    background-color: #6ea5f8;
+    color: white;
+    box-shadow: none;
+    width: 96%;
+`;

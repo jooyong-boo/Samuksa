@@ -1,5 +1,5 @@
 import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ReactElement } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -10,6 +10,8 @@ import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface loadingStats {
     loading: boolean;
@@ -17,10 +19,26 @@ interface loadingStats {
 }
 
 const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const notifyError = (text: ReactElement | string) => {
+        dismissAll();
+        toast.error(text, {
+            position: 'top-center',
+            autoClose: 2000,
+            hideProgressBar: true,
+        });
+    };
+    const notifySuccess = (text: ReactElement | string) => {
+        dismissAll();
+        toast.success(text, {
+            position: 'top-center',
+            autoClose: 1000,
+            hideProgressBar: true,
+        });
+    };
+    const dismissAll = () => toast.dismiss();
+
     const [result, setResult] = useRecoilState<any[]>(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
-    // console.log(result);
-
     const [selectResult, setSelectResult] = useState<null | any>(null);
     const [selectEstimate, setSelectEstimate] = useState<any>(null);
     const [totalPrice, setTotalPrice] = useState<number>();
@@ -67,6 +85,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
             setBookmark(item);
             localStorage.setItem('bookmark', JSON.stringify([item]));
         }
+        notifySuccess('즐겨찾기 추가완료');
     };
 
     const handleDeleteBookmark = (deleteItem: any) => {
@@ -77,6 +96,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
             setNewSelectEstimate([]);
             localStorage.setItem('bookmark', JSON.stringify(newBookmark));
         }
+        notifySuccess('즐겨찾기 삭제완료');
     };
 
     useEffect(() => {
@@ -100,25 +120,18 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
 
     return (
         <Card ref={ref}>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    paddingRight: '0.5rem',
-                    borderBottom: '1px solid #eaeaea',
-                }}
-            >
-                {/* <SearchResultsTypography>검색 결과({result.length})</SearchResultsTypography> */}
+            <Container>
                 <SearchResultsTypography>
                     검색 결과{result.length > 0 ? `(${result.length})` : null}
                 </SearchResultsTypography>
                 <Button>즐겨찾기 {bookmark.length}</Button>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            </Container>
+            <ResultDiv>
                 <CustomDiv>
                     {result.length > 0 && loading === false ? (
                         result.map((item, i) => {
                             const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
+                            let fontLength = combinationName.length;
                             return (
                                 <Fade in={true} timeout={200} key={i}>
                                     <CustomCardContent
@@ -129,63 +142,45 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                             backgroundColor: active ? '#F8F8F8' : 'white',
                                         }}
                                     >
-                                        <Grid
-                                            container
-                                            spacing={0.5}
-                                            rowSpacing={0.2}
-                                            justifyContent="center"
-                                            sx={{ width: '40%' }}
-                                        >
+                                        <CustomGrid container spacing={0.5} rowSpacing={0.2}>
                                             {combinationName.length > 1 ? (
                                                 combinationName.map((item: string, i: number) => {
                                                     if (i > 3) return null;
 
                                                     return (
                                                         <Grid item xs={6} key={item}>
-                                                            <Avatar
+                                                            <CustomAvatar
                                                                 alt={item}
                                                                 src={image}
                                                                 variant="rounded"
-                                                                sx={{
-                                                                    height: '30px',
-                                                                    width: '30px',
-                                                                }}
+                                                                width={'30px'}
+                                                                height={'30px'}
                                                             />
                                                         </Grid>
                                                     );
                                                 })
                                             ) : (
-                                                <Avatar
+                                                <CustomAvatar
                                                     alt={combinationName.join(' + ')}
                                                     src={image}
                                                     variant="rounded"
-                                                    sx={{
-                                                        height: '50px',
-                                                        width: '50px',
-                                                        margin: '0px',
-                                                    }}
+                                                    width={'50px'}
+                                                    height={'50px'}
+                                                    margin={'0'}
                                                 />
                                             )}
-                                        </Grid>
+                                        </CustomGrid>
                                         <SearchedCombinationsDiv>
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '1rem',
-                                                    color: '#4A4A4A',
-                                                    fontWeight: 'bold',
-                                                }}
+                                            <SearchedCombinationsTypography
+                                                color={'#4A4A4A'}
+                                                fontWeight={'600'}
+                                                fontSize={fontLength}
                                             >
                                                 {combinationName.join(' + ')}
-                                            </Typography>
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '1rem',
-                                                    color: '#A5A5A5',
-                                                }}
-                                                color="text.secondary"
-                                            >
+                                            </SearchedCombinationsTypography>
+                                            <SearchedCombinationsTypography color={'#A5A5A5'}>
                                                 ({combinationSize})
-                                            </Typography>
+                                            </SearchedCombinationsTypography>
                                         </SearchedCombinationsDiv>
                                     </CustomCardContent>
                                 </Fade>
@@ -217,36 +212,24 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                                         const { fishName, serving } = item;
                                                         return (
                                                             <CustomListItem key={i}>
-                                                                <Typography
-                                                                    sx={{
-                                                                        fontSize: '0.92rem',
-                                                                        color: '#545454',
-                                                                    }}
-                                                                >
+                                                                <CustomListItemTypography color={'#545454'}>
                                                                     {fishName}
-                                                                </Typography>
-                                                                <Typography
-                                                                    sx={{
-                                                                        fontSize: '0.92rem',
-                                                                        color: '#979797',
-                                                                    }}
-                                                                >
+                                                                </CustomListItemTypography>
+                                                                <CustomListItemTypography color={'#979797'}>
                                                                     ({serving}인분)
-                                                                </Typography>
+                                                                </CustomListItemTypography>
                                                             </CustomListItem>
                                                         );
                                                     },
                                                 )
                                               : null}
-                                          <Typography
-                                              sx={{
-                                                  fontSize: '1rem',
-                                                  mt: 1,
-                                                  fontWeight: 'bold',
-                                              }}
+                                          <CustomListItemTypography
+                                              fontWeight={'bold'}
+                                              marginTop={'0.5rem'}
+                                              fontSize={'1rem'}
                                           >
                                               {totalPrice.toLocaleString('ko-KR')}원
-                                          </Typography>
+                                          </CustomListItemTypography>
                                       </CustomListItems>
                                   </Fade>
                               );
@@ -258,26 +241,17 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                         <SelectedEstimateContainer>
                             <SelectedEstimateTopMenu>
                                 <div>
-                                    <Typography
-                                        sx={{
-                                            color: '#010000',
-                                            paddingTop: '18px',
-                                            fontWeight: 'bold',
-                                            fontSize: '1.14rem',
-                                        }}
+                                    <EstimateTopText
+                                        color={'#010000'}
+                                        paddingTop={'18px'}
+                                        fontWeight={'bold'}
+                                        fontSize={'1.14rem'}
                                     >
                                         수산물 견적
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            color: '#949494',
-                                            fontSize: '0.78rem',
-                                            mb: '11px',
-                                        }}
-                                    >
+                                    </EstimateTopText>
+                                    <EstimateTopText color={'#949494'} fontSize={'0.78rem'} marginBottom={'11px'}>
                                         실제 시세과 상이할 수 있습니다.
-                                    </Typography>
+                                    </EstimateTopText>
                                 </div>
                                 {newSelectEstimate?.length > 0 ? (
                                     <BookmarkAddedIcon
@@ -298,13 +272,10 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                 )}
                             </SelectedEstimateTopMenu>
                             <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
-                            {/* <div style={{ position: 'relative', textAlign: 'center', top: '0%' }}>
-                                <ExpandMoreIcon />
-                            </div> */}
                         </SelectedEstimateContainer>
                     </Fade>
                 ) : null}
-            </div>
+            </ResultDiv>
         </Card>
     );
 });
@@ -320,6 +291,13 @@ const Card = styled.div`
     margin: auto;
     margin-bottom: 7%;
     z-index: 3;
+`;
+
+const Container = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0.5rem;
+    border-bottom: 1px solid #eaeaea;
 `;
 
 const SearchResultsTypography = styled(Typography)`
@@ -348,6 +326,11 @@ const CustomDiv = styled.div`
     }
 `;
 
+const ResultDiv = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+`;
+
 const CustomCardContent = styled(CardContent)`
     display: flex;
     align-items: center;
@@ -363,6 +346,23 @@ const CustomCardContent = styled(CardContent)`
     }
 `;
 
+const CustomGrid = styled(Grid)`
+    justify-content: center;
+    width: 40%;
+`;
+
+interface CustomAvatarProps {
+    width: any;
+    height: any;
+    margin?: any;
+}
+
+const CustomAvatar = styled(Avatar)<CustomAvatarProps>`
+    width: ${(props) => (props.width ? `${props.width}` : '1rem')};
+    height: ${(props) => (props.height ? `${props.height}` : '1rem')};
+    margin: ${(props) => (props.margin ? `${props.margin}` : 'auto')};
+`;
+
 const SearchedCombinationsDiv = styled.div`
     display: flex;
     justify-content: space-between;
@@ -370,6 +370,19 @@ const SearchedCombinationsDiv = styled.div`
     width: 100%;
     height: 100%;
     padding-left: 10px;
+`;
+
+interface SearchedCombinationsTypographyProps {
+    color: any;
+    fontWeight?: any;
+    fontSize?: any;
+}
+
+const SearchedCombinationsTypography = styled(Typography)<SearchedCombinationsTypographyProps>`
+    color: ${(props) => (props.color ? `${props.color}` : 'white')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
+    font-size: ${(props) =>
+        props.fontSize > 2 ? `${(2 / props.fontSize + (0.55 - 0.9 / props.fontSize)).toFixed(2)}rem` : '0.9rem'};
 `;
 
 const LoadingSpinner = styled.div`
@@ -424,6 +437,20 @@ const CustomListItem = styled.div`
     flex-wrap: wrap;
 `;
 
+interface CustomListItemTypographyProps {
+    color?: any;
+    marginTop?: any;
+    fontWeigth?: any;
+    fontSize?: any;
+}
+
+const CustomListItemTypography = styled(Typography)<CustomListItemTypographyProps>`
+    color: ${(props) => (props.color ? `${props.color}` : 'black')};
+    margin-top: ${(props) => (props.marginTop ? `${props.marginTop}` : 'auto')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '0.9rem')};
+`;
+
 const SelectedEstimateContainer = styled.div`
     width: 69%;
     height: auto;
@@ -448,6 +475,22 @@ const SelectedEstimateTopMenu = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem 0 0;
+`;
+
+interface EstimateTopTextProps {
+    color: any;
+    fontSize: any;
+    paddingTop?: any;
+    fontWeight?: any;
+    marginBottom?: any;
+}
+
+const EstimateTopText = styled(Typography)<EstimateTopTextProps>`
+    color: ${(props) => props.color && `${props.color}`};
+    font-size: ${(props) => props.fontSize && `${props.fontSize}`};
+    padding-top: ${(props) => props.paddingTop && `${props.paddingTop}`};
+    font-weight: ${(props) => props.fontWeight && `${props.fontWeight}`};
+    margin-bottom: ${(props) => props.marginBottom && `${props.marginBottom}`};
 `;
 
 const Img = styled('img')({

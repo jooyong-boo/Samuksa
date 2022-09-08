@@ -79,84 +79,42 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                             <Slide key={id} direction="right" in={true} timeout={400}>
                                 <ListItem>
                                     {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
-                                    <Avatar
-                                        alt={selectFish}
-                                        src={imgUrl}
-                                        variant="square"
-                                        style={{
-                                            height: '50px',
-                                            width: '50px',
-                                            borderRadius: '3px',
-                                            margin: '13px',
-                                        }}
-                                    />
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            width: '100%',
-                                        }}
-                                    >
-                                        <CardContent
-                                            sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                padding: '16px 0px',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <div style={{ display: 'flex' }}>
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: '1rem',
-                                                        color: '#4A4A4A',
-                                                        fontWeight: 'bold',
-                                                    }}
-                                                >
+                                    <CustomAvatar alt={selectFish} src={imgUrl} />
+                                    <SelectedConditionListBox>
+                                        <CustomCardContent>
+                                            <SelectedItemsBox>
+                                                <SelectedItemInfo color={'#4A4A4A'} fontWeight={'600'}>
                                                     {selectFish}
-                                                </Typography>
-                                                <Typography
-                                                    sx={{
-                                                        fontSize: '0.9rem',
-                                                        color: '#A5A5A5',
-                                                        fontWeight: 'medium',
-                                                        marginLeft: 1,
-                                                    }}
+                                                </SelectedItemInfo>
+                                                <SelectedItemInfo
+                                                    fontSize={'0.9rem'}
+                                                    color={'#A5A5A5'}
+                                                    fontWeight={'medium'}
+                                                    marginLeft={'0.5rem'}
                                                 >
                                                     ({amount}인)
-                                                </Typography>
-                                            </div>
-                                            <Typography
-                                                sx={{
-                                                    fontSize: '0.9rem',
-                                                    color: '#A5A5A5',
-                                                    fontWeight: 'medium',
-                                                }}
-                                                color="text.secondary"
-                                                gutterBottom
+                                                </SelectedItemInfo>
+                                            </SelectedItemsBox>
+                                            <SelectedItemInfo
+                                                fontSize={'0.9rem'}
+                                                color={'#A5A5A5'}
+                                                fontWeight={'medium'}
                                             >
                                                 {farmStatus.join(', ')}
-                                            </Typography>
-                                        </CardContent>
+                                            </SelectedItemInfo>
+                                        </CustomCardContent>
                                         <CardActions>
-                                            <Button
+                                            <DeleteConditionBtn
                                                 variant="outlined"
-                                                sx={{
-                                                    borderRadius: '1px',
-                                                    color: '#949494',
-                                                    borderColor: '#D8D8D8',
-                                                    fontSize: '0.8rem',
-                                                    marginRight: '12px',
-                                                }}
                                                 onClick={() => {
                                                     deleteContidion(id, amount);
                                                 }}
                                             >
                                                 조건 삭제
-                                            </Button>
+                                            </DeleteConditionBtn>
                                             <ToastContainer />
                                         </CardActions>
-                                    </div>
+                                    </SelectedConditionListBox>
                                 </ListItem>
                             </Slide>
                         );
@@ -164,29 +122,11 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                 </SelectedConditionLists>
                 <CombinationSearchBtnDiv>
                     {selectCondition.length > 0 ? (
-                        <CombinationSearchBtn
-                            variant="contained"
-                            disableElevation
-                            sx={{
-                                backgroundColor: '#0098EE',
-                            }}
-                            onClick={onClick}
-                        >
+                        <CombinationSearchBtn variant="contained" disableElevation onClick={onClick}>
                             조합 검색
                         </CombinationSearchBtn>
                     ) : (
-                        <CombinationSearchBtn
-                            variant="contained"
-                            disableElevation
-                            disabled={true}
-                            sx={{
-                                ':disabled': {
-                                    backgroundColor: 'rgba(0,152,238,0.3)',
-                                    color: '#FFFFFF',
-                                },
-                            }}
-                            onClick={onClick}
-                        >
+                        <CombinationSearchBtn variant="contained" disableElevation disabled={true} onClick={onClick}>
                             선택한 조합이 없어요
                         </CombinationSearchBtn>
                     )}
@@ -235,6 +175,52 @@ const ListItem = styled.div`
     border-bottom: 1px solid #f6f6f6;
 `;
 
+const CustomAvatar = styled(Avatar)`
+    height: 50px;
+    width: 50px;
+    border-radius: 3px;
+    margin: 13px;
+`;
+
+const SelectedConditionListBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+`;
+
+const CustomCardContent = styled(CardContent)`
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0px;
+    justify-content: center;
+`;
+
+const SelectedItemsBox = styled.div`
+    display: flex;
+`;
+
+interface SelectedItemInfoProps {
+    fontSize?: any;
+    color?: any;
+    fontWeight?: any;
+    marginLeft?: any;
+}
+
+const SelectedItemInfo = styled(Typography)<SelectedItemInfoProps>`
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '0.975rem')};
+    color: ${(props) => (props.color ? `${props.color}` : 'black')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
+    margin-left: ${(props) => (props.marginLeft ? `${props.marginLeft}` : '0')};
+`;
+
+const DeleteConditionBtn = styled(Button)`
+    border-radius: 1px;
+    color: #949494;
+    border-color: #d8d8d8;
+    font-size: 0.8rem;
+    margin-right: 12px;
+`;
+
 const CombinationSearchBtnDiv = styled.div`
     width: 100%;
     height: 17%;
@@ -246,4 +232,9 @@ const CombinationSearchBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
+    background-color: #0098ee;
+    &:disabled {
+        background-color: rgba(0, 152, 238, 0.3);
+        color: #ffffff;
+    }
 `;

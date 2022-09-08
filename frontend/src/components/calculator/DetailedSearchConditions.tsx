@@ -153,7 +153,6 @@ const DetailedSearchConditions = () => {
         <>
             <Card>
                 <CustomTypography>상세 검색 조건</CustomTypography>
-                {/* <div style={{ display: 'flex', height: '100%', opacity: fish.length > 0 ? 1 : 0.4 }}> */}
                 <Container>
                     <CustomFishListDiv>
                         {/* <FormControl fullWidth>
@@ -180,44 +179,22 @@ const DetailedSearchConditions = () => {
                                         const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
                                         return (
                                             <Grow in={true} timeout={i * 200} key={fishInfoId}>
-                                                <ListItemStyled
-                                                    style={{
-                                                        backgroundColor: active ? '#F8F8F8' : 'white',
-                                                    }}
+                                                <ListItemDiv
                                                     onClick={() => {
                                                         onToggle(fishInfoId);
                                                     }}
+                                                    active={active}
                                                 >
-                                                    <ListItemAvatar
-                                                        sx={{
-                                                            padding: '9px 13px 9px 16px',
-                                                        }}
-                                                    >
-                                                        <Avatar
-                                                            alt={fishName}
-                                                            src={imgUrl}
-                                                            variant="square"
-                                                            style={{
-                                                                height: '50px',
-                                                                width: '50px',
-                                                                borderRadius: '3px',
-                                                            }}
-                                                        />
-                                                    </ListItemAvatar>
-                                                    <ListItem
-                                                        sx={{
-                                                            paddingLeft: 0,
-                                                            ':hover': { backgroundColor: '#f4f4f4' },
-                                                        }}
-                                                    >
+                                                    <ListItemAvaterStyled>
+                                                        <AvaterStyled alt={fishName} src={imgUrl} />
+                                                    </ListItemAvaterStyled>
+                                                    <ListItemStyled>
                                                         <ListItemText
                                                             primary={fishName}
                                                             secondary={`(수율: ${fishYield}%)`}
                                                         />
-                                                        {/* <Typography>{fishName}</Typography>
-                                                <Typography>{fishYield}</Typography> */}
-                                                    </ListItem>
-                                                </ListItemStyled>
+                                                    </ListItemStyled>
+                                                </ListItemDiv>
                                             </Grow>
                                         );
                                     })}
@@ -231,7 +208,7 @@ const DetailedSearchConditions = () => {
                     </CustomFishListDiv>
                     <CustomConditionSettingDiv>
                         <SelectVolumeDiv>
-                            <Typography sx={{ textAlign: 'center' }}>분량</Typography>
+                            <SelectVolumeTypograhy>분량</SelectVolumeTypograhy>
                             {selectFish.length > 0 ? (
                                 <Slider
                                     aria-labelledby="range-slider"
@@ -247,43 +224,36 @@ const DetailedSearchConditions = () => {
                             ) : (
                                 <Slider disabled value={0} />
                             )}
-                            <Typography sx={{ textAlign: 'center' }}>{amount}인</Typography>
+                            <SelectVolumeTypograhy>{amount}인</SelectVolumeTypograhy>
                         </SelectVolumeDiv>
                         <CustomSelectFarmTypeDiv>
                             <Typography variant="subtitle1">양식 여부</Typography>
                             {farm.length > 0 && selectFish.length > 0 ? (
-                                <CustomSelectFarmTypeTypography sx={{ color: '#737373' }}>
+                                <CustomSelectFarmTypography color={'#737373'}>
                                     중복 선택이 가능합니다.
-                                </CustomSelectFarmTypeTypography>
+                                </CustomSelectFarmTypography>
                             ) : (
-                                <CustomSelectFarmTypeTypography sx={{ color: '#AEAEAE' }}>
+                                <CustomSelectFarmTypography color={'#AEAEAE'}>
                                     어종 선택이 필요합니다.
-                                </CustomSelectFarmTypeTypography>
+                                </CustomSelectFarmTypography>
                             )}
                             {farm.length > 0 && selectFish.length > 0
                                 ? farm.map((item, i) => (
-                                      <Typography
+                                      <SelectFarmTypeTypography
                                           key={i}
-                                          sx={{
-                                              fontSize: '0.9rem',
-                                              width: '90px',
-                                              ':hover': { backgroundColor: 'rgba(99, 99, 99, 0.1)' },
-                                              borderRadius: '5px',
-                                          }}
                                           onClick={() => {
                                               changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
                                           }}
                                       >
-                                          <Checkbox
+                                          <FarmTypeCheckBox
                                               id={item}
-                                              sx={{ color: '#E1E1E1' }}
                                               onChange={(e) => {
                                                   changeHandler(e.currentTarget.checked, `${item}`);
                                               }}
                                               checked={farmStatus.includes(`${item}`) ? true : false}
                                           />
                                           {item}
-                                      </Typography>
+                                      </SelectFarmTypeTypography>
                                   ))
                                 : null}
                         </CustomSelectFarmTypeDiv>
@@ -293,9 +263,6 @@ const DetailedSearchConditions = () => {
                                     variant="contained"
                                     type="submit"
                                     disableElevation
-                                    sx={{
-                                        backgroundColor: '#0098EE',
-                                    }}
                                     onClick={addCondition}
                                 >
                                     조건 추가하기
@@ -306,19 +273,12 @@ const DetailedSearchConditions = () => {
                                     type="submit"
                                     disableElevation
                                     disabled={true}
-                                    sx={{
-                                        ':disabled': {
-                                            backgroundColor: 'rgba(0,152,238,0.3)',
-                                            color: '#FFFFFF',
-                                        },
-                                    }}
                                     onClick={addCondition}
                                 >
                                     {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
                                 </CustomConditionAddBtn>
                             )}
                         </CustomConditionAddDiv>
-                        {/* <ToastContainer /> */}
                     </CustomConditionSettingDiv>
                 </Container>
             </Card>
@@ -366,13 +326,34 @@ const CustomFishListPaper = styled(Paper)`
     box-shadow: none;
 `;
 
-const ListItemStyled = styled.div`
+interface ListItemStyledProps {
+    active?: boolean;
+}
+
+const ListItemDiv = styled.div<ListItemStyledProps>`
     display: flex;
-    background-color: white;
+    background-color: ${(props) => (props.active ? '#F8F8F8' : 'white')};
     height: 100%;
     border-bottom: 1px solid #f6f6f6;
     cursor: pointer;
-    &:hover > div {
+    &:hover {
+        background-color: #f4f4f4;
+    }
+`;
+
+const ListItemAvaterStyled = styled(ListItemAvatar)`
+    padding: 9px 13px 9px 16px;
+`;
+
+const AvaterStyled = styled(Avatar)`
+    height: 50px;
+    width: 50px;
+    border-radius: 3px;
+`;
+
+const ListItemStyled = styled(ListItem)`
+    padding-left: 0;
+    &:hover {
         background-color: #f4f4f4;
     }
 `;
@@ -419,6 +400,10 @@ const SelectVolumeDiv = styled.div`
     margin-top: 28px;
 `;
 
+const SelectVolumeTypograhy = styled(Typography)`
+    text-align: center;
+`;
+
 const CustomSelectFarmTypeDiv = styled.div`
     width: 90%;
     height: 225px;
@@ -428,10 +413,29 @@ const CustomSelectFarmTypeDiv = styled.div`
     padding-top: 24px;
 `;
 
-const CustomSelectFarmTypeTypography = styled(Typography)`
+interface CustomSelectFarmTypographyProps {
+    color: any;
+}
+
+const CustomSelectFarmTypography = styled(Typography)<CustomSelectFarmTypographyProps>`
     font-size: 0.9rem;
     margin-top: 3px;
     font-weight: medium;
+    color: ${(props) => (props.color ? `${props.color}` : 'white')};
+`;
+
+const SelectFarmTypeTypography = styled(Typography)`
+    font-size: 0.9rem;
+    width: 90px;
+    border-radius: 5px;
+    &:hover {
+        background-color: rgba(99, 99, 99, 0.1);
+        cursor: pointer;
+    }
+`;
+
+const FarmTypeCheckBox = styled(Checkbox)`
+    color: #e1e1e1;
 `;
 
 const CustomConditionAddDiv = styled.div`
@@ -444,4 +448,9 @@ const CustomConditionAddBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
+    background-color: #0098ee;
+    &:disabled {
+        background-color: rgba(0, 152, 238, 0.3);
+        color: #ffffff;
+    }
 `;
