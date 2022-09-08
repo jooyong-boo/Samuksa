@@ -1,7 +1,6 @@
 import {
     Button,
     createTheme,
-    Paper,
     Stack,
     Table,
     TableBody,
@@ -12,9 +11,9 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
-import { Link, useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, reviewPostPageState } from '../../store/atom';
