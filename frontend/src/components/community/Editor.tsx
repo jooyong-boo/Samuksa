@@ -36,24 +36,28 @@ interface userInfos {
 }
 
 const Writing = () => {
-    const notify = (text: string) =>
+    const notify = (text: string) => {
+        dismissAll();
         toast.success(text, {
             position: 'top-center',
-            autoClose: 1000,
+            autoClose: 1500,
             hideProgressBar: true,
         });
+    };
     const dismissAll = () => toast.dismiss();
 
     const navigate = useNavigate();
     const editorRef: any = useRef(null);
     const [title, setTitle] = useState('');
-    const [content, setContent] = useState(null);
+    const [content, setContent] = useState('');
     const [board, setBoard] = useState('');
 
     const userInfo = useRecoilValue(userInfoState);
 
     const { userNickName }: userInfos = userInfo;
     const userImage = useRecoilValue(userImageState);
+
+    const [transientStorage, setTransientStorage] = useState<any>([]);
 
     const location = useLocation();
     const prevLocation = location.state;
@@ -73,7 +77,7 @@ const Writing = () => {
     // console.log(title, content, board);
 
     // 임시저장 테스트중
-    const transientStorage = () => {
+    const handleTransientStorage = () => {
         let data = [
             {
                 title,
@@ -83,6 +87,7 @@ const Writing = () => {
         ];
         if (localStorage.getItem('transientStorage')) {
             if (window.confirm('이미 임시저장한 글이 있습니다, 새로 저장할까요?')) {
+                setTransientStorage(data);
                 localStorage.setItem('transientStorage', JSON.stringify(data));
                 notify('임시저장 완료');
                 return;
@@ -91,15 +96,16 @@ const Writing = () => {
             }
         } else {
             localStorage.setItem('transientStorage', JSON.stringify(data));
+            setTransientStorage(data);
             notify('임시저장 완료');
-            dismissAll();
         }
     };
 
-    const transientStorageDelete = () => {
+    const handleDeleteTransientStorage = () => {
         if (localStorage.getItem('transientStorage')) {
             if (window.confirm('임시저장 글을 삭제할까요?')) {
                 localStorage.removeItem('transientStorage');
+                setTransientStorage([]);
                 notify('삭제완료');
             }
         }
@@ -118,6 +124,7 @@ const Writing = () => {
         if (localStorage.getItem('transientStorage')) {
             const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage') || '{}')[0];
             if (window.confirm('임시저장된 글이 있습니다. 불러올까요?')) {
+                setTransientStorage(JSON.parse(localStorage.getItem('transientStorage') || '{}'));
                 setTitle(title);
                 setContent(content);
                 editorRef.current.getInstance().setHTML(content);
@@ -231,16 +238,22 @@ const Writing = () => {
                     >
                         등록
                     </Button>
-                    {localStorage.getItem('transientStorage') ? (
-                        <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
-                            <Button onClick={transientStorage}>임시저장</Button>
-                            <Button onClick={transientStorageDelete}>삭제</Button>
-                        </ButtonGroup>
+                    {transientStorage.length ? (
+                        // <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
+                        //     <Button onClick={transientStorage}>임시저장</Button>
+                        // </ButtonGroup>
+                        <Button
+                            variant="outlined"
+                            sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}
+                            onClick={handleDeleteTransientStorage}
+                        >
+                            임시저장 삭제
+                        </Button>
                     ) : (
                         <Button
                             variant="outlined"
                             sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}
-                            onClick={transientStorage}
+                            onClick={handleTransientStorage}
                         >
                             임시저장
                         </Button>

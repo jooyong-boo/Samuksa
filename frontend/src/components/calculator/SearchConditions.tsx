@@ -156,8 +156,8 @@ const SearchConditions = () => {
                 <SearchConditionTypography>검색 조건</SearchConditionTypography>
                 <SearchConditionContainer>
                     <SearchConditionForm onSubmit={onSubmit}>
-                        <Grid container spacing={5} justifyContent="center" alignItems="center">
-                            <Grid item xs={10}>
+                        <CustomGrid container spacing={5}>
+                            <CustomGrid item xs={10}>
                                 <TextField
                                     id="outlined-basic"
                                     label="인원수"
@@ -177,8 +177,8 @@ const SearchConditions = () => {
                                     }}
                                     // size="small"
                                 />
-                            </Grid>
-                            <Grid item xs={10}>
+                            </CustomGrid>
+                            <CustomGrid item xs={10}>
                                 <TextField
                                     id="outlined-basic"
                                     label="예산"
@@ -197,8 +197,8 @@ const SearchConditions = () => {
                                     }}
                                     // size="small"
                                 />
-                            </Grid>
-                            <Grid item xs={10}>
+                            </CustomGrid>
+                            <CustomGrid item xs={10}>
                                 <FormControl fullWidth>
                                     <InputLabel id="local">지역</InputLabel>
                                     <Select
@@ -221,17 +221,14 @@ const SearchConditions = () => {
                                             ))}
                                     </Select>
                                 </FormControl>
-                            </Grid>
-                        </Grid>
+                            </CustomGrid>
+                        </CustomGrid>
                         <SearchConditionBtnArea>
                             {select ? (
                                 <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
                                     disableElevation
-                                    sx={{
-                                        backgroundColor: '#0098EE',
-                                    }}
                                     onClick={searchForFishByRegion}
                                 >
                                     조건 선택
@@ -242,12 +239,6 @@ const SearchConditions = () => {
                                     type="submit"
                                     disableElevation
                                     disabled={true}
-                                    sx={{
-                                        ':disabled': {
-                                            backgroundColor: 'rgba(0,152,238,0.3)',
-                                            color: '#FFFFFF',
-                                        },
-                                    }}
                                     onClick={searchForFishByRegion}
                                 >
                                     선택 완료
@@ -301,6 +292,11 @@ const SearchConditionForm = styled.form`
     justify-content: center;
 `;
 
+const CustomGrid = styled(Grid)`
+    justify-content: center;
+    align-items: center;
+`;
+
 const SearchConditionBtnArea = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -313,6 +309,11 @@ const SearchConditionSelectBtn = styled(Button)`
     width: 274px;
     height: 38px;
     font-weight: 900;
+    background-color: #0098ee;
+    &:disabled {
+        background-color: rgba(0, 152, 238, 0.3);
+        color: #ffffff;
+    }
 `;
 
 const SearchConditionResetBtn = styled(Button)`

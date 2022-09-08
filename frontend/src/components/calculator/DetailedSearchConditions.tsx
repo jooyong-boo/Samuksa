@@ -208,7 +208,7 @@ const DetailedSearchConditions = () => {
                     </CustomFishListDiv>
                     <CustomConditionSettingDiv>
                         <SelectVolumeDiv>
-                            <Typography sx={{ textAlign: 'center' }}>분량</Typography>
+                            <SelectVolumeTypograhy>분량</SelectVolumeTypograhy>
                             {selectFish.length > 0 ? (
                                 <Slider
                                     aria-labelledby="range-slider"
@@ -224,43 +224,36 @@ const DetailedSearchConditions = () => {
                             ) : (
                                 <Slider disabled value={0} />
                             )}
-                            <Typography sx={{ textAlign: 'center' }}>{amount}인</Typography>
+                            <SelectVolumeTypograhy>{amount}인</SelectVolumeTypograhy>
                         </SelectVolumeDiv>
                         <CustomSelectFarmTypeDiv>
                             <Typography variant="subtitle1">양식 여부</Typography>
                             {farm.length > 0 && selectFish.length > 0 ? (
-                                <CustomSelectFarmTypeTypography sx={{ color: '#737373' }}>
+                                <CustomSelectFarmTypography color={'#737373'}>
                                     중복 선택이 가능합니다.
-                                </CustomSelectFarmTypeTypography>
+                                </CustomSelectFarmTypography>
                             ) : (
-                                <CustomSelectFarmTypeTypography sx={{ color: '#AEAEAE' }}>
+                                <CustomSelectFarmTypography color={'#AEAEAE'}>
                                     어종 선택이 필요합니다.
-                                </CustomSelectFarmTypeTypography>
+                                </CustomSelectFarmTypography>
                             )}
                             {farm.length > 0 && selectFish.length > 0
                                 ? farm.map((item, i) => (
-                                      <Typography
+                                      <SelectFarmTypeTypography
                                           key={i}
-                                          sx={{
-                                              fontSize: '0.9rem',
-                                              width: '90px',
-                                              ':hover': { backgroundColor: 'rgba(99, 99, 99, 0.1)' },
-                                              borderRadius: '5px',
-                                          }}
                                           onClick={() => {
                                               changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
                                           }}
                                       >
-                                          <Checkbox
+                                          <FarmTypeCheckBox
                                               id={item}
-                                              sx={{ color: '#E1E1E1' }}
                                               onChange={(e) => {
                                                   changeHandler(e.currentTarget.checked, `${item}`);
                                               }}
                                               checked={farmStatus.includes(`${item}`) ? true : false}
                                           />
                                           {item}
-                                      </Typography>
+                                      </SelectFarmTypeTypography>
                                   ))
                                 : null}
                         </CustomSelectFarmTypeDiv>
@@ -270,9 +263,6 @@ const DetailedSearchConditions = () => {
                                     variant="contained"
                                     type="submit"
                                     disableElevation
-                                    sx={{
-                                        backgroundColor: '#0098EE',
-                                    }}
                                     onClick={addCondition}
                                 >
                                     조건 추가하기
@@ -283,12 +273,6 @@ const DetailedSearchConditions = () => {
                                     type="submit"
                                     disableElevation
                                     disabled={true}
-                                    sx={{
-                                        ':disabled': {
-                                            backgroundColor: 'rgba(0,152,238,0.3)',
-                                            color: '#FFFFFF',
-                                        },
-                                    }}
                                     onClick={addCondition}
                                 >
                                     {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
@@ -416,6 +400,10 @@ const SelectVolumeDiv = styled.div`
     margin-top: 28px;
 `;
 
+const SelectVolumeTypograhy = styled(Typography)`
+    text-align: center;
+`;
+
 const CustomSelectFarmTypeDiv = styled.div`
     width: 90%;
     height: 225px;
@@ -425,10 +413,29 @@ const CustomSelectFarmTypeDiv = styled.div`
     padding-top: 24px;
 `;
 
-const CustomSelectFarmTypeTypography = styled(Typography)`
+interface CustomSelectFarmTypographyProps {
+    color: any;
+}
+
+const CustomSelectFarmTypography = styled(Typography)<CustomSelectFarmTypographyProps>`
     font-size: 0.9rem;
     margin-top: 3px;
     font-weight: medium;
+    color: ${(props) => (props.color ? `${props.color}` : 'white')};
+`;
+
+const SelectFarmTypeTypography = styled(Typography)`
+    font-size: 0.9rem;
+    width: 90px;
+    border-radius: 5px;
+    &:hover {
+        background-color: rgba(99, 99, 99, 0.1);
+        cursor: pointer;
+    }
+`;
+
+const FarmTypeCheckBox = styled(Checkbox)`
+    color: #e1e1e1;
 `;
 
 const CustomConditionAddDiv = styled.div`
@@ -441,4 +448,9 @@ const CustomConditionAddBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
+    background-color: #0098ee;
+    &:disabled {
+        background-color: rgba(0, 152, 238, 0.3);
+        color: #ffffff;
+    }
 `;

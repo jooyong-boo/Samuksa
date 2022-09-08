@@ -121,9 +121,8 @@ const Profile = () => {
                                     fileInput.current?.click();
                                 }}
                             />
-                            <input
+                            <ImageInput
                                 type="file"
-                                style={{ display: 'none' }}
                                 accept="image/jpg,image/png,image/jpeg"
                                 name="profile_img"
                                 onChange={onChange}
@@ -253,6 +252,10 @@ const ProfileAvatar = styled(Avatar)`
         opacity: 0.8;
         transition: all 0.3s;
     }
+`;
+
+const ImageInput = styled.input`
+    display: none;
 `;
 
 interface ProfileInputProps {
