@@ -26,7 +26,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 import React from 'react';
-import { typography } from '@mui/system';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
