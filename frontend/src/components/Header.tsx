@@ -59,11 +59,6 @@ const Header = () => {
             path: '/board',
             active: false,
         },
-        // {
-        //     id: 2,
-        //     name: '회원가입',
-        //     path: '/register',
-        // },
     ]);
 
     const [NON_USER_NAV_ITEMS, setNON_USER_NAV_ITEMS] = useState([
@@ -308,13 +303,6 @@ const Header = () => {
                         setUserInfo({});
                         setUserIdState('');
                         setImage('/broken-image.jpg');
-                        return notifyError(
-                            <p>
-                                서버와의 연결이 원활하지 않습니다.
-                                <br /> 새로고침을 하거나
-                                <br /> 인터넷 연결을 확인해주세요.
-                            </p>,
-                        );
                     } else {
                         const AToken = localStorage.getItem('jwtToken') || '';
                         const RToken = localStorage.getItem('refreshToken') || '';
