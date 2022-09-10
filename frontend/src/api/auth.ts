@@ -162,7 +162,6 @@ export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; R
             return result;
         }
     } catch (err) {
-        console.log(err);
         return err;
     }
 };
