@@ -164,7 +164,7 @@ const PostViewer = () => {
                                                 98,
                                             )}.jpg`}
                                             sx={{
-                                                bgcolor: '#6EA5F8',
+                                                bgcolor: '#0098ee',
                                                 color: 'white',
                                                 verticalAlign: 'middle',
                                                 width: '40px',
@@ -202,7 +202,7 @@ const PostViewer = () => {
                                 <Avatar
                                     src={userImage}
                                     sx={{
-                                        bgcolor: '#6EA5F8',
+                                        bgcolor: '#0098ee',
                                         color: 'white',
                                         verticalAlign: 'middle',
                                         width: '40px',
@@ -326,7 +326,7 @@ const CommentBox = styled.div`
 `;
 
 const CustomBtn = styled(Button)`
-    background-color: #6ea5f8;
+    background-color: #0098ee;
     font-weight: 900;
     color: white;
     box-shadow: none;
