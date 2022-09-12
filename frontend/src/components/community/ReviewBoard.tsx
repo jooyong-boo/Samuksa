@@ -231,7 +231,7 @@ const tableTopTextStyle = {
 };
 
 const WriteBtn = styled(Button)`
-    background-color: #6ea5f8;
+    background-color: #0098ee;
     font-weight: 900;
     color: white;
     box-shadow: none;
