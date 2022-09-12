@@ -154,7 +154,7 @@ const Writing = () => {
                             <Avatar
                                 src={userImage}
                                 sx={{
-                                    bgcolor: '#6EA5F8',
+                                    bgcolor: '#0098ee',
                                     color: 'white',
                                     verticalAlign: 'middle',
                                     width: '40px',
@@ -230,7 +230,7 @@ const Writing = () => {
                             width: '7rem',
                             height: '3rem',
                             boxShadow: 'none',
-                            backgroundColor: '#6EA5F8',
+                            backgroundColor: '#0098ee',
                             fontWeight: 900,
                             ':hover': { boxShadow: 'none' },
                         }}

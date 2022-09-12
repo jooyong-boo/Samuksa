@@ -455,7 +455,7 @@ const CustomTypography = styled(Typography)`
 `;
 
 const CustomBtn = styled(Button)`
-    background-color: #6ea5f8;
+    background-color: #0098ee;
     color: white;
     box-shadow: none;
     margin-left: 0.5rem;
@@ -467,7 +467,7 @@ const CustomBtn = styled(Button)`
 const RegisterBtn = styled(Button)`
     width: 100%;
     margin-top: 1rem;
-    background-color: #6ea5f8;
+    background-color: #0098ee;
     color: white;
     box-shadow: none;
     margin-bottom: 0.5rem;
@@ -485,7 +485,7 @@ const AskingSpan = styled.span`
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
     font-size: 0.8rem;
-    color: #6ea5f8;
+    color: #0098ee;
     &:hover {
         font-weight: bold;
     }

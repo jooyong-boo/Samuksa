@@ -12,7 +12,7 @@ const Introduction = () => {
                 <CustomTypography fontSize={'4.28rem'} marginRight={'1rem'}>
                     What is
                 </CustomTypography>
-                <CustomTypography fontSize={'4.28rem'} color={'#6EA5F8'} fontWeight={'600'}>
+                <CustomTypography fontSize={'4.28rem'} color={'#0098ee'} fontWeight={'600'}>
                     Samuksa
                 </CustomTypography>
                 <CustomTypography fontSize={'4.28rem'}>?</CustomTypography>

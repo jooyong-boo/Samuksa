@@ -17,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoSelector, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
 const Header = () => {
     const notify = (text: ReactElement | string) => {
@@ -391,7 +391,7 @@ const Header = () => {
                             sx={{
                                 display: { xs: 'flex' },
                                 mr: 1,
-                                color: '#6EA5F8',
+                                color: '#0098ee',
                                 fontSize: '2.875rem',
                                 cursor: 'pointer',
                             }}
@@ -401,7 +401,7 @@ const Header = () => {
                             component="a"
                             onClick={goMain}
                             sx={{
-                                color: '#6EA5F8',
+                                color: '#0098ee',
                                 fontWeight: '700',
                                 fontSize: '1.875rem',
                                 cursor: 'pointer',
@@ -456,7 +456,7 @@ const Header = () => {
                                         <Avatar
                                             src={image}
                                             sx={{
-                                                bgcolor: loginStatus ? '#6EA5F8' : '#a2a5a9',
+                                                bgcolor: loginStatus ? '#0098ee' : '#a2a5a9',
                                                 color: 'white',
                                                 verticalAlign: 'middle',
                                                 width: '2.5rem',
@@ -505,22 +505,27 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <LoginBtn
+                                <LoginOrRegisterBtn
                                     variant="outlined"
+                                    border={'0.5px solid #0098ee'}
+                                    $color={'#0098ee'}
+                                    $marginRight={'0.5rem'}
+                                    $hoverBackgroundColor={'rgb(229, 231, 235)'}
                                     onClick={() => {
                                         goNavigate('/login');
                                     }}
                                 >
                                     로그인
-                                </LoginBtn>
-                                <RegisterBtn
+                                </LoginOrRegisterBtn>
+                                <LoginOrRegisterBtn
                                     variant="contained"
+                                    $backgroundColor={'#0098ee'}
                                     onClick={() => {
                                         goNavigate('/register');
                                     }}
                                 >
                                     회원가입
-                                </RegisterBtn>
+                                </LoginOrRegisterBtn>
                             </>
                         )}
                     </div>
@@ -532,24 +537,26 @@ const Header = () => {
 
 export default React.memo(Header);
 
-const LoginBtn = styled(Button)`
-    width: 6rem;
-    height: 2.5rem;
-    border-radius: 20px;
-    border: 0.5px solid #6ea5f8;
-    background-color: white;
-    color: #6ea5f8;
-    margin-right: 0.5rem;
-`;
+interface LoginOrRegisterBtnProps {
+    border?: string;
+    $backgroundColor?: string;
+    $color?: string;
+    $marginRight?: string;
+    $hoverBackgroundColor?: string;
+}
 
-const RegisterBtn = styled(Button)`
+const LoginOrRegisterBtn = styled(Button)<LoginOrRegisterBtnProps>`
     width: 6rem;
     height: 2.5rem;
     border-radius: 20px;
-    background-color: #6ea5f8;
-    color: white;
+    border: ${(props) => (props.border ? `${props.border}` : 'none')};
+    color: ${(props) => (props.$color ? `${props.$color}` : 'white')};
+    background-color: ${(props) => (props.$backgroundColor ? `${props.$backgroundColor}` : 'white')};
+    margin-right: ${(props) => (props.$marginRight ? `${props.$marginRight}` : 'auto')};
     box-shadow: none;
     &:hover {
         box-shadow: none;
+        background-color: ${(props) => (props.$hoverBackgroundColor ? `${props.$hoverBackgroundColor}` : 'none')};
+        border: ${(props) => (props.border ? `${props.border}` : 'none')};
     }
 `;

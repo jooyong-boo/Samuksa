@@ -66,7 +66,6 @@ export const logout = async ({ AToken }: { AToken: string }) => {
                 'A-Token': AToken,
             },
         });
-        console.log(result);
     } catch (err) {
         console.log(err);
         return err;

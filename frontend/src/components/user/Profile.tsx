@@ -163,7 +163,7 @@ const Profile = () => {
                                 value={email || ''}
                                 onChange={changeEmail}
                             />
-                            <ModifyButton marginbottom={'0.5rem'} onClick={handleModifyEmail}>
+                            <ModifyButton $marginBottom={'0.5rem'} onClick={handleModifyEmail}>
                                 {emailModify ? '수정' : '확인'}
                             </ModifyButton>
                             {emailModify ? null : (
@@ -259,7 +259,7 @@ const ImageInput = styled.input`
 `;
 
 interface ProfileInputProps {
-    marginbottom?: any;
+    marginBottom?: string;
 }
 
 const ProfileInput = styled.input<ProfileInputProps>`
@@ -276,7 +276,7 @@ const ModifyDiv = styled.div`
 `;
 
 interface ModifyButtonProps {
-    marginbottom?: any;
+    $marginBottom?: string;
 }
 
 const ModifyButton = styled(Button)<ModifyButtonProps>`
@@ -284,5 +284,5 @@ const ModifyButton = styled(Button)<ModifyButtonProps>`
     font-weight: bold;
     color: black;
     margin-left: 0.5rem;
-    margin-bottom: ${(props) => (props.marginbottom ? `${props.marginbottom}` : '0')};
+    margin-bottom: ${(props) => (props.$marginBottom ? `${props.$marginBottom}` : '0')};
 `;
