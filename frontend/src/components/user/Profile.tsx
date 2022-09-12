@@ -158,12 +158,12 @@ const Profile = () => {
                         <ModifyDiv>
                             <CustomTypography>이메일</CustomTypography>
                             <ProfileInput
-                                marginbottom={'0.5rem'}
+                                marginBottom={'0.5rem'}
                                 disabled={emailModify}
                                 value={email || ''}
                                 onChange={changeEmail}
                             />
-                            <ModifyButton marginbottom={'0.5rem'} onClick={handleModifyEmail}>
+                            <ModifyButton $marginBottom={'0.5rem'} onClick={handleModifyEmail}>
                                 {emailModify ? '수정' : '확인'}
                             </ModifyButton>
                             {emailModify ? null : (
@@ -259,13 +259,13 @@ const ImageInput = styled.input`
 `;
 
 interface ProfileInputProps {
-    marginbottom?: any;
+    marginBottom?: string;
 }
 
 const ProfileInput = styled.input<ProfileInputProps>`
     padding: 0.8rem;
     flex-grow: 1;
-    margin-bottom: ${(props) => (props.marginbottom ? `${props.marginbottom}` : '0')};
+    margin-bottom: ${(props) => (props.marginBottom ? `${props.marginBottom}` : '0')};
 `;
 
 const ModifyDiv = styled.div`
@@ -276,7 +276,7 @@ const ModifyDiv = styled.div`
 `;
 
 interface ModifyButtonProps {
-    marginbottom?: any;
+    $marginBottom?: string;
 }
 
 const ModifyButton = styled(Button)<ModifyButtonProps>`
@@ -284,5 +284,5 @@ const ModifyButton = styled(Button)<ModifyButtonProps>`
     font-weight: bold;
     color: black;
     margin-left: 0.5rem;
-    margin-bottom: ${(props) => (props.marginbottom ? `${props.marginbottom}` : '0')};
+    margin-bottom: ${(props) => (props.$marginBottom ? `${props.$marginBottom}` : '0')};
 `;
