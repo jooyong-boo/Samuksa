@@ -48,7 +48,6 @@ const Login = () => {
         }
         login({ userId, passwd })
             .then((res) => {
-                console.log(res);
                 if (res.status !== 201) {
                     throw res;
                 }
@@ -285,7 +284,7 @@ const SaveIdTypography = styled(Typography)`
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
     font-size: 0.8rem;
-    color: #6ea5f8;
+    color: #0098ee;
     &:hover {
         font-weight: bold;
     }
@@ -299,7 +298,7 @@ const LoginBtnDiv = styled.div`
 `;
 
 const LoginBtn = styled(Button)`
-    background-color: #6ea5f8;
+    background-color: #0098ee;
     color: white;
     box-shadow: none;
     width: 100%;
