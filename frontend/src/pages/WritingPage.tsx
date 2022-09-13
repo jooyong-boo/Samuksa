@@ -1,8 +1,7 @@
-import React from 'react';
-import Editor from '../components/community/Editor';
+import PostEditor from '../components/community/PostEditor';
 
 const WritingPage = () => {
-    return <Editor />;
+    return <PostEditor />;
 };
 
 export default WritingPage;
