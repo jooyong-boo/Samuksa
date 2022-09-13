@@ -43,12 +43,12 @@ const Introduction = () => {
                 </Grid>
                 <Grid item>
                     <Img src={introduce3} alt="접시에 담긴 회" loading="lazy" />
-                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
+                    <Typography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
                         만든 이유
-                    </CustomTypography>
-                    <CustomTypography width={'250px'} color={'#545454'}>
+                    </Typography>
+                    <Typography sx={{ width: '250px', fontSize: '1rem', color: '#545454' }}>
                         좋아하는 것을 만들어보기로 공통의 관심사 ‘회’
-                    </CustomTypography>
+                    </Typography>
                 </Grid>
                 <BackgroundWave />
             </Grid>
@@ -73,8 +73,8 @@ const Background = styled.div`
 const Img = styled('img')({
     // margin: '13px 13px 12px 16px ',
     display: 'block',
-    width: '17.8rem',
-    height: '24.2rem',
+    width: '16rem',
+    height: '22rem',
     objectFit: 'cover',
     margin: 'auto',
     borderRadius: '5px',
@@ -84,12 +84,6 @@ const TitleBox = styled.div`
     display: flex;
     margin-top: 36px;
 `;
-
-// 사이즈
-// 컬러
-// 웨이트
-// 마진라이트
-// 위드
 
 interface CustomTypographyProps {
     fontSize?: any;
