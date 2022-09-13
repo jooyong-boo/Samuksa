@@ -82,19 +82,21 @@ const Button = styled.button`
     font-size: 1rem;
 
     &:hover {
+        color: #0098ee;
         font-weight: bold;
         cursor: pointer;
         transform: translateY(-1px);
     }
 
     &[disabled] {
+        color: #0098ee;
         font-weight: bold;
         cursor: revert;
         transform: revert;
     }
 
     &[aria-current] {
-        color: #6ea5f8;
+        color: #0098ee;
         font-weight: bold;
         cursor: revert;
         transform: revert;

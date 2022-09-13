@@ -4,20 +4,6 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { tabState } from '../../store/atom';
 
-const Background = styled.div`
-    background-color: #ebecee;
-    width: 100%;
-    height: 100vh;
-    padding-top: 100px;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    overflow: hidden;
-    margin: auto;
-`;
-
 const Board = () => {
     const [selectTab, setSelectTab] = useRecoilState(tabState);
     const navigate = useNavigate();
@@ -34,16 +20,8 @@ const Board = () => {
             path: '/board/tip',
         },
     ];
-    // console.log(selectTab);
-    // useEffect(() => {
-    //     setSelectTab(selectTab);
-    // }, []);
 
-    // const onChangeTab = (id) => {
-    //     setSelectTab(...tab.filter((item) => item.id === id));
-    // };
-
-    const changePage = (path: string) => {
+    const handleChangePage = (path: string) => {
         navigate(path);
     };
 
@@ -53,37 +31,59 @@ const Board = () => {
 
     return (
         <Background>
-            <Box
-                sx={{
-                    width: '95%',
-                    height: '95%',
-                    backgroundColor: 'white',
-                    margin: 'auto',
-                    borderRadius: '10px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
-                }}
-            >
+            <BoardBox>
                 <Tabs value={selectTab} onChange={handleChange} centered>
                     {tab.map(({ id, label, path }) => {
                         return (
-                            <Tab
+                            <BoardTab
                                 label={label}
                                 key={id}
                                 onClick={() => {
-                                    // onChangeTab(id);
-                                    changePage(path);
+                                    handleChangePage(path);
                                 }}
                             />
                         );
                     })}
                 </Tabs>
                 <Outlet />
-            </Box>
+            </BoardBox>
         </Background>
     );
 };
 
 export default Board;
+
+const Background = styled.div`
+    background-color: #ebecee;
+    width: 100%;
+    height: 100vh;
+    padding-top: 100px;
+    /* display: flex; */
+    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    overflow: hidden;
+    margin: auto;
+`;
+
+const BoardBox = styled(Box)`
+    width: 95%;
+    height: 95%;
+    background-color: white;
+    margin: auto;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
+
+const BoardTab = styled(Tab)`
+    :focus {
+        color: #0098ee;
+    }
+    :hover {
+        color: #0098ee;
+    }
+`;

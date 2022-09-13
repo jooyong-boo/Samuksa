@@ -40,4 +40,9 @@ export const theme = createTheme({
             minHeight: '4rem',
         },
     },
+    palette: {
+        primary: {
+            main: '#0098ee',
+        },
+    },
 });

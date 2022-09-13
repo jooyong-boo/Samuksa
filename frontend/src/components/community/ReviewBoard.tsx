@@ -1,6 +1,8 @@
 import {
     Button,
     createTheme,
+    FormControl,
+    Input,
     Stack,
     Table,
     TableBody,
@@ -11,7 +13,7 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -23,6 +25,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import timeForToday from '../utils/TimeForToday';
 import { RandomNickname } from '../common/RandomNickname';
+import CreateIcon from '@mui/icons-material/Create';
+import SearchIcon from '@mui/icons-material/Search';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -45,6 +49,21 @@ const ReviewBoard = () => {
     const userInfo = useRecoilValue(userInfoState);
     const posts = useRecoilValue(getPostState);
     const [usePosts, setUsePosts] = useState<any[]>([]);
+    const [searchPosts, setSearchPosts] = useState('');
+
+    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        let searchTitle = e.target.value;
+        setSearchPosts(searchTitle);
+    };
+
+    const handleSearch = (e: React.KeyboardEvent) => {
+        console.log(e);
+        if (e.key === 'Enter') {
+            let result = posts.filter((post: any) => post.title.includes(searchPosts));
+            setUsePosts(result);
+        }
+    };
 
     const goWriting = () => {
         if (userInfo) {
@@ -89,8 +108,27 @@ const ReviewBoard = () => {
                     margin: 'auto',
                 }}
             >
-                <Typography sx={{ fontSize: '2rem', fontWeight: 'bold' }}>리뷰게시판</Typography>
+                <Typography sx={{ fontSize: '2rem', fontWeight: '600' }}>리뷰게시판</Typography>
+                <FormControl sx={{ width: '40%' }}>
+                    <Input
+                        id="input-with-icon-adornment"
+                        startAdornment={
+                            // <InputAdornment position="start">
+                            <SearchIcon />
+                            // </InputAdornment>
+                        }
+                        type="string"
+                        defaultValue=""
+                        placeholder="게시글 검색"
+                        onChange={onSearch}
+                        onKeyPress={(e) => handleSearch(e)}
+                        autoComplete="off"
+                        // readOnly={fishList.length > 0 ? false : true}
+                        // disableUnderline={fishList.length > 0 ? false : true}
+                    />
+                </FormControl>
                 <WriteBtn variant="contained" onClick={goWriting}>
+                    <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
                     글쓰기
                 </WriteBtn>
             </div>
@@ -232,11 +270,12 @@ const tableTopTextStyle = {
 
 const WriteBtn = styled(Button)`
     background-color: #0098ee;
-    font-weight: 900;
+    font-weight: 700;
     color: white;
     box-shadow: none;
-    width: 6rem;
-    height: 2.5rem;
+    width: 6.5rem;
+    height: 2.3rem;
+    padding: 6px 1rem 6px 0.9rem;
     &:hover {
         box-shadow: none;
     }

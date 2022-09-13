@@ -75,18 +75,18 @@ const Header = () => {
             path: '/board',
             active: false,
         },
-        {
-            id: 3,
-            name: '로그인',
-            path: '/login',
-            active: false,
-        },
-        {
-            id: 4,
-            name: '회원가입',
-            path: '/register',
-            active: false,
-        },
+        // {
+        //     id: 3,
+        //     name: '로그인',
+        //     path: '/login',
+        //     active: false,
+        // },
+        // {
+        //     id: 4,
+        //     name: '회원가입',
+        //     path: '/register',
+        //     active: false,
+        // },
     ]);
 
     const USERS_ITEMS = [
@@ -157,21 +157,13 @@ const Header = () => {
     }, [location]);
 
     useEffect(() => {
-        loginConfirm
-            ? setNAV_ITEMS(
-                  NAV_ITEMS.map((item) =>
-                      location.pathname === item.path || location.pathname.includes(`${item.path}`)
-                          ? { ...item, active: true }
-                          : { ...item, active: false },
-                  ),
-              )
-            : setNON_USER_NAV_ITEMS(
-                  NON_USER_NAV_ITEMS.map((item) =>
-                      location.pathname === item.path || location.pathname.includes(`${item.path}`)
-                          ? { ...item, active: true }
-                          : { ...item, active: false },
-                  ),
-              );
+        setNAV_ITEMS(
+            NAV_ITEMS.map((item) =>
+                location.pathname === item.path || location.pathname.includes(`${item.path}`)
+                    ? { ...item, active: true }
+                    : { ...item, active: false },
+            ),
+        );
     }, [location]);
 
     useEffect(() => {
@@ -420,10 +412,10 @@ const Header = () => {
                                     sx={{
                                         mr: 2,
                                         ':hover': {
-                                            color: '#7A7A7A',
+                                            // color: '#0098ee',
                                             fontWeight: 'bold',
-                                            borderBottom: '1px solid #A7A7A7',
-                                            fontSize: '0.875rem',
+                                            // borderBottom: '1px solid #A7A7A7',
+                                            // fontSize: '0.875rem',
                                         },
                                     }}
                                 >
@@ -434,8 +426,8 @@ const Header = () => {
                                         // }}
                                         style={{
                                             textDecoration: 'none',
-                                            color: '#7A7A7A',
-                                            fontWeight: active ? 'bold' : '',
+                                            color: active ? '#0098ee' : '#7A7A7A',
+                                            fontWeight: active ? '700' : '',
                                             fontSize: '0.9rem',
                                         }}
                                     >
@@ -448,11 +440,7 @@ const Header = () => {
                         {loginStatus ? (
                             <>
                                 <Tooltip title="User">
-                                    <IconButton
-                                        onClick={handleOpenUserMenu}
-                                        // onMouseEnter={handleOpenUserMenu}
-                                        sx={{ p: 0 }}
-                                    >
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                         <Avatar
                                             src={image}
                                             sx={{

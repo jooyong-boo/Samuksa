@@ -23,6 +23,7 @@ import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../common/RandomNickname';
+import CreateIcon from '@mui/icons-material/Create';
 
 const tipBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -90,8 +91,9 @@ const TipBoard = () => {
                     margin: 'auto',
                 }}
             >
-                <Typography sx={{ fontSize: '2rem', fontWeight: 'bold' }}>Tip게시판</Typography>
+                <Typography sx={{ fontSize: '2rem', fontWeight: '600' }}>Tip게시판</Typography>
                 <WriteBtn variant="contained" onClick={goWriting}>
+                    <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
                     글쓰기
                 </WriteBtn>
             </div>
@@ -233,11 +235,12 @@ const tableTopTextStyle = {
 
 const WriteBtn = styled(Button)`
     background-color: #0098ee;
-    font-weight: 900;
+    font-weight: 700;
     color: white;
     box-shadow: none;
-    width: 6rem;
-    height: 2.5rem;
+    width: 6.5rem;
+    height: 2.3rem;
+    padding: 6px 1rem 6px 0.9rem;
     &:hover {
         box-shadow: none;
     }
