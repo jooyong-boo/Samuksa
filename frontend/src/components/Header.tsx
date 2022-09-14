@@ -14,8 +14,8 @@ import { useEffect } from 'react';
 import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { loginStatusState, userIdState, userImageState, userInfoSelector, userInfoState } from '../store/user';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
 import styled from 'styled-components';
 
@@ -150,11 +150,11 @@ const Header = () => {
         navigate(`${path}`);
     };
 
-    useEffect(() => {
-        if (location.pathname === '/board') {
-            navigate('/board/review');
-        }
-    }, [location]);
+    // useEffect(() => {
+    //     if (location.pathname === '/board') {
+    //         navigate('/board/review');
+    //     }
+    // }, [location]);
 
     useEffect(() => {
         setNAV_ITEMS(
@@ -420,7 +420,7 @@ const Header = () => {
                                     }}
                                 >
                                     <NavLink
-                                        to={`${path}`}
+                                        to={`${path}/review`}
                                         // onClick={() => {
                                         //     onClick(id);
                                         // }}

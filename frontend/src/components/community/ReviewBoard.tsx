@@ -3,6 +3,7 @@ import {
     createTheme,
     FormControl,
     Input,
+    InputAdornment,
     Stack,
     Table,
     TableBody,
@@ -58,7 +59,6 @@ const ReviewBoard = () => {
     };
 
     const handleSearch = (e: React.KeyboardEvent) => {
-        console.log(e);
         if (e.key === 'Enter') {
             let result = posts.filter((post: any) => post.title.includes(searchPosts));
             setUsePosts(result);
@@ -74,7 +74,7 @@ const ReviewBoard = () => {
         }
     };
 
-    const AddReadPost = (id: any) => {
+    const AddReadPost = (id: number) => {
         let readPost: any = localStorage.getItem('reviewReadPost');
         if (readPost?.length) {
             let newReadPost: any = [...JSON.parse(readPost), id];
@@ -98,44 +98,35 @@ const ReviewBoard = () => {
 
     return (
         <Background>
-            <div
-                style={{
-                    width: '80%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '0.5rem',
-                    margin: 'auto',
-                }}
-            >
-                <Typography sx={{ fontSize: '2rem', fontWeight: '600' }}>리뷰게시판</Typography>
-                <FormControl sx={{ width: '40%' }}>
-                    <Input
-                        id="input-with-icon-adornment"
-                        startAdornment={
-                            // <InputAdornment position="start">
-                            <SearchIcon />
-                            // </InputAdornment>
-                        }
-                        type="string"
-                        defaultValue=""
-                        placeholder="게시글 검색"
-                        onChange={onSearch}
-                        onKeyPress={(e) => handleSearch(e)}
-                        autoComplete="off"
-                        // readOnly={fishList.length > 0 ? false : true}
-                        // disableUnderline={fishList.length > 0 ? false : true}
-                    />
-                </FormControl>
-                <WriteBtn variant="contained" onClick={goWriting}>
-                    <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
-                    글쓰기
-                </WriteBtn>
-            </div>
-            <div style={{ width: '80%', textAlign: 'center', overflow: 'auto' }}>
+            <ReviewBoardContainer>
+                <BoardTopWrapper>
+                    <BoardTitleText>리뷰게시판</BoardTitleText>
+                    <SearchForm>
+                        <Input
+                            id="board-search"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            }
+                            type="string"
+                            defaultValue=""
+                            placeholder="게시글 검색"
+                            onChange={onSearch}
+                            onKeyPress={(e) => handleSearch(e)}
+                            autoComplete="off"
+                            // readOnly={fishList.length > 0 ? false : true}
+                            // disableUnderline={fishList.length > 0 ? false : true}
+                        />
+                    </SearchForm>
+                    <WriteBtn variant="contained" onClick={goWriting}>
+                        <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
+                        글쓰기
+                    </WriteBtn>
+                </BoardTopWrapper>
                 <ThemeProvider theme={theme}>
                     <CustomTableContainer>
-                        <Table sx={{ minWidth: 700 }} aria-label="simple table">
+                        <Table aria-label="review table">
                             <TableHead>
                                 <TableRow>
                                     {reviewBoardHead.map((item) => (
@@ -152,6 +143,7 @@ const ReviewBoard = () => {
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
                                     const date = newCreateAt.getDate();
+
                                     return (
                                         <TableRow
                                             key={id}
@@ -164,19 +156,15 @@ const ReviewBoard = () => {
                                         >
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
-                                                <NavLink
+                                                <TitleNavLink
                                                     to={`post/${id}`}
-                                                    style={{
-                                                        color: read ? '#770088' : '#5A5A5A',
-                                                        textDecoration: 'none',
-                                                        fontSize: '0.875rem',
-                                                    }}
+                                                    read={read ? 'true' : ''}
                                                     onClick={() => {
                                                         AddReadPost(id);
                                                     }}
                                                 >
                                                     {title}
-                                                </NavLink>
+                                                </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
                                             <TableCell
@@ -191,7 +179,7 @@ const ReviewBoard = () => {
                         </Table>
                     </CustomTableContainer>
                 </ThemeProvider>
-                <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
+                <PaginationStack>
                     <Pagination
                         total={posts.length}
                         limit={limit}
@@ -200,8 +188,8 @@ const ReviewBoard = () => {
                         postPage={postPage}
                         setPostPage={setPostPage}
                     />
-                </Stack>
-            </div>
+                </PaginationStack>
+            </ReviewBoardContainer>
         </Background>
     );
 };
@@ -216,7 +204,8 @@ const Background = styled.div`
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    overflow: overlay;
+    align-items: center;
+    overflow: auto;
     margin: auto;
     padding: 10px;
     &::-webkit-scrollbar {
@@ -229,44 +218,29 @@ const Background = styled.div`
     }
 `;
 
-const theme = createTheme({
-    typography: {
-        fontSize: 10,
-        fontFamily: 'Pretendard',
-    },
-    palette: {
-        primary: {
-            main: '#5A5A5A',
-        },
-    },
-});
+const ReviewBoardContainer = styled.div`
+    width: 80%;
+    text-align: center;
+    overflow: auto;
+`;
 
-const tableTextStyle = {
-    padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
-    textAlign: 'center',
-    fontSize: '0.875rem',
-};
+const BoardTopWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 1rem;
+`;
 
-const titleTextStyle = {
-    padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
-    textAlign: 'center',
-    maxWidth: '200px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    ':hover': {
-        fontWeight: 'bold',
-    },
-};
+const BoardTitleText = styled(Typography)`
+    font-size: 2rem;
+    font-weight: 600;
+`;
 
-const tableTopTextStyle = {
-    color: '#5A5A5A',
-    textAlign: 'center',
-    fontSize: '0.875rem',
-    padding: '12px 0px',
-};
+const SearchForm = styled(FormControl)`
+    width: 40%;
+`;
 
 const WriteBtn = styled(Button)`
     background-color: #0098ee;
@@ -288,3 +262,59 @@ const CustomTableContainer = styled(TableContainer)`
     max-height: 500px;
     padding: 0px 12px;
 `;
+
+interface TitleNavLinkProps {
+    read: string;
+}
+
+const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
+    color: ${(props) => (props.read ? '#770088' : '#5A5A5A')};
+    text-decoration: none;
+    font-size: 0.875rem;
+`;
+
+const PaginationStack = styled(Stack)`
+    width: 100%;
+    align-items: center;
+    margin: auto;
+    margin-top: 1rem;
+`;
+
+const theme = createTheme({
+    typography: {
+        fontSize: 10,
+        fontFamily: 'Pretendard',
+    },
+    palette: {
+        primary: {
+            main: '#5A5A5A',
+        },
+    },
+});
+
+const tableTopTextStyle = {
+    color: '#5A5A5A',
+    textAlign: 'center',
+    fontSize: '0.875rem',
+    padding: '12px 0px',
+};
+
+const tableTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A',
+    textAlign: 'center',
+    fontSize: '0.875rem',
+};
+
+const titleTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A',
+    textAlign: 'center',
+    maxWidth: '200px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    ':hover': {
+        fontWeight: 'bold',
+    },
+};
