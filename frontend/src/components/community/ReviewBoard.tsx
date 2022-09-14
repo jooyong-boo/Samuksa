@@ -59,7 +59,6 @@ const ReviewBoard = () => {
     };
 
     const handleSearch = (e: React.KeyboardEvent) => {
-        console.log(e);
         if (e.key === 'Enter') {
             let result = posts.filter((post: any) => post.title.includes(searchPosts));
             setUsePosts(result);
