@@ -26,7 +26,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 import React from 'react';
-import { typography } from '@mui/system';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -122,7 +121,7 @@ const Main = () => {
                 <Container>
                     <MainTitle>모두가 편히</MainTitle>
                     <MainTitle marginLeft={'1rem'}>떠먹는 그날까지,</MainTitle>
-                    <MainTitle color={'#6EA5F8'} marginLeft={'1rem'}>
+                    <MainTitle color={'#0098ee'} marginLeft={'1rem'}>
                         사먹사
                     </MainTitle>
                 </Container>
@@ -254,7 +253,7 @@ const AreaSelect = styled(Select)`
 const SubmitBtn = styled(Button)`
     margin-top: 1rem;
     opacity: 0.9;
-    background-color: #6ea5f8;
+    background-color: #0098ee;
     color: white;
     box-shadow: none;
     width: 96%;

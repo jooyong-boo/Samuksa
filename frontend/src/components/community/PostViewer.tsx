@@ -110,85 +110,64 @@ const PostViewer = () => {
     return (
         <Background>
             <PostViewerPaper elevation={0}>
-                <Typography sx={{ fontSize: '1.125rem', fontWeight: 'medium', padding: '0 1rem' }}>
-                    {data.title}
-                </Typography>
-                <div style={{ display: 'flex', width: '100%', padding: '0.5rem', justifyContent: 'space-between' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                        <Avatar
-                            src={`https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`}
-                            sx={{
-                                color: '#a2a5a9',
-                                verticalAlign: 'middle',
-                                width: '3rem',
-                                height: '3rem',
-                            }}
-                        />
-                        <div style={{ display: 'inline-flex', flexDirection: 'column', marginLeft: '0.5rem' }}>
-                            <Typography sx={{ fontSize: '1rem', fontWeight: '700' }}>{RandomNickname()}</Typography>
-                            <Typography sx={{ fontSize: '0.875rem', color: '#979797' }}>
+                <PostTitle>{data.title}</PostTitle>
+                <PostInfoContainer>
+                    <PostUserBox>
+                        <UserAvatar src={`https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`} />
+                        <UserInfoBox>
+                            <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
+                                {RandomNickname()}
+                            </UserInfoTypography>
+                            <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
                                 {timeForToday(data.createdAt)}
-                            </Typography>
-                        </div>
-                    </div>
-                    <div style={{ margin: 'auto 0' }}>
-                        <Typography sx={{ cursor: 'pointer', fontSize: '0.775rem' }} onClick={moveComment}>
-                            조회
-                            <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
-                            <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                            댓글
-                            <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
-                            <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                            추천
-                            <strong style={{ marginLeft: '3px' }}>{comments.length}</strong>
-                        </Typography>
-                    </div>
-                </div>
-                <div style={{ borderBottom: '1px solid #EAEAEA' }} />
+                            </UserInfoTypography>
+                        </UserInfoBox>
+                    </PostUserBox>
+                    <PostInfoBox onClick={moveComment}>
+                        조회
+                        <PostStrong>{comments.length}</PostStrong>
+                        <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                        댓글
+                        <PostStrong>{comments.length}</PostStrong>
+                        <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                        추천
+                        <PostStrong>{comments.length}</PostStrong>
+                    </PostInfoBox>
+                </PostInfoContainer>
                 {data !== '' ? (
-                    <div style={{ padding: '1rem', minHeight: '10rem' }}>
-                        <Typography sx={{ lineHeight: '170%' }}>{parse(DOMPurify.sanitize(data.content))}</Typography>
-                    </div>
+                    <PostContentBox>
+                        <PostContent>{parse(DOMPurify.sanitize(data.content))}</PostContent>
+                    </PostContentBox>
                 ) : null}
-                <div style={{ borderBottom: '1px solid #EAEAEA' }} />
-                <div style={{ margin: '1rem 0' }} ref={commentRef}>
+
+                <PostCommentBox ref={commentRef}>
                     <Typography fontSize={18}>댓글 {comments.length}</Typography>
                     {comments &&
                         comments.map((comment, i) => {
                             return (
                                 <React.Fragment key={i}>
-                                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <Avatar
+                                    <PostCommentsInfo>
+                                        <CommentAvatar
                                             src={`https://randomuser.me/api/portraits/men/${getRandomNumber(
                                                 1,
                                                 98,
                                             )}.jpg`}
-                                            sx={{
-                                                bgcolor: '#6EA5F8',
-                                                color: 'white',
-                                                verticalAlign: 'middle',
-                                                width: '40px',
-                                                height: '40px',
-                                                marginRight: '0.5rem',
-                                            }}
                                         />
-                                        <div key={comment.id} style={{ margin: '1rem 0' }}>
-                                            <Typography sx={{ color: 'rgb(75 85 99)', fontWeight: 'medium' }}>
+                                        <CommentUserInfoBox>
+                                            <CommentUserInfoText color={'rgb(75 85 99)'} fontWeight={'500'}>
                                                 {RandomNickname()}
-                                            </Typography>
-                                            <Typography fontSize={12} color="#979797">
+                                            </CommentUserInfoText>
+                                            <CommentUserInfoText color={'#979797'}>
                                                 {timeForToday(comment.createdAt)}
-                                            </Typography>
-                                        </div>
-                                    </div>
-                                    <Typography sx={{ color: 'rgb(55 65 81)' }}>{comment.content}</Typography>
+                                            </CommentUserInfoText>
+                                        </CommentUserInfoBox>
+                                    </PostCommentsInfo>
+                                    <CommentText>{comment.content}</CommentText>
                                 </React.Fragment>
                             );
                         })}
-                </div>
-                <div style={{ borderBottom: '1px solid #EAEAEA' }} />
-                <div style={{ margin: '1rem 0', display: 'flex', width: '100%', flexWrap: 'wrap' }}>
-                    {/* <Typography>댓글 작성</Typography> */}
+                </PostCommentBox>
+                <WriteCommentBox>
                     <div
                         style={{
                             width: '100%',
@@ -202,7 +181,7 @@ const PostViewer = () => {
                                 <Avatar
                                     src={userImage}
                                     sx={{
-                                        bgcolor: '#6EA5F8',
+                                        bgcolor: '#0098ee',
                                         color: 'white',
                                         verticalAlign: 'middle',
                                         width: '40px',
@@ -269,7 +248,7 @@ const PostViewer = () => {
                             </CustomBtn>
                         </div>
                     </div>
-                </div>
+                </WriteCommentBox>
             </PostViewerPaper>
             {/* <Paper sx={{ height: '75%', width: '80%', margin: 'auto', padding: '2rem', marginBottom: '1rem' }}> */}
             {/* </Paper> */}
@@ -287,7 +266,7 @@ const Background = styled.div`
     background-color: white;
     width: 95vw;
     height: 90%;
-    /* padding-top: 30px; */
+    padding-top: 1rem;
     /* display: flex; */
     /* flex-wrap: wrap; */
     /* flex-direction: column; */
@@ -314,6 +293,114 @@ const PostViewerPaper = styled(Paper)`
     }
 `;
 
+const PostTitle = styled(Typography)`
+    font-size: 1.125rem;
+    font-weight: 500;
+    padding: 0 1rem;
+`;
+
+const PostInfoContainer = styled.div`
+    display: flex;
+    width: 100%;
+    padding: 0.5rem;
+    justify-content: space-between;
+    border-bottom: 1px solid #eaeaea;
+`;
+
+const PostUserBox = styled.div`
+    display: inline-flex;
+    align-items: center;
+`;
+
+const UserAvatar = styled(Avatar)`
+    color: #a2a5a9;
+    vertical-align: middle;
+    width: 3rem;
+    height: 3rem;
+`;
+
+const UserInfoBox = styled.div`
+    display: inline-flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+`;
+
+interface UserInfoTypographyProps {
+    fontSize: string;
+    fontWeight?: string;
+    color?: string;
+}
+
+const UserInfoTypography = styled(Typography)<UserInfoTypographyProps>`
+    font-size: ${(props) => `${props.fontSize}`};
+    font-weight: ${(props) => `${props.fontWeight}`};
+    color: ${(props) => `${props.color}`};
+`;
+const PostInfoBox = styled(Typography)`
+    margin: auto 0;
+    cursor: pointer;
+    font-size: 0.775rem;
+`;
+
+const PostStrong = styled.strong`
+    margin-left: 3px;
+`;
+
+const PostContentBox = styled.div`
+    padding: 1rem;
+    min-height: 10rem;
+    border-bottom: 1px solid #eaeaea;
+`;
+
+const PostContent = styled(Typography)`
+    line-height: 170%;
+`;
+
+const PostCommentBox = styled.div`
+    margin: 1rem 0;
+`;
+
+const PostCommentsInfo = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const CommentAvatar = styled(Avatar)`
+    background-color: #0098ee;
+    color: white;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    margin-right: 0.5rem;
+`;
+
+const CommentUserInfoBox = styled.div`
+    margin: 1rem 0;
+`;
+
+interface CommentUserInfoTextProps {
+    color: string;
+    fontWeight?: string;
+}
+
+const CommentUserInfoText = styled(Typography)<CommentUserInfoTextProps>`
+    color: ${(props) => `${props.color}`};
+    font-weight: ${(props) => `${props.fontWeight}`};
+`;
+
+const CommentText = styled(Typography)`
+    color: rgb(55 65 81);
+`;
+
+const WriteCommentBox = styled.div`
+    margin: 1rem 0;
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    border-top: 1px solid #eaeaea;
+    padding-top: 1rem;
+`;
+
 const CommentBox = styled.div`
     width: 100%;
     display: flex;
@@ -326,8 +413,8 @@ const CommentBox = styled.div`
 `;
 
 const CustomBtn = styled(Button)`
-    background-color: #6ea5f8;
-    font-weight: 900;
+    background-color: #0098ee;
+    font-weight: 700;
     color: white;
     box-shadow: none;
     width: 7rem;

@@ -35,7 +35,7 @@ interface userInfos {
     userEmail?: string;
 }
 
-const Writing = () => {
+const PostEditor = () => {
     const notify = (text: string) => {
         dismissAll();
         toast.success(text, {
@@ -148,42 +148,26 @@ const Writing = () => {
         <Background>
             <EditorPaper elevation={0}>
                 <EditorTypography>글작성</EditorTypography>
-                <div style={{ display: 'flex', alignItems: 'center', paddingTop: '1rem' }}>
+                <EditorUserInfoBox>
                     {userInfo && (
                         <>
-                            <Avatar
-                                src={userImage}
-                                sx={{
-                                    bgcolor: '#6EA5F8',
-                                    color: 'white',
-                                    verticalAlign: 'middle',
-                                    width: '40px',
-                                    height: '40px',
-                                    marginRight: '0.3rem',
-                                }}
-                            />
-                            <Typography sx={{ fontSize: '1.2rem', fontWeight: 'medium' }}>{userNickName}</Typography>
+                            <UserAvatar src={userImage} />
+                            <UserTypography>{userNickName}</UserTypography>
                         </>
                     )}
-                </div>
+                </EditorUserInfoBox>
                 <FormControl fullWidth>
-                    <Select
+                    <Typography>게시판</Typography>
+                    <BoardSelect
                         labelId="board"
                         // defaultValue="게시판을 선택해주세요"
                         value={board}
                         MenuProps={MenuProps}
                         displayEmpty
+                        fullWidth
                         renderValue={board !== '' ? undefined : () => '게시판을 선택해주세요'}
                         onChange={(e) => {
-                            setBoard(e.target.value);
-                        }}
-                        sx={{
-                            backgroundColor: 'white',
-                            borderRadius: '5px',
-                            opacity: '0.8',
-                            width: '10rem',
-                            height: '3rem',
-                            margin: '0.5rem 0',
+                            setBoard(String(e.target.value));
                         }}
                     >
                         {totalBoard.map((val) => (
@@ -191,22 +175,14 @@ const Writing = () => {
                                 {val}
                             </MenuItem>
                         ))}
-                    </Select>
-                </FormControl>
-                <FormControl fullWidth sx={{ m: 1 }} variant="standard">
-                    <Input
-                        id="title"
-                        placeholder="제목을 입력해 주세요"
-                        value={title}
-                        fullWidth
-                        sx={{ width: '50rem', fontSize: '1.5rem', marginBottom: '0.5rem' }}
-                        onChange={onTitleChange}
-                    />
+                    </BoardSelect>
+                    <Typography>제목</Typography>
+                    <BoardTitle placeholder="제목을 입력해 주세요" value={title} onChange={onTitleChange} />
                 </FormControl>
                 <Editor
                     ref={editorRef}
                     onChange={onChange}
-                    placeholder="내용을 입력하세요."
+                    placeholder="내용을 입력해주세요."
                     previewStyle="vertical" // 미리보기 스타일 지정
                     height="450px" // 에디터 창 높이
                     initialEditType="wysiwyg" // 초기 입력모드 설정(디폴트 markdown)
@@ -223,51 +199,32 @@ const Writing = () => {
                     plugins={[colorSyntax]}
                     language="ko-KR"
                 />
-                <div style={{ width: '99%', display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            width: '7rem',
-                            height: '3rem',
-                            boxShadow: 'none',
-                            backgroundColor: '#6EA5F8',
-                            fontWeight: 900,
-                            ':hover': { boxShadow: 'none' },
-                        }}
-                        onClick={onSave}
-                    >
+                <ButtonBox>
+                    <SubmitBtn variant="contained" onClick={onSave}>
                         등록
-                    </Button>
+                    </SubmitBtn>
                     {transientStorage.length ? (
                         // <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
                         //     <Button onClick={transientStorage}>임시저장</Button>
                         // </ButtonGroup>
-                        <Button
-                            variant="outlined"
-                            sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}
-                            onClick={handleDeleteTransientStorage}
-                        >
+                        <CuntomBtn variant="outlined" margin={'0 0.5rem'} onClick={handleDeleteTransientStorage}>
                             임시저장 삭제
-                        </Button>
+                        </CuntomBtn>
                     ) : (
-                        <Button
-                            variant="outlined"
-                            sx={{ width: '7rem', height: '3rem', margin: '0 1rem' }}
-                            onClick={handleTransientStorage}
-                        >
+                        <CuntomBtn variant="outlined" margin={'0 0.5rem'} onClick={handleTransientStorage}>
                             임시저장
-                        </Button>
+                        </CuntomBtn>
                     )}
-                    <Button variant="outlined" sx={{ width: '7rem', height: '3rem' }} onClick={goBack}>
-                        뒤로가기
-                    </Button>
-                </div>
+                    <CuntomBtn variant="outlined" onClick={goBack}>
+                        취소
+                    </CuntomBtn>
+                </ButtonBox>
             </EditorPaper>
         </Background>
     );
 };
 
-export default Writing;
+export default PostEditor;
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -307,5 +264,70 @@ const EditorTypography = styled(Typography)`
     padding: 0px 0px 13px 19px;
     border-bottom: 1px solid #eaeaea;
     font-size: 1.4rem;
-    font-weight: bold;
+    font-weight: 600;
+`;
+
+const EditorUserInfoBox = styled.div`
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    margin-bottom: 0.5rem;
+`;
+
+const UserAvatar = styled(Avatar)`
+    background-color: #0098ee;
+    color: white;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    margin-right: 0.3rem;
+`;
+
+const UserTypography = styled(Typography)`
+    font-size: 1.2rem;
+    font-weight: medium;
+`;
+
+const BoardSelect = styled(Select)`
+    background-color: white;
+    border-radius: 5px;
+    opacity: 0.8;
+    height: 3rem;
+    margin: 0.3rem 0 1rem 0;
+`;
+
+const BoardTitle = styled.input`
+    height: 3rem;
+    border-radius: 5px;
+    border: 1px solid #d1d5d8;
+    padding: 0 1rem;
+    margin: 0.3rem 0 1rem 0;
+`;
+
+const ButtonBox = styled.div`
+    width: 99%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+`;
+
+const SubmitBtn = styled(Button)`
+    width: 7rem;
+    height: 3rem;
+    box-shadow: none;
+    background-color: #0098ee;
+    font-weight: 700;
+    &:hover {
+        box-shadow: none;
+    }
+`;
+
+interface CustomBtnProps {
+    margin?: string;
+}
+
+const CuntomBtn = styled(Button)<CustomBtnProps>`
+    width: 7rem;
+    height: 3rem;
+    margin: ${(props) => `${props.margin}`};
 `;

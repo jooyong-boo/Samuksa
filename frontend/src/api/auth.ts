@@ -66,7 +66,6 @@ export const logout = async ({ AToken }: { AToken: string }) => {
                 'A-Token': AToken,
             },
         });
-        console.log(result);
     } catch (err) {
         console.log(err);
         return err;
@@ -162,7 +161,6 @@ export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; R
             return result;
         }
     } catch (err) {
-        console.log(err);
         return err;
     }
 };
