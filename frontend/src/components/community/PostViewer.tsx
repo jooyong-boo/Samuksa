@@ -158,7 +158,7 @@ const PostViewer = () => {
                                             )}.jpg`}
                                         />
                                         <CommentUserInfoBox>
-                                            <CommentUserInfoText color={'rgb(75 85 99)'} fontWeight={'500'}>
+                                            <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
                                                 {RandomNickname()}
                                             </CommentUserInfoText>
                                             <CommentUserInfoText color={'#979797'}>
