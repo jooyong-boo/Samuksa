@@ -7,9 +7,15 @@ import { getWithdrawal } from '../../api/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import imageCompression from 'browser-image-compression';
 
+interface userInfos {
+    userId?: string;
+    userNickName?: string;
+    userEmail?: string;
+}
+
 const Profile = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-    const [image, setImage] = useRecoilState<any>(userImageState);
+    const [image, setImage] = useRecoilState<string | ArrayBuffer | null>(userImageState);
     const fileInput = useRef<HTMLInputElement | null>(null);
     const { userId, userNickName, userEmail }: userInfos = userInfo;
     const [nickname, setNickname] = useState('');
@@ -18,12 +24,6 @@ const Profile = () => {
     const [emailModify, setEmailModify] = useState(true);
 
     const navigate = useNavigate();
-
-    interface userInfos {
-        userId?: string;
-        userNickName?: string;
-        userEmail?: string;
-    }
 
     const withdrawal = () => {
         let confirmWithdrawal = window.confirm('정말 탈퇴하시겠어요?');
@@ -210,6 +210,7 @@ const Card = styled.div`
     align-items: center;
     border-radius: 5px;
     border: 1px solid rgb(225, 225, 225);
+    overflow: auto;
 `;
 
 const ProfileContainer = styled.div`
