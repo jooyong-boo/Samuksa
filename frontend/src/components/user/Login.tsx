@@ -174,16 +174,7 @@ const Login = () => {
                                 <CustomNavLink to={`/register`}>회원가입</CustomNavLink>
                             </Typography>
                         </LoginBtnDiv>
-                        <Typography
-                            sx={{
-                                marginBottom: '0.5rem',
-                                color: 'rgb(75 85 99)',
-                                fontSize: '0.875rem',
-                                fontWeight: 'medium',
-                            }}
-                        >
-                            SNS로그인
-                        </Typography>
+                        <SNSTypography>SNS로그인</SNSTypography>
                         <KakaoLogin />
                     </LoginBox>
                 </Card>
@@ -220,6 +211,7 @@ const Card = styled.div`
     border-radius: 5px;
     border: 1px solid #eaeaea;
     text-align: center;
+    overflow: auto;
 `;
 
 const LoginTitle = styled(Typography)`
@@ -312,4 +304,11 @@ const AskingSpan = styled.span`
     color: #969696;
     font-size: 0.875rem;
     margin-right: 0.3rem;
+`;
+
+const SNSTypography = styled(Typography)`
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+    font-size: 0.875rem;
+    font-weight: medium;
 `;
