@@ -4,6 +4,7 @@ import {
     FormControl,
     Input,
     InputAdornment,
+    List,
     Stack,
     Table,
     TableBody,
@@ -125,7 +126,7 @@ const ReviewBoard = () => {
                     </WriteBtn>
                 </BoardTopWrapper>
                 <ThemeProvider theme={theme}>
-                    <CustomTableContainer>
+                    {/* <CustomTableContainer>
                         <Table aria-label="review table">
                             <TableHead>
                                 <TableRow>
@@ -177,7 +178,63 @@ const ReviewBoard = () => {
                                 })}
                             </TableBody>
                         </Table>
-                    </CustomTableContainer>
+                    </CustomTableContainer> */}
+                    <div style={{ width: '90%' }}>
+                        <ul
+                            style={{
+                                listStyle: 'none',
+                                paddingLeft: '0px',
+                                borderTop: '1px solid black',
+                                // borderBottom: '1px solid black',
+                            }}
+                        >
+                            {usePosts.slice(offset, offset + limit).map((item: any) => {
+                                const { id, title, UserId, createdAt, read } = item;
+                                const newCreateAt = new Date(createdAt);
+                                const year = newCreateAt.getFullYear();
+                                const month = newCreateAt.getMonth();
+                                const date = newCreateAt.getDate();
+                                return (
+                                    <div key={id}>
+                                        <li
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                justifyContent: 'space-between',
+                                                borderBottom: '1px solid black',
+                                            }}
+                                        >
+                                            <div>
+                                                <Typography
+                                                    sx={{
+                                                        maxWidth: '200px',
+                                                        textOverflow: 'ellipsis',
+                                                        whiteSpace: 'nowrap',
+                                                        overflow: 'hidden',
+                                                        padding: '10px',
+                                                        fontSize: '1.185rem',
+                                                    }}
+                                                >
+                                                    {title}
+                                                </Typography>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'flex-start' }}></div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <div style={{ display: 'flex' }}>
+                                                    <Typography>{RandomNickname()}</Typography>
+                                                    <Typography>{id}</Typography>
+                                                    <Typography>{UserId}</Typography>
+                                                </div>
+                                                <Typography
+                                                    sx={{ color: '#5A5A5A' }}
+                                                >{`${year}년 ${month}월 ${date}일`}</Typography>
+                                            </div>
+                                        </li>
+                                    </div>
+                                );
+                            })}
+                        </ul>
+                    </div>
                 </ThemeProvider>
                 <PaginationStack>
                     <Pagination
@@ -261,6 +318,9 @@ const CustomTableContainer = styled(TableContainer)`
     border-radius: 0;
     max-height: 500px;
     padding: 0px 12px;
+    @media screen and (max-width: 500px) {
+        display: none;
+    }
 `;
 
 interface TitleNavLinkProps {
