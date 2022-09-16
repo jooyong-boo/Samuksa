@@ -27,7 +27,7 @@ const MenuProps = {
         },
     },
 };
-const totalBoard = ['리뷰게시판', '꿀팁게시판'];
+const totalBoard = ['리뷰게시판', 'TIP게시판'];
 
 interface userInfos {
     userId?: string;
@@ -140,7 +140,7 @@ const PostEditor = () => {
             setBoard('리뷰게시판');
         }
         if (prevLocation === '/tip' && !localStorage.getItem('transientStorage')) {
-            setBoard('꿀팁게시판');
+            setBoard('TIP게시판');
         }
     }, []);
 
