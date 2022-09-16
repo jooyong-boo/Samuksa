@@ -194,7 +194,7 @@ const Background = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    padding-top: 70px;
+    padding-top: 60px;
     overflow: hidden;
 `;
 

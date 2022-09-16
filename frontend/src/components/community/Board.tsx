@@ -1,5 +1,6 @@
 import { Box, Tab, Tabs } from '@mui/material';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { tabState } from '../../store/atom';
@@ -7,6 +8,7 @@ import { tabState } from '../../store/atom';
 const Board = () => {
     const [selectTab, setSelectTab] = useRecoilState(tabState);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const tab = [
         {
@@ -16,7 +18,7 @@ const Board = () => {
         },
         {
             id: 1,
-            label: '꿀TIP게시판',
+            label: 'TIP게시판',
             path: '/board/tip',
         },
     ];
@@ -28,6 +30,14 @@ const Board = () => {
     const handleChange = (event: React.SyntheticEvent<Element, Event>, newValue: number) => {
         setSelectTab(newValue);
     };
+
+    useEffect(() => {
+        if (location.pathname === '/board/review') {
+            setSelectTab(0);
+        } else if (location.pathname === '/board/tip') {
+            setSelectTab(1);
+        }
+    }, [location]);
 
     return (
         <Background>

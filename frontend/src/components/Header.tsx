@@ -414,7 +414,7 @@ const Header = () => {
                                 onClick={handleOpenNavMenu}
                                 color="inherit"
                             >
-                                <MenuIcon sx={{ color: 'black' }} fontSize="large" />
+                                <MenuIcon sx={{ color: '#0098ee' }} fontSize="large" />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -460,15 +460,15 @@ const Header = () => {
                         })}
                         {loginStatus ? (
                             <>
-                                <Tooltip title="User">
+                                <Tooltip title="사용자 메뉴">
                                     <UserIconButton onClick={handleOpenUserMenu}>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
-                                        <UserNickNameText>
-                                            {/* {loginStatus ? `${userInfo?.userNickName} 님` : ''} */}
-                                            {userInfo.userNickName ? `${userInfo.userNickName} 님` : ''}
-                                        </UserNickNameText>
                                     </UserIconButton>
                                 </Tooltip>
+                                <UserNickNameText>
+                                    {/* {loginStatus ? `${userInfo?.userNickName} 님` : ''} */}
+                                    {userInfo.userNickName ? `${userInfo.userNickName} 님` : ''}
+                                </UserNickNameText>
                                 <UserSelectMenu
                                     id="menu-appbar"
                                     anchorEl={anchorElUser}
@@ -609,7 +609,8 @@ const UserAvatar = styled(Avatar)<UserAvatarProps>`
 `;
 
 const UserNickNameText = styled(Typography)`
-    font-weight: bold;
+    font-weight: 500;
+    color: black;
 `;
 
 const UserSelectMenu = styled(Menu)`
