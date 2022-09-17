@@ -207,7 +207,7 @@ const ReviewBoard = () => {
                                             <div>
                                                 <Typography
                                                     sx={{
-                                                        maxWidth: '200px',
+                                                        maxWidth: '400px',
                                                         textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap',
                                                         overflow: 'hidden',
