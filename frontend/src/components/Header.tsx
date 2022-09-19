@@ -18,6 +18,7 @@ import { loginStatusState, userIdState, userImageState, userInfoState } from '..
 import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled from 'styled-components';
+import { reviewPostPageState, tipPostPageState } from '../store/atom';
 
 interface userInfoProps {
     passWd?: null;
@@ -53,6 +54,9 @@ const Header = () => {
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
     const [image, setImage] = useRecoilState<string | null>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
+    const [reviewPostPage, setReviewPostPage] = useRecoilState<number>(reviewPostPageState);
+    const [tioPostPage, setTipPostPage] = useRecoilState<number>(tipPostPageState);
+
     let loginConfirm = localStorage.getItem('jwtToken');
 
     const [NAV_ITEMS, setNAV_ITEMS] = useState([
@@ -156,6 +160,8 @@ const Header = () => {
 
     const goNavigate = (path: string) => {
         if (path === '/board') {
+            setReviewPostPage(1);
+            setTipPostPage(1);
             navigate(`${path}/review`);
         } else {
             navigate(`${path}`);
@@ -449,13 +455,15 @@ const Header = () => {
                         </MobileBox>
                         {NAV_ITEMS.map(({ id, name, path, active }) => {
                             return (
-                                <MenuNavLink
+                                <MenuNav
                                     key={id}
-                                    to={path === '/board' ? `${path}/review` : `${path}`}
+                                    onClick={() => {
+                                        goNavigate(path);
+                                    }}
                                     active={active ? 'true' : ''}
                                 >
                                     {name}
-                                </MenuNavLink>
+                                </MenuNav>
                             );
                         })}
                         {loginStatus ? (
@@ -570,11 +578,11 @@ const MobileBox = styled(Box)`
     }
 `;
 
-interface MenuNavLinkProps {
+interface MenuNavProps {
     active: string;
 }
 
-const MenuNavLink = styled(NavLink)<MenuNavLinkProps>`
+const MenuNav = styled(Typography)<MenuNavProps>`
     margin-right: 1.2rem;
     text-decoration: none;
     color: ${(props) => (props.active ? '#0098ee' : '#7A7A7A')};
@@ -582,6 +590,7 @@ const MenuNavLink = styled(NavLink)<MenuNavLinkProps>`
     font-size: 0.9rem;
     :hover {
         font-weight: bold;
+        cursor: pointer;
     }
     @media screen and (max-width: 500px) {
         display: none;
