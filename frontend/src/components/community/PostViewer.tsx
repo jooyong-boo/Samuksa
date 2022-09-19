@@ -18,6 +18,7 @@ import timeForToday from '../utils/TimeForToday';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../common/RandomNickname';
+import { getCommentById, getPostsById } from '../../api/post';
 
 interface userInfos {
     userId?: string;
@@ -51,23 +52,33 @@ const PostViewer = () => {
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
-    const getPostsId = async (id: string | undefined) => {
-        try {
-            const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
-            setData(data);
-        } catch (err) {
-            console.log(err.response);
-        }
-    };
+    // const getPostsId = async (id: string | undefined) => {
+    //     try {
+    //         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
+    //         setData(data);
+    //     } catch (err) {
+    //         console.log(err.response);
+    //     }
+    // };
 
-    const getComment = async (id: string | undefined) => {
-        try {
-            const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
-            setComments(data);
-        } catch (err) {
-            console.log(err.response);
-        }
-    };
+    // const getComment = async (id: string | undefined) => {
+    //     try {
+    //         const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
+    //         setComments(data);
+    //     } catch (err) {
+    //         console.log(err.response);
+    //     }
+    // };
+
+    async function searchPostsById(id: string | undefined) {
+        const data = await getPostsById(id);
+        setData(data);
+    }
+
+    async function searchUserComment(id: string | undefined) {
+        const data = await getCommentById(id);
+        setComments(data);
+    }
 
     const moveComment = () => {
         commentRef.current?.scrollIntoView({ block: 'start' });
@@ -96,8 +107,8 @@ const PostViewer = () => {
     };
 
     useEffect(() => {
-        getPostsId(id);
-        getComment(id);
+        searchPostsById(id);
+        searchUserComment(id);
     }, [id]);
 
     // console.log(data);
