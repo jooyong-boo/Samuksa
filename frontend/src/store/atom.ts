@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
-import { getPosts, getPostsId } from '../api/post';
+import { getPosts, getPostsById } from '../api/post';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
