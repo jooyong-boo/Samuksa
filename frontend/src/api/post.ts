@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { getRandomNumber } from '../components/community/PostViewer';
 
 // 전체 게시물 목록
 export const getPosts = async () => {
     try {
         const { data } = await axios.get('https://koreanjson.com/posts');
-        // console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
@@ -13,10 +11,19 @@ export const getPosts = async () => {
 };
 
 // 선택한 게시물 조회
-export const getPostsId = async (id: number) => {
+export const getPostsById = async (id: string | undefined) => {
     try {
         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
-        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err.response);
+    }
+};
+
+// 게시물 댓글 조회
+export const getCommentById = async (id: string | undefined) => {
+    try {
+        const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
         return data;
     } catch (err) {
         console.log(err.response);
