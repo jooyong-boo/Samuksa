@@ -29,6 +29,7 @@ import timeForToday from '../utils/TimeForToday';
 import { RandomNickname } from '../common/RandomNickname';
 import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
+import { getCommentById } from '../../api/post';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -49,9 +50,15 @@ const ReviewBoard = () => {
     const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState);
     const offset = (postPage - 1) * limit;
     const userInfo = useRecoilValue(userInfoState);
-    const posts = useRecoilValue(getPostState);
+    const posts = useRecoilValue<any[]>(getPostState);
     const [usePosts, setUsePosts] = useState<any[]>([]);
     const [searchPosts, setSearchPosts] = useState('');
+    const [postComment, setPostComment] = useState<any[]>([]);
+    const [open, setOpen] = useState(false);
+
+    const openSearch = () => {
+        setOpen(!open);
+    };
 
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -97,34 +104,55 @@ const ReviewBoard = () => {
         setUsePosts(newPosts);
     }, [posts]);
 
+    const getPostComment = async () => {
+        let comment = await Promise.all(
+            posts.map((post) => {
+                let newComment = getCommentById(post.id);
+                return newComment;
+            }),
+        );
+        setPostComment(comment);
+    };
+
+    useEffect(() => {
+        getPostComment();
+    }, [usePosts]);
+
     return (
         <Background>
             <ReviewBoardContainer>
                 <BoardTopWrapper>
-                    <BoardTitleText>리뷰게시판</BoardTitleText>
-                    <SearchForm>
-                        <Input
-                            id="board-search"
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <SearchIcon />
-                                </InputAdornment>
-                            }
-                            type="string"
-                            defaultValue=""
-                            placeholder="게시글 검색"
-                            onChange={onSearch}
-                            onKeyPress={(e) => handleSearch(e)}
-                            autoComplete="off"
-                            // readOnly={fishList.length > 0 ? false : true}
-                            // disableUnderline={fishList.length > 0 ? false : true}
-                        />
-                    </SearchForm>
+                    {/* <BoardTitleText>리뷰게시판</BoardTitleText> */}
                     <WriteBtn variant="contained" onClick={goWriting}>
                         <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
                         글쓰기
                     </WriteBtn>
+                    <SearchBtn variant="outlined" onClick={openSearch}>
+                        <SearchIcon sx={{ color: '#a7a7a7' }} />
+                    </SearchBtn>
                 </BoardTopWrapper>
+                {open ? (
+                    <div>
+                        <SearchForm>
+                            <Input
+                                id="board-search"
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                }
+                                type="string"
+                                defaultValue=""
+                                placeholder="게시글 검색"
+                                onChange={onSearch}
+                                onKeyPress={(e) => handleSearch(e)}
+                                autoComplete="off"
+                                // readOnly={fishList.length > 0 ? false : true}
+                                // disableUnderline={fishList.length > 0 ? false : true}
+                            />
+                        </SearchForm>
+                    </div>
+                ) : null}
                 <ThemeProvider theme={theme}>
                     {/* <CustomTableContainer>
                         <Table aria-label="review table">
@@ -179,7 +207,7 @@ const ReviewBoard = () => {
                             </TableBody>
                         </Table>
                     </CustomTableContainer> */}
-                    <div style={{ width: '90%' }}>
+                    <div style={{ width: '100%' }}>
                         <ul
                             style={{
                                 listStyle: 'none',
@@ -207,7 +235,7 @@ const ReviewBoard = () => {
                                             <div>
                                                 <Typography
                                                     sx={{
-                                                        maxWidth: '400px',
+                                                        maxWidth: '300px',
                                                         textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap',
                                                         overflow: 'hidden',
@@ -215,18 +243,46 @@ const ReviewBoard = () => {
                                                         fontSize: '1.185rem',
                                                     }}
                                                 >
-                                                    {title}
+                                                    <TitleNavLink
+                                                        to={`post/${id}`}
+                                                        read={read ? 'true' : ''}
+                                                        onClick={() => {
+                                                            AddReadPost(id);
+                                                        }}
+                                                    >
+                                                        {title}
+                                                    </TitleNavLink>
                                                 </Typography>
                                             </div>
                                             <div style={{ display: 'flex', justifyContent: 'flex-start' }}></div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                <div style={{ display: 'flex' }}>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    flexWrap: 'wrap',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        width: '100%',
+                                                        justifyContent: 'space-between',
+                                                    }}
+                                                >
                                                     <Typography>{RandomNickname()}</Typography>
-                                                    <Typography>{id}</Typography>
-                                                    <Typography>{UserId}</Typography>
+                                                    <div style={{ display: 'flex' }}>
+                                                        <Typography sx={{ marginRight: '0.3rem' }}>
+                                                            조회: {id}
+                                                        </Typography>
+                                                        <Typography sx={{ marginRight: '0.3rem' }}>
+                                                            댓글:
+                                                            {postComment.length > 0 ? postComment[id - 1].length : ''}
+                                                        </Typography>
+                                                        <Typography>추천: {UserId}</Typography>
+                                                    </div>
                                                 </div>
                                                 <Typography
-                                                    sx={{ color: '#5A5A5A' }}
+                                                    sx={{ color: '#5A5A5A', width: '100%', textAlign: 'end' }}
                                                 >{`${year}년 ${month}월 ${date}일`}</Typography>
                                             </div>
                                         </li>
@@ -305,11 +361,18 @@ const WriteBtn = styled(Button)`
     color: white;
     box-shadow: none;
     width: 6.5rem;
-    height: 2.3rem;
+    height: 2.5rem;
     padding: 6px 1rem 6px 0.9rem;
     &:hover {
         box-shadow: none;
     }
+`;
+
+const SearchBtn = styled(WriteBtn)`
+    background-color: white;
+    color: #0098ee;
+    margin-right: 0.3rem;
+    border-color: #a7a7a7;
 `;
 
 const CustomTableContainer = styled(TableContainer)`
