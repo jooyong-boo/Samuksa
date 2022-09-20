@@ -29,6 +29,7 @@ import timeForToday from '../utils/TimeForToday';
 import { RandomNickname } from '../common/RandomNickname';
 import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
+import ListIcon from '@mui/icons-material/List';
 import { getCommentById } from '../../api/post';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
@@ -49,7 +50,7 @@ const ReviewBoard = () => {
     const [page, setPage] = useState<number>(1);
     const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState);
     const offset = (postPage - 1) * limit;
-    const userInfo = useRecoilValue(userInfoState);
+    const userInfo = useRecoilValue<any>(userInfoState);
     const posts = useRecoilValue<any[]>(getPostState);
     const [usePosts, setUsePosts] = useState<any[]>([]);
     const [searchPosts, setSearchPosts] = useState('');
@@ -60,21 +61,21 @@ const ReviewBoard = () => {
         setOpen(!open);
     };
 
-    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onSearch = (e: React.ChangeEvent<HTMLInputElement>): void => {
         e.preventDefault();
         let searchTitle = e.target.value;
         setSearchPosts(searchTitle);
     };
 
-    const handleSearch = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
+    const handleSearch = (e: React.KeyboardEvent | React.MouseEvent): void => {
+        if (e.type === 'click' || (e as React.KeyboardEvent).key === 'Enter') {
             let result = posts.filter((post: any) => post.title.includes(searchPosts));
             setUsePosts(result);
         }
     };
 
     const goWriting = () => {
-        if (userInfo) {
+        if (Object.keys(userInfo).length) {
             navigate('/write', { state: '/review' });
         } else {
             navigate('/login');
@@ -124,37 +125,36 @@ const ReviewBoard = () => {
                 <BoardTopWrapper>
                     {/* <BoardTitleText>리뷰게시판</BoardTitleText> */}
                     <WriteBtn variant="contained" onClick={goWriting}>
-                        <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
+                        <StyleCreateIcon />
                         글쓰기
                     </WriteBtn>
-                    <SearchBtn variant="outlined" onClick={openSearch}>
-                        <SearchIcon sx={{ color: '#a7a7a7' }} />
-                    </SearchBtn>
+                    <div>
+                        <SearchBtn variant="outlined" onClick={openSearch}>
+                            <StyleSearchIcon />
+                        </SearchBtn>
+                        <SortBtn variant="outlined">
+                            <StyleListIcon />
+                        </SortBtn>
+                    </div>
                 </BoardTopWrapper>
                 {open ? (
-                    <div>
-                        <SearchForm>
-                            <Input
-                                id="board-search"
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                }
-                                type="string"
-                                defaultValue=""
+                    <SearchContainer>
+                        <SearchBox>
+                            <StyledSearchIcon
+                                onClick={(e) => {
+                                    handleSearch(e);
+                                }}
+                            />
+                            <SearchInput
                                 placeholder="게시글 검색"
                                 onChange={onSearch}
                                 onKeyPress={(e) => handleSearch(e)}
-                                autoComplete="off"
-                                // readOnly={fishList.length > 0 ? false : true}
-                                // disableUnderline={fishList.length > 0 ? false : true}
                             />
-                        </SearchForm>
-                    </div>
+                        </SearchBox>
+                    </SearchContainer>
                 ) : null}
                 <ThemeProvider theme={theme}>
-                    {/* <CustomTableContainer>
+                    <CustomTableContainer>
                         <Table aria-label="review table">
                             <TableHead>
                                 <TableRow>
@@ -193,6 +193,9 @@ const ReviewBoard = () => {
                                                     }}
                                                 >
                                                     {title}
+                                                    <Typography>
+                                                        {postComment.length > 0 ? postComment[id - 1].length : ''}
+                                                    </Typography>
                                                 </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
@@ -206,16 +209,9 @@ const ReviewBoard = () => {
                                 })}
                             </TableBody>
                         </Table>
-                    </CustomTableContainer> */}
-                    <div style={{ width: '100%' }}>
-                        <ul
-                            style={{
-                                listStyle: 'none',
-                                paddingLeft: '0px',
-                                borderTop: '1px solid black',
-                                // borderBottom: '1px solid black',
-                            }}
-                        >
+                    </CustomTableContainer>
+                    <MobileBoardContainer>
+                        <StyledUl>
                             {usePosts.slice(offset, offset + limit).map((item: any) => {
                                 const { id, title, UserId, createdAt, read } = item;
                                 const newCreateAt = new Date(createdAt);
@@ -229,7 +225,7 @@ const ReviewBoard = () => {
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 justifyContent: 'space-between',
-                                                borderBottom: '1px solid black',
+                                                borderBottom: '1px solid #EAEAEA',
                                             }}
                                         >
                                             <div>
@@ -240,7 +236,6 @@ const ReviewBoard = () => {
                                                         whiteSpace: 'nowrap',
                                                         overflow: 'hidden',
                                                         padding: '10px',
-                                                        fontSize: '1.185rem',
                                                     }}
                                                 >
                                                     <TitleNavLink
@@ -289,8 +284,8 @@ const ReviewBoard = () => {
                                     </div>
                                 );
                             })}
-                        </ul>
-                    </div>
+                        </StyledUl>
+                    </MobileBoardContainer>
                 </ThemeProvider>
                 <PaginationStack>
                     <Pagination
@@ -346,23 +341,15 @@ const BoardTopWrapper = styled.div`
     margin-bottom: 1rem;
 `;
 
-const BoardTitleText = styled(Typography)`
-    font-size: 2rem;
-    font-weight: 600;
-`;
-
-const SearchForm = styled(FormControl)`
-    width: 40%;
-`;
-
 const WriteBtn = styled(Button)`
     background-color: #0098ee;
     font-weight: 700;
     color: white;
     box-shadow: none;
-    width: 6.5rem;
+    width: 6rem;
     height: 2.5rem;
     padding: 6px 1rem 6px 0.9rem;
+    border-radius: 7px;
     &:hover {
         box-shadow: none;
     }
@@ -375,15 +362,72 @@ const SearchBtn = styled(WriteBtn)`
     border-color: #a7a7a7;
 `;
 
+const SortBtn = styled(SearchBtn)`
+    margin-right: 0;
+`;
+
+const StyleCreateIcon = styled(CreateIcon)`
+    margin-right: 0.4rem;
+    width: 1.3rem;
+`;
+
+const StyleSearchIcon = styled(SearchIcon)`
+    color: #a7a7a7;
+`;
+
+const StyleListIcon = styled(ListIcon)`
+    color: #a7a7a7;
+    font-size: 1.6rem;
+`;
+
+const SearchContainer = styled.div`
+    border-top: 1px solid #eaeaea;
+`;
+
+const SearchBox = styled.div`
+    display: flex;
+    border: 1px solid #939393;
+    border-radius: 10px;
+    margin: 0.5rem 1rem;
+    padding: 5px;
+`;
+
+const StyledSearchIcon = styled(SearchIcon)`
+    color: #a7a7a7;
+    cursor: pointer;
+    margin-right: 0.3rem;
+`;
+
+const SearchInput = styled.input`
+    border: none;
+    width: 100%;
+    :focus {
+        outline: none;
+    }
+`;
+
 const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
     border-bottom: 2px solid #a7a7a7;
     border-radius: 0;
     max-height: 500px;
     padding: 0px 12px;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 700px) {
         display: none;
     }
+`;
+
+const MobileBoardContainer = styled.div`
+    width: 100%;
+    @media screen and (min-width: 701px) {
+        display: none;
+    }
+`;
+
+const StyledUl = styled.ul`
+    list-style: none;
+    padding-left: 0px;
+    border-top: 1px solid #eaeaea;
 `;
 
 interface TitleNavLinkProps {
