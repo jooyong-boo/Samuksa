@@ -390,6 +390,16 @@ const Header = () => {
             name: '게시판',
             path: '/board',
         },
+        {
+            id: 3,
+            name: '로그인',
+            path: '/login',
+        },
+        {
+            id: 4,
+            name: '회원가입',
+            path: '/register',
+        },
     ];
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -448,7 +458,9 @@ const Header = () => {
                                             goNavigate(path);
                                         }}
                                     >
-                                        <Typography textAlign="center">{name}</Typography>
+                                        <Typography textAlign="center" sx={{ fontWeight: '500' }}>
+                                            {name}
+                                        </Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
@@ -507,7 +519,7 @@ const Header = () => {
                                 </UserSelectMenu>
                             </>
                         ) : (
-                            <>
+                            <DesktopBox>
                                 <LoginBtn
                                     variant="outlined"
                                     onClick={() => {
@@ -524,7 +536,7 @@ const Header = () => {
                                 >
                                     회원가입
                                 </RegisterBtn>
-                            </>
+                            </DesktopBox>
                         )}
                     </div>
                 </ToolBarWrapper>
@@ -574,6 +586,15 @@ const MobileBox = styled(Box)`
     flex-grow: 1;
     align-items: center;
     @media screen and (min-width: 501px) {
+        display: none;
+    }
+`;
+
+const DesktopBox = styled(Box)`
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    @media screen and (max-width: 500px) {
         display: none;
     }
 `;
