@@ -403,7 +403,7 @@ const Background = styled.div`
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    padding-top: 70px;
+    padding-top: 60px;
     overflow: hidden;
 `;
 
@@ -443,7 +443,7 @@ const RegisterTitle = styled(Typography)`
     font-size: 1.5rem;
     font-weight: bold;
     border-bottom: 1px solid #eaeaea;
-    padding-bottom: 24px;
+    padding-bottom: 1rem;
     text-align: center;
 `;
 

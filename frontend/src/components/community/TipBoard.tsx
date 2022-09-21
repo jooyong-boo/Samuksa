@@ -1,6 +1,9 @@
 import {
     Button,
     createTheme,
+    FormControl,
+    Input,
+    InputAdornment,
     Paper,
     Stack,
     Table,
@@ -24,6 +27,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../common/RandomNickname';
 import CreateIcon from '@mui/icons-material/Create';
+import { NavLink } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
 
 const tipBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -47,6 +52,20 @@ const TipBoard = () => {
     const posts = useRecoilValue(getPostState);
     const reversePosts = [...posts].reverse();
     const [usePosts, setUsePosts] = useState<any[]>([]);
+    const [searchPosts, setSearchPosts] = useState('');
+
+    const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        let searchTitle = e.target.value;
+        setSearchPosts(searchTitle);
+    };
+
+    const handleSearch = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            let result = posts.filter((post: any) => post.title.includes(searchPosts));
+            setUsePosts(result);
+        }
+    };
 
     const goWriting = () => {
         if (userInfo) {
@@ -57,7 +76,7 @@ const TipBoard = () => {
         }
     };
 
-    const AddReadPost = (id: any) => {
+    const AddReadPost = (id: number) => {
         let readPost: any = localStorage.getItem('tipReadPost');
         if (readPost?.length) {
             let newReadPost: any = [...JSON.parse(readPost), id];
@@ -81,26 +100,35 @@ const TipBoard = () => {
 
     return (
         <Background>
-            <div
-                style={{
-                    width: '80%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '0.5rem',
-                    margin: 'auto',
-                }}
-            >
-                <Typography sx={{ fontSize: '2rem', fontWeight: '600' }}>Tip게시판</Typography>
-                <WriteBtn variant="contained" onClick={goWriting}>
-                    <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
-                    글쓰기
-                </WriteBtn>
-            </div>
-            <div style={{ width: '80%', textAlign: 'center', overflow: 'auto' }}>
+            <ReviewBoardContainer>
+                <BoardTopWrapper>
+                    <BoardTitleText>TIP게시판</BoardTitleText>
+                    <SearchForm>
+                        <Input
+                            id="board-search"
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            }
+                            type="string"
+                            defaultValue=""
+                            placeholder="게시글 검색"
+                            onChange={onSearch}
+                            onKeyPress={(e) => handleSearch(e)}
+                            autoComplete="off"
+                            // readOnly={fishList.length > 0 ? false : true}
+                            // disableUnderline={fishList.length > 0 ? false : true}
+                        />
+                    </SearchForm>
+                    <WriteBtn variant="contained" onClick={goWriting}>
+                        <CreateIcon sx={{ marginRight: '0.4rem', width: '1.3rem' }} />
+                        글쓰기
+                    </WriteBtn>
+                </BoardTopWrapper>
                 <ThemeProvider theme={theme}>
                     <CustomTableContainer>
-                        <Table sx={{ minWidth: 700 }} aria-label="simple table">
+                        <Table aria-label="review table">
                             <TableHead>
                                 <TableRow>
                                     {tipBoardHead.map((item) => (
@@ -117,6 +145,7 @@ const TipBoard = () => {
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
                                     const date = newCreateAt.getDate();
+
                                     return (
                                         <TableRow
                                             key={id}
@@ -129,19 +158,15 @@ const TipBoard = () => {
                                         >
                                             <TableCell sx={tableTextStyle}>{id}</TableCell>
                                             <TableCell component="th" scope="row" sx={titleTextStyle}>
-                                                <Link
+                                                <TitleNavLink
                                                     to={`post/${id}`}
-                                                    style={{
-                                                        textDecoration: 'none',
-                                                        color: read ? '#770088' : '#5A5A5A',
-                                                        fontSize: '0.875rem',
-                                                    }}
+                                                    read={read ? 'true' : ''}
                                                     onClick={() => {
                                                         AddReadPost(id);
                                                     }}
                                                 >
                                                     {title}
-                                                </Link>
+                                                </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
                                             <TableCell
@@ -156,7 +181,7 @@ const TipBoard = () => {
                         </Table>
                     </CustomTableContainer>
                 </ThemeProvider>
-                <Stack sx={{ width: '100%', alignItems: 'center', margin: 'auto', marginTop: '1rem' }}>
+                <PaginationStack>
                     <Pagination
                         total={reversePosts.length}
                         limit={limit}
@@ -165,8 +190,8 @@ const TipBoard = () => {
                         postPage={postPage}
                         setPostPage={setPostPage}
                     />
-                </Stack>
-            </div>
+                </PaginationStack>
+            </ReviewBoardContainer>
         </Background>
     );
 };
@@ -181,7 +206,8 @@ const Background = styled.div`
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    overflow: overlay;
+    align-items: center;
+    overflow: auto;
     margin: auto;
     padding: 10px;
     &::-webkit-scrollbar {
@@ -194,44 +220,29 @@ const Background = styled.div`
     }
 `;
 
-const theme = createTheme({
-    typography: {
-        fontSize: 10,
-        fontFamily: 'Pretendard',
-    },
-    palette: {
-        primary: {
-            main: '#5A5A5A',
-        },
-    },
-});
+const ReviewBoardContainer = styled.div`
+    width: 80%;
+    text-align: center;
+    overflow: auto;
+`;
 
-const tableTextStyle = {
-    padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
-    textAlign: 'center',
-    fontSize: '0.875rem',
-};
+const BoardTopWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    margin-bottom: 1rem;
+`;
 
-const titleTextStyle = {
-    padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
-    textAlign: 'center',
-    maxWidth: '200px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    ':hover': {
-        fontWeight: 'bold',
-    },
-};
+const BoardTitleText = styled(Typography)`
+    font-size: 2rem;
+    font-weight: 600;
+`;
 
-const tableTopTextStyle = {
-    color: '#5A5A5A',
-    textAlign: 'center',
-    fontSize: '0.875rem',
-    padding: '12px 0px',
-};
+const SearchForm = styled(FormControl)`
+    width: 40%;
+`;
 
 const WriteBtn = styled(Button)`
     background-color: #0098ee;
@@ -253,3 +264,59 @@ const CustomTableContainer = styled(TableContainer)`
     max-height: 500px;
     padding: 0px 12px;
 `;
+
+interface TitleNavLinkProps {
+    read: string;
+}
+
+const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
+    color: ${(props) => (props.read ? '#770088' : '#5A5A5A')};
+    text-decoration: none;
+    font-size: 0.875rem;
+`;
+
+const PaginationStack = styled(Stack)`
+    width: 100%;
+    align-items: center;
+    margin: auto;
+    margin-top: 1rem;
+`;
+
+const theme = createTheme({
+    typography: {
+        fontSize: 10,
+        fontFamily: 'Pretendard',
+    },
+    palette: {
+        primary: {
+            main: '#5A5A5A',
+        },
+    },
+});
+
+const tableTopTextStyle = {
+    color: '#5A5A5A',
+    textAlign: 'center',
+    fontSize: '0.875rem',
+    padding: '12px 0px',
+};
+
+const tableTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A',
+    textAlign: 'center',
+    fontSize: '0.875rem',
+};
+
+const titleTextStyle = {
+    padding: '8px 16px 8px 16px',
+    color: '#5A5A5A',
+    textAlign: 'center',
+    maxWidth: '200px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    ':hover': {
+        fontWeight: 'bold',
+    },
+};

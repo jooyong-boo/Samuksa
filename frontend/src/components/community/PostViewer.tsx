@@ -4,7 +4,7 @@ import { Avatar, Button, Paper, TextField, Typography } from '@mui/material';
 // import { getPostsId } from '../../api/post';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
@@ -18,6 +18,7 @@ import timeForToday from '../utils/TimeForToday';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../common/RandomNickname';
+import { getCommentById, getPostsById } from '../../api/post';
 
 interface userInfos {
     userId?: string;
@@ -38,6 +39,7 @@ const PostViewer = () => {
 
     const { id } = useParams<{ id?: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const params = useParams();
     const [data, setData] = useState<any>('');
     const [comments, setComments] = useState<any[]>([]);
@@ -46,28 +48,37 @@ const PostViewer = () => {
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
-
     const { userId, userNickName, userEmail }: userInfos = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
-    const getPostsId = async (id: string | undefined) => {
-        try {
-            const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
-            setData(data);
-        } catch (err) {
-            console.log(err.response);
-        }
-    };
+    // const getPostsId = async (id: string | undefined) => {
+    //     try {
+    //         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
+    //         setData(data);
+    //     } catch (err) {
+    //         console.log(err.response);
+    //     }
+    // };
 
-    const getComment = async (id: string | undefined) => {
-        try {
-            const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
-            setComments(data);
-        } catch (err) {
-            console.log(err.response);
-        }
-    };
+    // const getComment = async (id: string | undefined) => {
+    //     try {
+    //         const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
+    //         setComments(data);
+    //     } catch (err) {
+    //         console.log(err.response);
+    //     }
+    // };
+
+    async function searchPostsById(id: string | undefined) {
+        const data = await getPostsById(id);
+        setData(data);
+    }
+
+    async function searchUserComment(id: string | undefined) {
+        const data = await getCommentById(id);
+        setComments(data);
+    }
 
     const moveComment = () => {
         commentRef.current?.scrollIntoView({ block: 'start' });
@@ -75,13 +86,13 @@ const PostViewer = () => {
 
     const handlePrevPost = () => {
         if (Number(params.id) - 1 > 0) {
-            navigate(`/board/review/post/${Number(params.id) - 1}`);
+            navigate(`/board/${location.pathname.split('/')[2]}/post/${Number(params.id) - 1}`);
         }
     };
 
     const handleNextPost = () => {
         if (Number(params.id) < postList.length) {
-            navigate(`/board/review/post/${Number(params.id) + 1}`);
+            navigate(`/board/${location.pathname.split('/')[2]}/post/${Number(params.id) + 1}`);
         }
     };
 
@@ -96,15 +107,19 @@ const PostViewer = () => {
     };
 
     useEffect(() => {
-        getPostsId(id);
-        getComment(id);
+        searchPostsById(id);
+        searchUserComment(id);
     }, [id]);
 
     // console.log(data);
     // console.log(comments);
 
     const goList = () => {
-        navigate('/board/review');
+        if (location.pathname.includes('/tip')) {
+            navigate('/board/tip');
+        } else if (location.pathname.includes('/review')) {
+            navigate('/board/review');
+        }
     };
 
     return (
@@ -154,7 +169,7 @@ const PostViewer = () => {
                                             )}.jpg`}
                                         />
                                         <CommentUserInfoBox>
-                                            <CommentUserInfoText color={'rgb(75 85 99)'} fontWeight={'500'}>
+                                            <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
                                                 {RandomNickname()}
                                             </CommentUserInfoText>
                                             <CommentUserInfoText color={'#979797'}>
@@ -167,91 +182,39 @@ const PostViewer = () => {
                             );
                         })}
                 </PostCommentBox>
-                <WriteCommentBox>
-                    <div
-                        style={{
-                            width: '100%',
-                            border: '2px solid rgba(0, 0, 0, 0.1)',
-                            borderRadius: '5px',
-                            padding: '1rem',
-                        }}
-                    >
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            {userInfo && (
-                                <Avatar
-                                    src={userImage}
-                                    sx={{
-                                        bgcolor: '#0098ee',
-                                        color: 'white',
-                                        verticalAlign: 'middle',
-                                        width: '40px',
-                                        height: '40px',
-                                        marginRight: '0.5rem',
-                                    }}
-                                />
-                            )}
-                            <Typography>{userInfo && userNickName}</Typography>
-                        </div>
+                <BottomCommentBox>
+                    <UserCommentWrapper>
+                        <CommentUserAvatarContainer>
+                            {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
+                            <Typography>{loginStatus && userNickName}</Typography>
+                        </CommentUserAvatarContainer>
                         <CommentBox>
                             <TextField
                                 sx={{ width: '100%' }}
                                 placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
+                                disabled={!loginStatus}
                             />
-                            <CustomBtn
-                                variant="contained"
-                                sx={{
-                                    margin: '1rem',
-                                }}
-                                onClick={CommentRegister}
-                            >
+                            <CustomBtn variant="contained" margin={'1rem'} onClick={CommentRegister}>
                                 등록
                             </CustomBtn>
-                            <CustomBtn
-                                variant="contained"
-                                sx={{
-                                    margin: '1rem 0',
-                                }}
-                                onClick={CommentRegister}
-                            >
+                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={CommentRegister}>
                                 등록 + 추천
                             </CustomBtn>
                         </CommentBox>
-                    </div>
-                    <CustomBtn
-                        variant="contained"
-                        sx={{
-                            margin: '1rem 0',
-                        }}
-                        onClick={goList}
-                    >
+                    </UserCommentWrapper>
+                    <CustomBtn variant="contained" margin={'1rem 0'} onClick={goList}>
                         목록
                     </CustomBtn>
-                    <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                        <div>
-                            <CustomBtn
-                                variant="contained"
-                                sx={{
-                                    margin: '1rem',
-                                }}
-                                onClick={handlePrevPost}
-                            >
-                                이전글
-                            </CustomBtn>
-                            <CustomBtn
-                                variant="contained"
-                                sx={{
-                                    margin: '1rem 0',
-                                }}
-                                onClick={handleNextPost}
-                            >
-                                다음글
-                            </CustomBtn>
-                        </div>
-                    </div>
-                </WriteCommentBox>
+                    <PageMoveBox>
+                        <CustomBtn variant="contained" margin={'1rem'} onClick={handlePrevPost}>
+                            이전글
+                        </CustomBtn>
+                        <CustomBtn variant="contained" margin={'1rem 0'} onClick={handleNextPost}>
+                            다음글
+                        </CustomBtn>
+                    </PageMoveBox>
+                </BottomCommentBox>
             </PostViewerPaper>
-            {/* <Paper sx={{ height: '75%', width: '80%', margin: 'auto', padding: '2rem', marginBottom: '1rem' }}> */}
-            {/* </Paper> */}
         </Background>
     );
 };
@@ -392,13 +355,34 @@ const CommentText = styled(Typography)`
     color: rgb(55 65 81);
 `;
 
-const WriteCommentBox = styled.div`
+const BottomCommentBox = styled.div`
     margin: 1rem 0;
     display: flex;
     width: 100%;
     flex-wrap: wrap;
     border-top: 1px solid #eaeaea;
     padding-top: 1rem;
+`;
+
+const UserCommentWrapper = styled.div`
+    width: 100%;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 1rem;
+`;
+
+const CommentUserAvatarContainer = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const CommentUserAvatar = styled(Avatar)`
+    background-color: #0098ee;
+    color: white;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    margin-right: 0.5rem;
 `;
 
 const CommentBox = styled.div`
@@ -412,14 +396,25 @@ const CommentBox = styled.div`
     border-radius: 5px;
 `;
 
-const CustomBtn = styled(Button)`
+interface CustomBtnProps {
+    margin?: string;
+}
+
+const CustomBtn = styled(Button)<CustomBtnProps>`
     background-color: #0098ee;
     font-weight: 700;
     color: white;
     box-shadow: none;
     width: 7rem;
     height: 2.5rem;
+    margin: ${(props) => `${props.margin}`};
     :hover {
         box-shadow: none;
     }
+`;
+
+const PageMoveBox = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: center;
 `;
