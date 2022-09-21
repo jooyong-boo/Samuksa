@@ -17,6 +17,9 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
     const [totalPage, setTotalPage] = useState<any>([]);
     const [currentGroup, setCurrentGroup] = useState<any>([]);
 
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+    const [reactionBtn, setReactionBtn] = useState(10);
+
     let pageArray: number[] = [];
     useEffect(() => {
         for (let i = 1; i <= numPages; i++) {
@@ -27,19 +30,43 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
 
     let pageArr: number[] = [];
     const pagination = () => {
-        for (let i = 0; i < totalPage.length; i += 10) {
-            pageArr.push(totalPage.slice(i, i + 10));
+        for (let i = 0; i < totalPage.length; i += reactionBtn) {
+            pageArr.push(totalPage.slice(i, i + reactionBtn));
         }
         return pageArr;
     };
 
+    function getWindowDimensions() {
+        const { innerWidth: width } = window;
+        return {
+            width,
+        };
+    }
+
     useEffect(() => {
-        setCurrentGroup(pagination()[Math.floor((postPage - 1) / 10)]);
-    }, [totalPage, postPage]);
+        setCurrentGroup(pagination()[Math.floor((postPage - 1) / reactionBtn)]);
+    }, [totalPage, postPage, reactionBtn]);
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [windowDimensions]);
+
+    useEffect(() => {
+        if (windowDimensions.width < 501) {
+            setReactionBtn(8);
+        } else {
+            setReactionBtn(10);
+        }
+    }, [windowDimensions]);
 
     return (
         <>
-            <List sx={{ display: 'flex', justifyContent: 'center' }}>
+            <List sx={{ display: 'flex', justifyContent: 'center', width: '80%' }}>
                 <div>
                     <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
                         &lt;&lt;
@@ -48,9 +75,9 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
                         &lt;
                     </Button>
                 </div>
-                <div style={{ width: '20rem' }}>
+                <div style={{ margin: '0 1rem' }}>
                     {currentGroup &&
-                        currentGroup.map((btn: number, i: number) => (
+                        currentGroup.map((btn: number) => (
                             <Button
                                 key={btn}
                                 onClick={() => setPostPage(btn)}
@@ -75,8 +102,8 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
 
 const Button = styled.button`
     border: none;
-    padding: 0px 5px;
-    margin: 0;
+    /* padding: 0px 0.4rem; */
+    margin: 0 0.4rem;
     background: white;
     color: #5a5a5a;
     font-size: 1rem;

@@ -1,4 +1,5 @@
 import {
+    Avatar,
     Button,
     createTheme,
     FormControl,
@@ -31,6 +32,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
 import { getCommentById } from '../../api/post';
+import { getRandomNumber } from './PostViewer';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -226,16 +228,37 @@ const ReviewBoard = () => {
                                                 flexDirection: 'column',
                                                 justifyContent: 'space-between',
                                                 borderBottom: '1px solid #EAEAEA',
+                                                padding: '0.5rem 0',
                                             }}
                                         >
                                             <div>
+                                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Avatar
+                                                        src={`https://randomuser.me/api/portraits/women/${getRandomNumber(
+                                                            1,
+                                                            98,
+                                                        )}.jpg`}
+                                                        sx={{ width: '2rem', height: '2rem' }}
+                                                    />
+                                                    <Typography
+                                                        sx={{
+                                                            display: 'flex',
+                                                            marginLeft: '0.5rem',
+                                                            fontSize: '0.8rem',
+                                                        }}
+                                                    >
+                                                        {RandomNickname()}
+                                                    </Typography>
+                                                </div>
                                                 <Typography
                                                     sx={{
+                                                        textAlign: 'start',
                                                         maxWidth: '300px',
                                                         textOverflow: 'ellipsis',
                                                         whiteSpace: 'nowrap',
                                                         overflow: 'hidden',
-                                                        padding: '10px',
+                                                        padding: '10px 0',
+                                                        ':hover': { fontWeight: 'bold' },
                                                     }}
                                                 >
                                                     <TitleNavLink
@@ -264,21 +287,20 @@ const ReviewBoard = () => {
                                                         justifyContent: 'space-between',
                                                     }}
                                                 >
-                                                    <Typography>{RandomNickname()}</Typography>
                                                     <div style={{ display: 'flex' }}>
                                                         <Typography sx={{ marginRight: '0.3rem' }}>
                                                             조회: {id}
                                                         </Typography>
                                                         <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            댓글:
+                                                            댓글:{' '}
                                                             {postComment.length > 0 ? postComment[id - 1].length : ''}
                                                         </Typography>
                                                         <Typography>추천: {UserId}</Typography>
                                                     </div>
+                                                    <Typography
+                                                        sx={{ color: '#5A5A5A', textAlign: 'end' }}
+                                                    >{`${year}년 ${month}월 ${date}일`}</Typography>
                                                 </div>
-                                                <Typography
-                                                    sx={{ color: '#5A5A5A', width: '100%', textAlign: 'end' }}
-                                                >{`${year}년 ${month}월 ${date}일`}</Typography>
                                             </div>
                                         </li>
                                     </div>
@@ -410,7 +432,7 @@ const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
     border-bottom: 2px solid #a7a7a7;
     border-radius: 0;
-    max-height: 500px;
+    max-height: 600px;
     padding: 0px 12px;
     @media screen and (max-width: 700px) {
         display: none;
@@ -445,6 +467,7 @@ const PaginationStack = styled(Stack)`
     align-items: center;
     margin: auto;
     margin-top: 1rem;
+    overflow-x: hidden;
 `;
 
 const theme = createTheme({
