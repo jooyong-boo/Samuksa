@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import image from '../components/assets/img/mainImage.jpg';
+import image from '../components/assets/img/mainImage.webp';
 import {
     Box,
     Button,

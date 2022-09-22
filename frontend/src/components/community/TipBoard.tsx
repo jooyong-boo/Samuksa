@@ -117,8 +117,6 @@ const TipBoard = () => {
                             onChange={onSearch}
                             onKeyPress={(e) => handleSearch(e)}
                             autoComplete="off"
-                            // readOnly={fishList.length > 0 ? false : true}
-                            // disableUnderline={fishList.length > 0 ? false : true}
                         />
                     </SearchForm>
                     <WriteBtn variant="contained" onClick={goWriting}>
