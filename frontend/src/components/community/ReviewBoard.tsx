@@ -195,15 +195,13 @@ const ReviewBoard = () => {
                                                     }}
                                                 >
                                                     {title}
-                                                    <Typography>
+                                                    {/* <Typography>
                                                         {postComment.length > 0 ? postComment[id - 1].length : ''}
-                                                    </Typography>
+                                                    </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
-                                            <TableCell
-                                                sx={tableTextStyle}
-                                            >{`${year}년 ${month}월 ${date}일`}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                         </TableRow>

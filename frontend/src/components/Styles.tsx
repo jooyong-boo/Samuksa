@@ -22,17 +22,7 @@ export const LoadingText = styled.div`
 
 export const theme = createTheme({
     typography: {
-        fontFamily: [
-            'Pretendard',
-            'NanumBarunGothic',
-            'Noto Sans KR',
-            'nanumsquare',
-            'sans-serif',
-            '-apple-system',
-            'BlinkMacSystemFont',
-            'Segoe UI',
-            'Oxygen',
-        ].join(','),
+        fontFamily: ['Pretendard', 'sans-serif', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Oxygen'].join(','),
         fontSize: 14,
     },
     mixins: {

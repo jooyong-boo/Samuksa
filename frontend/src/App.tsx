@@ -1,20 +1,21 @@
 import './App.css';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
-import CalculatorPage from './pages/CalculatorPage';
-import MainPage from './pages/MainPage';
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
-import BoardPage from './pages/board/BoardPage';
-import WritingPage from './pages/WritingPage';
-import PostViewPage from './pages/PostViewPage';
-import ReviewPage from './pages/board/ReviewPage';
-import TipPage from './pages/board/TipPage';
-import ProfilePage from './pages/auth/ProfilePage';
 import UserInfoPage from './pages/auth/UserInfoPage';
 import RequireAuth from './components/utils/RequireAuth';
 import PublicAuth from './components/utils/PublicAuth';
+
+const MainPage = lazy(() => import('./pages/MainPage'));
+const CalculatorPage = lazy(() => import('./pages/CalculatorPage'));
+const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
+const BoardPage = lazy(() => import('./pages/board/BoardPage'));
+const ReviewPage = lazy(() => import('./pages/board/ReviewPage'));
+const TipPage = lazy(() => import('./pages/board/TipPage'));
+const WritingPage = lazy(() => import('./pages/WritingPage'));
+const PostViewPage = lazy(() => import('./pages/PostViewPage'));
+const ProfilePage = lazy(() => import('./pages/auth/ProfilePage'));
 
 function App() {
     return (
