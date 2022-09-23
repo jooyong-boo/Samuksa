@@ -138,7 +138,7 @@ const Main = () => {
                             variant="outlined"
                             value={personNum}
                             onChange={handlePersonNumChange}
-                            autoFocus
+                            // autoFocus
                             autoComplete="off"
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">명</InputAdornment>,
