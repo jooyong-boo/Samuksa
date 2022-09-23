@@ -34,7 +34,7 @@ const Wave1 = styled.div`
         repeat-x;
     position: absolute;
     /* top: 80%; */
-    bottom: 55%;
+    bottom: 50%;
     width: 6500px;
     height: 198px;
     animation: ${Wave} 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
@@ -43,7 +43,7 @@ const Wave1 = styled.div`
 
 const Wave2 = styled(Wave1)`
     /* top: 85%; */
-    bottom: 50%;
+    bottom: 45%;
     animation: ${Wave} 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, ${Swell} 7s ease -1.25s infinite;
     opacity: 1;
 `;

@@ -159,13 +159,13 @@ const SearchConditions = () => {
                         <CustomGrid container spacing={5}>
                             <CustomGrid item xs={10}>
                                 <TextField
-                                    id="outlined-basic"
+                                    id="peopleNumber"
                                     label="인원수"
                                     type="string"
                                     variant="outlined"
                                     value={personNum}
                                     onChange={handlePersonNumChange}
-                                    autoFocus={true}
+                                    // autoFocus={true}
                                     fullWidth
                                     autoComplete="off"
                                     InputProps={{
@@ -180,7 +180,7 @@ const SearchConditions = () => {
                             </CustomGrid>
                             <CustomGrid item xs={10}>
                                 <TextField
-                                    id="outlined-basic"
+                                    id="budget"
                                     label="예산"
                                     type="string"
                                     variant="outlined"
