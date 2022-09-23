@@ -9,17 +9,17 @@ const Introduction = () => {
     return (
         <Background>
             <TitleBox>
-                <CustomTypography fontSize={'4.28rem'} marginRight={'1rem'}>
+                <TitleText fontSize={'4.28rem'} marginRight={'1rem'}>
                     What is
-                </CustomTypography>
-                <CustomTypography fontSize={'4.28rem'} color={'#0098ee'} fontWeight={'600'}>
+                </TitleText>
+                <TitleText fontSize={'4.28rem'} color={'#0098ee'} fontWeight={'600'}>
                     Samuksa
-                </CustomTypography>
-                <CustomTypography fontSize={'4.28rem'}>?</CustomTypography>
+                </TitleText>
+                <TitleText fontSize={'4.28rem'}>?</TitleText>
             </TitleBox>
             <Grid
                 container
-                rowSpacing={4}
+                rowSpacing={2}
                 sx={{ textAlign: 'center', marginBottom: '30px' }}
                 justifyContent="space-evenly"
             >
@@ -68,21 +68,49 @@ const Background = styled.div`
     justify-content: space-evenly;
     align-items: center;
     overflow: hidden;
+    padding-top: 3rem;
 `;
 
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '16rem',
-    height: '22rem',
-    objectFit: 'cover',
-    margin: 'auto',
-    borderRadius: '5px',
-});
+interface TitleBoxProps {
+    fontSize?: any;
+    color?: any;
+    fontWeight?: any;
+    marginRight?: any;
+}
+
+const TitleText = styled(Typography)<TitleBoxProps>`
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '1rem')};
+    color: ${(props) => (props.color ? `${props.color}` : 'black')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : 'normal')};
+    margin-right: ${(props) => (props.marginRight ? `${props.marginRight}` : '0')};
+    @media all and (max-width: 479px) {
+        font-size: 3rem;
+    }
+`;
+
+const Img = styled.img`
+    display: block;
+    width: 16rem;
+    height: 22rem;
+    object-fit: cover;
+    margin: auto;
+    border-radius: 5px;
+    @media all and (min-width: 700px) and (max-width: 749px) {
+        width: 14rem;
+        height: 19rem;
+    }
+    @media all and (max-width: 500px) {
+        width: 11rem;
+        height: 14rem;
+    }
+`;
 
 const TitleBox = styled.div`
     display: flex;
     margin-top: 36px;
+    @media all and (max-width: 500px) {
+        text-align: center;
+    }
 `;
 
 interface CustomTypographyProps {
