@@ -284,17 +284,25 @@ export default React.memo(SearchResults);
 
 const Card = styled.div`
     background-color: white;
-    width: 1190px;
+    width: 93%;
+    /* width: 1190px; */
     height: 550px;
-    min-width: 500px;
+    min-width: 370px;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 7%;
     z-index: 3;
+    @media all and (max-width: 1023px) {
+        display: flex;
+        flex-wrap: wrap;
+        height: 100%;
+        flex-direction: column;
+    }
 `;
 
 const Container = styled.div`
     display: flex;
+    width: 100%;
     justify-content: space-between;
     padding-right: 0.5rem;
     border-bottom: 1px solid #eaeaea;
@@ -315,7 +323,7 @@ const CustomDiv = styled.div`
     overflow: overlay;
     overflow-x: hidden;
     border-bottom-left-radius: 5px;
-    min-width: 20%;
+    min-width: 240px;
     &::-webkit-scrollbar {
         width: 5px;
         border-radius: 5px;
@@ -324,11 +332,17 @@ const CustomDiv = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
+    @media all and (max-width: 500px) {
+        width: 50%;
+    }
 `;
 
 const ResultDiv = styled.div`
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    @media all and (max-width: 500px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const CustomCardContent = styled(CardContent)`
@@ -379,6 +393,7 @@ interface SearchedCombinationsTypographyProps {
 }
 
 const SearchedCombinationsTypography = styled(Typography)<SearchedCombinationsTypographyProps>`
+    max-width: 120px;
     color: ${(props) => (props.color ? `${props.color}` : 'white')};
     font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
     font-size: ${(props) =>
@@ -403,7 +418,7 @@ const CustomListDiv = styled.div`
     background-color: white;
     border-right: 1px solid #eaeaea;
     /* border-bottom: 1px solid #f6f6f6; */
-    min-width: 11%;
+    min-width: 130px;
     position: relative;
     overflow: overlay;
     max-height: 497px;
@@ -416,6 +431,9 @@ const CustomListDiv = styled.div`
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
+    }
+    @media all and (max-width: 500px) {
+        width: 40%;
     }
 `;
 
@@ -452,7 +470,7 @@ const CustomListItemTypography = styled(Typography)<CustomListItemTypographyProp
 `;
 
 const SelectedEstimateContainer = styled.div`
-    width: 69%;
+    width: 68%;
     height: auto;
     min-width: 300px;
     max-height: 494px;
@@ -467,6 +485,9 @@ const SelectedEstimateContainer = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
+    @media all and (max-width: 1120px) {
+        width: 100%;
+    }
 `;
 
 const SelectedEstimateTopMenu = styled.div`
@@ -475,6 +496,9 @@ const SelectedEstimateTopMenu = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem 0 0;
+    @media all and (max-width: 1120px) {
+        display: none;
+    }
 `;
 
 interface EstimateTopTextProps {
@@ -492,13 +516,3 @@ const EstimateTopText = styled(Typography)<EstimateTopTextProps>`
     font-weight: ${(props) => props.fontWeight && `${props.fontWeight}`};
     margin-bottom: ${(props) => props.marginBottom && `${props.marginBottom}`};
 `;
-
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '50px',
-    height: '50px',
-    objectFit: 'cover',
-    margin: 'auto',
-    // padding: '9px 13px',
-});
