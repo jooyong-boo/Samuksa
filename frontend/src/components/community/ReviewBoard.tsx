@@ -107,19 +107,19 @@ const ReviewBoard = () => {
         setUsePosts(newPosts);
     }, [posts]);
 
-    const getPostComment = async () => {
-        let comment = await Promise.all(
-            posts.map((post) => {
-                let newComment = getCommentById(post.id);
-                return newComment;
-            }),
-        );
-        setPostComment(comment);
-    };
+    // const getPostComment = async () => {
+    //     let comment = await Promise.all(
+    //         posts.map((post) => {
+    //             let newComment = getCommentById(post.id);
+    //             return newComment;
+    //         }),
+    //     );
+    //     setPostComment(comment);
+    // };
 
-    useEffect(() => {
-        getPostComment();
-    }, [usePosts]);
+    // useEffect(() => {
+    //     getPostComment();
+    // }, [usePosts]);
 
     return (
         <Background>
