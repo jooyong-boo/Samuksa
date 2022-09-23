@@ -343,7 +343,7 @@ const Register = () => {
                                 </CustomBtn>
                             </InputBox>
                             <InputBox paddingTop={'0.5rem'} display={'flex'}>
-                                {checkEmail ? (
+                                {!checkEmail ? (
                                     <>
                                         <TextField
                                             id="emailAuth"
