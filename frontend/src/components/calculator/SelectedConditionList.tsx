@@ -147,7 +147,7 @@ const Card = styled.div`
     /* margin: 30px 100px; */
     position: relative;
     /* 테블릿 세로 (해상도 768px ~ 1023px)*/
-    @media all and (min-width: 768px) and (max-width: 1023px) {
+    @media all and (min-width: 768px) and (max-width: 1185px) {
         margin-bottom: 1rem;
     }
 
