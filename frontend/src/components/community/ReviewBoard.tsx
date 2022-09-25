@@ -308,14 +308,7 @@ const ReviewBoard = () => {
                     </MobileBoardContainer>
                 </ThemeProvider>
                 <PaginationStack>
-                    <Pagination
-                        total={posts.length}
-                        limit={limit}
-                        page={page}
-                        setPage={setPage}
-                        postPage={postPage}
-                        setPostPage={setPostPage}
-                    />
+                    <Pagination total={posts.length} limit={limit} postPage={postPage} setPostPage={setPostPage} />
                 </PaginationStack>
             </ReviewBoardContainer>
         </Background>

@@ -183,8 +183,6 @@ const TipBoard = () => {
                     <Pagination
                         total={reversePosts.length}
                         limit={limit}
-                        page={page}
-                        setPage={setPage}
                         postPage={postPage}
                         setPostPage={setPostPage}
                     />
