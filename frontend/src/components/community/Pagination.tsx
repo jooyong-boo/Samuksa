@@ -18,10 +18,10 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
     const [currentGroup, setCurrentGroup] = useState<any>([]);
 
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-    const [reactionBtn, setReactionBtn] = useState(10);
+    const [reactionBtn, setReactionBtn] = useState(0);
 
-    let pageArray: number[] = [];
     useEffect(() => {
+        let pageArray: number[] = [];
         for (let i = 1; i <= numPages; i++) {
             pageArray.push(i);
         }
@@ -31,7 +31,11 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
     let pageArr: number[] = [];
     const pagination = () => {
         for (let i = 0; i < totalPage.length; i += reactionBtn) {
-            pageArr.push(totalPage.slice(i, i + reactionBtn));
+            if (i > totalPage.length) {
+                pageArr.push(totalPage.slice(i, i + reactionBtn - totalPage.length));
+            } else {
+                pageArr.push(totalPage.slice(i, i + reactionBtn));
+            }
         }
         return pageArr;
     };
@@ -58,7 +62,7 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
 
     useEffect(() => {
         if (windowDimensions.width < 501) {
-            setReactionBtn(8);
+            setReactionBtn(6);
         } else {
             setReactionBtn(10);
         }
@@ -77,15 +81,18 @@ const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagi
                 </div>
                 <div style={{ margin: '0 1rem' }}>
                     {currentGroup &&
-                        currentGroup.map((btn: number) => (
-                            <Button
-                                key={btn}
-                                onClick={() => setPostPage(btn)}
-                                aria-current={postPage === btn ? 'page' : undefined}
-                            >
-                                {btn}
-                            </Button>
-                        ))}
+                        currentGroup.map((btn: number) => {
+                            // console.log(currentGroup);
+                            return (
+                                <Button
+                                    key={btn}
+                                    onClick={() => setPostPage(btn)}
+                                    aria-current={postPage === btn ? 'page' : undefined}
+                                >
+                                    {btn}
+                                </Button>
+                            );
+                        })}
                 </div>
                 <div>
                     <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
