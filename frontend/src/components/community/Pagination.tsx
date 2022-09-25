@@ -6,13 +6,11 @@ import styled from 'styled-components';
 interface pagination {
     total: number;
     limit: number;
-    page: number;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
     postPage: number;
     setPostPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Pagination = ({ total, limit, page, setPage, postPage, setPostPage }: pagination) => {
+const Pagination = ({ total, limit, postPage, setPostPage }: pagination) => {
     const numPages = Math.ceil(total / limit);
     const [totalPage, setTotalPage] = useState<any>([]);
     const [currentGroup, setCurrentGroup] = useState<any>([]);
