@@ -59,8 +59,12 @@ const Pagination = ({ total, limit, postPage, setPostPage }: pagination) => {
     }, [windowDimensions]);
 
     useEffect(() => {
-        if (windowDimensions.width < 501) {
+        if (windowDimensions.width < 561 && 501 <= windowDimensions.width) {
+            setReactionBtn(8);
+        } else if (windowDimensions.width >= 400 && windowDimensions.width < 501) {
             setReactionBtn(6);
+        } else if (windowDimensions.width < 400) {
+            setReactionBtn(4);
         } else {
             setReactionBtn(10);
         }
