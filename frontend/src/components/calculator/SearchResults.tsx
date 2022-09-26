@@ -340,7 +340,7 @@ const CustomDiv = styled.div`
 const ResultDiv = styled.div`
     display: flex;
     flex-wrap: nowrap;
-    @media all and (max-width: 500px) {
+    @media all and (max-width: 700px) {
         flex-wrap: wrap;
     }
 `;
