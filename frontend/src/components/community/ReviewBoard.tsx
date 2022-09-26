@@ -3,9 +3,12 @@ import {
     Button,
     createTheme,
     FormControl,
+    IconButton,
     Input,
     InputAdornment,
     List,
+    Menu,
+    MenuItem,
     Stack,
     Table,
     TableBody,
@@ -99,11 +102,23 @@ const ReviewBoard = () => {
         const readPost = localStorage.getItem('reviewReadPost');
         const newPosts = posts.map((item: any) => {
             if (readPost?.includes(item.id)) {
-                return Object.assign({}, item, { read: true });
+                return Object.assign(
+                    {},
+                    item,
+                    { read: true },
+                    { nickName: RandomNickname() },
+                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+                );
             } else {
-                return item;
+                return Object.assign(
+                    {},
+                    item,
+                    { nickName: RandomNickname() },
+                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+                );
             }
         });
+
         setUsePosts(newPosts);
     }, [posts]);
 
@@ -121,6 +136,28 @@ const ReviewBoard = () => {
     //     getPostComment();
     // }, [usePosts]);
 
+    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+    const Menuopen = Boolean(anchorElNav);
+
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElNav(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const pages = [
+        {
+            id: 1,
+            name: '작성순',
+        },
+        {
+            id: 2,
+            name: '추천순',
+        },
+    ];
+
     return (
         <Background>
             <ReviewBoardContainer>
@@ -134,9 +171,39 @@ const ReviewBoard = () => {
                         <SearchBtn variant="outlined" onClick={openSearch}>
                             <StyleSearchIcon />
                         </SearchBtn>
-                        <SortBtn variant="outlined">
+                        {/* <SortBtn variant="outlined"> */}
+
+                        <SortBtn
+                            variant="outlined"
+                            aria-controls={Menuopen ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={Menuopen ? 'true' : undefined}
+                            onClick={handleOpenNavMenu}
+                        >
                             <StyleListIcon />
                         </SortBtn>
+                        <Menu id="게시글정렬" anchorEl={anchorElNav} open={Menuopen} onClose={handleCloseNavMenu}>
+                            {pages.map(({ id, name }) => {
+                                return (
+                                    <MenuItem
+                                        key={id}
+                                        onClick={handleCloseNavMenu}
+                                        sx={{ width: '80px', padding: 0, height: '30px' }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: '400',
+                                                textAlign: 'center',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            {name}
+                                        </Typography>
+                                    </MenuItem>
+                                );
+                            })}
+                        </Menu>
+                        {/* </SortBtn> */}
                     </div>
                 </BoardTopWrapper>
                 {open ? (
@@ -169,7 +236,7 @@ const ReviewBoard = () => {
                             </TableHead>
                             <TableBody>
                                 {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read } = item;
+                                    const { id, title, UserId, createdAt, read, nickName } = item;
                                     const newCreateAt = new Date(createdAt);
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
@@ -200,7 +267,7 @@ const ReviewBoard = () => {
                                                     </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{nickName}</TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -213,11 +280,12 @@ const ReviewBoard = () => {
                     <MobileBoardContainer>
                         <StyledUl>
                             {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                const { id, title, UserId, createdAt, read } = item;
+                                const { id, title, UserId, createdAt, read, nickName, avatar } = item;
                                 const newCreateAt = new Date(createdAt);
                                 const year = newCreateAt.getFullYear();
                                 const month = newCreateAt.getMonth();
                                 const date = newCreateAt.getDate();
+
                                 return (
                                     <div key={id}>
                                         <li
@@ -231,13 +299,7 @@ const ReviewBoard = () => {
                                         >
                                             <div>
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Avatar
-                                                        src={`https://randomuser.me/api/portraits/women/${getRandomNumber(
-                                                            1,
-                                                            98,
-                                                        )}.jpg`}
-                                                        sx={{ width: '2rem', height: '2rem' }}
-                                                    />
+                                                    <Avatar src={avatar} sx={{ width: '2rem', height: '2rem' }} />
                                                     <Typography
                                                         sx={{
                                                             display: 'flex',
@@ -245,7 +307,7 @@ const ReviewBoard = () => {
                                                             fontSize: '0.8rem',
                                                         }}
                                                     >
-                                                        {RandomNickname()}
+                                                        {nickName}
                                                     </Typography>
                                                 </div>
                                                 <Typography
@@ -308,14 +370,7 @@ const ReviewBoard = () => {
                     </MobileBoardContainer>
                 </ThemeProvider>
                 <PaginationStack>
-                    <Pagination
-                        total={posts.length}
-                        limit={limit}
-                        page={page}
-                        setPage={setPage}
-                        postPage={postPage}
-                        setPostPage={setPostPage}
-                    />
+                    <Pagination total={posts.length} limit={limit} postPage={postPage} setPostPage={setPostPage} />
                 </PaginationStack>
             </ReviewBoardContainer>
         </Background>
