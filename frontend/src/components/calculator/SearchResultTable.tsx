@@ -170,6 +170,60 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                         <Typography>총가격</Typography>
                     </div>
                 </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <div style={{ padding: '1rem' }}>
+                        <CustomMobileAvatar alt={'1'} src={image} />
+                        <Typography>어종(자연산)</Typography>
+                        <Typography>국내산</Typography>
+                        <Typography>무게</Typography>
+                        <Typography>수량</Typography>
+                        <Typography>가격</Typography>
+                        <Typography>총가격</Typography>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <div style={{ padding: '1rem' }}>
+                        <CustomMobileAvatar alt={'1'} src={image} />
+                        <Typography>어종(자연산)</Typography>
+                        <Typography>국내산</Typography>
+                        <Typography>무게</Typography>
+                        <Typography>수량</Typography>
+                        <Typography>가격</Typography>
+                        <Typography>총가격</Typography>
+                    </div>
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <div style={{ padding: '1rem' }}>
+                        <CustomMobileAvatar alt={'1'} src={image} />
+                        <Typography>어종(자연산)</Typography>
+                        <Typography>국내산</Typography>
+                        <Typography>무게</Typography>
+                        <Typography>수량</Typography>
+                        <Typography>가격</Typography>
+                        <Typography>총가격</Typography>
+                    </div>
+                </div>
             </MobileGridBox>
         </>
     );
@@ -236,12 +290,17 @@ const DetailWeightPriceDiv = styled.div`
 `;
 
 const MobileGridBox = styled.div`
+    width: 60%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30%, auto));
+    grid-template-columns: repeat(auto-fit, 100px);
     justify-content: center;
     align-content: center;
     text-align: center;
+    /* grid-auto-rows: 100px; */
     @media all and (min-width: 1121px) {
         display: none;
+    }
+    @media all and (max-width: 700px) {
+        width: 100%;
     }
 `;
