@@ -9,6 +9,7 @@ import {
     List,
     Menu,
     MenuItem,
+    SelectChangeEvent,
     Stack,
     Table,
     TableBody,
@@ -39,6 +40,25 @@ import { getRandomNumber } from './PostViewer';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
+const SortPages = [
+    {
+        id: 1,
+        name: '최신순',
+    },
+    {
+        id: 2,
+        name: '추천순',
+    },
+    {
+        id: 3,
+        name: '댓글순',
+    },
+    {
+        id: 4,
+        name: '조회순',
+    },
+];
+
 const ReviewBoard = () => {
     const notifyError = (text: string) => {
         dismissAll();
@@ -61,6 +81,7 @@ const ReviewBoard = () => {
     const [searchPosts, setSearchPosts] = useState('');
     const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
+    const [curSort, setCurSort] = useState(SortPages[0].name);
 
     const openSearch = () => {
         setOpen(!open);
@@ -122,20 +143,6 @@ const ReviewBoard = () => {
         setUsePosts(newPosts);
     }, [posts]);
 
-    // const getPostComment = async () => {
-    //     let comment = await Promise.all(
-    //         posts.map((post) => {
-    //             let newComment = getCommentById(post.id);
-    //             return newComment;
-    //         }),
-    //     );
-    //     setPostComment(comment);
-    // };
-
-    // useEffect(() => {
-    //     getPostComment();
-    // }, [usePosts]);
-
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
 
@@ -147,16 +154,12 @@ const ReviewBoard = () => {
         setAnchorElNav(null);
     };
 
-    const pages = [
-        {
-            id: 1,
-            name: '작성순',
-        },
-        {
-            id: 2,
-            name: '추천순',
-        },
-    ];
+    const handleSortPage = (e: React.MouseEvent, name: string) => {
+        e.preventDefault();
+        if (curSort !== name) {
+            setCurSort(name);
+        }
+    };
 
     return (
         <Background>
@@ -181,14 +184,20 @@ const ReviewBoard = () => {
                             onClick={handleOpenNavMenu}
                         >
                             <StyleListIcon />
+                            <Typography sx={{ fontSize: '0.8rem', color: '#374151', fontWeight: '500' }}>
+                                {curSort}
+                            </Typography>
                         </SortBtn>
                         <Menu id="게시글정렬" anchorEl={anchorElNav} open={Menuopen} onClose={handleCloseNavMenu}>
-                            {pages.map(({ id, name }) => {
+                            {SortPages.map(({ id, name }) => {
                                 return (
                                     <MenuItem
                                         key={id}
-                                        onClick={handleCloseNavMenu}
-                                        sx={{ width: '80px', padding: 0, height: '30px' }}
+                                        onClick={(e) => {
+                                            handleCloseNavMenu();
+                                            handleSortPage(e, name);
+                                        }}
+                                        sx={{ width: '80px', padding: '1rem 0' }}
                                     >
                                         <Typography
                                             sx={{
