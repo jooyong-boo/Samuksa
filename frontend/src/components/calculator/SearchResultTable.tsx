@@ -26,7 +26,7 @@ const tableTextStyle = {
     color: '#5A5A5A',
 };
 
-const tableTop = ['', '수산물 명', '원산지', '양식여부', '무게', '수량', '가격', '순살 무게', '합계'];
+const tableTop = ['', '수산물 명', '원산지', '무게', '수량', '가격', '합계'];
 
 interface estimate {
     selectEstimate: any;
@@ -75,8 +75,10 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                                   <TableCell component="th" scope="row" sx={tableTextStyle}>
                                                       {fishName}
                                                   </TableCell>
-                                                  <TableCell sx={tableTextStyle}>{areaFrom}</TableCell>
-                                                  <TableCell sx={tableTextStyle}>{farmType}</TableCell>
+                                                  <TableCell sx={tableTextStyle}>
+                                                      {areaFrom} ({farmType})
+                                                  </TableCell>
+                                                  {/* <TableCell sx={tableTextStyle}>{farmType}</TableCell> */}
                                                   {/* <TableCell>{ maxWeight && minWeight? `${minWeight / 1000} ~ ${maxWeight / 1000}kg` : maxWeight? `${maxWeight / 1000}kg` : `${minWeight / 1000}kg` }</TableCell> */}
                                                   <TableCell sx={tableTextStyle}>
                                                       {(weightPerServing * serving) / 1000}
@@ -86,10 +88,10 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                                   <TableCell sx={tableTextStyle}>
                                                       {(price * 1000).toLocaleString('ko-KR')}원
                                                   </TableCell>
-                                                  <TableCell sx={tableTextStyle}>
+                                                  {/* <TableCell sx={tableTextStyle}>
                                                       {((weightPerServing * serving) / 1000) * 0.5}
                                                       kg
-                                                  </TableCell>
+                                                  </TableCell> */}
                                                   {/* <TableCell>{maxWeight? ((maxWeight * 0.5) / 1000) : minWeight? ((minWeight * 0.5) / 1000) : null}kg</TableCell> */}
                                                   <TableCell sx={tableTextStyle}>
                                                       {totalMoney.toLocaleString('ko-KR')}원
@@ -152,84 +154,61 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                 </CombinationInfoContainer>
             </ResultTableWrapper>
             <MobileGridBox>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div style={{ padding: '1rem' }}>
-                        <CustomMobileAvatar alt={'1'} src={image} />
-                        <Typography>어종(자연산)</Typography>
-                        <Typography>국내산</Typography>
-                        <Typography>무게</Typography>
-                        <Typography>수량</Typography>
-                        <Typography>가격</Typography>
-                        <Typography>총가격</Typography>
-                    </div>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div style={{ padding: '1rem' }}>
-                        <CustomMobileAvatar alt={'1'} src={image} />
-                        <Typography>어종(자연산)</Typography>
-                        <Typography>국내산</Typography>
-                        <Typography>무게</Typography>
-                        <Typography>수량</Typography>
-                        <Typography>가격</Typography>
-                        <Typography>총가격</Typography>
-                    </div>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div style={{ padding: '1rem' }}>
-                        <CustomMobileAvatar alt={'1'} src={image} />
-                        <Typography>어종(자연산)</Typography>
-                        <Typography>국내산</Typography>
-                        <Typography>무게</Typography>
-                        <Typography>수량</Typography>
-                        <Typography>가격</Typography>
-                        <Typography>총가격</Typography>
-                    </div>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div style={{ padding: '1rem' }}>
-                        <CustomMobileAvatar alt={'1'} src={image} />
-                        <Typography>어종(자연산)</Typography>
-                        <Typography>국내산</Typography>
-                        <Typography>무게</Typography>
-                        <Typography>수량</Typography>
-                        <Typography>가격</Typography>
-                        <Typography>총가격</Typography>
-                    </div>
-                </div>
+                {selectEstimate
+                    ? selectEstimate.map((item: any, i: number) => {
+                          const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
+                          const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [
+                              ...fishRecommendAlgoWeights,
+                          ];
+                          return (
+                              <div
+                                  style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      border: '1px solid #eaeaea',
+                                  }}
+                              >
+                                  <div
+                                      style={{
+                                          padding: '1rem',
+                                          height: '30rem',
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          justifyContent: 'space-between',
+                                      }}
+                                  >
+                                      <CustomMobileAvatar alt={'1'} src={image} />
+                                      <Typography>
+                                          {fishName}({farmType})
+                                      </Typography>
+                                      <Typography>{areaFrom}</Typography>
+                                      <Typography>
+                                          {' '}
+                                          {(weightPerServing * serving) / 1000}
+                                          kg
+                                      </Typography>
+                                      <Typography>{serving}마리</Typography>
+                                      <Typography> {(price * 1000).toLocaleString('ko-KR')}원</Typography>
+                                      <Typography>{totalMoney.toLocaleString('ko-KR')}원</Typography>
+                                  </div>
+                              </div>
+                          );
+                      })
+                    : null}
             </MobileGridBox>
         </>
     );
 }
 const ResultTableWrapper = styled.div`
-    @media all and (max-width: 1120px) {
+    @media all and (min-width: 951px) {
+        width: 100%;
+    }
+    @media all and (min-width: 729px) and (max-width: 950px) {
+        display: none;
+    }
+    @media all and (max-width: 615px) {
         display: none;
     }
 `;
@@ -247,9 +226,10 @@ const CustomAvatar = styled(Avatar)`
 `;
 
 const CustomMobileAvatar = styled(Avatar)`
-    height: 6em;
+    height: 6rem;
     width: 6rem;
     border-radius: 3px;
+    margin-bottom: 1rem;
 `;
 
 const CombinationInfoContainer = styled.div`
@@ -290,17 +270,26 @@ const DetailWeightPriceDiv = styled.div`
 `;
 
 const MobileGridBox = styled.div`
-    width: 60%;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, 100px);
+    grid-template-columns: repeat(auto-fit, 130px);
     justify-content: center;
     align-content: center;
     text-align: center;
-    /* grid-auto-rows: 100px; */
-    @media all and (min-width: 1121px) {
+    grid-gap: 20px;
+    padding-bottom: 1rem;
+    @media all and (min-width: 951px) {
         display: none;
     }
-    @media all and (max-width: 700px) {
+    @media all and (min-width: 731px) and (max-width: 950px) {
         width: 100%;
+        display: grid;
+    }
+    @media all and (min-width: 616px) and (max-width: 730px) {
+        display: none;
+    }
+    @media all and (max-width: 615px) {
+        width: 100%;
+        display: grid;
     }
 `;
