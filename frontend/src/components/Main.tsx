@@ -70,10 +70,6 @@ const Main = () => {
         }
     };
 
-    const handleAreaChange = (e: SelectChangeEvent) => {
-        setArea(e.target.value as string);
-    };
-
     const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
@@ -83,6 +79,10 @@ const Main = () => {
             notify('가격은 천만원 이하로 해주세요');
             setMoney(String(10000000));
         }
+    };
+
+    const handleAreaChange = (e: SelectChangeEvent) => {
+        setArea(e.target.value as string);
     };
 
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
