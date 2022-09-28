@@ -69,6 +69,9 @@ const Background = styled.div`
     align-items: center;
     overflow: hidden;
     padding-top: 3rem;
+    @media all and (max-width: 500px) {
+        justify-content: flex-start;
+    }
 `;
 
 interface TitleBoxProps {
@@ -83,33 +86,34 @@ const TitleText = styled(Typography)<TitleBoxProps>`
     color: ${(props) => (props.color ? `${props.color}` : 'black')};
     font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : 'normal')};
     margin-right: ${(props) => (props.marginRight ? `${props.marginRight}` : '0')};
-    @media all and (max-width: 479px) {
+    @media all and (max-width: 500px) {
         font-size: 3rem;
     }
 `;
 
 const Img = styled.img`
     display: block;
-    width: 16rem;
-    height: 22rem;
+    width: 14rem;
+    height: 19rem;
     object-fit: cover;
     margin: auto;
     border-radius: 5px;
-    @media all and (min-width: 700px) and (max-width: 749px) {
-        width: 14rem;
-        height: 19rem;
+    @media all and (max-width: 900px) {
+        width: 12rem;
+        height: 16rem;
     }
     @media all and (max-width: 500px) {
-        width: 11rem;
-        height: 14rem;
+        width: 9rem;
+        height: 12rem;
     }
 `;
 
 const TitleBox = styled.div`
     display: flex;
-    margin-top: 36px;
+    margin-top: 30px;
     @media all and (max-width: 500px) {
         text-align: center;
+        margin-top: 25px;
     }
 `;
 
