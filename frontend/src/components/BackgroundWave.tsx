@@ -39,6 +39,12 @@ const Wave1 = styled.div`
     height: 198px;
     animation: ${Wave} 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
     transform: translate3d(0, 0, 0);
+    @media screen and (max-width: 1200px) {
+        bottom: 40%;
+    }
+    @media screen and (max-width: 900px) {
+        bottom: 30%;
+    }
 `;
 
 const Wave2 = styled(Wave1)`
@@ -46,6 +52,12 @@ const Wave2 = styled(Wave1)`
     bottom: 45%;
     animation: ${Wave} 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, ${Swell} 7s ease -1.25s infinite;
     opacity: 1;
+    @media screen and (max-width: 1200px) {
+        bottom: 35%;
+    }
+    @media screen and (max-width: 900px) {
+        bottom: 25%;
+    }
 `;
 
 const BackgroundWave = () => {
