@@ -76,12 +76,14 @@ const ReviewBoard = () => {
     const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState);
     const offset = (postPage - 1) * limit;
     const userInfo = useRecoilValue<any>(userInfoState);
-    const posts = useRecoilValue<any[]>(getPostState);
+    const postsRecoil = useRecoilValue<any[]>(getPostState);
+    const [posts, setPosts] = useState(postsRecoil);
     const [usePosts, setUsePosts] = useState<any[]>([]);
     const [searchPosts, setSearchPosts] = useState('');
     const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState(SortPages[0].name);
+    const [searchOption, setSearchOption] = useState('제목');
 
     const openSearch = () => {
         setOpen(!open);
@@ -95,8 +97,36 @@ const ReviewBoard = () => {
 
     const handleSearch = (e: React.KeyboardEvent | React.MouseEvent): void => {
         if (e.type === 'click' || (e as React.KeyboardEvent).key === 'Enter') {
-            let result = posts.filter((post: any) => post.title.includes(searchPosts));
-            setUsePosts(result);
+            if (searchOption === '제목') {
+                let result = posts.filter((post: any) => post.title.includes(searchPosts));
+                if (result.length === 0) {
+                    return notifyError('일치하는 글이 없습니다.');
+                }
+                let writedResult = result.map((post) => {
+                    let readPost: any = localStorage.getItem('reviewReadPost');
+                    if (readPost?.includes(post.id)) {
+                        return { ...post, read: true };
+                    } else {
+                        return post;
+                    }
+                });
+                setUsePosts(writedResult);
+            }
+            if (searchOption === '글쓴이') {
+                let result = posts.filter((post: any) => post.nickName.includes(searchPosts));
+                if (result.length === 0) {
+                    return notifyError('일치하는 글이 없습니다.');
+                }
+                let writedResult = result.map((post) => {
+                    let readPost: any = localStorage.getItem('reviewReadPost');
+                    if (readPost?.includes(post.id)) {
+                        return { ...post, read: true };
+                    } else {
+                        return post;
+                    }
+                });
+                setUsePosts(writedResult);
+            }
         }
     };
 
@@ -119,9 +149,13 @@ const ReviewBoard = () => {
         }
     };
 
+    const handleChangeSearchOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSearchOption(e.target.value);
+    };
+
     useEffect(() => {
         const readPost = localStorage.getItem('reviewReadPost');
-        const newPosts = posts.map((item: any) => {
+        const newPosts = postsRecoil.map((item: any) => {
             if (readPost?.includes(item.id)) {
                 return Object.assign(
                     {},
@@ -140,8 +174,9 @@ const ReviewBoard = () => {
             }
         });
 
+        setPosts(newPosts);
         setUsePosts(newPosts);
-    }, [posts]);
+    }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
@@ -163,7 +198,7 @@ const ReviewBoard = () => {
 
     return (
         <Background>
-            <ReviewBoardContainer>
+            <BoardContainer>
                 <BoardTopWrapper>
                     {/* <BoardTitleText>리뷰게시판</BoardTitleText> */}
                     <WriteBtn variant="contained" onClick={goWriting}>
@@ -175,7 +210,6 @@ const ReviewBoard = () => {
                             <StyleSearchIcon />
                         </SearchBtn>
                         {/* <SortBtn variant="outlined"> */}
-
                         <SortBtn
                             variant="outlined"
                             aria-controls={Menuopen ? 'basic-menu' : undefined}
@@ -217,6 +251,15 @@ const ReviewBoard = () => {
                 </BoardTopWrapper>
                 {open ? (
                     <SearchContainer>
+                        <SelectBox
+                            onChange={(e) => {
+                                handleChangeSearchOption(e);
+                            }}
+                            // value={}
+                        >
+                            <option value="제목">제목</option>
+                            <option value="글쓴이">글쓴이</option>
+                        </SelectBox>
                         <SearchBox>
                             <StyledSearchIcon
                                 onClick={(e) => {
@@ -379,9 +422,14 @@ const ReviewBoard = () => {
                     </MobileBoardContainer>
                 </ThemeProvider>
                 <PaginationStack>
-                    <Pagination total={posts.length} limit={limit} postPage={postPage} setPostPage={setPostPage} />
+                    <Pagination
+                        total={postsRecoil.length}
+                        limit={limit}
+                        postPage={postPage}
+                        setPostPage={setPostPage}
+                    />
                 </PaginationStack>
-            </ReviewBoardContainer>
+            </BoardContainer>
         </Background>
     );
 };
@@ -410,7 +458,7 @@ const Background = styled.div`
     }
 `;
 
-const ReviewBoardContainer = styled.div`
+const BoardContainer = styled.div`
     width: 80%;
     text-align: center;
     overflow: auto;
@@ -465,11 +513,15 @@ const StyleListIcon = styled(ListIcon)`
 `;
 
 const SearchContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
     border-top: 1px solid #eaeaea;
 `;
 
 const SearchBox = styled.div`
     display: flex;
+    width: 90%;
     border: 1px solid #939393;
     border-radius: 10px;
     margin: 0.5rem 1rem;
@@ -484,7 +536,14 @@ const StyledSearchIcon = styled(SearchIcon)`
 
 const SearchInput = styled.input`
     border: none;
+    outline: none;
     width: 100%;
+`;
+
+const SelectBox = styled.select`
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
     :focus {
         outline: none;
     }
