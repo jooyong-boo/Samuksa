@@ -3,7 +3,7 @@ import React, { ReactElement } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { signUp, checkIdAxios, checkNickNameAxios, checkEmailAxios, checkEmailAuthAxios } from '../../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,11 +49,11 @@ const Register = () => {
 
     // 이메일
     const [email, setEmail] = useState('');
-    const [checkEmail, setCheckEmail] = useState(true);
-
+    const [checkEmail, setCheckEmail] = useState(false);
+    const [viewAuthNum, setViewAuthNum] = useState(false);
     // 이메일 인증번호
     const [authNum, setAuthNum] = useState('');
-    const [checkAuthNum, setCheckAuthNum] = useState(true);
+    const [checkAuthNum, setCheckAuthNum] = useState(false);
 
     const onChange = (
         change: (value: string) => void,
@@ -63,36 +63,36 @@ const Register = () => {
         let inputChange = e.target.value;
         if (check === id) {
             const IdReg = new RegExp(/^[a-z0-9]{4,12}$/);
+            change(inputChange);
             if (IdReg.test(inputChange)) {
-                change(inputChange);
                 setCheckId(false);
             } else {
-                change(inputChange);
                 setCheckId(true);
             }
         }
         if (check === nickName) {
             const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,8}$/);
+            change(inputChange);
             if (nickNameReg.test(inputChange)) {
-                change(inputChange);
                 setCheckNickName(false);
             } else {
-                change(inputChange);
                 setCheckNickName(true);
             }
         }
         if (check === password) {
-            const passwordReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/);
+            const passwordReg = new RegExp(/^(?=.*[A-Za-z0-9])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z0-9\d$@$!%*#?&]{8,16}$/);
+            change(inputChange);
             if (passwordReg.test(inputChange)) {
-                change(inputChange);
                 setCheckPw(false);
             } else {
-                change(inputChange);
                 setCheckPw(true);
+                setCheckPwConfirm(true);
             }
         }
         if (check === passwordConfirm) {
-            const passwordConfirmReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/);
+            const passwordConfirmReg = new RegExp(
+                /^(?=.*[A-Za-z0-9])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z0-9\d$@$!%*#?&]{8,16}$/,
+            );
             change(inputChange);
             if (passwordConfirmReg.test(inputChange) && password === passwordConfirm) {
                 setCheckPwConfirm(false);
@@ -105,19 +105,20 @@ const Register = () => {
                 /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
             );
             if (emailReg.test(inputChange)) {
-                setCheckEmail(false);
+                setCheckEmail(true);
                 change(inputChange);
             } else {
-                setCheckEmail(true);
+                setCheckEmail(false);
+                setCheckAuthNum(false);
             }
         }
         if (check === authNum) {
             const emailAuthReg = new RegExp(/^[0-9a-zA-Z]{8}$/);
             if (emailAuthReg.test(inputChange)) {
-                setCheckAuthNum(false);
+                setCheckAuthNum(true);
                 change(inputChange);
             } else {
-                setCheckAuthNum(true);
+                setCheckAuthNum(false);
             }
         }
     };
@@ -140,7 +141,8 @@ const Register = () => {
         checkEmailAxios({ email }).then((res) => {
             console.log(res);
             if (res?.data && res?.status === 201) {
-                setCheckEmail(true);
+                setCheckEmail(false);
+                setViewAuthNum(true);
                 notifySuccess(
                     <p>
                         입력한 이메일로 인증번호를 발송했습니다.
@@ -158,10 +160,12 @@ const Register = () => {
             console.log(res);
             if (res?.data === 'success') {
                 notifySuccess('이메일 인증완료');
-                setCheckAuthNum(true);
+                setCheckEmail(false);
+                setCheckAuthNum(false);
+                setViewAuthNum(false);
             } else {
                 notifyError('인증번호를 재확인해주세요');
-                setCheckAuthNum(false);
+                // setCheckAuthNum(false);
             }
         });
     };
@@ -207,6 +211,7 @@ const Register = () => {
             setCheckPwConfirm(true);
         } else {
             setCheckPwConfirm(false);
+            setCheckPw(false);
         }
     }, [password, passwordConfirm]);
 
@@ -297,7 +302,7 @@ const Register = () => {
                                     variant="outlined"
                                     size="small"
                                     type={passwordView ? '' : 'password'}
-                                    placeholder="8~16자리 영문, 숫자 조합"
+                                    placeholder="8~16자리 영문, 숫자, 특수문자 조합"
                                     autoComplete="off"
                                     fullWidth
                                     color={checkPw ? 'error' : 'primary'}
@@ -333,17 +338,17 @@ const Register = () => {
                                     placeholder="이메일 형식을 지켜주세요"
                                     fullWidth
                                     sx={{ flexGrow: 1 }}
-                                    color={checkEmail ? 'error' : 'primary'}
+                                    color={checkEmail ? 'primary' : 'error'}
                                     onChange={(e) => {
                                         onChange(setEmail, email, e);
                                     }}
                                 />
-                                <CustomBtn variant="contained" onClick={onClickEmailAuth} disabled={checkEmail}>
+                                <CustomBtn variant="contained" onClick={onClickEmailAuth} disabled={!checkEmail}>
                                     인증
                                 </CustomBtn>
                             </InputBox>
                             <InputBox paddingTop={'0.5rem'} display={'flex'}>
-                                {!checkEmail ? (
+                                {viewAuthNum ? (
                                     <>
                                         <TextField
                                             id="emailAuth"
@@ -352,7 +357,7 @@ const Register = () => {
                                             autoComplete="off"
                                             placeholder="인증번호 입력"
                                             sx={{ flexGrow: 1 }}
-                                            color={checkAuthNum ? 'error' : 'primary'}
+                                            color={checkAuthNum ? 'primary' : 'error'}
                                             onChange={(e) => {
                                                 onChange(setAuthNum, authNum, e);
                                             }}
@@ -360,7 +365,7 @@ const Register = () => {
                                         <CustomBtn
                                             variant="contained"
                                             onClick={onClickEmailAuthCheck}
-                                            disabled={checkAuthNum}
+                                            disabled={!checkAuthNum}
                                         >
                                             확인
                                         </CustomBtn>
@@ -455,7 +460,7 @@ const CustomTypography = styled(Typography)`
 `;
 
 const CustomBtn = styled(Button)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     box-shadow: none;
     margin-left: 0.5rem;
@@ -467,7 +472,7 @@ const CustomBtn = styled(Button)`
 const RegisterBtn = styled(Button)`
     width: 100%;
     margin-top: 1rem;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     box-shadow: none;
     margin-bottom: 0.5rem;
@@ -485,7 +490,7 @@ const AskingSpan = styled.span`
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
     font-size: 0.8rem;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     &:hover {
         font-weight: bold;
     }
