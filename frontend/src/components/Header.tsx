@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,7 +8,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Tooltip } from '@mui/material';
+import { Avatar, Button, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
 import { toast } from 'react-toastify';
@@ -17,7 +17,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
 
 interface userInfoProps {
@@ -49,6 +49,8 @@ const Header = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
+
+    const theme = useContext(ThemeContext);
 
     const [loginStatus, setLoginStatus] = useRecoilState(loginStatusState);
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
@@ -289,83 +291,6 @@ const Header = () => {
         }
     }, [location, loginStatus]);
 
-    // useEffect(() => {
-    //     if (Object.keys(userInfo).length === 0) {
-    //         getUserInfo()
-    //             .then((res) => {
-    //                 if (res?.data?.userId) {
-    //                     setUserInfo(res.data);
-    //                 } else {
-    //                     throw res;
-    //                 }
-    //             })
-    //             .catch((e) => {
-    //                 if (e.code === 'ERR_NETWORK') {
-    //                     localStorage.removeItem('jwtToken');
-    //                     localStorage.removeItem('refreshToken');
-    //                     localStorage.removeItem('kakaoAuth');
-    //                     setLoginStatus(false);
-    //                     setUserInfo({});
-    //                     setUserIdState('');
-    //                     setImage('/broken-image.jpg');
-    //                 } else {
-    //                     const AToken = localStorage.getItem('jwtToken') || '';
-    //                     const RToken = localStorage.getItem('refreshToken') || '';
-    //                     getTokenReissuance({ AToken, RToken })
-    //                         .then((res) => {
-    //                             if (res?.data?.accessToken && res.data.refreshToken) {
-    //                                 localStorage.setItem('jwtToken', res.data.accessToken);
-    //                                 localStorage.setItem('refreshToken', res.data.refreshToken);
-    //                             }
-    //                         })
-    //                         .then(() => {
-    //                             getUserInfo()
-    //                                 .then((res) => {
-    //                                     if (res.data.userId) {
-    //                                         setUserInfo(res.data);
-    //                                     }
-    //                                 })
-    //                                 .catch((e) => {
-    //                                     if (e.code === 'ERR_NETWORK') {
-    //                                         localStorage.removeItem('jwtToken');
-    //                                         localStorage.removeItem('refreshToken');
-    //                                         localStorage.removeItem('kakaoAuth');
-    //                                         setLoginStatus(false);
-    //                                         setUserInfo({});
-    //                                         setUserIdState('');
-    //                                         setImage('/broken-image.jpg');
-    //                                         return notifyError(
-    //                                             <p>
-    //                                                 서버와의 연결이 원활하지 않습니다.
-    //                                                 <br /> 새로고침을 하거나
-    //                                                 <br /> 인터넷 연결을 확인해주세요.
-    //                                             </p>,
-    //                                         );
-    //                                     }
-    //                                 });
-    //                         })
-    //                         .catch((e) => {
-    //                             if (e.response?.data?.code === 401 && e.response?.data?.message === 'INVALID_TOKEN') {
-    //                                 localStorage.removeItem('jwtToken');
-    //                                 localStorage.removeItem('refreshToken');
-    //                                 localStorage.removeItem('kakaoAuth');
-    //                                 setLoginStatus(false);
-    //                                 setUserInfo({});
-    //                                 setUserIdState('');
-    //                                 setImage('/broken-image.jpg');
-    //                                 return notifyError(
-    //                                     <p>
-    //                                         아이디 인증시간이 만료되었습니다.
-    //                                         <br /> 재로그인 해주세요
-    //                                     </p>,
-    //                                 );
-    //                             }
-    //                         });
-    //                 }
-    //             });
-    //     }
-    // }, []);
-
     // 유저 메뉴
     const [anchorElUser, setAnchorElUser] = useState<HTMLButtonElement | null>(null);
 
@@ -420,7 +345,7 @@ const Header = () => {
                         <MainLogo />
                         <MainTitle>SAMUKSA</MainTitle>
                     </LogoTitleBox>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <MenuWrapper>
                         <MobileBox>
                             <IconButton
                                 size="large"
@@ -430,7 +355,7 @@ const Header = () => {
                                 onClick={handleOpenNavMenu}
                                 color="inherit"
                             >
-                                <MenuIcon sx={{ color: '#0098ee' }} fontSize="large" />
+                                <MenuIcon sx={{ color: `${theme.colors.main}` }} fontSize="large" />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -450,19 +375,53 @@ const Header = () => {
                                     display: { xs: 'block', md: 'none' },
                                 }}
                             >
-                                {pages.map(({ id, name, path }) => (
-                                    <MenuItem
-                                        key={id}
-                                        onClick={() => {
-                                            handleCloseNavMenu();
-                                            goNavigate(path);
-                                        }}
-                                    >
-                                        <Typography textAlign="center" sx={{ fontWeight: '500' }}>
-                                            {name}
-                                        </Typography>
-                                    </MenuItem>
-                                ))}
+                                {loginStatus
+                                    ? NAV_ITEMS.map(({ id, name, path }) => (
+                                          <StyledMenuItem
+                                              key={id}
+                                              onClick={() => {
+                                                  handleCloseNavMenu();
+                                                  goNavigate(path);
+                                              }}
+                                          >
+                                              <MenuItemList>{name}</MenuItemList>
+                                          </StyledMenuItem>
+                                      ))
+                                    : pages.map(({ id, name, path }) => (
+                                          <StyledMenuItem
+                                              key={id}
+                                              onClick={() => {
+                                                  handleCloseNavMenu();
+                                                  goNavigate(path);
+                                              }}
+                                          >
+                                              <MenuItemList>{name}</MenuItemList>
+                                          </StyledMenuItem>
+                                      ))}
+                                {loginStatus ? <Divider /> : null}
+                                {loginStatus ? (
+                                    <MobileUserBox>
+                                        <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
+                                        <div>
+                                            <UserNickNameText>{userInfo.userNickName}</UserNickNameText>
+                                            <UserEmailText>{userInfo.userEmail}</UserEmailText>
+                                        </div>
+                                    </MobileUserBox>
+                                ) : null}
+                                {loginStatus
+                                    ? USERS_ITEMS.map(({ id, name, path }) => (
+                                          <MenuItem
+                                              key={id}
+                                              onClick={() => {
+                                                  handleCloseNavMenu();
+                                                  goNavigate(path);
+                                                  handleLogout(name);
+                                              }}
+                                          >
+                                              <MenuItemList>{name}</MenuItemList>
+                                          </MenuItem>
+                                      ))
+                                    : null}
                             </Menu>
                         </MobileBox>
                         {NAV_ITEMS.map(({ id, name, path, active }) => {
@@ -479,14 +438,13 @@ const Header = () => {
                             );
                         })}
                         {loginStatus ? (
-                            <>
+                            <UserBox>
                                 <Tooltip title="사용자 메뉴">
                                     <UserIconButton onClick={handleOpenUserMenu}>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                     </UserIconButton>
                                 </Tooltip>
                                 <UserNickNameText>
-                                    {/* {loginStatus ? `${userInfo?.userNickName} 님` : ''} */}
                                     {userInfo.userNickName ? `${userInfo.userNickName} 님` : ''}
                                 </UserNickNameText>
                                 <UserSelectMenu
@@ -517,7 +475,7 @@ const Header = () => {
                                         </MenuItem>
                                     ))}
                                 </UserSelectMenu>
-                            </>
+                            </UserBox>
                         ) : (
                             <DesktopBox>
                                 <LoginBtn
@@ -538,7 +496,7 @@ const Header = () => {
                                 </RegisterBtn>
                             </DesktopBox>
                         )}
-                    </div>
+                    </MenuWrapper>
                 </ToolBarWrapper>
             </AppBarContainer>
         </Box>
@@ -549,9 +507,9 @@ export default React.memo(Header);
 
 const AppBarContainer = styled(AppBar)`
     position: fixed;
+    /* background-color: rgba(255, 255, 255, 0); */
     background-color: #ffffff;
     box-shadow: none;
-    /* width: 100%; */
 `;
 
 const ToolBarWrapper = styled(Toolbar)`
@@ -569,23 +527,41 @@ const LogoTitleBox = styled.div`
 const MainLogo = styled(SetMealIcon)`
     display: flex;
     margin-right: 0.5rem;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     font-size: 2.875rem;
     cursor: pointer;
 `;
 
 const MainTitle = styled(Typography)`
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
     font-size: 1.875rem;
     cursor: pointer;
+`;
+
+const MenuWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const MobileBox = styled(Box)`
     display: flex;
     flex-grow: 1;
     align-items: center;
-    @media screen and (min-width: 501px) {
+    display: none;
+    ${({ theme }) => theme.device.mobile} {
+        display: block;
+    }
+`;
+
+const StyledMenuItem = styled(MenuItem)`
+    width: 100vw;
+`;
+
+const UserBox = styled.div`
+    display: flex;
+    align-items: center;
+    ${({ theme }) => theme.device.mobile} {
         display: none;
     }
 `;
@@ -594,7 +570,7 @@ const DesktopBox = styled(Box)`
     display: flex;
     flex-grow: 1;
     align-items: center;
-    @media screen and (max-width: 500px) {
+    ${({ theme }) => theme.device.mobile} {
         display: none;
     }
 `;
@@ -606,14 +582,14 @@ interface MenuNavProps {
 const MenuNav = styled(Typography)<MenuNavProps>`
     margin-right: 1.2rem;
     text-decoration: none;
-    color: ${(props) => (props.active ? '#0098ee' : '#7A7A7A')};
+    color: ${(props) => (props.active ? props.theme.colors.main : '#7A7A7A')};
     font-weight: ${(props) => (props.active ? '600' : '500')};
     font-size: 0.9rem;
     :hover {
         font-weight: bold;
         cursor: pointer;
     }
-    @media screen and (max-width: 500px) {
+    ${({ theme }) => theme.device.mobile} {
         display: none;
     }
 `;
@@ -622,11 +598,16 @@ const UserIconButton = styled(IconButton)`
     padding: 0;
 `;
 
+const MobileUserBox = styled.div`
+    display: flex;
+    padding: 5px 10px;
+`;
+
 interface UserAvatarProps {
     $loginStatus: string;
 }
 const UserAvatar = styled(Avatar)<UserAvatarProps>`
-    background-color: ${(props) => (props.$loginStatus ? '#0098ee' : '#A2A5A9')};
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     vertical-align: middle;
     width: 2.5rem;
@@ -636,11 +617,30 @@ const UserAvatar = styled(Avatar)<UserAvatarProps>`
     :hover {
         transform: scale(1.1);
     }
+    ${({ theme }) => theme.device.mobile} {
+        width: 35px;
+        height: 35px;
+        margin-right: 0.5rem;
+        cursor: default;
+        :hover {
+            transform: none;
+        }
+    }
 `;
 
 const UserNickNameText = styled(Typography)`
     font-weight: 500;
-    color: black;
+    color: #111827;
+    font-size: 1rem;
+    ${({ theme }) => theme.device.mobile} {
+        font-size: 1.125rem;
+    }
+`;
+
+const UserEmailText = styled(Typography)`
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 1.1rem;
 `;
 
 const UserSelectMenu = styled(Menu)`
@@ -649,17 +649,20 @@ const UserSelectMenu = styled(Menu)`
 
 const MenuItemList = styled(Typography)`
     text-align: center;
-    color: #7a7a7a;
-    font-size: 0.9rem;
+    color: #111827;
+    font-size: 1rem;
     font-weight: 500;
+    ${({ theme }) => theme.device.mobile} {
+        font-size: 1.125rem;
+    }
 `;
 
 const LoginBtn = styled(Button)`
     width: 6rem;
     height: 2.5rem;
     border-radius: 20px;
-    border: 0.5px solid #0098ee;
-    color: #0098ee;
+    border: 0.5px solid ${({ theme }) => theme.colors.main};
+    color: ${({ theme }) => theme.colors.main};
     margin-right: 0.5rem;
     :hover {
         box-shadow: none;
@@ -671,7 +674,7 @@ const RegisterBtn = styled(Button)`
     width: 6rem;
     height: 2.5rem;
     border-radius: 20px;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     box-shadow: none;
     :hover {
         box-shadow: none;

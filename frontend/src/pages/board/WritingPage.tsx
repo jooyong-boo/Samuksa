@@ -1,4 +1,4 @@
-import PostEditor from '../components/community/PostEditor';
+import PostEditor from '../../components/community/PostEditor';
 
 const WritingPage = () => {
     return <PostEditor />;

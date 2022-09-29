@@ -275,7 +275,7 @@ const EditorUserInfoBox = styled.div`
 `;
 
 const UserAvatar = styled(Avatar)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     vertical-align: middle;
     width: 40px;
@@ -315,7 +315,7 @@ const SubmitBtn = styled(Button)`
     width: 7rem;
     height: 3rem;
     box-shadow: none;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
     &:hover {
         box-shadow: none;

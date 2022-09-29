@@ -93,9 +93,9 @@ const BoardTab = styled(Tab)`
     font-size: 1rem;
     padding: 0;
     :focus {
-        color: #0098ee;
+        color: ${({ theme }) => theme.colors.main};
     }
     :hover {
-        color: #0098ee;
+        color: ${({ theme }) => theme.colors.main};
     }
 `;

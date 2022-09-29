@@ -146,6 +146,22 @@ const Card = styled.div`
     border-radius: 5px;
     /* margin: 30px 100px; */
     position: relative;
+    /* 테블릿 세로 (해상도 768px ~ 1023px)*/
+    @media all and (min-width: 768px) and (max-width: 1185px) {
+        margin-bottom: 1rem;
+    }
+
+    /* 모바일 가로, 테블릿 세로 (해상도 480px ~ 767px)*/
+    @media all and (min-width: 480px) and (max-width: 767px) {
+        /* width: 95%; */
+        margin-bottom: 1rem;
+    }
+
+    /* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
+    @media all and (max-width: 479px) {
+        width: 95%;
+        margin-bottom: 1rem;
+    }
 `;
 
 const SelectedConditionListTypography = styled(Typography)`
@@ -232,7 +248,7 @@ const CombinationSearchBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     &:disabled {
         background-color: rgba(0, 152, 238, 0.3);
         color: #ffffff;

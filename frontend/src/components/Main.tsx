@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled, { ThemeContext } from 'styled-components';
 import image from '../components/assets/img/mainImage.webp';
 import {
     Box,
@@ -25,7 +25,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -49,6 +49,8 @@ const Main = () => {
 
     const navigate = useNavigate();
 
+    const theme = useContext(ThemeContext);
+
     const getArea = useRecoilValue(getAreaState);
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
@@ -70,10 +72,6 @@ const Main = () => {
         }
     };
 
-    const handleAreaChange = (e: SelectChangeEvent) => {
-        setArea(e.target.value as string);
-    };
-
     const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
@@ -83,6 +81,10 @@ const Main = () => {
             notify('가격은 천만원 이하로 해주세요');
             setMoney(String(10000000));
         }
+    };
+
+    const handleAreaChange = (e: SelectChangeEvent) => {
+        setArea(e.target.value as string);
     };
 
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -121,7 +123,7 @@ const Main = () => {
                 <Container>
                     <MainTitle>모두가 편히</MainTitle>
                     <MainTitle marginLeft={'1rem'}>떠먹는 그날까지,</MainTitle>
-                    <MainTitle color={'#0098ee'} marginLeft={'1rem'}>
+                    <MainTitle color={theme.colors.main} marginLeft={'1rem'}>
                         사먹사
                     </MainTitle>
                 </Container>
@@ -138,7 +140,7 @@ const Main = () => {
                             variant="outlined"
                             value={personNum}
                             onChange={handlePersonNumChange}
-                            autoFocus
+                            // autoFocus
                             autoComplete="off"
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">명</InputAdornment>,
@@ -253,7 +255,7 @@ const AreaSelect = styled(Select)`
 const SubmitBtn = styled(Button)`
     margin-top: 1rem;
     opacity: 0.9;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     box-shadow: none;
     width: 96%;

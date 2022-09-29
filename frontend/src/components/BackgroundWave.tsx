@@ -34,18 +34,30 @@ const Wave1 = styled.div`
         repeat-x;
     position: absolute;
     /* top: 80%; */
-    bottom: 55%;
+    bottom: 50%;
     width: 6500px;
     height: 198px;
     animation: ${Wave} 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
     transform: translate3d(0, 0, 0);
+    @media screen and (max-width: 1200px) {
+        bottom: 40%;
+    }
+    @media screen and (max-width: 900px) {
+        bottom: 30%;
+    }
 `;
 
 const Wave2 = styled(Wave1)`
     /* top: 85%; */
-    bottom: 50%;
+    bottom: 45%;
     animation: ${Wave} 5s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, ${Swell} 7s ease -1.25s infinite;
     opacity: 1;
+    @media screen and (max-width: 1200px) {
+        bottom: 35%;
+    }
+    @media screen and (max-width: 900px) {
+        bottom: 25%;
+    }
 `;
 
 const BackgroundWave = () => {

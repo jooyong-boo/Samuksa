@@ -1,22 +1,11 @@
 import { Box, Fab } from '@mui/material';
-import { styled } from '@mui/material';
+import styled from 'styled-components';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useMemo } from 'react';
 import { throttle } from 'lodash';
 import { useRef } from 'react';
-
-const CustomBox = styled(Box)`
-    position: fixed;
-    z-index: 1000;
-
-    // 데스크탑
-    @media screen and (min-width: 480px) {
-        right: 4%;
-        bottom: 5%;
-    }
-`;
 
 const TopScrollBtn = () => {
     const [scroll, setScroll] = useState(false);
@@ -48,25 +37,46 @@ const TopScrollBtn = () => {
 
     return (
         <CustomBox>
-            <Fab
-                color="primary"
-                aria-label="top"
-                onClick={moveTop}
-                size="medium"
-                sx={{
-                    boxShadow: 'none',
-                    backgroundColor: 'rgba(245,216,176,0.9)',
-                    opacity: scroll ? '1' : '0',
-                    visibility: scroll ? '' : 'hidden',
-                    transition: scroll
-                        ? 'all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'
-                        : 'all 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-                }}
-            >
+            <CircleFab color="primary" aria-label="top" onClick={moveTop} scroll={scroll ? 'true' : ''}>
                 <ArrowUpwardIcon />
-            </Fab>
+            </CircleFab>
         </CustomBox>
     );
 };
 
 export default TopScrollBtn;
+
+const CustomBox = styled(Box)`
+    position: fixed;
+    z-index: 1000;
+    right: 4%;
+    bottom: 5%;
+
+    /* // 데스크탑
+        @media screen and (min-width: 480px) {
+        }
+    
+        // 모바일
+        @media screen and (max-width: 479px) {
+            right: 4%;
+            bottom: 5%;
+        } */
+`;
+
+interface CircleFabProps {
+    scroll: string;
+}
+
+const CircleFab = styled(Fab)<CircleFabProps>`
+    box-shadow: none;
+    width: 4rem;
+    height: 4rem;
+    background-color: rgba(245, 216, 176, 0.9);
+    opacity: ${(props) => (props.scroll ? 1 : 0)};
+    visibility: ${(props) => (props.scroll ? '' : 'hidden')};
+    transition: ${(props) =>
+        props.scroll ? 'all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms' : 'all 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'};
+    :hover {
+        background-color: ${({ theme }) => theme.colors.main};
+    }
+`;

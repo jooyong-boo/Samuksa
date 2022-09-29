@@ -13,8 +13,8 @@ const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 const BoardPage = lazy(() => import('./pages/board/BoardPage'));
 const ReviewPage = lazy(() => import('./pages/board/ReviewPage'));
 const TipPage = lazy(() => import('./pages/board/TipPage'));
-const WritingPage = lazy(() => import('./pages/WritingPage'));
-const PostViewPage = lazy(() => import('./pages/PostViewPage'));
+const WritingPage = lazy(() => import('./pages/board/WritingPage'));
+const PostViewPage = lazy(() => import('./pages/board/PostViewPage'));
 const ProfilePage = lazy(() => import('./pages/auth/ProfilePage'));
 
 function App() {

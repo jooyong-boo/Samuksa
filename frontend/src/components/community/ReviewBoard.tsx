@@ -3,9 +3,13 @@ import {
     Button,
     createTheme,
     FormControl,
+    IconButton,
     Input,
     InputAdornment,
     List,
+    Menu,
+    MenuItem,
+    SelectChangeEvent,
     Stack,
     Table,
     TableBody,
@@ -27,7 +31,7 @@ import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import timeForToday from '../utils/TimeForToday';
-import { RandomNickname } from '../common/RandomNickname';
+import { RandomNickname } from '../utils/RandomNickname';
 import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
@@ -35,6 +39,25 @@ import { getCommentById } from '../../api/post';
 import { getRandomNumber } from './PostViewer';
 
 const reviewBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
+
+const SortPages = [
+    {
+        id: 1,
+        name: '최신순',
+    },
+    {
+        id: 2,
+        name: '추천순',
+    },
+    {
+        id: 3,
+        name: '댓글순',
+    },
+    {
+        id: 4,
+        name: '조회순',
+    },
+];
 
 const ReviewBoard = () => {
     const notifyError = (text: string) => {
@@ -53,11 +76,14 @@ const ReviewBoard = () => {
     const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState);
     const offset = (postPage - 1) * limit;
     const userInfo = useRecoilValue<any>(userInfoState);
-    const posts = useRecoilValue<any[]>(getPostState);
+    const postsRecoil = useRecoilValue<any[]>(getPostState);
+    const [posts, setPosts] = useState(postsRecoil);
     const [usePosts, setUsePosts] = useState<any[]>([]);
     const [searchPosts, setSearchPosts] = useState('');
     const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
+    const [curSort, setCurSort] = useState(SortPages[0].name);
+    const [searchOption, setSearchOption] = useState('제목');
 
     const openSearch = () => {
         setOpen(!open);
@@ -71,8 +97,36 @@ const ReviewBoard = () => {
 
     const handleSearch = (e: React.KeyboardEvent | React.MouseEvent): void => {
         if (e.type === 'click' || (e as React.KeyboardEvent).key === 'Enter') {
-            let result = posts.filter((post: any) => post.title.includes(searchPosts));
-            setUsePosts(result);
+            if (searchOption === '제목') {
+                let result = posts.filter((post: any) => post.title.includes(searchPosts));
+                if (result.length === 0) {
+                    return notifyError('일치하는 글이 없습니다.');
+                }
+                let writedResult = result.map((post) => {
+                    let readPost: any = localStorage.getItem('reviewReadPost');
+                    if (readPost?.includes(post.id)) {
+                        return { ...post, read: true };
+                    } else {
+                        return post;
+                    }
+                });
+                setUsePosts(writedResult);
+            }
+            if (searchOption === '글쓴이') {
+                let result = posts.filter((post: any) => post.nickName.includes(searchPosts));
+                if (result.length === 0) {
+                    return notifyError('일치하는 글이 없습니다.');
+                }
+                let writedResult = result.map((post) => {
+                    let readPost: any = localStorage.getItem('reviewReadPost');
+                    if (readPost?.includes(post.id)) {
+                        return { ...post, read: true };
+                    } else {
+                        return post;
+                    }
+                });
+                setUsePosts(writedResult);
+            }
         }
     };
 
@@ -95,35 +149,56 @@ const ReviewBoard = () => {
         }
     };
 
-    useEffect(() => {
-        const readPost = localStorage.getItem('reviewReadPost');
-        const newPosts = posts.map((item: any) => {
-            if (readPost?.includes(item.id)) {
-                return Object.assign({}, item, { read: true });
-            } else {
-                return item;
-            }
-        });
-        setUsePosts(newPosts);
-    }, [posts]);
-
-    const getPostComment = async () => {
-        let comment = await Promise.all(
-            posts.map((post) => {
-                let newComment = getCommentById(post.id);
-                return newComment;
-            }),
-        );
-        setPostComment(comment);
+    const handleChangeSearchOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSearchOption(e.target.value);
     };
 
     useEffect(() => {
-        getPostComment();
-    }, [usePosts]);
+        const readPost = localStorage.getItem('reviewReadPost');
+        const newPosts = postsRecoil.map((item: any) => {
+            if (readPost?.includes(item.id)) {
+                return Object.assign(
+                    {},
+                    item,
+                    { read: true },
+                    { nickName: RandomNickname() },
+                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+                );
+            } else {
+                return Object.assign(
+                    {},
+                    item,
+                    { nickName: RandomNickname() },
+                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+                );
+            }
+        });
+
+        setPosts(newPosts);
+        setUsePosts(newPosts);
+    }, [postsRecoil]);
+
+    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+    const Menuopen = Boolean(anchorElNav);
+
+    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElNav(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleSortPage = (e: React.MouseEvent, name: string) => {
+        e.preventDefault();
+        if (curSort !== name) {
+            setCurSort(name);
+        }
+    };
 
     return (
         <Background>
-            <ReviewBoardContainer>
+            <BoardContainer>
                 <BoardTopWrapper>
                     {/* <BoardTitleText>리뷰게시판</BoardTitleText> */}
                     <WriteBtn variant="contained" onClick={goWriting}>
@@ -134,13 +209,57 @@ const ReviewBoard = () => {
                         <SearchBtn variant="outlined" onClick={openSearch}>
                             <StyleSearchIcon />
                         </SearchBtn>
-                        <SortBtn variant="outlined">
+                        {/* <SortBtn variant="outlined"> */}
+                        <SortBtn
+                            variant="outlined"
+                            aria-controls={Menuopen ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={Menuopen ? 'true' : undefined}
+                            onClick={handleOpenNavMenu}
+                        >
                             <StyleListIcon />
+                            <Typography sx={{ fontSize: '0.8rem', color: '#374151', fontWeight: '500' }}>
+                                {curSort}
+                            </Typography>
                         </SortBtn>
+                        <Menu id="게시글정렬" anchorEl={anchorElNav} open={Menuopen} onClose={handleCloseNavMenu}>
+                            {SortPages.map(({ id, name }) => {
+                                return (
+                                    <MenuItem
+                                        key={id}
+                                        onClick={(e) => {
+                                            handleCloseNavMenu();
+                                            handleSortPage(e, name);
+                                        }}
+                                        sx={{ width: '80px', padding: '1rem 0' }}
+                                    >
+                                        <Typography
+                                            sx={{
+                                                fontWeight: '400',
+                                                textAlign: 'center',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            {name}
+                                        </Typography>
+                                    </MenuItem>
+                                );
+                            })}
+                        </Menu>
+                        {/* </SortBtn> */}
                     </div>
                 </BoardTopWrapper>
                 {open ? (
                     <SearchContainer>
+                        <SelectBox
+                            onChange={(e) => {
+                                handleChangeSearchOption(e);
+                            }}
+                            // value={}
+                        >
+                            <option value="제목">제목</option>
+                            <option value="글쓴이">글쓴이</option>
+                        </SelectBox>
                         <SearchBox>
                             <StyledSearchIcon
                                 onClick={(e) => {
@@ -169,7 +288,7 @@ const ReviewBoard = () => {
                             </TableHead>
                             <TableBody>
                                 {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read } = item;
+                                    const { id, title, UserId, createdAt, read, nickName } = item;
                                     const newCreateAt = new Date(createdAt);
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
@@ -200,7 +319,7 @@ const ReviewBoard = () => {
                                                     </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{RandomNickname()}</TableCell>
+                                            <TableCell sx={tableTextStyle}>{nickName}</TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -213,11 +332,12 @@ const ReviewBoard = () => {
                     <MobileBoardContainer>
                         <StyledUl>
                             {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                const { id, title, UserId, createdAt, read } = item;
+                                const { id, title, UserId, createdAt, read, nickName, avatar } = item;
                                 const newCreateAt = new Date(createdAt);
                                 const year = newCreateAt.getFullYear();
                                 const month = newCreateAt.getMonth();
                                 const date = newCreateAt.getDate();
+
                                 return (
                                     <div key={id}>
                                         <li
@@ -231,13 +351,7 @@ const ReviewBoard = () => {
                                         >
                                             <div>
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Avatar
-                                                        src={`https://randomuser.me/api/portraits/women/${getRandomNumber(
-                                                            1,
-                                                            98,
-                                                        )}.jpg`}
-                                                        sx={{ width: '2rem', height: '2rem' }}
-                                                    />
+                                                    <Avatar src={avatar} sx={{ width: '2rem', height: '2rem' }} />
                                                     <Typography
                                                         sx={{
                                                             display: 'flex',
@@ -245,7 +359,7 @@ const ReviewBoard = () => {
                                                             fontSize: '0.8rem',
                                                         }}
                                                     >
-                                                        {RandomNickname()}
+                                                        {nickName}
                                                     </Typography>
                                                 </div>
                                                 <Typography
@@ -309,15 +423,13 @@ const ReviewBoard = () => {
                 </ThemeProvider>
                 <PaginationStack>
                     <Pagination
-                        total={posts.length}
+                        total={postsRecoil.length}
                         limit={limit}
-                        page={page}
-                        setPage={setPage}
                         postPage={postPage}
                         setPostPage={setPostPage}
                     />
                 </PaginationStack>
-            </ReviewBoardContainer>
+            </BoardContainer>
         </Background>
     );
 };
@@ -346,7 +458,7 @@ const Background = styled.div`
     }
 `;
 
-const ReviewBoardContainer = styled.div`
+const BoardContainer = styled.div`
     width: 80%;
     text-align: center;
     overflow: auto;
@@ -362,7 +474,7 @@ const BoardTopWrapper = styled.div`
 `;
 
 const WriteBtn = styled(Button)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
     color: white;
     box-shadow: none;
@@ -377,7 +489,7 @@ const WriteBtn = styled(Button)`
 
 const SearchBtn = styled(WriteBtn)`
     background-color: white;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     margin-right: 0.3rem;
     border-color: #a7a7a7;
 `;
@@ -401,11 +513,15 @@ const StyleListIcon = styled(ListIcon)`
 `;
 
 const SearchContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
     border-top: 1px solid #eaeaea;
 `;
 
 const SearchBox = styled.div`
     display: flex;
+    width: 90%;
     border: 1px solid #939393;
     border-radius: 10px;
     margin: 0.5rem 1rem;
@@ -420,7 +536,14 @@ const StyledSearchIcon = styled(SearchIcon)`
 
 const SearchInput = styled.input`
     border: none;
+    outline: none;
     width: 100%;
+`;
+
+const SelectBox = styled.select`
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
     :focus {
         outline: none;
     }

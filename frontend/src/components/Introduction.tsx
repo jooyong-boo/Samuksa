@@ -1,25 +1,27 @@
 import { Grid, Typography } from '@mui/material';
-import styled from 'styled-components';
+import { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 import introduce1 from '../components/assets/img/introduce1.jpg';
 import introduce2 from '../components/assets/img/introduce2.jpg';
 import introduce3 from '../components/assets/img/introduce3.jpg';
 import BackgroundWave from './BackgroundWave';
 
 const Introduction = () => {
+    const theme = useContext(ThemeContext);
     return (
         <Background>
             <TitleBox>
-                <CustomTypography fontSize={'4.28rem'} marginRight={'1rem'}>
+                <TitleText fontSize={'4.28rem'} marginRight={'1rem'}>
                     What is
-                </CustomTypography>
-                <CustomTypography fontSize={'4.28rem'} color={'#0098ee'} fontWeight={'600'}>
+                </TitleText>
+                <TitleText fontSize={'4.28rem'} color={theme.colors.main} fontWeight={'600'}>
                     Samuksa
-                </CustomTypography>
-                <CustomTypography fontSize={'4.28rem'}>?</CustomTypography>
+                </TitleText>
+                <TitleText fontSize={'4.28rem'}>?</TitleText>
             </TitleBox>
             <Grid
                 container
-                rowSpacing={4}
+                rowSpacing={2}
                 sx={{ textAlign: 'center', marginBottom: '30px' }}
                 justifyContent="space-evenly"
             >
@@ -68,21 +70,53 @@ const Background = styled.div`
     justify-content: space-evenly;
     align-items: center;
     overflow: hidden;
+    padding-top: 3rem;
+    ${({ theme }) => theme.device.mobile} {
+        justify-content: center;
+    }
 `;
 
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '16rem',
-    height: '22rem',
-    objectFit: 'cover',
-    margin: 'auto',
-    borderRadius: '5px',
-});
+interface TitleBoxProps {
+    fontSize?: any;
+    color?: any;
+    fontWeight?: any;
+    marginRight?: any;
+}
+
+const TitleText = styled(Typography)<TitleBoxProps>`
+    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '1rem')};
+    color: ${(props) => (props.color ? `${props.color}` : 'black')};
+    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : 'normal')};
+    margin-right: ${(props) => (props.marginRight ? `${props.marginRight}` : '0')};
+    ${({ theme }) => theme.device.mobile} {
+        font-size: 3rem;
+    }
+`;
+
+const Img = styled.img`
+    display: block;
+    width: 14rem;
+    height: 19rem;
+    object-fit: cover;
+    margin: auto;
+    border-radius: 5px;
+    ${({ theme }) => theme.device.tablet} {
+        width: 12rem;
+        height: 16rem;
+    }
+    ${({ theme }) => theme.device.mobile} {
+        width: 9rem;
+        height: 12rem;
+    }
+`;
 
 const TitleBox = styled.div`
     display: flex;
-    margin-top: 36px;
+    margin-top: 30px;
+    ${({ theme }) => theme.device.mobile} {
+        text-align: center;
+        margin-bottom: 25px;
+    }
 `;
 
 interface CustomTypographyProps {

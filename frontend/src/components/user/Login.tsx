@@ -2,7 +2,7 @@ import { Button, Link, TextField, Typography } from '@mui/material';
 import React, { ReactElement } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { getUserInfo, login } from '../../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -276,7 +276,7 @@ const SaveIdTypography = styled(Typography)`
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
     font-size: 0.8rem;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     &:hover {
         font-weight: bold;
     }
@@ -290,7 +290,7 @@ const LoginBtnDiv = styled.div`
 `;
 
 const LoginBtn = styled(Button)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     box-shadow: none;
     width: 100%;

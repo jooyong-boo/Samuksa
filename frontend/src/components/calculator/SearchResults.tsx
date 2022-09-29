@@ -65,12 +65,16 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
         setSelectEstimate(null);
     };
 
-    const onEstimateClick = (item: any[], price: number, selectId: number) => {
+    const onEstimateClick = (item: any[], price: number, selectId: number, selectActive: boolean) => {
         setSelectResult(
             selectResult.map((item: any, id: number) =>
                 id === selectId ? { ...item, active: !item.active } : { ...item, active: false },
             ),
         );
+        if (selectActive) {
+            setSelectEstimate(null);
+            return;
+        }
         setSelectEstimate(item);
         setTotalPrice(price);
     };
@@ -200,7 +204,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                   <Fade in={true} timeout={300} key={i}>
                                       <CustomListItems
                                           onClick={() => {
-                                              onEstimateClick(fishRecommendBtDtos, totalPrice, i);
+                                              onEstimateClick(fishRecommendBtDtos, totalPrice, i, active);
                                           }}
                                           sx={{
                                               backgroundColor: active ? '#F8F8F8' : 'white',
@@ -240,7 +244,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                     <Fade in={true} timeout={300}>
                         <SelectedEstimateContainer>
                             <SelectedEstimateTopMenu>
-                                <div>
+                                <EstimateTopDiv>
                                     <EstimateTopText
                                         color={'#010000'}
                                         paddingTop={'18px'}
@@ -252,10 +256,10 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                     <EstimateTopText color={'#949494'} fontSize={'0.78rem'} marginBottom={'11px'}>
                                         실제 시세과 상이할 수 있습니다.
                                     </EstimateTopText>
-                                </div>
+                                </EstimateTopDiv>
                                 {newSelectEstimate?.length > 0 ? (
                                     <BookmarkAddedIcon
-                                        fontSize="medium"
+                                        fontSize="large"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() => {
                                             handleDeleteBookmark(selectEstimate);
@@ -263,7 +267,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                     />
                                 ) : (
                                     <BookmarkBorderIcon
-                                        fontSize="medium"
+                                        fontSize="large"
                                         sx={{ cursor: 'pointer' }}
                                         onClick={() => {
                                             addBookmark(selectEstimate);
@@ -284,17 +288,26 @@ export default React.memo(SearchResults);
 
 const Card = styled.div`
     background-color: white;
+    /* width: 93%; */
     width: 1190px;
     height: 550px;
-    min-width: 500px;
+    min-width: 300px;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 7%;
     z-index: 3;
+    @media all and (max-width: 1185px) {
+        width: 95%;
+        display: flex;
+        flex-wrap: wrap;
+        height: 100%;
+        flex-direction: column;
+    }
 `;
 
 const Container = styled.div`
     display: flex;
+    width: 100%;
     justify-content: space-between;
     padding-right: 0.5rem;
     border-bottom: 1px solid #eaeaea;
@@ -315,7 +328,7 @@ const CustomDiv = styled.div`
     overflow: overlay;
     overflow-x: hidden;
     border-bottom-left-radius: 5px;
-    min-width: 20%;
+    min-width: 200px;
     &::-webkit-scrollbar {
         width: 5px;
         border-radius: 5px;
@@ -324,11 +337,19 @@ const CustomDiv = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
+    @media all and (max-width: 350px) {
+        width: 40%;
+        /* flex-wrap: nowrap; */
+    }
 `;
 
 const ResultDiv = styled.div`
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    width: 100%;
+    @media all and (max-width: 729px) {
+        flex-wrap: wrap;
+    }
 `;
 
 const CustomCardContent = styled(CardContent)`
@@ -336,6 +357,7 @@ const CustomCardContent = styled(CardContent)`
     align-items: center;
     cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
+    width: 100%;
     height: 70px;
     &:last-child {
         padding-bottom: 0;
@@ -379,6 +401,7 @@ interface SearchedCombinationsTypographyProps {
 }
 
 const SearchedCombinationsTypography = styled(Typography)<SearchedCombinationsTypographyProps>`
+    max-width: 120px;
     color: ${(props) => (props.color ? `${props.color}` : 'white')};
     font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
     font-size: ${(props) =>
@@ -403,7 +426,7 @@ const CustomListDiv = styled.div`
     background-color: white;
     border-right: 1px solid #eaeaea;
     /* border-bottom: 1px solid #f6f6f6; */
-    min-width: 11%;
+    min-width: 100px;
     position: relative;
     overflow: overlay;
     max-height: 497px;
@@ -416,6 +439,9 @@ const CustomListDiv = styled.div`
     &::-webkit-scrollbar-thumb {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
+    }
+    @media all and (max-width: 500px) {
+        flex-grow: 1;
     }
 `;
 
@@ -452,9 +478,9 @@ const CustomListItemTypography = styled(Typography)<CustomListItemTypographyProp
 `;
 
 const SelectedEstimateContainer = styled.div`
-    width: 69%;
+    width: 68%;
     height: auto;
-    min-width: 300px;
+    /* min-width: 300px; */
     max-height: 494px;
     /* margin: auto; */
     overflow: overlay;
@@ -467,6 +493,12 @@ const SelectedEstimateContainer = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
+    @media all and (max-width: 1120px) {
+        width: 100%;
+    }
+    @media all and (max-width: 730px) {
+        border-top: 1px solid #eaeaea;
+    }
 `;
 
 const SelectedEstimateTopMenu = styled.div`
@@ -475,6 +507,10 @@ const SelectedEstimateTopMenu = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem 0 0;
+`;
+
+const EstimateTopDiv = styled.div`
+    padding: 0 1rem;
 `;
 
 interface EstimateTopTextProps {
@@ -492,13 +528,3 @@ const EstimateTopText = styled(Typography)<EstimateTopTextProps>`
     font-weight: ${(props) => props.fontWeight && `${props.fontWeight}`};
     margin-bottom: ${(props) => props.marginBottom && `${props.marginBottom}`};
 `;
-
-const Img = styled('img')({
-    // margin: '13px 13px 12px 16px ',
-    display: 'block',
-    width: '50px',
-    height: '50px',
-    objectFit: 'cover',
-    margin: 'auto',
-    // padding: '9px 13px',
-});

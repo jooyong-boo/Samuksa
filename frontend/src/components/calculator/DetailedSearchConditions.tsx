@@ -363,7 +363,7 @@ const CustomList = styled(List)`
     background-color: 'background.paper';
     position: relative;
     overflow: auto;
-    max-height: 411px;
+    max-height: 413px;
     border-radius: 5px;
     padding: 0;
     box-shadow: none;
@@ -448,7 +448,7 @@ const CustomConditionAddBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     &:disabled {
         background-color: rgba(0, 152, 238, 0.3);
         color: #ffffff;
