@@ -309,7 +309,7 @@ const SearchConditionSelectBtn = styled(Button)`
     width: 274px;
     height: 38px;
     font-weight: 900;
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     &:disabled {
         background-color: rgba(0, 152, 238, 0.3);
         color: #ffffff;
