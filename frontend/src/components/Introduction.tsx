@@ -1,18 +1,20 @@
 import { Grid, Typography } from '@mui/material';
-import styled from 'styled-components';
+import { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 import introduce1 from '../components/assets/img/introduce1.jpg';
 import introduce2 from '../components/assets/img/introduce2.jpg';
 import introduce3 from '../components/assets/img/introduce3.jpg';
 import BackgroundWave from './BackgroundWave';
 
 const Introduction = () => {
+    const theme = useContext(ThemeContext);
     return (
         <Background>
             <TitleBox>
                 <TitleText fontSize={'4.28rem'} marginRight={'1rem'}>
                     What is
                 </TitleText>
-                <TitleText fontSize={'4.28rem'} color={'#0098ee'} fontWeight={'600'}>
+                <TitleText fontSize={'4.28rem'} color={theme.colors.main} fontWeight={'600'}>
                     Samuksa
                 </TitleText>
                 <TitleText fontSize={'4.28rem'}>?</TitleText>
@@ -69,8 +71,8 @@ const Background = styled.div`
     align-items: center;
     overflow: hidden;
     padding-top: 3rem;
-    @media all and (max-width: 500px) {
-        justify-content: flex-start;
+    ${({ theme }) => theme.device.mobile} {
+        justify-content: center;
     }
 `;
 
@@ -86,7 +88,7 @@ const TitleText = styled(Typography)<TitleBoxProps>`
     color: ${(props) => (props.color ? `${props.color}` : 'black')};
     font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : 'normal')};
     margin-right: ${(props) => (props.marginRight ? `${props.marginRight}` : '0')};
-    @media all and (max-width: 500px) {
+    ${({ theme }) => theme.device.mobile} {
         font-size: 3rem;
     }
 `;
@@ -98,11 +100,11 @@ const Img = styled.img`
     object-fit: cover;
     margin: auto;
     border-radius: 5px;
-    @media all and (max-width: 900px) {
+    ${({ theme }) => theme.device.tablet} {
         width: 12rem;
         height: 16rem;
     }
-    @media all and (max-width: 500px) {
+    ${({ theme }) => theme.device.mobile} {
         width: 9rem;
         height: 12rem;
     }
@@ -111,9 +113,9 @@ const Img = styled.img`
 const TitleBox = styled.div`
     display: flex;
     margin-top: 30px;
-    @media all and (max-width: 500px) {
+    ${({ theme }) => theme.device.mobile} {
         text-align: center;
-        margin-top: 25px;
+        margin-bottom: 25px;
     }
 `;
 
