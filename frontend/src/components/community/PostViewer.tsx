@@ -17,7 +17,7 @@ import { getPostState } from '../../store/atom';
 import timeForToday from '../utils/TimeForToday';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { RandomNickname } from '../common/RandomNickname';
+import { RandomNickname } from '../utils/RandomNickname';
 import { getCommentById, getPostsById } from '../../api/post';
 
 interface userInfos {
@@ -329,7 +329,7 @@ const PostCommentsInfo = styled.div`
 `;
 
 const CommentAvatar = styled(Avatar)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     vertical-align: middle;
     width: 40px;
@@ -377,7 +377,7 @@ const CommentUserAvatarContainer = styled.div`
 `;
 
 const CommentUserAvatar = styled(Avatar)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     color: white;
     vertical-align: middle;
     width: 40px;
@@ -401,7 +401,7 @@ interface CustomBtnProps {
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
     color: white;
     box-shadow: none;

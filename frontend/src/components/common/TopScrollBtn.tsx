@@ -1,5 +1,5 @@
 import { Box, Fab } from '@mui/material';
-import { styled } from '@mui/material';
+import styled from 'styled-components';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -77,6 +77,6 @@ const CircleFab = styled(Fab)<CircleFabProps>`
     transition: ${(props) =>
         props.scroll ? 'all 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms' : 'all 195ms cubic-bezier(0.4, 0, 0.2, 1) 0ms'};
     :hover {
-        background-color: #0098ee;
+        background-color: ${({ theme }) => theme.colors.main};
     }
 `;

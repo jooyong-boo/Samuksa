@@ -31,7 +31,7 @@ import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import timeForToday from '../utils/TimeForToday';
-import { RandomNickname } from '../common/RandomNickname';
+import { RandomNickname } from '../utils/RandomNickname';
 import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
@@ -446,7 +446,7 @@ const BoardTopWrapper = styled.div`
 `;
 
 const WriteBtn = styled(Button)`
-    background-color: #0098ee;
+    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
     color: white;
     box-shadow: none;
@@ -461,7 +461,7 @@ const WriteBtn = styled(Button)`
 
 const SearchBtn = styled(WriteBtn)`
     background-color: white;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     margin-right: 0.3rem;
     border-color: #a7a7a7;
 `;

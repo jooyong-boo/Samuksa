@@ -11,8 +11,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TopScrollBtn from './components/common/TopScrollBtn';
 import { StyledEngineProvider } from '@mui/styled-engine';
-import { ThemeProvider } from '@mui/material';
-import { theme } from './components/Styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
+import { muiTheme } from './components/styles/muiTheme';
+import { styledTheme } from './components/styles/styledTheme';
+import { toastTheme } from './components/styles/toastTheme';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -22,19 +25,14 @@ root.render(
         <RecoilRoot>
             <BrowserRouter>
                 <StyledEngineProvider injectFirst>
-                    <ThemeProvider theme={theme}>
-                        <ToastContainer
-                            toastStyle={{
-                                backgroundColor: '#F5F5F5',
-                                color: '#575757',
-                                opacity: '0.9',
-                                boxShadow: 'none',
-                            }}
-                        />
-                        <Header />
-                        <App />
-                        <TopScrollBtn />
-                    </ThemeProvider>
+                    <StyledThemeProvider theme={styledTheme}>
+                        <MuiThemeProvider theme={muiTheme}>
+                            <ToastContainer toastStyle={toastTheme} />
+                            <Header />
+                            <App />
+                            <TopScrollBtn />
+                        </MuiThemeProvider>
+                    </StyledThemeProvider>
                 </StyledEngineProvider>
             </BrowserRouter>
         </RecoilRoot>

@@ -118,21 +118,21 @@ const Button = styled.button`
     font-size: 1rem;
 
     &:hover {
-        color: #0098ee;
+        color: ${({ theme }) => theme.colors.main};
         font-weight: bold;
         cursor: pointer;
         transform: translateY(-1px);
     }
 
     &[disabled] {
-        color: #0098ee;
+        color: ${({ theme }) => theme.colors.main};
         font-weight: bold;
         cursor: revert;
         transform: revert;
     }
 
     &[aria-current] {
-        color: #0098ee;
+        color: ${({ theme }) => theme.colors.main};
         font-weight: bold;
         cursor: revert;
         transform: revert;
