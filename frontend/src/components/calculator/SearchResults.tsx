@@ -323,7 +323,7 @@ const CustomDiv = styled.div`
     border-bottom: 1px solid #f6f6f6;
     border-right: 1px solid #eaeaea;
     width: 20%;
-    height: 497px;
+    height: 496px;
     position: relative;
     overflow: overlay;
     overflow-x: hidden;
