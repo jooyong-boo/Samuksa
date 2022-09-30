@@ -156,11 +156,32 @@ const PostViewer = () => {
                 ) : null}
 
                 <PostCommentBox ref={commentRef}>
-                    <Typography fontSize={18}>댓글 {comments.length}</Typography>
+                    <TotalCommentText>{comments.length}개의 댓글</TotalCommentText>
+                    <UserCommentWrapper>
+                        <CommentUserAvatarContainer>
+                            {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
+                            <Typography>{loginStatus && userNickName}</Typography>
+                        </CommentUserAvatarContainer>
+                        <CommentBox>
+                            <TextField
+                                sx={{
+                                    width: '100%',
+                                }}
+                                placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
+                                disabled={!loginStatus}
+                            />
+                            <CustomBtn variant="contained" margin={'1rem'} onClick={CommentRegister}>
+                                등록
+                            </CustomBtn>
+                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={CommentRegister}>
+                                등록 + 추천
+                            </CustomBtn>
+                        </CommentBox>
+                    </UserCommentWrapper>
                     {comments &&
                         comments.map((comment, i) => {
                             return (
-                                <React.Fragment key={i}>
+                                <CommentDiv key={i}>
                                     <PostCommentsInfo>
                                         <CommentAvatar
                                             src={`https://randomuser.me/api/portraits/men/${getRandomNumber(
@@ -178,30 +199,11 @@ const PostViewer = () => {
                                         </CommentUserInfoBox>
                                     </PostCommentsInfo>
                                     <CommentText>{comment.content}</CommentText>
-                                </React.Fragment>
+                                </CommentDiv>
                             );
                         })}
                 </PostCommentBox>
                 <BottomCommentBox>
-                    <UserCommentWrapper>
-                        <CommentUserAvatarContainer>
-                            {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
-                            <Typography>{loginStatus && userNickName}</Typography>
-                        </CommentUserAvatarContainer>
-                        <CommentBox>
-                            <TextField
-                                sx={{ width: '100%' }}
-                                placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
-                                disabled={!loginStatus}
-                            />
-                            <CustomBtn variant="contained" margin={'1rem'} onClick={CommentRegister}>
-                                등록
-                            </CustomBtn>
-                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={CommentRegister}>
-                                등록 + 추천
-                            </CustomBtn>
-                        </CommentBox>
-                    </UserCommentWrapper>
                     <CustomBtn variant="contained" margin={'1rem 0'} onClick={goList}>
                         목록
                     </CustomBtn>
@@ -323,6 +325,13 @@ const PostCommentBox = styled.div`
     margin: 1rem 0;
 `;
 
+const CommentDiv = styled.div`
+    border-bottom: 1px solid #eaeaea;
+    &:last-child {
+        border-bottom: none;
+    }
+`;
+
 const PostCommentsInfo = styled.div`
     display: flex;
     align-items: center;
@@ -353,6 +362,7 @@ const CommentUserInfoText = styled(Typography)<CommentUserInfoTextProps>`
 
 const CommentText = styled(Typography)`
     color: rgb(55 65 81);
+    margin-bottom: 1rem;
 `;
 
 const BottomCommentBox = styled.div`
@@ -369,6 +379,7 @@ const UserCommentWrapper = styled.div`
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 1rem;
+    margin-bottom: 1rem;
 `;
 
 const CommentUserAvatarContainer = styled.div`
@@ -394,6 +405,11 @@ const CommentBox = styled.div`
     margin-top: 1rem;
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+`;
+
+const TotalCommentText = styled(Typography)`
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
 `;
 
 interface CustomBtnProps {

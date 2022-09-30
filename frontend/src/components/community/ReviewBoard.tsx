@@ -209,7 +209,6 @@ const ReviewBoard = () => {
                         <SearchBtn variant="outlined" onClick={openSearch}>
                             <StyleSearchIcon />
                         </SearchBtn>
-                        {/* <SortBtn variant="outlined"> */}
                         <SortBtn
                             variant="outlined"
                             aria-controls={Menuopen ? 'basic-menu' : undefined}
@@ -218,35 +217,23 @@ const ReviewBoard = () => {
                             onClick={handleOpenNavMenu}
                         >
                             <StyleListIcon />
-                            <Typography sx={{ fontSize: '0.8rem', color: '#374151', fontWeight: '500' }}>
-                                {curSort}
-                            </Typography>
+                            <SortTypography>{curSort}</SortTypography>
                         </SortBtn>
                         <Menu id="게시글정렬" anchorEl={anchorElNav} open={Menuopen} onClose={handleCloseNavMenu}>
                             {SortPages.map(({ id, name }) => {
                                 return (
-                                    <MenuItem
+                                    <SortMenuItem
                                         key={id}
                                         onClick={(e) => {
                                             handleCloseNavMenu();
                                             handleSortPage(e, name);
                                         }}
-                                        sx={{ width: '80px', padding: '1rem 0' }}
                                     >
-                                        <Typography
-                                            sx={{
-                                                fontWeight: '400',
-                                                textAlign: 'center',
-                                                width: '100%',
-                                            }}
-                                        >
-                                            {name}
-                                        </Typography>
-                                    </MenuItem>
+                                        <SortMenuTypography>{name}</SortMenuTypography>
+                                    </SortMenuItem>
                                 );
                             })}
                         </Menu>
-                        {/* </SortBtn> */}
                     </div>
                 </BoardTopWrapper>
                 {open ? (
@@ -255,7 +242,6 @@ const ReviewBoard = () => {
                             onChange={(e) => {
                                 handleChangeSearchOption(e);
                             }}
-                            // value={}
                         >
                             <option value="제목">제목</option>
                             <option value="글쓴이">글쓴이</option>
@@ -512,6 +498,23 @@ const StyleListIcon = styled(ListIcon)`
     font-size: 1.6rem;
 `;
 
+const SortTypography = styled(Typography)`
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 500;
+`;
+
+const SortMenuItem = styled(MenuItem)`
+    width: 80px;
+    padding: 1rem 0;
+`;
+
+const SortMenuTypography = styled(Typography)`
+    font-weight: 400;
+    text-align: center;
+    width: 100%;
+`;
+
 const SearchContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -555,15 +558,16 @@ const CustomTableContainer = styled(TableContainer)`
     border-radius: 0;
     max-height: 600px;
     padding: 0px 12px;
-    @media screen and (max-width: 700px) {
+    ${({ theme }) => theme.device.tablet} {
         display: none;
     }
 `;
 
 const MobileBoardContainer = styled.div`
-    width: 100%;
-    @media screen and (min-width: 701px) {
-        display: none;
+    display: none;
+    ${({ theme }) => theme.device.tablet} {
+        display: block;
+        width: 100%;
     }
 `;
 

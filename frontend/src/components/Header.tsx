@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,6 +19,7 @@ import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
+import { throttle } from 'lodash';
 
 interface userInfoProps {
     passWd?: null;
@@ -58,6 +59,7 @@ const Header = () => {
     const setUserIdState = useSetRecoilState(userIdState);
     const [reviewPostPage, setReviewPostPage] = useRecoilState<number>(reviewPostPageState);
     const [tioPostPage, setTipPostPage] = useRecoilState<number>(tipPostPageState);
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
     let loginConfirm = localStorage.getItem('jwtToken');
 
@@ -76,64 +78,48 @@ const Header = () => {
         },
     ]);
 
-    const [NON_USER_NAV_ITEMS, setNON_USER_NAV_ITEMS] = useState([
+    const USERS_ITEMS = [
+        {
+            id: 1,
+            name: '프로필',
+            path: '/myinfo/profile',
+        },
+        {
+            id: 2,
+            name: '회원 정보',
+            path: '/myinfo',
+        },
+        {
+            id: 3,
+            name: '즐겨찾기',
+            path: '/bookmark',
+        },
+        {
+            id: 4,
+            name: '로그아웃',
+            path: '/',
+        },
+    ];
+
+    // 햄버거 메뉴
+    const pages = [
         {
             id: 1,
             name: '수산물 계산기',
             path: '/calculator',
-            active: false,
         },
         {
             id: 2,
             name: '게시판',
             path: '/board',
-            active: false,
-        },
-        // {
-        //     id: 3,
-        //     name: '로그인',
-        //     path: '/login',
-        //     active: false,
-        // },
-        // {
-        //     id: 4,
-        //     name: '회원가입',
-        //     path: '/register',
-        //     active: false,
-        // },
-    ]);
-
-    const USERS_ITEMS = [
-        {
-            id: 1,
-            name: '로그아웃',
-            path: '/',
-        },
-        {
-            id: 2,
-            name: '프로필',
-            path: '/myinfo/profile',
         },
         {
             id: 3,
-            name: '회원 정보',
-            path: '/myinfo',
-        },
-        {
-            id: 4,
-            name: '즐겨찾기',
-            path: '/',
-        },
-    ];
-
-    const NON_USERS_ITEMS = [
-        {
-            id: 1,
             name: '로그인',
             path: '/login',
         },
         {
-            id: 2,
+            id: 4,
             name: '회원가입',
             path: '/register',
         },
@@ -303,30 +289,7 @@ const Header = () => {
         setAnchorElUser(null);
     };
 
-    // 햄버거 메뉴
-    const pages = [
-        {
-            id: 1,
-            name: '수산물 계산기',
-            path: '/calculator',
-        },
-        {
-            id: 2,
-            name: '게시판',
-            path: '/board',
-        },
-        {
-            id: 3,
-            name: '로그인',
-            path: '/login',
-        },
-        {
-            id: 4,
-            name: '회원가입',
-            path: '/register',
-        },
-    ];
-
+    // 모바일 메뉴
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -336,6 +299,32 @@ const Header = () => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+
+    // width에 따라 menu 보이는 유무 정하는 코드
+    function getWindowDimensions() {
+        const { innerWidth: width } = window;
+        return {
+            width,
+        };
+    }
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [windowDimensions]);
+
+    useEffect(() => {
+        if (windowDimensions.width <= 500) {
+            setAnchorElUser(null);
+        } else if (windowDimensions.width >= 500) {
+            setAnchorElNav(null);
+        }
+    }, [windowDimensions]);
+    //
 
     return (
         <Box>
@@ -349,11 +338,10 @@ const Header = () => {
                         <MobileBox>
                             <IconButton
                                 size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
+                                aria-label="Mobilemenu"
+                                aria-controls="Mobilemenu"
                                 aria-haspopup="true"
                                 onClick={handleOpenNavMenu}
-                                color="inherit"
                             >
                                 <MenuIcon sx={{ color: `${theme.colors.main}` }} fontSize="large" />
                             </IconButton>
@@ -362,41 +350,38 @@ const Header = () => {
                                 anchorEl={anchorElNav}
                                 anchorOrigin={{
                                     vertical: 'bottom',
-                                    horizontal: 'left',
+                                    horizontal: 'right',
                                 }}
                                 keepMounted
                                 transformOrigin={{
                                     vertical: 'top',
-                                    horizontal: 'left',
+                                    horizontal: 'right',
                                 }}
                                 open={Boolean(anchorElNav)}
                                 onClose={handleCloseNavMenu}
-                                sx={{
-                                    display: { xs: 'block', md: 'none' },
-                                }}
                             >
                                 {loginStatus
                                     ? NAV_ITEMS.map(({ id, name, path }) => (
-                                          <StyledMenuItem
-                                              key={id}
+                                          <StyledMobileMenuItem
+                                              key={name}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
                                               }}
                                           >
                                               <MenuItemList>{name}</MenuItemList>
-                                          </StyledMenuItem>
+                                          </StyledMobileMenuItem>
                                       ))
                                     : pages.map(({ id, name, path }) => (
-                                          <StyledMenuItem
-                                              key={id}
+                                          <StyledMobileMenuItem
+                                              key={name}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
                                               }}
                                           >
                                               <MenuItemList>{name}</MenuItemList>
-                                          </StyledMenuItem>
+                                          </StyledMobileMenuItem>
                                       ))}
                                 {loginStatus ? <Divider /> : null}
                                 {loginStatus ? (
@@ -411,7 +396,7 @@ const Header = () => {
                                 {loginStatus
                                     ? USERS_ITEMS.map(({ id, name, path }) => (
                                           <MenuItem
-                                              key={id}
+                                              key={name}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -448,22 +433,22 @@ const Header = () => {
                                     {userInfo.userNickName ? `${userInfo.userNickName} 님` : ''}
                                 </UserNickNameText>
                                 <UserSelectMenu
-                                    id="menu-appbar"
+                                    id="menu"
                                     anchorEl={anchorElUser}
                                     anchorOrigin={{
                                         vertical: 'top',
-                                        horizontal: 'right',
+                                        horizontal: 'left',
                                     }}
                                     keepMounted
                                     transformOrigin={{
                                         vertical: 'top',
-                                        horizontal: 'right',
+                                        horizontal: 'left',
                                     }}
                                     open={Boolean(anchorElUser)}
                                     onClose={handleCloseUserMenu}
                                 >
                                     {USERS_ITEMS.map(({ id, name, path }) => (
-                                        <MenuItem
+                                        <StyledMenuitem
                                             key={id}
                                             onClick={() => {
                                                 handleCloseUserMenu();
@@ -472,7 +457,7 @@ const Header = () => {
                                             }}
                                         >
                                             <MenuItemList>{name}</MenuItemList>
-                                        </MenuItem>
+                                        </StyledMenuitem>
                                     ))}
                                 </UserSelectMenu>
                             </UserBox>
@@ -507,9 +492,11 @@ export default React.memo(Header);
 
 const AppBarContainer = styled(AppBar)`
     position: fixed;
-    /* background-color: rgba(255, 255, 255, 0); */
     background-color: #ffffff;
     box-shadow: none;
+    /* ${({ theme }) => theme.device.mobile} {
+        background-color: rgba(255, 255, 255, 0);
+    } */
 `;
 
 const ToolBarWrapper = styled(Toolbar)`
@@ -554,7 +541,7 @@ const MobileBox = styled(Box)`
     }
 `;
 
-const StyledMenuItem = styled(MenuItem)`
+const StyledMobileMenuItem = styled(MenuItem)`
     width: 100vw;
 `;
 
@@ -647,11 +634,20 @@ const UserSelectMenu = styled(Menu)`
     margin-top: 45px;
 `;
 
+const StyledMenuitem = styled(MenuItem)`
+    width: 10rem;
+    text-align: center;
+    &:last-child {
+        border-top: 1px solid #eaeaea;
+    }
+`;
+
 const MenuItemList = styled(Typography)`
     text-align: center;
     color: #111827;
     font-size: 1rem;
     font-weight: 500;
+    /* width: 100%; */
     ${({ theme }) => theme.device.mobile} {
         font-size: 1.125rem;
     }

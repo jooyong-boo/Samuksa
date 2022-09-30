@@ -5,7 +5,7 @@ const colors = {
 const size = {
     mobile: '500px',
     tablet: '768px',
-    desktop: '1440px',
+    desktop: '1200px',
 };
 
 // 미디어 쿼리의 중복 코드를 줄이기위해 정의된 변수입니다

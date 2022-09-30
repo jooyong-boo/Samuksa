@@ -5,6 +5,7 @@ import Loading from './components/common/Loading';
 import UserInfoPage from './pages/auth/UserInfoPage';
 import RequireAuth from './components/utils/RequireAuth';
 import PublicAuth from './components/utils/PublicAuth';
+import BookmarkPage from './pages/BookmarkPage';
 
 const MainPage = lazy(() => import('./pages/MainPage'));
 const CalculatorPage = lazy(() => import('./pages/CalculatorPage'));
@@ -52,6 +53,14 @@ function App() {
                         <RequireAuth>
                             <ProfilePage />
                         </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/bookmark"
+                    element={
+                        // <RequireAuth>
+                        <BookmarkPage />
+                        // </RequireAuth>
                     }
                 />
                 <Route path="/calculator" element={<CalculatorPage />} />
