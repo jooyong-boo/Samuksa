@@ -464,6 +464,7 @@ const CustomBtn = styled(Button)`
     color: white;
     box-shadow: none;
     margin-left: 0.5rem;
+    flex-grow: 1;
     :hover {
         box-shadow: none;
     }
