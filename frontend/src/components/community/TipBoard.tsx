@@ -76,13 +76,14 @@ const TipBoard = () => {
     const [postPage, setPostPage] = useRecoilState<number>(tipPostPageState);
     const offset = (postPage - 1) * limit;
     const userInfo = useRecoilValue<any>(userInfoState);
-    const posts = useRecoilValue<any[]>(getPostState);
-    const reversePosts = [...posts].reverse();
+    const postsRecoil = useRecoilValue<any[]>(getPostState);
+    const [reversePosts, setReversePosts] = useState([...postsRecoil].reverse());
     const [usePosts, setUsePosts] = useState<any[]>([]);
     const [searchPosts, setSearchPosts] = useState('');
     const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState(SortPages[0].name);
+    const [searchOption, setSearchOption] = useState('제목');
 
     const openSearch = () => {
         setOpen(!open);
@@ -96,31 +97,40 @@ const TipBoard = () => {
 
     const handleSearch = (e: React.KeyboardEvent | React.MouseEvent): void => {
         if (e.type === 'click' || (e as React.KeyboardEvent).key === 'Enter') {
-            let result = reversePosts.filter((post: any) => post.title.includes(searchPosts));
-            let writedResult = result.map((post) => {
-                let readPost: any = localStorage.getItem('tipReadPost');
-                if (readPost?.includes(post.id)) {
-                    return Object.assign(
-                        {},
-                        post,
-                        { read: true },
-                        { nickName: RandomNickname() },
-                        { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                    );
-                } else {
-                    return Object.assign(
-                        {},
-                        post,
-                        { nickName: RandomNickname() },
-                        { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                    );
+            if (searchOption === '제목') {
+                let result = reversePosts.filter((post: any) => post.title.includes(searchPosts));
+                if (result.length === 0) {
+                    return notifyError('일치하는 글이 없습니다.');
                 }
-            });
-            setUsePosts(writedResult);
+                let writedResult = result.map((post) => {
+                    let readPost: any = localStorage.getItem('tipReadPost');
+                    if (readPost?.includes(post.id)) {
+                        return { ...post, read: true };
+                    } else {
+                        return post;
+                    }
+                });
+                setUsePosts(writedResult);
+            }
+            if (searchOption === '글쓴이') {
+                let result = reversePosts.filter((post: any) => post.nickName.includes(searchPosts));
+                if (result.length === 0) {
+                    return notifyError('일치하는 글이 없습니다.');
+                }
+                let writedResult = result.map((post) => {
+                    let readPost: any = localStorage.getItem('tipReadPost');
+                    if (readPost?.includes(post.id)) {
+                        return { ...post, read: true };
+                    } else {
+                        return post;
+                    }
+                });
+                setUsePosts(writedResult);
+            }
         }
     };
 
-    const goWriting = () => {
+    const goWriting = (): void => {
         if (Object.keys(userInfo).length) {
             navigate('/write', { state: '/tip' });
         } else {
@@ -137,6 +147,10 @@ const TipBoard = () => {
         } else {
             localStorage.setItem('tipReadPost', JSON.stringify([id]));
         }
+    };
+
+    const handleChangeSearchOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSearchOption(e.target.value);
     };
 
     useEffect(() => {
@@ -159,9 +173,9 @@ const TipBoard = () => {
                 );
             }
         });
-
+        setReversePosts(newPosts);
         setUsePosts(newPosts);
-    }, [posts]);
+    }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
@@ -194,8 +208,6 @@ const TipBoard = () => {
                         <SearchBtn variant="outlined" onClick={openSearch}>
                             <StyleSearchIcon />
                         </SearchBtn>
-                        {/* <SortBtn variant="outlined"> */}
-
                         <SortBtn
                             variant="outlined"
                             aria-controls={Menuopen ? 'basic-menu' : undefined}
@@ -204,39 +216,35 @@ const TipBoard = () => {
                             onClick={handleOpenNavMenu}
                         >
                             <StyleListIcon />
-                            <Typography sx={{ fontSize: '0.8rem', color: '#374151', fontWeight: '500' }}>
-                                {curSort}
-                            </Typography>
+                            <SortTypography>{curSort}</SortTypography>
                         </SortBtn>
                         <Menu id="게시글정렬" anchorEl={anchorElNav} open={Menuopen} onClose={handleCloseNavMenu}>
                             {SortPages.map(({ id, name }) => {
                                 return (
-                                    <MenuItem
+                                    <SortMenuItem
                                         key={id}
                                         onClick={(e) => {
                                             handleCloseNavMenu();
                                             handleSortPage(e, name);
                                         }}
-                                        sx={{ width: '80px', padding: '1rem 0' }}
                                     >
-                                        <Typography
-                                            sx={{
-                                                fontWeight: '400',
-                                                textAlign: 'center',
-                                                width: '100%',
-                                            }}
-                                        >
-                                            {name}
-                                        </Typography>
-                                    </MenuItem>
+                                        <SortMenuTypography>{name}</SortMenuTypography>
+                                    </SortMenuItem>
                                 );
                             })}
                         </Menu>
-                        {/* </SortBtn> */}
                     </div>
                 </BoardTopWrapper>
                 {open ? (
                     <SearchContainer>
+                        <SelectBox
+                            onChange={(e) => {
+                                handleChangeSearchOption(e);
+                            }}
+                        >
+                            <option value="제목">제목</option>
+                            <option value="글쓴이">글쓴이</option>
+                        </SelectBox>
                         <SearchBox>
                             <StyledSearchIcon
                                 onClick={(e) => {
@@ -399,7 +407,12 @@ const TipBoard = () => {
                     </MobileBoardContainer>
                 </ThemeProvider>
                 <PaginationStack>
-                    <Pagination total={posts.length} limit={limit} postPage={postPage} setPostPage={setPostPage} />
+                    <Pagination
+                        total={postsRecoil.length}
+                        limit={limit}
+                        postPage={postPage}
+                        setPostPage={setPostPage}
+                    />
                 </PaginationStack>
             </BoardContainer>
         </Background>
@@ -484,12 +497,33 @@ const StyleListIcon = styled(ListIcon)`
     font-size: 1.6rem;
 `;
 
+const SortTypography = styled(Typography)`
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 500;
+`;
+
+const SortMenuItem = styled(MenuItem)`
+    width: 80px;
+    padding: 1rem 0;
+`;
+
+const SortMenuTypography = styled(Typography)`
+    font-weight: 400;
+    text-align: center;
+    width: 100%;
+`;
+
 const SearchContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
     border-top: 1px solid #eaeaea;
 `;
 
 const SearchBox = styled.div`
     display: flex;
+    width: 90%;
     border: 1px solid #939393;
     border-radius: 10px;
     margin: 0.5rem 1rem;
@@ -510,21 +544,31 @@ const SearchInput = styled.input`
     }
 `;
 
+const SelectBox = styled.select`
+    border: none;
+    border-radius: 0;
+    font-size: 1rem;
+    :focus {
+        outline: none;
+    }
+`;
+
 const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
     border-bottom: 2px solid #a7a7a7;
     border-radius: 0;
     max-height: 600px;
     padding: 0px 12px;
-    @media screen and (max-width: 700px) {
+    ${({ theme }) => theme.device.tablet} {
         display: none;
     }
 `;
 
 const MobileBoardContainer = styled.div`
-    width: 100%;
-    @media screen and (min-width: 701px) {
-        display: none;
+    display: none;
+    ${({ theme }) => theme.device.tablet} {
+        display: block;
+        width: 100%;
     }
 `;
 
