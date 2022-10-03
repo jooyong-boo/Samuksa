@@ -344,36 +344,16 @@ const ReviewBoard = () => {
                                                     </TitleNavLink>
                                                 </TitleInfo>
                                             </div>
-                                            <div style={{ display: 'flex', justifyContent: 'flex-start' }}></div>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    flexWrap: 'wrap',
-                                                }}
-                                            >
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        width: '100%',
-                                                        justifyContent: 'space-between',
-                                                    }}
-                                                >
-                                                    <div style={{ display: 'flex' }}>
-                                                        <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            조회: {id}
-                                                        </Typography>
-                                                        <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            댓글:{' '}
-                                                            {postComment.length > 0 ? postComment[id - 1].length : ''}
-                                                        </Typography>
-                                                        <Typography>추천: {UserId}</Typography>
-                                                    </div>
-                                                    <Typography
-                                                        sx={{ color: '#5A5A5A', textAlign: 'end' }}
-                                                    >{`${year}년 ${month}월 ${date}일`}</Typography>
-                                                </div>
-                                            </div>
+                                            <MobilePostAdditionalInfoWrapper>
+                                                <MobilePostAddInfoLeft>
+                                                    <MobilePostAddInfoText>조회: {id}</MobilePostAddInfoText>
+                                                    <MobilePostAddInfoText>
+                                                        댓글: {postComment.length > 0 ? postComment[id - 1].length : ''}
+                                                    </MobilePostAddInfoText>
+                                                    <Typography>추천: {UserId}</Typography>
+                                                </MobilePostAddInfoLeft>
+                                                <MobilePostAddInfoRightText>{`${year}년 ${month}월 ${date}일`}</MobilePostAddInfoRightText>
+                                            </MobilePostAdditionalInfoWrapper>
                                         </MobileLi>
                                     </div>
                                 );
@@ -576,7 +556,7 @@ const NickNameInfo = styled(Typography)`
 `;
 
 const TitleInfo = styled(Typography)`
-    text-align: center;
+    text-align: start;
     max-width: 300px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -595,6 +575,26 @@ const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
     color: ${(props) => (props.read ? '#770088' : '#5A5A5A')};
     text-decoration: none;
     font-size: 0.875rem;
+`;
+
+const MobilePostAdditionalInfoWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+`;
+
+const MobilePostAddInfoLeft = styled.div`
+    display: flex;
+`;
+
+const MobilePostAddInfoText = styled(Typography)`
+    margin-left: 0.3rem;
+`;
+
+const MobilePostAddInfoRightText = styled(Typography)`
+    color: #5a5a5a;
+    text-align: end;
 `;
 
 const PaginationStack = styled(Stack)`
