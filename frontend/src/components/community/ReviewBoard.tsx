@@ -274,7 +274,7 @@ const ReviewBoard = () => {
                             </TableHead>
                             <TableBody>
                                 {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read, nickName } = item;
+                                    const { id, title, UserId, createdAt, read, nickName, avatar } = item;
                                     const newCreateAt = new Date(createdAt);
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
@@ -305,7 +305,18 @@ const ReviewBoard = () => {
                                                     </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{nickName}</TableCell>
+                                            <TableCell sx={tableTextStyle}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    <MobileAvatar src={avatar} />
+                                                    <Typography sx={{ marginLeft: '0.5rem' }}>{nickName}</Typography>
+                                                </div>
+                                            </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
