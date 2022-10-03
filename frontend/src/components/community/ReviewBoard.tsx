@@ -326,39 +326,13 @@ const ReviewBoard = () => {
 
                                 return (
                                     <div key={id}>
-                                        <li
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'space-between',
-                                                borderBottom: '1px solid #EAEAEA',
-                                                padding: '0.5rem 0',
-                                            }}
-                                        >
+                                        <MobileLi>
                                             <div>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Avatar src={avatar} sx={{ width: '2rem', height: '2rem' }} />
-                                                    <Typography
-                                                        sx={{
-                                                            display: 'flex',
-                                                            marginLeft: '0.5rem',
-                                                            fontSize: '0.8rem',
-                                                        }}
-                                                    >
-                                                        {nickName}
-                                                    </Typography>
-                                                </div>
-                                                <Typography
-                                                    sx={{
-                                                        textAlign: 'start',
-                                                        maxWidth: '300px',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        overflow: 'hidden',
-                                                        padding: '10px 0',
-                                                        ':hover': { fontWeight: 'bold' },
-                                                    }}
-                                                >
+                                                <MobileWriterWrapper>
+                                                    <MobileAvatar src={avatar} />
+                                                    <NickNameInfo>{nickName}</NickNameInfo>
+                                                </MobileWriterWrapper>
+                                                <TitleInfo>
                                                     <TitleNavLink
                                                         to={`post/${id}`}
                                                         read={read ? 'true' : ''}
@@ -368,7 +342,7 @@ const ReviewBoard = () => {
                                                     >
                                                         {title}
                                                     </TitleNavLink>
-                                                </Typography>
+                                                </TitleInfo>
                                             </div>
                                             <div style={{ display: 'flex', justifyContent: 'flex-start' }}></div>
                                             <div
@@ -400,7 +374,7 @@ const ReviewBoard = () => {
                                                     >{`${year}년 ${month}월 ${date}일`}</Typography>
                                                 </div>
                                             </div>
-                                        </li>
+                                        </MobileLi>
                                     </div>
                                 );
                             })}
@@ -575,6 +549,42 @@ const StyledUl = styled.ul`
     list-style: none;
     padding-left: 0px;
     border-top: 1px solid #eaeaea;
+`;
+
+const MobileLi = styled.li`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 1px solid #eaeaea;
+    padding: 0.5rem 0;
+`;
+
+const MobileWriterWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const MobileAvatar = styled(Avatar)`
+    width: 2rem;
+    height: 2rem;
+`;
+
+const NickNameInfo = styled(Typography)`
+    display: flex;
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+`;
+
+const TitleInfo = styled(Typography)`
+    text-align: center;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 10px 0;
+    :hover {
+        font-weight: bold;
+    }
 `;
 
 interface TitleNavLinkProps {
