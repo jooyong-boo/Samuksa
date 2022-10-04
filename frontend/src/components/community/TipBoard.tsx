@@ -273,7 +273,7 @@ const TipBoard = () => {
                             </TableHead>
                             <TableBody>
                                 {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read, nickName } = item;
+                                    const { id, title, UserId, createdAt, read, nickName, avatar } = item;
                                     const newCreateAt = new Date(createdAt);
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
@@ -304,7 +304,19 @@ const TipBoard = () => {
                                                     </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{nickName}</TableCell>
+                                            <TableCell sx={tableTextStyle}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'flex-start',
+                                                        margin: 'auto',
+                                                    }}
+                                                >
+                                                    <MobileAvatar src={avatar} />
+                                                    <Typography sx={{ marginLeft: '0.5rem' }}>{nickName}</Typography>
+                                                </div>
+                                            </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -325,39 +337,13 @@ const TipBoard = () => {
 
                                 return (
                                     <div key={id}>
-                                        <li
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'space-between',
-                                                borderBottom: '1px solid #EAEAEA',
-                                                padding: '0.5rem 0',
-                                            }}
-                                        >
+                                        <MobileLi>
                                             <div>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Avatar src={avatar} sx={{ width: '2rem', height: '2rem' }} />
-                                                    <Typography
-                                                        sx={{
-                                                            display: 'flex',
-                                                            marginLeft: '0.5rem',
-                                                            fontSize: '0.8rem',
-                                                        }}
-                                                    >
-                                                        {nickName}
-                                                    </Typography>
-                                                </div>
-                                                <Typography
-                                                    sx={{
-                                                        textAlign: 'start',
-                                                        maxWidth: '300px',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        overflow: 'hidden',
-                                                        padding: '10px 0',
-                                                        ':hover': { fontWeight: 'bold' },
-                                                    }}
-                                                >
+                                                <MobileWriterWrapper>
+                                                    <MobileAvatar src={avatar} />
+                                                    <NickNameInfo>{nickName}</NickNameInfo>
+                                                </MobileWriterWrapper>
+                                                <TitleInfo>
                                                     <TitleNavLink
                                                         to={`post/${id}`}
                                                         read={read ? 'true' : ''}
@@ -367,39 +353,17 @@ const TipBoard = () => {
                                                     >
                                                         {title}
                                                     </TitleNavLink>
-                                                </Typography>
+                                                </TitleInfo>
                                             </div>
-                                            <div style={{ display: 'flex', justifyContent: 'flex-start' }}></div>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    flexWrap: 'wrap',
-                                                }}
-                                            >
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        width: '100%',
-                                                        justifyContent: 'space-between',
-                                                    }}
-                                                >
-                                                    <div style={{ display: 'flex' }}>
-                                                        <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            조회: {id}
-                                                        </Typography>
-                                                        <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            댓글:{' '}
-                                                            {postComment.length > 0 ? postComment[id - 1].length : ''}
-                                                        </Typography>
-                                                        <Typography>추천: {UserId}</Typography>
-                                                    </div>
-                                                    <Typography
-                                                        sx={{ color: '#5A5A5A', textAlign: 'end' }}
-                                                    >{`${year}년 ${month}월 ${date}일`}</Typography>
-                                                </div>
-                                            </div>
-                                        </li>
+                                            <MobilePostAdditionalInfoWrapper>
+                                                <MobilePostAddInfoLeft>
+                                                    <MobilePostAddInfoText>조회: {id}</MobilePostAddInfoText>
+                                                    <MobilePostAddInfoText>댓글: {id}</MobilePostAddInfoText>
+                                                    <MobilePostAddInfoText>추천: {UserId}</MobilePostAddInfoText>
+                                                </MobilePostAddInfoLeft>
+                                                <MobilePostAddInfoRightText>{`${year}년 ${month}월 ${date}일`}</MobilePostAddInfoRightText>
+                                            </MobilePostAdditionalInfoWrapper>
+                                        </MobileLi>
                                     </div>
                                 );
                             })}
@@ -578,14 +542,73 @@ const StyledUl = styled.ul`
     border-top: 1px solid #eaeaea;
 `;
 
+const MobileLi = styled.li`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 1px solid #eaeaea;
+    padding: 0.5rem 0;
+`;
+
+const MobileWriterWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const MobileAvatar = styled(Avatar)`
+    width: 2rem;
+    height: 2rem;
+`;
+
+const NickNameInfo = styled(Typography)`
+    display: flex;
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+`;
+
+const TitleInfo = styled(Typography)`
+    text-align: start;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 10px 0;
+    :hover {
+        font-weight: bold;
+    }
+`;
+
 interface TitleNavLinkProps {
     read: string;
 }
 
 const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
-    color: ${(props) => (props.read ? '#770088' : '#5A5A5A')};
+    color: ${(props) => (props.read ? '#770088' : '#374151')};
     text-decoration: none;
     font-size: 0.875rem;
+    ${({ theme }) => theme.device.tablet} {
+        font-size: 0.95rem;
+    }
+`;
+
+const MobilePostAdditionalInfoWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+`;
+
+const MobilePostAddInfoLeft = styled.div`
+    display: flex;
+`;
+
+const MobilePostAddInfoText = styled(Typography)`
+    margin-left: 0.3rem;
+`;
+
+const MobilePostAddInfoRightText = styled(Typography)`
+    color: #5a5a5a;
+    text-align: end;
 `;
 
 const PaginationStack = styled(Stack)`
@@ -603,13 +626,13 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#5A5A5A',
+            main: '#374151',
         },
     },
 });
 
 const tableTopTextStyle = {
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     fontSize: '0.875rem',
     padding: '12px 0px',
@@ -617,14 +640,15 @@ const tableTopTextStyle = {
 
 const tableTextStyle = {
     padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     fontSize: '0.875rem',
+    maxWidth: '130px',
 };
 
 const titleTextStyle = {
     padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     maxWidth: '200px',
     textOverflow: 'ellipsis',
