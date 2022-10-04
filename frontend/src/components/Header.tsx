@@ -19,7 +19,6 @@ import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
-import { throttle } from 'lodash';
 
 interface userInfoProps {
     passWd?: null;
