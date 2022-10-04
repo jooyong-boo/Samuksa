@@ -104,6 +104,53 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                         </Table>
                     </CustomTableContainer>
                 </ThemeProvider>
+                <MobileGridBox>
+                    {selectEstimate
+                        ? selectEstimate.map((item: any, i: number) => {
+                              const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } =
+                                  item;
+                              const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [
+                                  ...fishRecommendAlgoWeights,
+                              ];
+                              return (
+                                  <div
+                                      style={{
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                          border: '1px solid #eaeaea',
+                                      }}
+                                      key={i}
+                                  >
+                                      <div
+                                          style={{
+                                              padding: '1rem',
+                                              height: '30rem',
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              justifyContent: 'space-between',
+                                          }}
+                                      >
+                                          <CustomMobileAvatar alt={'1'} src={image} />
+                                          <Typography>
+                                              {fishName}({farmType})
+                                          </Typography>
+                                          <Typography>{areaFrom}</Typography>
+                                          <Typography>
+                                              {' '}
+                                              {(weightPerServing * serving) / 1000}
+                                              kg
+                                          </Typography>
+                                          <Typography>{serving}마리</Typography>
+                                          <Typography> {(price * 1000).toLocaleString('ko-KR')}원</Typography>
+                                          <Typography>{totalMoney.toLocaleString('ko-KR')}원</Typography>
+                                      </div>
+                                  </div>
+                              );
+                          })
+                        : null}
+                </MobileGridBox>
                 <CombinationInfoContainer>
                     <CombinationFishDetailInfo>
                         {selectEstimate
@@ -153,70 +200,34 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                     </DetailWeightPriceDiv>
                 </CombinationInfoContainer>
             </ResultTableWrapper>
-            <MobileGridBox>
-                {selectEstimate
-                    ? selectEstimate.map((item: any, i: number) => {
-                          const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
-                          const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [
-                              ...fishRecommendAlgoWeights,
-                          ];
-                          return (
-                              <div
-                                  style={{
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
-                                      border: '1px solid #eaeaea',
-                                  }}
-                              >
-                                  <div
-                                      style={{
-                                          padding: '1rem',
-                                          height: '30rem',
-                                          display: 'flex',
-                                          flexDirection: 'column',
-                                          justifyContent: 'space-between',
-                                      }}
-                                  >
-                                      <CustomMobileAvatar alt={'1'} src={image} />
-                                      <Typography>
-                                          {fishName}({farmType})
-                                      </Typography>
-                                      <Typography>{areaFrom}</Typography>
-                                      <Typography>
-                                          {' '}
-                                          {(weightPerServing * serving) / 1000}
-                                          kg
-                                      </Typography>
-                                      <Typography>{serving}마리</Typography>
-                                      <Typography> {(price * 1000).toLocaleString('ko-KR')}원</Typography>
-                                      <Typography>{totalMoney.toLocaleString('ko-KR')}원</Typography>
-                                  </div>
-                              </div>
-                          );
-                      })
-                    : null}
-            </MobileGridBox>
         </>
     );
 }
 const ResultTableWrapper = styled.div`
-    @media all and (min-width: 951px) {
+    /* @media all and (min-width: 951px) {
         width: 100%;
     }
-    @media all and (min-width: 729px) and (max-width: 950px) {
+    @media all and (min-width: 731px) and (max-width: 950px) {
         display: none;
     }
     @media all and (max-width: 615px) {
         display: none;
-    }
+    } */
 `;
 
 const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
     border-bottom: 2px solid #a7a7a7;
     border-radius: 0;
+    @media all and (min-width: 951px) {
+        width: 100%;
+    }
+    @media all and (min-width: 731px) and (max-width: 950px) {
+        display: none;
+    }
+    @media all and (max-width: 615px) {
+        display: none;
+    }
 `;
 
 const CustomAvatar = styled(Avatar)`
@@ -281,7 +292,7 @@ const MobileGridBox = styled.div`
     @media all and (min-width: 951px) {
         display: none;
     }
-    @media all and (min-width: 731px) and (max-width: 950px) {
+    @media all and (min-width: 730px) and (max-width: 950px) {
         width: 100%;
         display: grid;
     }
