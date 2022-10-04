@@ -95,7 +95,7 @@ export const getAreaState = selector({
     get: async ({ get }) => {
         const response = await getArea();
         if (response.code === 'ERR_NETWORK') {
-            notifyError('서버와 연결이 끊겼습니다.');
+            // notifyError('서버와 연결이 끊겼습니다.');
             return '';
         }
         return response;
