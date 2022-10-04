@@ -12,6 +12,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { NavLink } from 'react-router-dom';
 
 interface loadingStats {
     loading: boolean;
@@ -52,16 +53,24 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
     }, [selectCondition]);
 
     useEffect(() => {
-        setLoading(false);
-    }, [result]);
+        if (loading) {
+            setSelectResult(null);
+            setSelectEstimate(null);
+        }
+    }, [loading]);
 
-    const onRecommendClick = (item: any[], id: number) => {
+    const onRecommendClick = (item: any[], id: number, active: boolean) => {
         setSelectResult(item);
         setResult(
             result.map((item) =>
                 item.combinationName === id ? { ...item, active: !item.active } : { ...item, active: false },
             ),
         );
+        if (active) {
+            setSelectResult(null);
+            setSelectEstimate(null);
+            return;
+        }
         setSelectEstimate(null);
     };
 
@@ -128,7 +137,9 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                 <SearchResultsTypography>
                     검색 결과{result.length > 0 ? `(${result.length})` : null}
                 </SearchResultsTypography>
-                <Button>즐겨찾기 {bookmark.length}</Button>
+                <BookmarkLink to={'/bookmark'}>
+                    <Button>즐겨찾기 {bookmark.length}</Button>
+                </BookmarkLink>
             </Container>
             <ResultDiv>
                 <CustomDiv>
@@ -140,7 +151,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                 <Fade in={true} timeout={200} key={i}>
                                     <CustomCardContent
                                         onClick={() => {
-                                            onRecommendClick(fishRecommendCombinations, combinationName);
+                                            onRecommendClick(fishRecommendCombinations, combinationName, active);
                                         }}
                                         sx={{
                                             backgroundColor: active ? '#F8F8F8' : 'white',
@@ -157,8 +168,8 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                                                 alt={item}
                                                                 src={image}
                                                                 variant="rounded"
-                                                                width={'30px'}
-                                                                height={'30px'}
+                                                                width={'2.14rem'}
+                                                                height={'2.14rem'}
                                                             />
                                                         </Grid>
                                                     );
@@ -319,6 +330,11 @@ const SearchResultsTypography = styled(Typography)`
     font-weight: bold;
 `;
 
+const BookmarkLink = styled(NavLink)`
+    text-decoration: none;
+    display: flex;
+`;
+
 const CustomDiv = styled.div`
     border-bottom: 1px solid #f6f6f6;
     border-right: 1px solid #eaeaea;
@@ -347,7 +363,7 @@ const ResultDiv = styled.div`
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
-    @media all and (max-width: 729px) {
+    @media all and (max-width: 730px) {
         flex-wrap: wrap;
     }
 `;
@@ -425,10 +441,9 @@ const CustomListDiv = styled.div`
     flex-wrap: wrap;
     background-color: white;
     border-right: 1px solid #eaeaea;
-    /* border-bottom: 1px solid #f6f6f6; */
-    min-width: 100px;
-    position: relative;
-    overflow: overlay;
+    min-width: 90px;
+    /* position: relative; */
+    /* overflow: overlay; */
     max-height: 497px;
     padding: 0;
     overflow-x: hidden;
@@ -440,14 +455,19 @@ const CustomListDiv = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
-    @media all and (max-width: 500px) {
+    ${({ theme }) => theme.device.tablet} {
+        width: 30%;
+    }
+    ${({ theme }) => theme.device.mobile} {
         flex-grow: 1;
+        border-right: none;
     }
 `;
 
 const CustomListItems = styled(ListItem)`
     display: flex;
     flex-direction: column;
+    width: 100%;
     padding-left: 0;
     cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
@@ -493,11 +513,12 @@ const SelectedEstimateContainer = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
-    @media all and (max-width: 1120px) {
+    /* @media all and (max-width: 1120px) {
         width: 100%;
-    }
+    } */
     @media all and (max-width: 730px) {
         border-top: 1px solid #eaeaea;
+        width: 100%;
     }
 `;
 
