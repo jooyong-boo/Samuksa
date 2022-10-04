@@ -51,9 +51,11 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                         throw new Error('조합 없음');
                     }
                     // 조합이 있는 경우
-                    setLoading(false);
                     setRecommendList(res.fishRecommendUnions);
                     contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+                })
+                .then(() => {
+                    setLoading(false);
                 })
                 .catch((e) => {
                     setLoading(false);
