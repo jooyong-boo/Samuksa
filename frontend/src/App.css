@@ -116,7 +116,7 @@ body::-webkit-scrollbar-thumb {
 
 @media (max-width: 300px) {
     html {
-        font-size: 0.6rem;
+        font-size: 0.65rem;
     }
 }
 
@@ -126,7 +126,7 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
-@media (min-width: 700px) {
+@media (700px <= width < 1200px) {
     html {
         font-size: 0.8rem;
     }

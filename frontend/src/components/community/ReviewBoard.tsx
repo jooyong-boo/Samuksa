@@ -80,7 +80,6 @@ const ReviewBoard = () => {
     const [posts, setPosts] = useState(postsRecoil);
     const [usePosts, setUsePosts] = useState<any[]>([]);
     const [searchPosts, setSearchPosts] = useState('');
-    const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState(SortPages[0].name);
     const [searchOption, setSearchOption] = useState('제목');
@@ -274,7 +273,7 @@ const ReviewBoard = () => {
                             </TableHead>
                             <TableBody>
                                 {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read, nickName } = item;
+                                    const { id, title, UserId, createdAt, read, nickName, avatar } = item;
                                     const newCreateAt = new Date(createdAt);
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
@@ -305,7 +304,21 @@ const ReviewBoard = () => {
                                                     </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{nickName}</TableCell>
+                                            <TableCell sx={tableTextStyle}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'flex-start',
+                                                        margin: 'auto',
+                                                    }}
+                                                >
+                                                    <MobileAvatar src={avatar} />
+                                                    <Typography sx={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>
+                                                        {nickName}
+                                                    </Typography>
+                                                </div>
+                                            </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -347,10 +360,8 @@ const ReviewBoard = () => {
                                             <MobilePostAdditionalInfoWrapper>
                                                 <MobilePostAddInfoLeft>
                                                     <MobilePostAddInfoText>조회: {id}</MobilePostAddInfoText>
-                                                    <MobilePostAddInfoText>
-                                                        댓글: {postComment.length > 0 ? postComment[id - 1].length : ''}
-                                                    </MobilePostAddInfoText>
-                                                    <Typography>추천: {UserId}</Typography>
+                                                    <MobilePostAddInfoText>댓글: {id}</MobilePostAddInfoText>
+                                                    <MobilePostAddInfoText>추천: {UserId}</MobilePostAddInfoText>
                                                 </MobilePostAddInfoLeft>
                                                 <MobilePostAddInfoRightText>{`${year}년 ${month}월 ${date}일`}</MobilePostAddInfoRightText>
                                             </MobilePostAdditionalInfoWrapper>
@@ -411,6 +422,9 @@ const BoardTopWrapper = styled.div`
     align-items: center;
     margin: auto;
     margin-bottom: 1rem;
+    ${({ theme }) => theme.device.mobile} {
+        flex-wrap: wrap;
+    }
 `;
 
 const WriteBtn = styled(Button)`
@@ -572,9 +586,15 @@ interface TitleNavLinkProps {
 }
 
 const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
-    color: ${(props) => (props.read ? '#770088' : '#5A5A5A')};
+    color: ${(props) => (props.read ? '#770088' : '#374151')};
     text-decoration: none;
     font-size: 0.875rem;
+    ${({ theme }) => theme.device.tablet} {
+        font-size: 0.95rem;
+    }
+    ${({ theme }) => theme.device.mobile} {
+        font-size: 0.95rem;
+    }
 `;
 
 const MobilePostAdditionalInfoWrapper = styled.div`
@@ -612,13 +632,13 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#5A5A5A',
+            main: '#374151',
         },
     },
 });
 
 const tableTopTextStyle = {
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     fontSize: '0.875rem',
     padding: '12px 0px',
@@ -626,14 +646,15 @@ const tableTopTextStyle = {
 
 const tableTextStyle = {
     padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     fontSize: '0.875rem',
+    maxWidth: '130px',
 };
 
 const titleTextStyle = {
     padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     maxWidth: '200px',
     textOverflow: 'ellipsis',

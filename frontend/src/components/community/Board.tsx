@@ -90,7 +90,6 @@ const BoardBox = styled(Box)`
 `;
 
 const BoardTab = styled(Tab)`
-    font-size: 1rem;
     padding: 0;
     :focus {
         color: ${({ theme }) => theme.colors.main};
