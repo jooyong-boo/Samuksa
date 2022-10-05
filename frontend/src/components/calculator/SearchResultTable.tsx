@@ -142,9 +142,9 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                               {(weightPerServing * serving) / 1000}
                                               kg
                                           </Typography>
-                                          <Typography>{serving}마리</Typography>
-                                          <Typography> {(price * 1000).toLocaleString('ko-KR')}원</Typography>
-                                          <Typography>{totalMoney.toLocaleString('ko-KR')}원</Typography>
+                                          <Typography>총 {serving}마리</Typography>
+                                          <Typography>마리당 {(price * 1000).toLocaleString('ko-KR')}원</Typography>
+                                          <Typography>Total: {totalMoney.toLocaleString('ko-KR')}원</Typography>
                                       </div>
                                   </div>
                               );
@@ -164,6 +164,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                                   fontSize: '0.8rem',
                                                   color: '#707070',
                                                   marginRight: 1,
+                                                  minWidth: '2rem',
                                               }}
                                           >
                                               {fishName}
