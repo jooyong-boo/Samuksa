@@ -16,6 +16,8 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getUserInfo } from '../../api/auth';
+import { getRandomNumber } from './PostViewer';
+import { getPostState } from '../../store/atom';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -52,6 +54,7 @@ const PostEditor = () => {
     const [content, setContent] = useState('');
     const [board, setBoard] = useState('');
 
+    const postsRecoil = useRecoilValue<any[]>(getPostState);
     const userInfo = useRecoilValue(userInfoState);
 
     const { userNickName }: userInfos = userInfo;
@@ -66,11 +69,11 @@ const PostEditor = () => {
         navigate(-1);
     };
 
-    const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
 
-    const onChange = () => {
+    const onChangeContent = () => {
         const data = editorRef.current?.getInstance().getHTML();
         setContent(data);
     };
@@ -112,12 +115,18 @@ const PostEditor = () => {
     };
 
     const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const date = new Date();
+        const date = new Date().toISOString();
         const data = {
-            date,
+            createdAt: date,
+            updatedAt: date,
             title,
             content,
+            avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`,
+            nickName: userNickName,
+            read: false,
+            userId: postsRecoil.length + 1,
         };
+        console.log(data);
     };
 
     useEffect(() => {
@@ -177,11 +186,11 @@ const PostEditor = () => {
                         ))}
                     </BoardSelect>
                     <Typography>제목</Typography>
-                    <BoardTitle placeholder="제목을 입력해 주세요" value={title} onChange={onTitleChange} />
+                    <BoardTitle placeholder="제목을 입력해 주세요" value={title} onChange={onChangeTitle} />
                 </FormControl>
                 <Editor
                     ref={editorRef}
-                    onChange={onChange}
+                    onChange={onChangeContent}
                     placeholder="내용을 입력해주세요."
                     previewStyle="vertical" // 미리보기 스타일 지정
                     height="450px" // 에디터 창 높이
