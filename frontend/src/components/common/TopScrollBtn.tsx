@@ -37,7 +37,7 @@ const TopScrollBtn = () => {
 
     return (
         <CustomBox>
-            <CircleFab color="primary" aria-label="top" onClick={moveTop} scroll={scroll ? 'true' : ''}>
+            <CircleFab color="primary" aria-label="scroll to top" onClick={moveTop} scroll={scroll ? 'true' : ''}>
                 <ArrowUpwardIcon />
             </CircleFab>
         </CustomBox>
