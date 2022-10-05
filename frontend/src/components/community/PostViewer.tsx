@@ -49,26 +49,10 @@ const PostViewer = () => {
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
     const { userId, userNickName, userEmail }: userInfos = userInfo;
+    const [newComment, setNewComment] = useState('');
+    const [commentModify, setCommentModify] = useState(false);
 
     const commentRef = useRef<null | HTMLDivElement>(null);
-
-    // const getPostsId = async (id: string | undefined) => {
-    //     try {
-    //         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
-    //         setData(data);
-    //     } catch (err) {
-    //         console.log(err.response);
-    //     }
-    // };
-
-    // const getComment = async (id: string | undefined) => {
-    //     try {
-    //         const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
-    //         setComments(data);
-    //     } catch (err) {
-    //         console.log(err.response);
-    //     }
-    // };
 
     async function searchPostsById(id: string | undefined) {
         const data = await getPostsById(id);
@@ -96,8 +80,23 @@ const PostViewer = () => {
         }
     };
 
-    const CommentRegister = () => {
+    const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewComment(e.target.value);
+    };
+
+    const commentRegister = () => {
         if (userInfo) {
+            setComments([
+                ...comments,
+                {
+                    PostId: Number(id),
+                    UserId: userNickName,
+                    content: newComment,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    id: userId,
+                },
+            ]);
             dismissAll();
             notifySuccess('등록 성공');
         } else {
@@ -106,13 +105,20 @@ const PostViewer = () => {
         }
     };
 
+    const commentDelete = (createdAt: string) => {
+        setComments(comments.filter((item) => item.createdAt !== createdAt));
+    };
+
+    const changeCommentModify = () => {
+        setCommentModify(!commentModify);
+    };
+
+    console.log(comments);
+
     useEffect(() => {
         searchPostsById(id);
         searchUserComment(id);
     }, [id]);
-
-    // console.log(data);
-    // console.log(comments);
 
     const goList = () => {
         if (location.pathname.includes('/tip')) {
@@ -121,6 +127,7 @@ const PostViewer = () => {
             navigate('/board/review');
         }
     };
+    console.log(commentModify);
 
     return (
         <Background>
@@ -169,19 +176,21 @@ const PostViewer = () => {
                                 }}
                                 placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
                                 disabled={!loginStatus}
+                                onChange={handleChangeComment}
                             />
-                            <CustomBtn variant="contained" margin={'1rem'} onClick={CommentRegister}>
+                            <CustomBtn variant="contained" margin={'1rem'} onClick={commentRegister}>
                                 등록
                             </CustomBtn>
-                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={CommentRegister}>
+                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister}>
                                 등록 + 추천
                             </CustomBtn>
                         </CommentBox>
                     </UserCommentWrapper>
                     {comments &&
                         comments.map((comment, i) => {
+                            const { UserId, id, createdAt } = comment;
                             return (
-                                <CommentDiv key={i}>
+                                <CommentDiv key={id + i}>
                                     <PostCommentsInfo>
                                         <CommentAvatar
                                             src={`https://randomuser.me/api/portraits/men/${getRandomNumber(
@@ -191,14 +200,42 @@ const PostViewer = () => {
                                         />
                                         <CommentUserInfoBox>
                                             <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
-                                                {RandomNickname()}
+                                                {typeof UserId === 'number' ? RandomNickname() : UserId}
                                             </CommentUserInfoText>
                                             <CommentUserInfoText color={'#979797'}>
-                                                {timeForToday(comment.createdAt)}
+                                                {timeForToday(createdAt)}
                                             </CommentUserInfoText>
                                         </CommentUserInfoBox>
+                                        {userId === id ? (
+                                            <div
+                                                style={{
+                                                    textAlign: 'end',
+                                                    flexGrow: 1,
+                                                    paddingRight: '1rem',
+                                                }}
+                                            >
+                                                <span
+                                                    style={{ marginRight: '0.5rem', fontSize: '0.85rem' }}
+                                                    onClick={changeCommentModify}
+                                                >
+                                                    수정
+                                                </span>
+                                                <span
+                                                    style={{ fontSize: '0.85rem' }}
+                                                    onClick={() => {
+                                                        commentDelete(createdAt);
+                                                    }}
+                                                >
+                                                    삭제
+                                                </span>
+                                            </div>
+                                        ) : null}
                                     </PostCommentsInfo>
-                                    <CommentText>{comment.content}</CommentText>
+                                    {userId === id && commentModify ? (
+                                        <div>수정하기</div>
+                                    ) : (
+                                        <CommentText>{comment.content}</CommentText>
+                                    )}
                                 </CommentDiv>
                             );
                         })}
