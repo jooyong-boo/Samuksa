@@ -44,18 +44,27 @@ const SortPages = [
     {
         id: 1,
         name: '최신순',
+        active: false,
     },
     {
         id: 2,
         name: '추천순',
+        active: false,
     },
     {
         id: 3,
         name: '댓글순',
+        active: false,
     },
     {
         id: 4,
         name: '조회순',
+        active: false,
+    },
+    {
+        id: 5,
+        name: '오래된순',
+        active: false,
     },
 ];
 
@@ -78,10 +87,10 @@ const ReviewBoard = () => {
     const userInfo = useRecoilValue<any>(userInfoState);
     const postsRecoil = useRecoilValue<any[]>(getPostState);
     const [posts, setPosts] = useState(postsRecoil);
-    const [usePosts, setUsePosts] = useState<any[]>([]);
+    const [usePosts, setUsePosts] = useState<any[]>(postsRecoil);
     const [searchPosts, setSearchPosts] = useState('');
     const [open, setOpen] = useState(false);
-    const [curSort, setCurSort] = useState(SortPages[0].name);
+    const [curSort, setCurSort] = useState('최신순');
     const [searchOption, setSearchOption] = useState('제목');
 
     const openSearch = () => {
@@ -152,30 +161,30 @@ const ReviewBoard = () => {
         setSearchOption(e.target.value);
     };
 
-    useEffect(() => {
-        const readPost = localStorage.getItem('reviewReadPost');
-        const newPosts = postsRecoil.map((item: any) => {
-            if (readPost?.includes(item.id)) {
-                return Object.assign(
-                    {},
-                    item,
-                    { read: true },
-                    { nickName: RandomNickname() },
-                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                );
-            } else {
-                return Object.assign(
-                    {},
-                    item,
-                    { nickName: RandomNickname() },
-                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                );
-            }
-        });
+    // useEffect(() => {
+    //     const readPost = localStorage.getItem('reviewReadPost');
+    //     const newPosts = postsRecoil.map((item: any) => {
+    //         if (readPost?.includes(item.id)) {
+    //             return Object.assign(
+    //                 {},
+    //                 item,
+    //                 { read: true },
+    //                 { nickName: RandomNickname() },
+    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+    //             );
+    //         } else {
+    //             return Object.assign(
+    //                 {},
+    //                 item,
+    //                 { nickName: RandomNickname() },
+    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+    //             );
+    //         }
+    //     });
 
-        setPosts(newPosts);
-        setUsePosts(newPosts);
-    }, [postsRecoil]);
+    //     setPosts(newPosts);
+    //     setUsePosts(newPosts);
+    // }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
@@ -192,6 +201,15 @@ const ReviewBoard = () => {
         e.preventDefault();
         if (curSort !== name) {
             setCurSort(name);
+            let sortUsePosts = [...usePosts];
+            switch (name) {
+                case '최신순':
+                    setUsePosts(sortUsePosts.sort((a, b) => a.id - b.id));
+                    break;
+                case '오래된순':
+                    setUsePosts(sortUsePosts.sort((a, b) => b.id - a.id));
+                    break;
+            }
         }
     };
 
