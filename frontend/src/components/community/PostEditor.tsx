@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUserInfo } from '../../api/auth';
 import { getRandomNumber } from './PostViewer';
 import { getPostState } from '../../store/atom';
+import { setNewPost } from '../../api/post';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -116,16 +117,20 @@ const PostEditor = () => {
 
     const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         const date = new Date().toISOString();
+        let avatar = `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`;
+        let read = false;
+        let id = postsRecoil.length + 1;
         const data = {
             createdAt: date,
             updatedAt: date,
             title,
             content,
-            avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`,
+            avatar,
             nickName: userNickName,
-            read: false,
-            userId: postsRecoil.length + 1,
+            read,
+            userId: id,
         };
+        setNewPost({ date, title, content, avatar, userNickName, read, id }).then((res) => console.log(res));
         console.log(data);
     };
 
