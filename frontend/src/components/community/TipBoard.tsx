@@ -57,6 +57,11 @@ const SortPages = [
         id: 4,
         name: '조회순',
     },
+    {
+        id: 5,
+        name: '오래된순',
+        active: false,
+    },
 ];
 
 const TipBoard = () => {
@@ -78,11 +83,11 @@ const TipBoard = () => {
     const userInfo = useRecoilValue<any>(userInfoState);
     const postsRecoil = useRecoilValue<any[]>(getPostState);
     const [reversePosts, setReversePosts] = useState([...postsRecoil].reverse());
-    const [usePosts, setUsePosts] = useState<any[]>([]);
+    const [usePosts, setUsePosts] = useState<any[]>(postsRecoil);
     const [searchPosts, setSearchPosts] = useState('');
     const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
-    const [curSort, setCurSort] = useState(SortPages[0].name);
+    const [curSort, setCurSort] = useState('오래된순');
     const [searchOption, setSearchOption] = useState('제목');
 
     const openSearch = () => {
@@ -154,28 +159,33 @@ const TipBoard = () => {
     };
 
     useEffect(() => {
-        const readPost = localStorage.getItem('tipReadPost');
-        const newPosts = reversePosts.map((item: any) => {
-            if (readPost?.includes(item.id)) {
-                return Object.assign(
-                    {},
-                    item,
-                    { read: true },
-                    { nickName: RandomNickname() },
-                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                );
-            } else {
-                return Object.assign(
-                    {},
-                    item,
-                    { nickName: RandomNickname() },
-                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                );
-            }
-        });
-        setReversePosts(newPosts);
-        setUsePosts(newPosts);
+        let sortUsePosts = [...postsRecoil];
+        setUsePosts(sortUsePosts.sort((a, b) => b.id - a.id));
     }, [postsRecoil]);
+
+    // useEffect(() => {
+    //     const readPost = localStorage.getItem('tipReadPost');
+    //     const newPosts = reversePosts.map((item: any) => {
+    //         if (readPost?.includes(item.id)) {
+    //             return Object.assign(
+    //                 {},
+    //                 item,
+    //                 { read: true },
+    //                 { nickName: RandomNickname() },
+    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+    //             );
+    //         } else {
+    //             return Object.assign(
+    //                 {},
+    //                 item,
+    //                 { nickName: RandomNickname() },
+    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+    //             );
+    //         }
+    //     });
+    //     setReversePosts(newPosts);
+    //     setUsePosts(newPosts);
+    // }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
@@ -192,6 +202,15 @@ const TipBoard = () => {
         e.preventDefault();
         if (curSort !== name) {
             setCurSort(name);
+            let sortUsePosts = [...usePosts];
+            switch (name) {
+                case '최신순':
+                    setUsePosts(sortUsePosts.sort((a, b) => a.id - b.id));
+                    break;
+                case '오래된순':
+                    setUsePosts(sortUsePosts.sort((a, b) => b.id - a.id));
+                    break;
+            }
         }
     };
 
