@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import image from '../../components/assets/img/contemplative-reptile.jpeg';
+import image from '../../components/assets/img/contemplative-reptile.webp';
 import { recommendListState, selectConditions } from '../../store/atom';
 import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
