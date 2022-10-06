@@ -62,7 +62,7 @@ const Header = () => {
 
     let loginConfirm = localStorage.getItem('jwtToken');
 
-    const [NAV_ITEMS, setNAV_ITEMS] = useState([
+    const [NAV_ITEMS, SET_NAV_ITEMS] = useState([
         {
             id: 1,
             name: '수산물 계산기',
@@ -77,56 +77,64 @@ const Header = () => {
         },
     ]);
 
-    const USERS_ITEMS = [
+    const [USERS_ITEMS, SET_USER_ITEMS] = useState([
         {
             id: 1,
             name: '프로필',
             path: '/myinfo/profile',
+            active: false,
         },
         {
             id: 2,
             name: '회원 정보',
             path: '/myinfo',
+            active: false,
         },
         {
             id: 3,
             name: '즐겨찾기',
             path: '/bookmark',
+            active: false,
         },
         {
             id: 4,
             name: '로그아웃',
             path: '/',
+            active: false,
         },
-    ];
+    ]);
 
     // 햄버거 메뉴
-    const pages = [
+    const [pages, SetPages] = useState([
         {
             id: 1,
             name: '수산물 계산기',
             path: '/calculator',
+            active: false,
         },
         {
             id: 2,
             name: '게시판',
             path: '/board',
+            active: false,
         },
         {
             id: 3,
             name: '로그인',
             path: '/login',
+            active: false,
         },
         {
             id: 4,
             name: '회원가입',
             path: '/register',
+            active: false,
         },
-    ];
+    ]);
 
     const goMain = () => {
         navigate('/');
-        setNAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
+        SET_NAV_ITEMS(NAV_ITEMS.map((item) => ({ ...item, active: false })));
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -156,7 +164,7 @@ const Header = () => {
     };
 
     useEffect(() => {
-        setNAV_ITEMS(
+        SET_NAV_ITEMS(
             NAV_ITEMS.map((item) =>
                 location.pathname === item.path || location.pathname.includes(`${item.path}`)
                     ? { ...item, active: true }
