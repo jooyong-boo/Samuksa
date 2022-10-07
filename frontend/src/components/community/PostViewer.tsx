@@ -97,6 +97,7 @@ const PostViewer = () => {
                     id: userId,
                 },
             ]);
+            setCommentModify(false);
             dismissAll();
             notifySuccess('등록 성공');
         } else {
@@ -113,8 +114,6 @@ const PostViewer = () => {
         setCommentModify(!commentModify);
     };
 
-    console.log(comments);
-
     useEffect(() => {
         searchPostsById(id);
         searchUserComment(id);
@@ -127,7 +126,6 @@ const PostViewer = () => {
             navigate('/board/review');
         }
     };
-    console.log(commentModify);
 
     return (
         <Background>
@@ -232,7 +230,19 @@ const PostViewer = () => {
                                         ) : null}
                                     </PostCommentsInfo>
                                     {userId === id && commentModify ? (
-                                        <div>수정하기</div>
+                                        <>
+                                            <TextField
+                                                sx={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={comment.content}
+                                                // onChange={handleChangeComment}
+                                            />
+                                            <Button variant="outlined">취소</Button>
+                                            <CustomBtn variant="contained" margin={'1rem'}>
+                                                등록
+                                            </CustomBtn>
+                                        </>
                                     ) : (
                                         <CommentText>{comment.content}</CommentText>
                                     )}
