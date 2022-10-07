@@ -49,26 +49,10 @@ const PostViewer = () => {
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
     const { userId, userNickName, userEmail }: userInfos = userInfo;
+    const [newComment, setNewComment] = useState('');
+    const [commentModify, setCommentModify] = useState(false);
 
     const commentRef = useRef<null | HTMLDivElement>(null);
-
-    // const getPostsId = async (id: string | undefined) => {
-    //     try {
-    //         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
-    //         setData(data);
-    //     } catch (err) {
-    //         console.log(err.response);
-    //     }
-    // };
-
-    // const getComment = async (id: string | undefined) => {
-    //     try {
-    //         const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
-    //         setComments(data);
-    //     } catch (err) {
-    //         console.log(err.response);
-    //     }
-    // };
 
     async function searchPostsById(id: string | undefined) {
         const data = await getPostsById(id);
@@ -96,8 +80,24 @@ const PostViewer = () => {
         }
     };
 
-    const CommentRegister = () => {
+    const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewComment(e.target.value);
+    };
+
+    const commentRegister = () => {
         if (userInfo) {
+            setComments([
+                ...comments,
+                {
+                    PostId: Number(id),
+                    UserId: userNickName,
+                    content: newComment,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    id: userId,
+                },
+            ]);
+            setCommentModify(false);
             dismissAll();
             notifySuccess('등록 성공');
         } else {
@@ -106,13 +106,18 @@ const PostViewer = () => {
         }
     };
 
+    const commentDelete = (createdAt: string) => {
+        setComments(comments.filter((item) => item.createdAt !== createdAt));
+    };
+
+    const changeCommentModify = () => {
+        setCommentModify(!commentModify);
+    };
+
     useEffect(() => {
         searchPostsById(id);
         searchUserComment(id);
     }, [id]);
-
-    // console.log(data);
-    // console.log(comments);
 
     const goList = () => {
         if (location.pathname.includes('/tip')) {
@@ -156,11 +161,34 @@ const PostViewer = () => {
                 ) : null}
 
                 <PostCommentBox ref={commentRef}>
-                    <Typography fontSize={18}>댓글 {comments.length}</Typography>
+                    <TotalCommentText>{comments.length}개의 댓글</TotalCommentText>
+                    <UserCommentWrapper>
+                        <CommentUserAvatarContainer>
+                            {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
+                            <Typography>{loginStatus && userNickName}</Typography>
+                        </CommentUserAvatarContainer>
+                        <CommentBox>
+                            <TextField
+                                sx={{
+                                    width: '100%',
+                                }}
+                                placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
+                                disabled={!loginStatus}
+                                onChange={handleChangeComment}
+                            />
+                            <CustomBtn variant="contained" margin={'1rem'} onClick={commentRegister}>
+                                등록
+                            </CustomBtn>
+                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister}>
+                                등록 + 추천
+                            </CustomBtn>
+                        </CommentBox>
+                    </UserCommentWrapper>
                     {comments &&
                         comments.map((comment, i) => {
+                            const { UserId, id, createdAt } = comment;
                             return (
-                                <React.Fragment key={i}>
+                                <CommentDiv key={id + i}>
                                     <PostCommentsInfo>
                                         <CommentAvatar
                                             src={`https://randomuser.me/api/portraits/men/${getRandomNumber(
@@ -170,38 +198,59 @@ const PostViewer = () => {
                                         />
                                         <CommentUserInfoBox>
                                             <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
-                                                {RandomNickname()}
+                                                {typeof UserId === 'number' ? RandomNickname() : UserId}
                                             </CommentUserInfoText>
                                             <CommentUserInfoText color={'#979797'}>
-                                                {timeForToday(comment.createdAt)}
+                                                {timeForToday(createdAt)}
                                             </CommentUserInfoText>
                                         </CommentUserInfoBox>
+                                        {userId === id ? (
+                                            <div
+                                                style={{
+                                                    textAlign: 'end',
+                                                    flexGrow: 1,
+                                                    paddingRight: '1rem',
+                                                }}
+                                            >
+                                                <span
+                                                    style={{ marginRight: '0.5rem', fontSize: '0.85rem' }}
+                                                    onClick={changeCommentModify}
+                                                >
+                                                    수정
+                                                </span>
+                                                <span
+                                                    style={{ fontSize: '0.85rem' }}
+                                                    onClick={() => {
+                                                        commentDelete(createdAt);
+                                                    }}
+                                                >
+                                                    삭제
+                                                </span>
+                                            </div>
+                                        ) : null}
                                     </PostCommentsInfo>
-                                    <CommentText>{comment.content}</CommentText>
-                                </React.Fragment>
+                                    {userId === id && commentModify ? (
+                                        <>
+                                            <TextField
+                                                sx={{
+                                                    width: '100%',
+                                                }}
+                                                defaultValue={comment.content}
+                                                // onChange={handleChangeComment}
+                                            />
+                                            <Button variant="outlined">취소</Button>
+                                            <CustomBtn variant="contained" margin={'1rem'}>
+                                                등록
+                                            </CustomBtn>
+                                        </>
+                                    ) : (
+                                        <CommentText>{comment.content}</CommentText>
+                                    )}
+                                </CommentDiv>
                             );
                         })}
                 </PostCommentBox>
                 <BottomCommentBox>
-                    <UserCommentWrapper>
-                        <CommentUserAvatarContainer>
-                            {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
-                            <Typography>{loginStatus && userNickName}</Typography>
-                        </CommentUserAvatarContainer>
-                        <CommentBox>
-                            <TextField
-                                sx={{ width: '100%' }}
-                                placeholder={loginStatus ? '댓글을 남겨보세요' : '댓글을 쓰려면 로그인이 필요합니다.'}
-                                disabled={!loginStatus}
-                            />
-                            <CustomBtn variant="contained" margin={'1rem'} onClick={CommentRegister}>
-                                등록
-                            </CustomBtn>
-                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={CommentRegister}>
-                                등록 + 추천
-                            </CustomBtn>
-                        </CommentBox>
-                    </UserCommentWrapper>
                     <CustomBtn variant="contained" margin={'1rem 0'} onClick={goList}>
                         목록
                     </CustomBtn>
@@ -323,6 +372,13 @@ const PostCommentBox = styled.div`
     margin: 1rem 0;
 `;
 
+const CommentDiv = styled.div`
+    border-bottom: 1px solid #eaeaea;
+    &:last-child {
+        border-bottom: none;
+    }
+`;
+
 const PostCommentsInfo = styled.div`
     display: flex;
     align-items: center;
@@ -353,6 +409,7 @@ const CommentUserInfoText = styled(Typography)<CommentUserInfoTextProps>`
 
 const CommentText = styled(Typography)`
     color: rgb(55 65 81);
+    margin-bottom: 1rem;
 `;
 
 const BottomCommentBox = styled.div`
@@ -369,6 +426,7 @@ const UserCommentWrapper = styled.div`
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 1rem;
+    margin-bottom: 1rem;
 `;
 
 const CommentUserAvatarContainer = styled.div`
@@ -394,6 +452,11 @@ const CommentBox = styled.div`
     margin-top: 1rem;
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+`;
+
+const TotalCommentText = styled(Typography)`
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
 `;
 
 interface CustomBtnProps {

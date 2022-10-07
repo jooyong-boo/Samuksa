@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import image from '../../components/assets/img/contemplative-reptile.jpeg';
+import image from '../../components/assets/img/contemplative-reptile.webp';
 import { Avatar, createTheme, Grid, ThemeProvider, Typography } from '@mui/material';
 
 const theme = createTheme({
@@ -39,7 +39,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
             <ResultTableWrapper>
                 <ThemeProvider theme={theme}>
                     <CustomTableContainer>
-                        <Table sx={{ minWidth: 700 }} aria-label="조합 상세리스트">
+                        <Table aria-label="조합 상세리스트">
                             <TableHead>
                                 <TableRow>
                                     {tableTop.map((item) => (
@@ -49,7 +49,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                     ))}
                                 </TableRow>
                             </TableHead>
-                            <TableBody sx={{}}>
+                            <TableBody>
                                 {selectEstimate
                                     ? selectEstimate.map((item: any, i: number) => {
                                           const {
@@ -69,7 +69,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                                       '&:last-child td, &:last-child th': { border: 0 },
                                                   }}
                                               >
-                                                  <TableCell>
+                                                  <TableCell sx={tableTextStyle}>
                                                       <CustomAvatar alt={fishName} src={image} />
                                                   </TableCell>
                                                   <TableCell component="th" scope="row" sx={tableTextStyle}>
@@ -104,6 +104,54 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                         </Table>
                     </CustomTableContainer>
                 </ThemeProvider>
+                <MobileGridBox>
+                    {selectEstimate
+                        ? selectEstimate.map((item: any, i: number) => {
+                              const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } =
+                                  item;
+                              const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [
+                                  ...fishRecommendAlgoWeights,
+                              ];
+                              return (
+                                  <div
+                                      style={{
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                          border: '1px solid #eaeaea',
+                                      }}
+                                      key={i}
+                                  >
+                                      <div
+                                          style={{
+                                              padding: '1rem',
+                                              height: '30rem',
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              justifyContent: 'space-between',
+                                              alignItems: 'center',
+                                          }}
+                                      >
+                                          <CustomMobileAvatar alt={'1'} src={image} />
+                                          <Typography>
+                                              {fishName}({farmType})
+                                          </Typography>
+                                          <Typography>{areaFrom}</Typography>
+                                          <Typography>
+                                              {' '}
+                                              {(weightPerServing * serving) / 1000}
+                                              kg
+                                          </Typography>
+                                          <Typography>총 {serving}마리</Typography>
+                                          <Typography>마리당 {(price * 1000).toLocaleString('ko-KR')}원</Typography>
+                                          <Typography>Total: {totalMoney.toLocaleString('ko-KR')}원</Typography>
+                                      </div>
+                                  </div>
+                              );
+                          })
+                        : null}
+                </MobileGridBox>
                 <CombinationInfoContainer>
                     <CombinationFishDetailInfo>
                         {selectEstimate
@@ -112,26 +160,33 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                   const [{ maxWeight, minWeight }] = [...fishRecommendAlgoWeights];
                                   return (
                                       <CombinationDetailDiv key={i}>
-                                          <Typography
-                                              sx={{
-                                                  fontSize: '0.8rem',
-                                                  color: '#707070',
-                                                  marginRight: 1,
-                                              }}
+                                          <CombinationDetailTypography
+                                              fontSize={'0.8rem'}
+                                              color={'#707070'}
+                                              marginRight={'0.6rem'}
+                                              minWidth={'2rem'}
+                                              fontWeight={'600'}
                                           >
                                               {fishName}
-                                          </Typography>
-                                          <CombinationDetailTypography
+                                          </CombinationDetailTypography>
+                                          {/* <CombinationDetailTypography
                                               fontSize={'0.8rem'}
                                               color={'#707070'}
                                               marginRight={'0.5rem'}
                                           >
                                               {(weightPerServing * serving) / 1000}
                                               kg(무게) X 0.5(수율) X {serving}(수량){' '}
+                                          </CombinationDetailTypography> */}
+                                          <CombinationDetailTypography
+                                              fontSize={'0.8rem'}
+                                              color={'#707070'}
+                                              marginRight={'0.5rem'}
+                                          >
+                                              {serving}마리
                                           </CombinationDetailTypography>
                                           <CombinationDetailTypography
                                               fontSize={'0.9rem'}
-                                              fontWeight={'700'}
+                                              fontWeight={'600'}
                                               color={'#707070'}
                                           >
                                               {(((weightPerServing * serving) / 1000) * 0.5 * serving).toFixed(1)}
@@ -153,76 +208,41 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                     </DetailWeightPriceDiv>
                 </CombinationInfoContainer>
             </ResultTableWrapper>
-            <MobileGridBox>
-                {selectEstimate
-                    ? selectEstimate.map((item: any, i: number) => {
-                          const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
-                          const [{ area, areaFrom, farmType, maxWeight, minWeight, price }] = [
-                              ...fishRecommendAlgoWeights,
-                          ];
-                          return (
-                              <div
-                                  style={{
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
-                                      border: '1px solid #eaeaea',
-                                  }}
-                              >
-                                  <div
-                                      style={{
-                                          padding: '1rem',
-                                          height: '30rem',
-                                          display: 'flex',
-                                          flexDirection: 'column',
-                                          justifyContent: 'space-between',
-                                      }}
-                                  >
-                                      <CustomMobileAvatar alt={'1'} src={image} />
-                                      <Typography>
-                                          {fishName}({farmType})
-                                      </Typography>
-                                      <Typography>{areaFrom}</Typography>
-                                      <Typography>
-                                          {' '}
-                                          {(weightPerServing * serving) / 1000}
-                                          kg
-                                      </Typography>
-                                      <Typography>{serving}마리</Typography>
-                                      <Typography> {(price * 1000).toLocaleString('ko-KR')}원</Typography>
-                                      <Typography>{totalMoney.toLocaleString('ko-KR')}원</Typography>
-                                  </div>
-                              </div>
-                          );
-                      })
-                    : null}
-            </MobileGridBox>
         </>
     );
 }
 const ResultTableWrapper = styled.div`
-    @media all and (min-width: 951px) {
+    /* @media all and (min-width: 951px) {
         width: 100%;
     }
-    @media all and (min-width: 729px) and (max-width: 950px) {
+    @media all and (min-width: 731px) and (max-width: 950px) {
         display: none;
     }
     @media all and (max-width: 615px) {
         display: none;
-    }
+    } */
 `;
 
 const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
     border-bottom: 2px solid #a7a7a7;
     border-radius: 0;
+    @media all and (min-width: 951px) {
+        width: 100%;
+    }
+    @media all and (min-width: 731px) and (max-width: 890px) {
+        display: none;
+    }
+    ${({ theme }) => theme.device.mobile} {
+        display: none;
+    }
 `;
 
 const CustomAvatar = styled(Avatar)`
     height: 3.9rem;
     width: 3.9rem;
     border-radius: 3px;
+    margin: 5px 0;
 `;
 
 const CustomMobileAvatar = styled(Avatar)`
@@ -251,6 +271,7 @@ interface CombinationDetailTypographyProps {
     color?: any;
     marginRight?: any;
     fontWeight?: any;
+    minWidth?: any;
 }
 
 const CombinationDetailDiv = styled.div`
@@ -262,6 +283,7 @@ const CombinationDetailTypography = styled(Typography)<CombinationDetailTypograp
     color: ${(props) => (props.color ? `${props.color}` : 'black')};
     margin-right: ${(props) => (props.marginRight ? `${props.marginRight}` : '0')};
     font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
+    min-width: ${(props) => props.minWidth && `${props.minWidth}`};
 `;
 
 const DetailWeightPriceDiv = styled.div`
@@ -277,18 +299,21 @@ const MobileGridBox = styled.div`
     align-content: center;
     text-align: center;
     grid-gap: 20px;
+    padding-top: 1rem;
     padding-bottom: 1rem;
-    @media all and (min-width: 951px) {
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    @media all and (min-width: 851px) {
         display: none;
     }
-    @media all and (min-width: 731px) and (max-width: 950px) {
+    @media all and (min-width: 730px) and (max-width: 890px) {
         width: 100%;
         display: grid;
     }
-    @media all and (min-width: 616px) and (max-width: 730px) {
+    @media all and (min-width: 501px) and (max-width: 730px) {
         display: none;
     }
-    @media all and (max-width: 615px) {
+    ${({ theme }) => theme.device.mobile} {
         width: 100%;
         display: grid;
     }

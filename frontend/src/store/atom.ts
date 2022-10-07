@@ -3,6 +3,8 @@ import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from
 import { getPosts, getPostsById } from '../api/post';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { RandomNickname } from '../components/utils/RandomNickname';
+import { getRandomNumber } from '../components/community/PostViewer';
 
 const notifyError = (text: string) => {
     dismissAll();
@@ -95,7 +97,7 @@ export const getAreaState = selector({
     get: async ({ get }) => {
         const response = await getArea();
         if (response.code === 'ERR_NETWORK') {
-            notifyError('서버와 연결이 끊겼습니다.');
+            // notifyError('서버와 연결이 끊겼습니다.');
             return '';
         }
         return response;
@@ -107,7 +109,26 @@ export const getPostState = selector({
     key: 'getPostState',
     get: async ({ get }) => {
         const response = await getPosts();
-        return response;
+        const readPost = localStorage.getItem('reviewReadPost');
+        const newPosts = response.map((item: any) => {
+            if (readPost?.includes(item.id)) {
+                return Object.assign(
+                    {},
+                    item,
+                    { read: true },
+                    { nickName: RandomNickname() },
+                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+                );
+            } else {
+                return Object.assign(
+                    {},
+                    item,
+                    { nickName: RandomNickname() },
+                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+                );
+            }
+        });
+        return newPosts;
     },
 });
 

@@ -363,7 +363,7 @@ const CustomList = styled(List)`
     background-color: 'background.paper';
     position: relative;
     overflow: auto;
-    max-height: 413px;
+    max-height: 410px;
     border-radius: 5px;
     padding: 0;
     box-shadow: none;

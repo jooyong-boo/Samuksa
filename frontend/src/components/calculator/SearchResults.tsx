@@ -4,14 +4,15 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import image from '../../components/assets/img/contemplative-reptile.jpeg';
-import { recommendListState, selectConditions } from '../../store/atom';
+import image from '../../components/assets/img/contemplative-reptile.webp';
+import { areaState, recommendListState, selectConditions } from '../../store/atom';
 import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { NavLink } from 'react-router-dom';
 
 interface loadingStats {
     loading: boolean;
@@ -44,6 +45,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
     const [totalPrice, setTotalPrice] = useState<number>();
     const [bookmark, setBookmark] = useState([]);
     const [newSelectEstimate, setNewSelectEstimate] = useState<any[]>([]);
+    const area = useRecoilValue(areaState);
 
     useEffect(() => {
         setSelectResult(null);
@@ -52,16 +54,24 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
     }, [selectCondition]);
 
     useEffect(() => {
-        setLoading(false);
-    }, [result]);
+        if (loading) {
+            setSelectResult(null);
+            setSelectEstimate(null);
+        }
+    }, [loading]);
 
-    const onRecommendClick = (item: any[], id: number) => {
+    const onRecommendClick = (item: any[], id: number, active: boolean) => {
         setSelectResult(item);
         setResult(
             result.map((item) =>
                 item.combinationName === id ? { ...item, active: !item.active } : { ...item, active: false },
             ),
         );
+        if (active) {
+            setSelectResult(null);
+            setSelectEstimate(null);
+            return;
+        }
         setSelectEstimate(null);
     };
 
@@ -128,7 +138,9 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                 <SearchResultsTypography>
                     검색 결과{result.length > 0 ? `(${result.length})` : null}
                 </SearchResultsTypography>
-                <Button>즐겨찾기 {bookmark.length}</Button>
+                <BookmarkLink to={'/bookmark'}>
+                    <Button>즐겨찾기 {bookmark.length}</Button>
+                </BookmarkLink>
             </Container>
             <ResultDiv>
                 <CustomDiv>
@@ -140,7 +152,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                 <Fade in={true} timeout={200} key={i}>
                                     <CustomCardContent
                                         onClick={() => {
-                                            onRecommendClick(fishRecommendCombinations, combinationName);
+                                            onRecommendClick(fishRecommendCombinations, combinationName, active);
                                         }}
                                         sx={{
                                             backgroundColor: active ? '#F8F8F8' : 'white',
@@ -157,8 +169,8 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                                                 alt={item}
                                                                 src={image}
                                                                 variant="rounded"
-                                                                width={'30px'}
-                                                                height={'30px'}
+                                                                width={'2.14rem'}
+                                                                height={'2.14rem'}
                                                             />
                                                         </Grid>
                                                     );
@@ -251,7 +263,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         fontWeight={'bold'}
                                         fontSize={'1.14rem'}
                                     >
-                                        수산물 견적
+                                        {area} 수산물 견적
                                     </EstimateTopText>
                                     <EstimateTopText color={'#949494'} fontSize={'0.78rem'} marginBottom={'11px'}>
                                         실제 시세과 상이할 수 있습니다.
@@ -291,7 +303,7 @@ const Card = styled.div`
     /* width: 93%; */
     width: 1190px;
     height: 550px;
-    min-width: 300px;
+    min-width: 322px;
     border-radius: 5px;
     margin: auto;
     margin-bottom: 7%;
@@ -319,11 +331,16 @@ const SearchResultsTypography = styled(Typography)`
     font-weight: bold;
 `;
 
+const BookmarkLink = styled(NavLink)`
+    text-decoration: none;
+    display: flex;
+`;
+
 const CustomDiv = styled.div`
     border-bottom: 1px solid #f6f6f6;
     border-right: 1px solid #eaeaea;
     width: 20%;
-    height: 497px;
+    height: 496px;
     position: relative;
     overflow: overlay;
     overflow-x: hidden;
@@ -347,7 +364,7 @@ const ResultDiv = styled.div`
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
-    @media all and (max-width: 729px) {
+    @media all and (max-width: 730px) {
         flex-wrap: wrap;
     }
 `;
@@ -425,9 +442,8 @@ const CustomListDiv = styled.div`
     flex-wrap: wrap;
     background-color: white;
     border-right: 1px solid #eaeaea;
-    /* border-bottom: 1px solid #f6f6f6; */
-    min-width: 100px;
-    position: relative;
+    min-width: 105px;
+    /* position: relative; */
     overflow: overlay;
     max-height: 497px;
     padding: 0;
@@ -440,15 +456,21 @@ const CustomListDiv = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
-    @media all and (max-width: 500px) {
+    ${({ theme }) => theme.device.tablet} {
+        width: 25%;
+    }
+    ${({ theme }) => theme.device.mobile} {
         flex-grow: 1;
+        border-right: none;
     }
 `;
 
 const CustomListItems = styled(ListItem)`
     display: flex;
     flex-direction: column;
-    padding-left: 0;
+    width: 100%;
+    min-width: 105px;
+    /* padding-left: 0; */
     cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
     :hover {
@@ -461,6 +483,9 @@ const CustomListItem = styled.div`
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    ${({ theme }) => theme.device.tablet} {
+        justify-content: center;
+    }
 `;
 
 interface CustomListItemTypographyProps {
@@ -475,12 +500,15 @@ const CustomListItemTypography = styled(Typography)<CustomListItemTypographyProp
     margin-top: ${(props) => (props.marginTop ? `${props.marginTop}` : 'auto')};
     font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '400')};
     font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '0.9rem')};
+    ${({ theme }) => theme.device.tablet} {
+        margin-left: 0.3rem;
+        margin-right: 0.3rem;
+    }
 `;
 
 const SelectedEstimateContainer = styled.div`
     width: 68%;
     height: auto;
-    /* min-width: 300px; */
     max-height: 494px;
     /* margin: auto; */
     overflow: overlay;
@@ -493,11 +521,12 @@ const SelectedEstimateContainer = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
-    @media all and (max-width: 1120px) {
-        width: 100%;
-    }
     @media all and (max-width: 730px) {
+        width: 100%;
         border-top: 1px solid #eaeaea;
+        border-bottom: 1px solid #eaeaea;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
     }
 `;
 

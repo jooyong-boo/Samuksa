@@ -258,5 +258,5 @@ const SubmitBtn = styled(Button)`
     background-color: ${({ theme }) => theme.colors.main};
     color: white;
     box-shadow: none;
-    width: 96%;
+    width: 97%;
 `;

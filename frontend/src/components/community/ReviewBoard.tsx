@@ -20,7 +20,7 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -44,18 +44,27 @@ const SortPages = [
     {
         id: 1,
         name: '최신순',
+        active: false,
     },
     {
         id: 2,
         name: '추천순',
+        active: false,
     },
     {
         id: 3,
         name: '댓글순',
+        active: false,
     },
     {
         id: 4,
         name: '조회순',
+        active: false,
+    },
+    {
+        id: 5,
+        name: '오래된순',
+        active: false,
     },
 ];
 
@@ -78,11 +87,10 @@ const ReviewBoard = () => {
     const userInfo = useRecoilValue<any>(userInfoState);
     const postsRecoil = useRecoilValue<any[]>(getPostState);
     const [posts, setPosts] = useState(postsRecoil);
-    const [usePosts, setUsePosts] = useState<any[]>([]);
+    const [usePosts, setUsePosts] = useState<any[]>(postsRecoil);
     const [searchPosts, setSearchPosts] = useState('');
-    const [postComment, setPostComment] = useState<any[]>([]);
     const [open, setOpen] = useState(false);
-    const [curSort, setCurSort] = useState(SortPages[0].name);
+    const [curSort, setCurSort] = useState('최신순');
     const [searchOption, setSearchOption] = useState('제목');
 
     const openSearch = () => {
@@ -153,30 +161,30 @@ const ReviewBoard = () => {
         setSearchOption(e.target.value);
     };
 
-    useEffect(() => {
-        const readPost = localStorage.getItem('reviewReadPost');
-        const newPosts = postsRecoil.map((item: any) => {
-            if (readPost?.includes(item.id)) {
-                return Object.assign(
-                    {},
-                    item,
-                    { read: true },
-                    { nickName: RandomNickname() },
-                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                );
-            } else {
-                return Object.assign(
-                    {},
-                    item,
-                    { nickName: RandomNickname() },
-                    { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-                );
-            }
-        });
+    // useEffect(() => {
+    //     const readPost = localStorage.getItem('reviewReadPost');
+    //     const newPosts = postsRecoil.map((item: any) => {
+    //         if (readPost?.includes(item.id)) {
+    //             return Object.assign(
+    //                 {},
+    //                 item,
+    //                 { read: true },
+    //                 { nickName: RandomNickname() },
+    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+    //             );
+    //         } else {
+    //             return Object.assign(
+    //                 {},
+    //                 item,
+    //                 { nickName: RandomNickname() },
+    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
+    //             );
+    //         }
+    //     });
 
-        setPosts(newPosts);
-        setUsePosts(newPosts);
-    }, [postsRecoil]);
+    //     setPosts(newPosts);
+    //     setUsePosts(newPosts);
+    // }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
@@ -193,6 +201,15 @@ const ReviewBoard = () => {
         e.preventDefault();
         if (curSort !== name) {
             setCurSort(name);
+            let sortUsePosts = [...usePosts];
+            switch (name) {
+                case '최신순':
+                    setUsePosts(sortUsePosts.sort((a, b) => a.id - b.id));
+                    break;
+                case '오래된순':
+                    setUsePosts(sortUsePosts.sort((a, b) => b.id - a.id));
+                    break;
+            }
         }
     };
 
@@ -209,7 +226,6 @@ const ReviewBoard = () => {
                         <SearchBtn variant="outlined" onClick={openSearch}>
                             <StyleSearchIcon />
                         </SearchBtn>
-                        {/* <SortBtn variant="outlined"> */}
                         <SortBtn
                             variant="outlined"
                             aria-controls={Menuopen ? 'basic-menu' : undefined}
@@ -218,35 +234,23 @@ const ReviewBoard = () => {
                             onClick={handleOpenNavMenu}
                         >
                             <StyleListIcon />
-                            <Typography sx={{ fontSize: '0.8rem', color: '#374151', fontWeight: '500' }}>
-                                {curSort}
-                            </Typography>
+                            <SortTypography>{curSort}</SortTypography>
                         </SortBtn>
                         <Menu id="게시글정렬" anchorEl={anchorElNav} open={Menuopen} onClose={handleCloseNavMenu}>
                             {SortPages.map(({ id, name }) => {
                                 return (
-                                    <MenuItem
+                                    <SortMenuItem
                                         key={id}
                                         onClick={(e) => {
                                             handleCloseNavMenu();
                                             handleSortPage(e, name);
                                         }}
-                                        sx={{ width: '80px', padding: '1rem 0' }}
                                     >
-                                        <Typography
-                                            sx={{
-                                                fontWeight: '400',
-                                                textAlign: 'center',
-                                                width: '100%',
-                                            }}
-                                        >
-                                            {name}
-                                        </Typography>
-                                    </MenuItem>
+                                        <SortMenuTypography>{name}</SortMenuTypography>
+                                    </SortMenuItem>
                                 );
                             })}
                         </Menu>
-                        {/* </SortBtn> */}
                     </div>
                 </BoardTopWrapper>
                 {open ? (
@@ -255,7 +259,6 @@ const ReviewBoard = () => {
                             onChange={(e) => {
                                 handleChangeSearchOption(e);
                             }}
-                            // value={}
                         >
                             <option value="제목">제목</option>
                             <option value="글쓴이">글쓴이</option>
@@ -288,7 +291,7 @@ const ReviewBoard = () => {
                             </TableHead>
                             <TableBody>
                                 {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read, nickName } = item;
+                                    const { id, title, UserId, createdAt, read, nickName, avatar } = item;
                                     const newCreateAt = new Date(createdAt);
                                     const year = newCreateAt.getFullYear();
                                     const month = newCreateAt.getMonth();
@@ -319,7 +322,21 @@ const ReviewBoard = () => {
                                                     </Typography> */}
                                                 </TitleNavLink>
                                             </TableCell>
-                                            <TableCell sx={tableTextStyle}>{nickName}</TableCell>
+                                            <TableCell sx={tableTextStyle}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'flex-start',
+                                                        margin: 'auto',
+                                                    }}
+                                                >
+                                                    <MobileAvatar src={avatar} />
+                                                    <Typography sx={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>
+                                                        {nickName}
+                                                    </Typography>
+                                                </div>
+                                            </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -340,39 +357,13 @@ const ReviewBoard = () => {
 
                                 return (
                                     <div key={id}>
-                                        <li
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'space-between',
-                                                borderBottom: '1px solid #EAEAEA',
-                                                padding: '0.5rem 0',
-                                            }}
-                                        >
+                                        <MobileLi>
                                             <div>
-                                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Avatar src={avatar} sx={{ width: '2rem', height: '2rem' }} />
-                                                    <Typography
-                                                        sx={{
-                                                            display: 'flex',
-                                                            marginLeft: '0.5rem',
-                                                            fontSize: '0.8rem',
-                                                        }}
-                                                    >
-                                                        {nickName}
-                                                    </Typography>
-                                                </div>
-                                                <Typography
-                                                    sx={{
-                                                        textAlign: 'start',
-                                                        maxWidth: '300px',
-                                                        textOverflow: 'ellipsis',
-                                                        whiteSpace: 'nowrap',
-                                                        overflow: 'hidden',
-                                                        padding: '10px 0',
-                                                        ':hover': { fontWeight: 'bold' },
-                                                    }}
-                                                >
+                                                <MobileWriterWrapper>
+                                                    <MobileAvatar src={avatar} />
+                                                    <NickNameInfo>{nickName}</NickNameInfo>
+                                                </MobileWriterWrapper>
+                                                <TitleInfo>
                                                     <TitleNavLink
                                                         to={`post/${id}`}
                                                         read={read ? 'true' : ''}
@@ -382,39 +373,17 @@ const ReviewBoard = () => {
                                                     >
                                                         {title}
                                                     </TitleNavLink>
-                                                </Typography>
+                                                </TitleInfo>
                                             </div>
-                                            <div style={{ display: 'flex', justifyContent: 'flex-start' }}></div>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    flexWrap: 'wrap',
-                                                }}
-                                            >
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        width: '100%',
-                                                        justifyContent: 'space-between',
-                                                    }}
-                                                >
-                                                    <div style={{ display: 'flex' }}>
-                                                        <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            조회: {id}
-                                                        </Typography>
-                                                        <Typography sx={{ marginRight: '0.3rem' }}>
-                                                            댓글:{' '}
-                                                            {postComment.length > 0 ? postComment[id - 1].length : ''}
-                                                        </Typography>
-                                                        <Typography>추천: {UserId}</Typography>
-                                                    </div>
-                                                    <Typography
-                                                        sx={{ color: '#5A5A5A', textAlign: 'end' }}
-                                                    >{`${year}년 ${month}월 ${date}일`}</Typography>
-                                                </div>
-                                            </div>
-                                        </li>
+                                            <MobilePostAdditionalInfoWrapper>
+                                                <MobilePostAddInfoLeft>
+                                                    <MobilePostAddInfoText>조회: {id}</MobilePostAddInfoText>
+                                                    <MobilePostAddInfoText>댓글: {id}</MobilePostAddInfoText>
+                                                    <MobilePostAddInfoText>추천: {UserId}</MobilePostAddInfoText>
+                                                </MobilePostAddInfoLeft>
+                                                <MobilePostAddInfoRightText>{`${year}년 ${month}월 ${date}일`}</MobilePostAddInfoRightText>
+                                            </MobilePostAdditionalInfoWrapper>
+                                        </MobileLi>
                                     </div>
                                 );
                             })}
@@ -471,6 +440,9 @@ const BoardTopWrapper = styled.div`
     align-items: center;
     margin: auto;
     margin-bottom: 1rem;
+    ${({ theme }) => theme.device.mobile} {
+        flex-wrap: wrap;
+    }
 `;
 
 const WriteBtn = styled(Button)`
@@ -510,6 +482,23 @@ const StyleSearchIcon = styled(SearchIcon)`
 const StyleListIcon = styled(ListIcon)`
     color: #a7a7a7;
     font-size: 1.6rem;
+`;
+
+const SortTypography = styled(Typography)`
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 500;
+`;
+
+const SortMenuItem = styled(MenuItem)`
+    width: 80px;
+    padding: 1rem 0;
+`;
+
+const SortMenuTypography = styled(Typography)`
+    font-weight: 400;
+    text-align: center;
+    width: 100%;
 `;
 
 const SearchContainer = styled.div`
@@ -555,15 +544,16 @@ const CustomTableContainer = styled(TableContainer)`
     border-radius: 0;
     max-height: 600px;
     padding: 0px 12px;
-    @media screen and (max-width: 700px) {
+    ${({ theme }) => theme.device.tablet} {
         display: none;
     }
 `;
 
 const MobileBoardContainer = styled.div`
-    width: 100%;
-    @media screen and (min-width: 701px) {
-        display: none;
+    display: none;
+    ${({ theme }) => theme.device.tablet} {
+        display: block;
+        width: 100%;
     }
 `;
 
@@ -573,14 +563,76 @@ const StyledUl = styled.ul`
     border-top: 1px solid #eaeaea;
 `;
 
+const MobileLi = styled.li`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 1px solid #eaeaea;
+    padding: 0.5rem 0;
+`;
+
+const MobileWriterWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const MobileAvatar = styled(Avatar)`
+    width: 2rem;
+    height: 2rem;
+`;
+
+const NickNameInfo = styled(Typography)`
+    display: flex;
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+`;
+
+const TitleInfo = styled(Typography)`
+    text-align: start;
+    max-width: 300px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 10px 0;
+    :hover {
+        font-weight: bold;
+    }
+`;
+
 interface TitleNavLinkProps {
     read: string;
 }
 
 const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
-    color: ${(props) => (props.read ? '#770088' : '#5A5A5A')};
+    color: ${(props) => (props.read ? '#770088' : '#374151')};
     text-decoration: none;
     font-size: 0.875rem;
+    ${({ theme }) => theme.device.tablet} {
+        font-size: 0.95rem;
+    }
+    ${({ theme }) => theme.device.mobile} {
+        font-size: 0.95rem;
+    }
+`;
+
+const MobilePostAdditionalInfoWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+`;
+
+const MobilePostAddInfoLeft = styled.div`
+    display: flex;
+`;
+
+const MobilePostAddInfoText = styled(Typography)`
+    margin-left: 0.3rem;
+`;
+
+const MobilePostAddInfoRightText = styled(Typography)`
+    color: #5a5a5a;
+    text-align: end;
 `;
 
 const PaginationStack = styled(Stack)`
@@ -598,13 +650,13 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#5A5A5A',
+            main: '#374151',
         },
     },
 });
 
 const tableTopTextStyle = {
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     fontSize: '0.875rem',
     padding: '12px 0px',
@@ -612,14 +664,15 @@ const tableTopTextStyle = {
 
 const tableTextStyle = {
     padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     fontSize: '0.875rem',
+    maxWidth: '130px',
 };
 
 const titleTextStyle = {
     padding: '8px 16px 8px 16px',
-    color: '#5A5A5A',
+    color: '#374151',
     textAlign: 'center',
     maxWidth: '200px',
     textOverflow: 'ellipsis',

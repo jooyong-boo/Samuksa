@@ -16,12 +16,16 @@ interface amount {
 }
 
 const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amount) => {
-    const notify = (text: ReactElement | string) =>
+    const notify = (text: ReactElement | string) => {
+        dismissAll();
         toast.warning(text, {
             position: 'top-center',
             autoClose: 1000,
             hideProgressBar: true,
         });
+    };
+    const dismissAll = () => toast.dismiss();
+
     const contactRef = useRef<HTMLDivElement>(null);
 
     const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
@@ -51,16 +55,18 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                         throw new Error('조합 없음');
                     }
                     // 조합이 있는 경우
-                    setLoading(false);
                     setRecommendList(res.fishRecommendUnions);
                     contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+                })
+                .then(() => {
+                    setLoading(false);
                 })
                 .catch((e) => {
                     setLoading(false);
                     notify(
                         <p>
                             찾을 수 있는 조합이 없습니다.
-                            <br /> 예산을 다시 설정해주세요.
+                            <br /> 조건을 다시 정해주세요.
                         </p>,
                     );
                     return;
@@ -159,7 +165,7 @@ const Card = styled.div`
 
     /* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
     @media all and (max-width: 479px) {
-        width: 95%;
+        /* width: 95%; */
         margin-bottom: 1rem;
     }
 `;
