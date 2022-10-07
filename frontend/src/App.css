@@ -114,19 +114,13 @@ body::-webkit-scrollbar-thumb {
     border-radius: 5px;
 }
 
-@media (max-width: 300px) {
-    html {
-        font-size: 0.65rem;
-    }
-}
-
-@media (300px < width < 700px) {
+@media (max-width: 767px) {
     html {
         font-size: 0.7rem;
     }
 }
 
-@media (700px <= width < 1200px) {
+@media (768px <= width < 1200px) {
     html {
         font-size: 0.8rem;
     }
