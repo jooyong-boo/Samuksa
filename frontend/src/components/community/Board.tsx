@@ -68,11 +68,6 @@ const Background = styled.div`
     width: 100%;
     height: 100vh;
     padding-top: 100px;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
     overflow: hidden;
     margin: auto;
 `;
@@ -80,6 +75,7 @@ const Background = styled.div`
 const BoardBox = styled(Box)`
     width: 95%;
     height: 95%;
+    min-width: 300px;
     background-color: white;
     margin: auto;
     border-radius: 10px;
