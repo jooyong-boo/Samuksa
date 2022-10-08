@@ -110,7 +110,7 @@ export const getPostState = selector({
     get: async ({ get }) => {
         const response = await getPosts();
         const readPost = localStorage.getItem('reviewReadPost');
-        const newPosts = response.map((item: any) => {
+        const newPosts = response?.map((item: any) => {
             if (readPost?.includes(item.id)) {
                 return Object.assign(
                     {},
