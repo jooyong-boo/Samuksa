@@ -350,7 +350,7 @@ const Header = () => {
                                 aria-haspopup="true"
                                 onClick={handleOpenNavMenu}
                             >
-                                <MenuIcon sx={{ color: `${theme.colors.main}` }} fontSize="large" />
+                                <StyledMenuIcon />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -546,6 +546,11 @@ const MobileBox = styled(Box)`
     ${({ theme }) => theme.device.mobile} {
         display: block;
     }
+`;
+
+const StyledMenuIcon = styled(MenuIcon)`
+    color: ${({ theme }) => theme.colors.main};
+    font-size: 2.5rem;
 `;
 
 const StyledMobileMenuItem = styled(MenuItem)`
