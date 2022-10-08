@@ -324,17 +324,10 @@ const TipBoard = () => {
                                                 </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'flex-start',
-                                                        margin: 'auto',
-                                                    }}
-                                                >
-                                                    <MobileAvatar src={avatar} />
-                                                    <Typography sx={{ marginLeft: '0.5rem' }}>{nickName}</Typography>
-                                                </div>
+                                                <PostUserInfoDiv>
+                                                    <StyledAvatar src={avatar} />
+                                                    <NickNameInfo>{nickName}</NickNameInfo>
+                                                </PostUserInfoDiv>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -359,7 +352,7 @@ const TipBoard = () => {
                                         <MobileLi>
                                             <div>
                                                 <MobileWriterWrapper>
-                                                    <MobileAvatar src={avatar} />
+                                                    <StyledAvatar src={avatar} />
                                                     <NickNameInfo>{nickName}</NickNameInfo>
                                                 </MobileWriterWrapper>
                                                 <TitleInfo>
@@ -574,7 +567,7 @@ const MobileWriterWrapper = styled.div`
     align-items: center;
 `;
 
-const MobileAvatar = styled(Avatar)`
+const StyledAvatar = styled(Avatar)`
     width: 2rem;
     height: 2rem;
 `;
@@ -608,6 +601,13 @@ const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
     ${({ theme }) => theme.device.tablet} {
         font-size: 0.95rem;
     }
+`;
+
+const PostUserInfoDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto;
 `;
 
 const MobilePostAdditionalInfoWrapper = styled.div`
