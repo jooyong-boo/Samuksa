@@ -323,19 +323,10 @@ const ReviewBoard = () => {
                                                 </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'flex-start',
-                                                        margin: 'auto',
-                                                    }}
-                                                >
-                                                    <MobileAvatar src={avatar} />
-                                                    <Typography sx={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>
-                                                        {nickName}
-                                                    </Typography>
-                                                </div>
+                                                <PostUserInfoDiv>
+                                                    <StyledAvatar src={avatar} />
+                                                    <NickNameInfo>{nickName}</NickNameInfo>
+                                                </PostUserInfoDiv>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -360,7 +351,7 @@ const ReviewBoard = () => {
                                         <MobileLi>
                                             <div>
                                                 <MobileWriterWrapper>
-                                                    <MobileAvatar src={avatar} />
+                                                    <StyledAvatar src={avatar} />
                                                     <NickNameInfo>{nickName}</NickNameInfo>
                                                 </MobileWriterWrapper>
                                                 <TitleInfo>
@@ -576,7 +567,7 @@ const MobileWriterWrapper = styled.div`
     align-items: center;
 `;
 
-const MobileAvatar = styled(Avatar)`
+const StyledAvatar = styled(Avatar)`
     width: 2rem;
     height: 2rem;
 `;
@@ -613,6 +604,13 @@ const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
     ${({ theme }) => theme.device.mobile} {
         font-size: 0.95rem;
     }
+`;
+
+const PostUserInfoDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto;
 `;
 
 const MobilePostAdditionalInfoWrapper = styled.div`
