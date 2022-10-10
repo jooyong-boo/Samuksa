@@ -5,14 +5,15 @@
         "strictNullChecks": true, // enable strict null checks as a best practice
         "module": "CommonJS", // specify module code generation
         "jsx": "react-jsx", // use typescript to transpile jsx to js
-        "target": "es5", // specify ECMAScript target version
+        "target": "es6", // specify ECMAScript target version
         "allowJs": true, // allow a partial TypeScript and JavaScript codebase
         // "strict": false,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": true,
         "resolveJsonModule": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "lib": ["dom", "dom.iterable"]
     },
     "types": ["react/next", "react-dom/next"],
     "include": ["./src/"]
