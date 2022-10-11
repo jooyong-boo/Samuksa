@@ -154,9 +154,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                         onClick={() => {
                                             onRecommendClick(fishRecommendCombinations, combinationName, active);
                                         }}
-                                        sx={{
-                                            backgroundColor: active ? '#F8F8F8' : 'white',
-                                        }}
+                                        active={active ? 'true' : ''}
                                     >
                                         <CustomGrid container spacing={0.5} rowSpacing={0.2}>
                                             {combinationName.length > 1 ? (
@@ -218,9 +216,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                           onClick={() => {
                                               onEstimateClick(fishRecommendBtDtos, totalPrice, i, active);
                                           }}
-                                          sx={{
-                                              backgroundColor: active ? '#F8F8F8' : 'white',
-                                          }}
+                                          active={active ? 'true' : ''}
                                       >
                                           {fishRecommendBtDtos
                                               ? fishRecommendBtDtos.map(
@@ -270,17 +266,13 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                     </EstimateTopText>
                                 </EstimateTopDiv>
                                 {newSelectEstimate?.length > 0 ? (
-                                    <BookmarkAddedIcon
-                                        fontSize="large"
-                                        sx={{ cursor: 'pointer' }}
+                                    <StyledAddBookmark
                                         onClick={() => {
                                             handleDeleteBookmark(selectEstimate);
                                         }}
                                     />
                                 ) : (
-                                    <BookmarkBorderIcon
-                                        fontSize="large"
-                                        sx={{ cursor: 'pointer' }}
+                                    <StyledRemoveBookmark
                                         onClick={() => {
                                             addBookmark(selectEstimate);
                                         }}
@@ -369,9 +361,14 @@ const ResultDiv = styled.div`
     }
 `;
 
-const CustomCardContent = styled(CardContent)`
+interface CustomCardContentProps {
+    active: string;
+}
+
+const CustomCardContent = styled(CardContent)<CustomCardContentProps>`
     display: flex;
     align-items: center;
+    background-color: ${(props) => (props.active ? '#F8F8F8' : 'white')};
     cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
     width: 100%;
@@ -465,9 +462,14 @@ const CustomListDiv = styled.div`
     }
 `;
 
-const CustomListItems = styled(ListItem)`
+interface CustomListItemsProps {
+    active: string;
+}
+
+const CustomListItems = styled(ListItem)<CustomListItemsProps>`
     display: flex;
     flex-direction: column;
+    background-color: ${(props) => (props.active ? '#F8F8F8' : 'white')};
     width: 100%;
     min-width: 105px;
     /* padding-left: 0; */
@@ -556,4 +558,16 @@ const EstimateTopText = styled(Typography)<EstimateTopTextProps>`
     padding-top: ${(props) => props.paddingTop && `${props.paddingTop}`};
     font-weight: ${(props) => props.fontWeight && `${props.fontWeight}`};
     margin-bottom: ${(props) => props.marginBottom && `${props.marginBottom}`};
+`;
+
+const StyledAddBookmark = styled(BookmarkAddedIcon)`
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+`;
+
+const StyledRemoveBookmark = styled(BookmarkBorderIcon)`
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
 `;
