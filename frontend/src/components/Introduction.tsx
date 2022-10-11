@@ -11,20 +11,15 @@ const Introduction = () => {
     return (
         <Background>
             <TitleBox>
-                <TitleText fontSize={'4.28rem'} marginRight={'1rem'}>
+                <TitleText fontSize={'4rem'} marginRight={'1rem'}>
                     What is
                 </TitleText>
-                <TitleText fontSize={'4.28rem'} color={theme.colors.main} fontWeight={'600'}>
+                <TitleText fontSize={'4rem'} color={theme.colors.main} fontWeight={'600'} marginRight={'0.5rem'}>
                     Samuksa
                 </TitleText>
-                <TitleText fontSize={'4.28rem'}>?</TitleText>
+                <TitleText fontSize={'4rem'}>?</TitleText>
             </TitleBox>
-            <Grid
-                container
-                rowSpacing={2}
-                sx={{ textAlign: 'center', marginBottom: '30px' }}
-                justifyContent="space-evenly"
-            >
+            <StyledGrid container>
                 <Grid item>
                     <Img src={introduce1} alt="생선을 들고있는 어부" loading="lazy" />
                     <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
@@ -45,15 +40,15 @@ const Introduction = () => {
                 </Grid>
                 <Grid item>
                     <Img src={introduce3} alt="접시에 담긴 회" loading="lazy" />
-                    <Typography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
+                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
                         만든 이유
-                    </Typography>
-                    <Typography sx={{ width: '250px', fontSize: '1rem', color: '#545454' }}>
+                    </CustomTypography>
+                    <CustomTypography width={'250px'} fontSize={'1rem'} color={'#545454'}>
                         좋아하는 것을 만들어보기로 공통의 관심사 ‘회’
-                    </Typography>
+                    </CustomTypography>
                 </Grid>
                 <BackgroundWave />
-            </Grid>
+            </StyledGrid>
         </Background>
     );
 };
@@ -99,6 +94,7 @@ const Img = styled.img`
     height: 19rem;
     object-fit: cover;
     margin: auto;
+    margin-bottom: 0.5rem;
     border-radius: 5px;
     ${({ theme }) => theme.device.tablet} {
         width: 12rem;
@@ -107,6 +103,7 @@ const Img = styled.img`
     ${({ theme }) => theme.device.mobile} {
         width: 9rem;
         height: 12rem;
+        margin-bottom: 0.1rem;
     }
 `;
 
@@ -117,6 +114,14 @@ const TitleBox = styled.div`
         text-align: center;
         margin-bottom: 25px;
     }
+`;
+
+const StyledGrid = styled(Grid)`
+    text-align: center;
+    margin-bottom: 30px;
+    justify-content: space-evenly;
+    column-gap: 1rem;
+    row-gap: 1rem;
 `;
 
 interface CustomTypographyProps {
