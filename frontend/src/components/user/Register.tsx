@@ -233,14 +233,13 @@ const Register = () => {
                         <InputAreaContainer>
                             <CustomTypography>아이디</CustomTypography>
                             <InputBox>
-                                <TextField
+                                <RegisterTextField
                                     id="id"
                                     variant="outlined"
                                     size="small"
                                     placeholder="4~12자 영문, 숫자"
                                     autoComplete="off"
                                     color={checkId ? 'error' : 'primary'}
-                                    sx={{ flexGrow: 1 }}
                                     onChange={(e) => {
                                         onChange(setId, id, e);
                                     }}
@@ -263,12 +262,11 @@ const Register = () => {
                             </>
                             <CustomTypography>닉네임</CustomTypography>
                             <InputBox>
-                                <TextField
+                                <RegisterTextField
                                     id="nickName"
                                     variant="outlined"
                                     size="small"
                                     placeholder="2~9자 한글 또는 영문"
-                                    sx={{ flexGrow: 1 }}
                                     autoComplete="off"
                                     color={checkNickName ? 'error' : 'primary'}
                                     onChange={(e) => {
@@ -331,13 +329,12 @@ const Register = () => {
                             </InputBox>
                             <CustomTypography>이메일</CustomTypography>
                             <InputBox>
-                                <TextField
+                                <RegisterTextField
                                     id="email"
                                     variant="outlined"
                                     size="small"
                                     placeholder="이메일 형식을 지켜주세요"
                                     fullWidth
-                                    sx={{ flexGrow: 1 }}
                                     color={checkEmail ? 'primary' : 'error'}
                                     onChange={(e) => {
                                         onChange(setEmail, email, e);
@@ -350,13 +347,12 @@ const Register = () => {
                             <InputBox paddingTop={'0.5rem'} display={'flex'}>
                                 {viewAuthNum ? (
                                     <>
-                                        <TextField
+                                        <RegisterTextField
                                             id="emailAuth"
                                             variant="outlined"
                                             size="small"
                                             autoComplete="off"
                                             placeholder="인증번호 입력"
-                                            sx={{ flexGrow: 1 }}
                                             color={checkAuthNum ? 'primary' : 'error'}
                                             onChange={(e) => {
                                                 onChange(setAuthNum, authNum, e);
@@ -442,6 +438,10 @@ interface InputBoxProps {
 const InputBox = styled.div<InputBoxProps>`
     padding-top: ${(props) => (props.paddingTop ? `${props.paddingTop}` : '0')};
     display: ${(props) => (props.display ? `${props.display}` : 'flex')};
+`;
+
+const RegisterTextField = styled(TextField)`
+    flex-grow: 1;
 `;
 
 const RegisterTitle = styled(Typography)`
