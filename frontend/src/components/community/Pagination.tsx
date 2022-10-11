@@ -71,43 +71,46 @@ const Pagination = ({ total, limit, postPage, setPostPage }: pagination) => {
     }, [windowDimensions]);
 
     return (
-        <>
-            <List sx={{ display: 'flex', justifyContent: 'center', width: '80%' }}>
-                <div>
-                    <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
-                        &lt;&lt;
-                    </Button>
-                    <Button onClick={() => setPostPage(postPage - 1)} disabled={postPage === 1}>
-                        &lt;
-                    </Button>
-                </div>
-                <div style={{ margin: '0 1rem' }}>
-                    {currentGroup &&
-                        currentGroup.map((btn: number) => {
-                            // console.log(currentGroup);
-                            return (
-                                <Button
-                                    key={btn}
-                                    onClick={() => setPostPage(btn)}
-                                    aria-current={postPage === btn ? 'page' : undefined}
-                                >
-                                    {btn}
-                                </Button>
-                            );
-                        })}
-                </div>
-                <div>
-                    <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
-                        &gt;
-                    </Button>
-                    <Button onClick={() => setPostPage(numPages)} disabled={postPage === numPages}>
-                        &gt;&gt;
-                    </Button>
-                </div>
-            </List>
-        </>
+        <PaginationList>
+            <div>
+                <Button onClick={() => setPostPage(1)} disabled={postPage === 1}>
+                    &lt;&lt;
+                </Button>
+                <Button onClick={() => setPostPage(postPage - 1)} disabled={postPage === 1}>
+                    &lt;
+                </Button>
+            </div>
+            <div style={{ margin: '0 1rem' }}>
+                {currentGroup &&
+                    currentGroup.map((btn: number) => {
+                        // console.log(currentGroup);
+                        return (
+                            <Button
+                                key={btn}
+                                onClick={() => setPostPage(btn)}
+                                aria-current={postPage === btn ? 'page' : undefined}
+                            >
+                                {btn}
+                            </Button>
+                        );
+                    })}
+            </div>
+            <div>
+                <Button onClick={() => setPostPage(postPage + 1)} disabled={postPage === numPages}>
+                    &gt;
+                </Button>
+                <Button onClick={() => setPostPage(numPages)} disabled={postPage === numPages}>
+                    &gt;&gt;
+                </Button>
+            </div>
+        </PaginationList>
     );
 };
+
+const PaginationList = styled(List)`
+    display: flex;
+    justify-content: center;
+`;
 
 const Button = styled.button`
     border: none;
