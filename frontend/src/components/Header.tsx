@@ -21,11 +21,11 @@ import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
 
 interface userInfoProps {
-    passWd?: null;
-    userEmail?: string;
     userId?: string;
+    nickName?: string;
+    email?: string;
+    profileImage?: string;
     userIdx?: number;
-    userNickName?: string;
 }
 
 const Header = () => {
@@ -395,8 +395,8 @@ const Header = () => {
                                     <MobileUserBox>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                         <div>
-                                            <UserNickNameText>{userInfo.userNickName}</UserNickNameText>
-                                            <UserEmailText>{userInfo.userEmail}</UserEmailText>
+                                            <UserNickNameText>{userInfo.nickName}</UserNickNameText>
+                                            <UserEmailText>{userInfo.email}</UserEmailText>
                                         </div>
                                     </MobileUserBox>
                                 ) : null}
@@ -437,7 +437,7 @@ const Header = () => {
                                     </UserIconButton>
                                 </Tooltip>
                                 <UserNickNameText>
-                                    {userInfo.userNickName ? `${userInfo.userNickName} 님` : ''}
+                                    {userInfo.nickName ? `${userInfo.nickName} 님` : ''}
                                 </UserNickNameText>
                                 <UserSelectMenu
                                     id="menu"

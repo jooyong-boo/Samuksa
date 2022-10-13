@@ -22,8 +22,8 @@ import { getCommentById, getPostsById } from '../../api/post';
 
 interface userInfos {
     userId?: string;
-    userNickName?: string;
-    userEmail?: string;
+    nickName?: string;
+    email?: string;
 }
 
 const PostViewer = () => {
@@ -48,7 +48,7 @@ const PostViewer = () => {
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
-    const { userId, userNickName, userEmail }: userInfos = userInfo;
+    const { userId, nickName, email }: userInfos = userInfo;
     const [newComment, setNewComment] = useState('');
     const [commentModify, setCommentModify] = useState(false);
 
@@ -90,7 +90,7 @@ const PostViewer = () => {
                 ...comments,
                 {
                     PostId: Number(id),
-                    UserId: userNickName,
+                    UserId: nickName,
                     content: newComment,
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -165,7 +165,7 @@ const PostViewer = () => {
                     <UserCommentWrapper>
                         <CommentUserAvatarContainer>
                             {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
-                            <Typography>{loginStatus && userNickName}</Typography>
+                            <Typography>{loginStatus && nickName}</Typography>
                         </CommentUserAvatarContainer>
                         <CommentBox>
                             <TextField

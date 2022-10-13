@@ -39,24 +39,3 @@ type newPost = {
     read: boolean;
     id: number;
 };
-
-// 게시물 등록
-export const setNewPost = async ({ date, title, content, avatar, userNickName, read, id }: newPost) => {
-    try {
-        const { data } = await axios.post('https://koreanjson.com/posts', {
-            params: {
-                id: userNickName,
-                title,
-                content,
-                createdAt: date,
-                updatedAt: date,
-                UserId: id,
-                avatar,
-                read,
-            },
-        });
-        return data;
-    } catch (err) {
-        console.log(err);
-    }
-};
