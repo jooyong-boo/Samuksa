@@ -18,7 +18,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUserInfo } from '../../api/auth';
 import { getRandomNumber } from './PostViewer';
 import { getPostState } from '../../store/atom';
-import { setNewPost } from '../../api/post';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -34,8 +33,8 @@ const totalBoard = ['리뷰게시판', 'TIP게시판'];
 
 interface userInfos {
     userId?: string;
-    userNickName?: string;
-    userEmail?: string;
+    nickName?: string;
+    email?: string;
 }
 
 const PostEditor = () => {
@@ -58,7 +57,7 @@ const PostEditor = () => {
     const postsRecoil = useRecoilValue<any[]>(getPostState);
     const userInfo = useRecoilValue(userInfoState);
 
-    const { userNickName }: userInfos = userInfo;
+    const { nickName }: userInfos = userInfo;
     const userImage = useRecoilValue(userImageState);
 
     const [transientStorage, setTransientStorage] = useState<any>([]);
@@ -126,11 +125,10 @@ const PostEditor = () => {
             title,
             content,
             avatar,
-            nickName: userNickName,
+            nickName,
             read,
             userId: id,
         };
-        setNewPost({ date, title, content, avatar, userNickName, read, id }).then((res) => console.log(res));
         console.log(data);
     };
 
@@ -166,7 +164,7 @@ const PostEditor = () => {
                     {userInfo && (
                         <>
                             <UserAvatar src={userImage} />
-                            <UserTypography>{userNickName}</UserTypography>
+                            <UserTypography>{nickName}</UserTypography>
                         </>
                     )}
                 </EditorUserInfoBox>
