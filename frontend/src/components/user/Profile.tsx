@@ -10,17 +10,18 @@ import handlingDataForm from '../utils/handlingDataForm';
 
 interface userInfos {
     userId?: string;
-    userNickName?: string;
-    userEmail?: string;
+    nickName?: string;
+    email?: string;
+    profileImage?: string;
 }
 
 const Profile = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [image, setImage] = useRecoilState<string | ArrayBuffer | null>(userImageState);
     const fileInput = useRef<HTMLInputElement | null>(null);
-    const { userId, userNickName, userEmail }: userInfos = userInfo;
+    const { userId, nickName, email, profileImage }: userInfos = userInfo;
     const [nickname, setNickname] = useState('');
-    const [email, setEmail] = useState('');
+    const [userEmail, setEmail] = useState('');
     const [nicknameModify, setNicknameModify] = useState(true);
     const [emailModify, setEmailModify] = useState(true);
 
@@ -58,7 +59,7 @@ const Profile = () => {
                     const base64data = reader.result;
                     if (reader.readyState === 2) {
                         setImage(base64data);
-                        console.log(base64data);
+                        // console.log(base64data);
                     }
                 };
             });
@@ -93,14 +94,14 @@ const Profile = () => {
 
     const handleModifyNickname = () => {
         if (nicknameModify === false) {
-            setUserInfo({ ...userInfo, userNickName: nickname });
+            setUserInfo({ ...userInfo, nickName: nickname });
         }
         setNicknameModify(!nicknameModify);
     };
 
     const handleModifyEmail = () => {
         if (emailModify === false) {
-            setUserInfo({ ...userInfo, userEmail: email });
+            setUserInfo({ ...userInfo, email: userEmail });
         }
         setEmailModify(!emailModify);
     };
@@ -114,8 +115,8 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        setNickname(userNickName || '');
-        setEmail(userEmail || '');
+        setNickname(nickName || '');
+        setEmail(email || '');
     }, [userInfo]);
 
     return (
@@ -170,7 +171,7 @@ const Profile = () => {
                             <ProfileInput
                                 $marginBottom={'0.5rem'}
                                 disabled={emailModify}
-                                value={email || ''}
+                                value={userEmail || ''}
                                 onChange={changeEmail}
                             />
                             <ModifyButton $marginBottom={'0.5rem'} onClick={handleModifyEmail}>
