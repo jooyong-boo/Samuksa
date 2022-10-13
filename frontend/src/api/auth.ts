@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { stubString } from 'lodash';
 
 type Register = {
     id: string;
@@ -19,7 +18,7 @@ instance.interceptors.request.use((config) => {
     if (token) {
         config.headers = {
             ...config.headers,
-            'X-AUTH-TOKEN': token,
+            Authorization: `Bearer ${token}`,
         };
     }
     return config;
@@ -27,14 +26,13 @@ instance.interceptors.request.use((config) => {
 
 export const signUp = async ({ id, password, nickName, email }: Register) => {
     try {
-        const { data } = await instance.post('/signup', null, {
-            params: {
-                userId: id,
-                userName: nickName,
-                passwd: password,
-                userEmail: email,
-            },
+        const { data } = await instance.post('/signup', {
+            userId: id,
+            nickName,
+            password,
+            email,
         });
+        console.log(data);
         return data;
     } catch (err) {
         return err;
@@ -43,15 +41,14 @@ export const signUp = async ({ id, password, nickName, email }: Register) => {
 
 export const login = async ({ userId, passwd }: { userId: string; passwd: string }) => {
     try {
-        const result = await instance.post('/user/login', null, {
-            params: {
-                userId: userId,
-                passwd: passwd,
-            },
+        const result = await instance.post('/login', {
+            userId,
+            password: passwd,
         });
-        if (result.status === 201) {
-            localStorage.setItem('jwtToken', result.data.accessToken);
-            localStorage.setItem('refreshToken', result.data.refreshToken);
+        console.log(result);
+        if (result.status === 200) {
+            localStorage.setItem('jwtToken', result.headers[`access-token`]);
+            localStorage.setItem('refreshToken', result.headers[`refresh-token`]);
             return result;
         }
     } catch (err) {
@@ -72,21 +69,26 @@ export const logout = async ({ AToken }: { AToken: string }) => {
     }
 };
 
-export const checkIdAxios = async ({ id }: { id: string }) => {
+export const checkDuplicate = async (info: string, check: string) => {
     try {
-        const { data } = await instance.get('/signup/existence-id', {
-            params: { userId: id },
+        const { data } = await instance.get('/signup/existence-info', {
+            params: {
+                [`${check}`]: info,
+            },
         });
+        console.log(data);
         return data;
     } catch (err) {
         console.log(err.response);
+        return err.response.data;
     }
 };
 
-export const checkNickNameAxios = async ({ nickName }: { nickName: string }) => {
+export const requestCheckEmail = async (email: string, checkEmail: string, authNum?: string, checkAuthNum?: string) => {
     try {
-        const { data } = await instance.get('/signup/existence-name', {
-            params: { userName: nickName },
+        const data = await instance.post('/signup/message', {
+            [`${checkEmail}`]: email,
+            [`${checkAuthNum}`]: authNum,
         });
         return data;
     } catch (err) {
@@ -124,6 +126,7 @@ export const checkEmailAuthAxios = async ({ authNum, email }: { authNum: string;
 export const getUserInfo = async () => {
     try {
         const result = await instance.get('/user/user-info');
+        console.log(result);
         if (result.data) {
             return result;
         } else {
@@ -162,5 +165,24 @@ export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; R
         }
     } catch (err) {
         return err;
+    }
+};
+
+export const changeUserImage = async (formData: FormData) => {
+    try {
+        const result = await instance.post(
+            '/user/upload-image',
+            {
+                formData,
+            },
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
+        console.log(result);
+    } catch (err) {
+        console.log(err);
     }
 };
