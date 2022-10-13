@@ -109,9 +109,9 @@ const Img = styled.img`
 
 const TitleBox = styled.div`
     display: flex;
-    margin-top: 30px;
     ${({ theme }) => theme.device.mobile} {
         text-align: center;
+        margin-top: 30px;
         margin-bottom: 25px;
     }
 `;
