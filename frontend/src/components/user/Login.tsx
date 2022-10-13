@@ -48,10 +48,10 @@ const Login = () => {
         }
         login({ userId, passwd })
             .then((res) => {
-                if (res.status !== 201) {
+                if (res.status !== 200) {
                     throw res;
                 }
-                if (res.status === 201) {
+                if (res.status === 200) {
                     navigate('/');
                 }
                 if (idSaveStatus) {
@@ -63,8 +63,8 @@ const Login = () => {
                     if (res.code === 500) {
                         return;
                     }
-                    if (res.data.userNickName) {
-                        notifySuccess(`${res.data.userNickName}님 반갑습니다!`);
+                    if (res.data.nickName) {
+                        notifySuccess(`${res.data.nickName}님 반갑습니다!`);
                         userInfo(res.data);
                     }
                 });
