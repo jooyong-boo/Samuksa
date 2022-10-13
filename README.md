@@ -2,6 +2,8 @@
 
 사먹는 사람들 (사먹사)
 <br/><br/>
+<img width="1279" alt="스크린샷 2022-10-13 오후 5 46 16" src="https://user-images.githubusercontent.com/93763666/195548693-5e16da7b-e984-4c27-b686-7d52ee98af5a.png">
+<br/><br/>
 
 
 ## 📎 프로젝트 소개
