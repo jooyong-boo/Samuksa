@@ -270,7 +270,7 @@ const ReviewBoard = () => {
                                 }}
                             />
                             <SearchInput
-                                placeholder="게시글 검색"
+                                placeholder={`${searchOption} 검색`}
                                 onChange={onSearch}
                                 onKeyPress={(e) => handleSearch(e)}
                             />
@@ -323,19 +323,10 @@ const ReviewBoard = () => {
                                                 </TitleNavLink>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'flex-start',
-                                                        margin: 'auto',
-                                                    }}
-                                                >
-                                                    <MobileAvatar src={avatar} />
-                                                    <Typography sx={{ marginLeft: '0.5rem', fontSize: '0.8rem' }}>
-                                                        {nickName}
-                                                    </Typography>
-                                                </div>
+                                                <PostUserInfoDiv>
+                                                    <StyledAvatar src={avatar} />
+                                                    <NickNameInfo>{nickName}</NickNameInfo>
+                                                </PostUserInfoDiv>
                                             </TableCell>
                                             <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
                                             <TableCell sx={tableTextStyle}>{UserId}</TableCell>
@@ -360,7 +351,7 @@ const ReviewBoard = () => {
                                         <MobileLi>
                                             <div>
                                                 <MobileWriterWrapper>
-                                                    <MobileAvatar src={avatar} />
+                                                    <StyledAvatar src={avatar} />
                                                     <NickNameInfo>{nickName}</NickNameInfo>
                                                 </MobileWriterWrapper>
                                                 <TitleInfo>
@@ -505,7 +496,7 @@ const SearchContainer = styled.div`
     display: flex;
     justify-content: center;
     width: 100%;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid #a7a7a7;
 `;
 
 const SearchBox = styled.div`
@@ -531,19 +522,19 @@ const SearchInput = styled.input`
 
 const SelectBox = styled.select`
     border: none;
-    border-radius: 0;
     font-size: 1rem;
+    padding: 10px 0;
+    text-align: center;
     :focus {
         outline: none;
     }
 `;
 
 const CustomTableContainer = styled(TableContainer)`
-    border-top: 2px solid #a7a7a7;
-    border-bottom: 2px solid #a7a7a7;
+    border-top: 1px solid #a7a7a7;
+    border-bottom: 1px solid #a7a7a7;
     border-radius: 0;
     max-height: 600px;
-    padding: 0px 12px;
     ${({ theme }) => theme.device.tablet} {
         display: none;
     }
@@ -576,7 +567,7 @@ const MobileWriterWrapper = styled.div`
     align-items: center;
 `;
 
-const MobileAvatar = styled(Avatar)`
+const StyledAvatar = styled(Avatar)`
     width: 2rem;
     height: 2rem;
 `;
@@ -613,6 +604,13 @@ const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
     ${({ theme }) => theme.device.mobile} {
         font-size: 0.95rem;
     }
+`;
+
+const PostUserInfoDiv = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: auto;
 `;
 
 const MobilePostAdditionalInfoWrapper = styled.div`

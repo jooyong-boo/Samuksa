@@ -137,3 +137,9 @@ body::-webkit-scrollbar-thumb {
         font-size: 1rem;
     }
 }
+
+select {
+    appearance: none;
+    -moz-appearance: none; /* Firefox */
+    -webkit-appearance: none; /* Safari and Chrome */
+}

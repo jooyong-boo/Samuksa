@@ -42,7 +42,7 @@ const Board = () => {
     return (
         <Background>
             <BoardBox>
-                <Tabs value={selectTab} onChange={handleChange} centered sx={{ marginBottom: '0.5rem' }}>
+                <BoardTabs value={selectTab} onChange={handleChange}>
                     {tab.map(({ id, label, path }) => {
                         return (
                             <BoardTab
@@ -54,7 +54,7 @@ const Board = () => {
                             />
                         );
                     })}
-                </Tabs>
+                </BoardTabs>
                 <Outlet />
             </BoardBox>
         </Background>
@@ -83,6 +83,10 @@ const BoardBox = styled(Box)`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+`;
+
+const BoardTabs = styled(Tabs)`
+    margin-bottom: 0.5rem;
 `;
 
 const BoardTab = styled(Tab)`

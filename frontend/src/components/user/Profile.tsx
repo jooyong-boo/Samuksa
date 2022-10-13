@@ -4,8 +4,9 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { userImageState, userInfoState } from '../../store/user';
 import { getWithdrawal } from '../../api/auth';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import imageCompression from 'browser-image-compression';
+import handlingDataForm from '../utils/handlingDataForm';
 
 interface userInfos {
     userId?: string;
@@ -75,6 +76,15 @@ const Profile = () => {
         try {
             const compressedFile = await imageCompression(fileSrc, options);
             console.log(compressedFile);
+            const reader = new FileReader();
+            reader.readAsDataURL(compressedFile);
+            reader.onloadend = () => {
+                // 변환 완료!
+                const base64data = reader.result;
+
+                // formData 만드는 함수
+                handlingDataForm(base64data);
+            };
             return compressedFile;
         } catch (error) {
             console.log(error);
