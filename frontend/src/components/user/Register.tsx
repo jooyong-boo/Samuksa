@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { signUp, checkEmailAxios, checkEmailAuthAxios, checkDuplicate, requestCheckEmail } from '../../api/auth';
+import { signUp, checkDuplicate, requestCheckEmail } from '../../api/auth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useSetRecoilState } from 'recoil';
@@ -73,7 +73,7 @@ const Register = () => {
             }
         }
         if (check === 'nickName') {
-            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,8}$/);
+            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣 ]{3,12}$/);
             change(inputChange);
             if (nickNameReg.test(inputChange)) {
                 setCheckNickName(true);
@@ -285,7 +285,7 @@ const Register = () => {
                                     id="nickName"
                                     variant="outlined"
                                     size="small"
-                                    placeholder="2~9자 한글 또는 영문"
+                                    placeholder="3~12자 한글 또는 영문"
                                     autoComplete="off"
                                     color={checkNickName ? 'primary' : 'error'}
                                     onChange={(e) => {
