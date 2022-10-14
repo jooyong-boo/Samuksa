@@ -58,9 +58,9 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
 
 export const logout = async ({ AToken }: { AToken: string }) => {
     try {
-        const result = await instance.delete('/user/login', {
+        const result = await instance.delete('/login/jwt', {
             params: {
-                'A-Token': AToken,
+                accessToken: AToken,
             },
         });
     } catch (err) {
@@ -69,6 +69,7 @@ export const logout = async ({ AToken }: { AToken: string }) => {
     }
 };
 
+// 중복 확인
 export const checkDuplicate = async (info: string, check: string) => {
     try {
         const { data } = await instance.get('/signup/existence-info', {
@@ -96,37 +97,9 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
     }
 };
 
-export const checkEmailAxios = async ({ email }: { email: string }) => {
-    try {
-        const data = await instance.post('/signup/message', null, {
-            params: {
-                userEmail: email,
-            },
-        });
-        return data;
-    } catch (err) {
-        console.log(err.response);
-    }
-};
-
-export const checkEmailAuthAxios = async ({ authNum, email }: { authNum: string; email: string }) => {
-    try {
-        const data = await instance.post('/signup/message-auth', null, {
-            params: {
-                Key: authNum,
-                userEmail: email,
-            },
-        });
-        return data;
-    } catch (err) {
-        console.log(err.response);
-    }
-};
-
 export const getUserInfo = async () => {
     try {
         const result = await instance.get('/user/user-info');
-        console.log(result);
         if (result.data) {
             return result;
         } else {
@@ -137,6 +110,7 @@ export const getUserInfo = async () => {
     }
 };
 
+// 회원 탈퇴
 export const getWithdrawal = async (userId: string, passwd: string) => {
     try {
         const { data } = await instance.delete('/user/user-info', {
@@ -153,11 +127,9 @@ export const getWithdrawal = async (userId: string, passwd: string) => {
 
 export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; RToken: string }) => {
     try {
-        const result = await instance.post('/user/refresh-token', null, {
-            params: {
-                'A-Token': AToken,
-                'R-Token': RToken,
-            },
+        const result = await instance.post('/login/refresh-token', {
+            accessToken: AToken,
+            refreshToken: RToken,
         });
         // console.log(result);
         if (result.status === 200) {
