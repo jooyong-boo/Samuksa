@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { userImageState, userInfoState } from '../../store/user';
-import { getWithdrawal } from '../../api/auth';
+import { changeUserImage, getWithdrawal } from '../../api/auth';
 import { useEffect, useRef, useState } from 'react';
 import imageCompression from 'browser-image-compression';
 import handlingDataForm from '../utils/handlingDataForm';
@@ -24,7 +24,7 @@ const Profile = () => {
     const [userEmail, setEmail] = useState('');
     const [nicknameModify, setNicknameModify] = useState(true);
     const [emailModify, setEmailModify] = useState(true);
-
+    console.log(userInfo);
     const navigate = useNavigate();
 
     const withdrawal = () => {
@@ -41,6 +41,8 @@ const Profile = () => {
     // 이미지 업로드
     const onChange = (e: any) => {
         const value = e?.target?.files[0];
+        console.log(e.target.files);
+        console.log(value);
         if (value) {
             setImage(() => value);
         } else {
@@ -48,6 +50,10 @@ const Profile = () => {
             setImage('/broken-image.jpg');
             return;
         }
+        const formData = new FormData();
+        formData.append('image', value);
+
+        changeUserImage(formData);
         //화면에 프로필 사진 표시
         const reader = new FileReader();
         actionImgCompress(value)
@@ -82,9 +88,10 @@ const Profile = () => {
             reader.onloadend = () => {
                 // 변환 완료!
                 const base64data = reader.result;
+                console.log(reader);
 
                 // formData 만드는 함수
-                handlingDataForm(base64data);
+                // handlingDataForm(base64data);
             };
             return compressedFile;
         } catch (error) {
