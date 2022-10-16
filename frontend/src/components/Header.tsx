@@ -141,7 +141,18 @@ const Header = () => {
     const handleLogout = (name: string) => {
         if (name === '로그아웃') {
             const AToken = localStorage.getItem('jwtToken') || '';
-            logout({ AToken });
+            logout(AToken).then((res) => {
+                if (res.status === 200) {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('kakaoAuth');
+                    navigate('/');
+                    setUserInfo({});
+                    setUserIdState('');
+                    setImage('/broken-image.jpg');
+                    notify('다음에 또 만나요!');
+                }
+            });
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('kakaoAuth');
@@ -211,7 +222,7 @@ const Header = () => {
                     } else {
                         const AToken = localStorage.getItem('jwtToken') || '';
                         const RToken = localStorage.getItem('refreshToken') || '';
-                        getTokenReissuance({ AToken, RToken })
+                        getTokenReissuance(AToken, RToken)
                             .then((res) => {
                                 if (res?.data?.accessToken && res.data.refreshToken) {
                                     localStorage.setItem('jwtToken', res.data.accessToken);
