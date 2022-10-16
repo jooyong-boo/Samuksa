@@ -56,13 +56,15 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
     }
 };
 
-export const logout = async ({ AToken }: { AToken: string }) => {
+export const logout = async (accessToken: string) => {
     try {
         const result = await instance.delete('/login/jwt', {
-            params: {
-                accessToken: AToken,
+            data: {
+                accessToken,
             },
         });
+        console.log(result);
+        return result;
     } catch (err) {
         console.log(err);
         return err;
@@ -84,7 +86,7 @@ export const checkDuplicate = async (info: string, check: string) => {
         return err.response.data;
     }
 };
-
+// 이메일 인증, 체크
 export const requestCheckEmail = async (email: string, checkEmail: string, authNum?: string, checkAuthNum?: string) => {
     try {
         const data = await instance.post('/signup/message', {
@@ -97,6 +99,7 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
     }
 };
 
+//유저정보
 export const getUserInfo = async () => {
     try {
         const result = await instance.get('/user/user-info');
@@ -124,12 +127,12 @@ export const getWithdrawal = async (userId: string, passwd: string) => {
         console.log(e);
     }
 };
-
-export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; RToken: string }) => {
+// 토큰 재발급
+export const getTokenReissuance = async (accessToken: string, refreshToken: string) => {
     try {
         const result = await instance.post('/login/refresh-token', {
-            accessToken: AToken,
-            refreshToken: RToken,
+            accessToken,
+            refreshToken,
         });
         // console.log(result);
         if (result.status === 200) {
@@ -139,7 +142,7 @@ export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; R
         return err;
     }
 };
-
+// 유저 이미지
 export const changeUserImage = async (formData: FormData) => {
     try {
         const result = await instance.post(
@@ -158,3 +161,12 @@ export const changeUserImage = async (formData: FormData) => {
         console.log(err);
     }
 };
+
+// 프로필 정보 변경
+// export const changeUserInfo =async (newNickName, newPassword, password, userId) => {
+//     try {
+//         const result = await instance.patch('/user/user-info', {
+
+//         })
+//     }
+// }
