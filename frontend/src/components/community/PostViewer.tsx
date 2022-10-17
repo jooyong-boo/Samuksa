@@ -19,7 +19,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../utils/RandomNickname';
 import { getCommentById, getPostsById } from '../../api/post';
-
+import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 interface userInfos {
     userId?: string;
     nickName?: string;
@@ -157,6 +157,33 @@ const PostViewer = () => {
                 {data !== '' ? (
                     <PostContentBox>
                         <PostContent>{parse(DOMPurify.sanitize(data.content))}</PostContent>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <div
+                                style={{
+                                    border: '1px solid #EAEAEA',
+                                    display: 'inline-flex',
+                                    borderRadius: '5px',
+                                    margin: '1rem 0',
+                                }}
+                            >
+                                <Button>
+                                    <AiOutlineDown />
+                                </Button>
+                                <span
+                                    style={{
+                                        borderLeft: '1px solid #EAEAEA',
+                                        borderRight: '1px solid #EAEAEA',
+                                        padding: '0.5rem 1rem',
+                                        height: '100%',
+                                    }}
+                                >
+                                    0
+                                </span>
+                                <Button>
+                                    <AiOutlineUp />
+                                </Button>
+                            </div>
+                        </div>
                     </PostContentBox>
                 ) : null}
 
@@ -165,7 +192,9 @@ const PostViewer = () => {
                     <UserCommentWrapper>
                         <CommentUserAvatarContainer>
                             {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
-                            <Typography>{loginStatus && nickName}</Typography>
+                            <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
+                                {loginStatus && nickName}
+                            </CommentUserInfoText>
                         </CommentUserAvatarContainer>
                         <CommentBox>
                             <TextField
@@ -176,12 +205,12 @@ const PostViewer = () => {
                                 disabled={!loginStatus}
                                 onChange={handleChangeComment}
                             />
-                            <CustomBtn variant="contained" margin={'1rem'} onClick={commentRegister}>
+                            <CustomBtn variant="contained" margin={'1rem 0 1rem 1rem'} onClick={commentRegister}>
                                 등록
                             </CustomBtn>
-                            <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister}>
+                            {/* <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister}>
                                 등록 + 추천
-                            </CustomBtn>
+                            </CustomBtn> */}
                         </CommentBox>
                     </UserCommentWrapper>
                     {comments &&
@@ -438,8 +467,8 @@ const CommentUserAvatar = styled(Avatar)`
     background-color: ${({ theme }) => theme.colors.main};
     color: white;
     vertical-align: middle;
-    width: 40px;
-    height: 40px;
+    width: 3rem;
+    height: 3rem;
     margin-right: 0.5rem;
 `;
 
@@ -461,6 +490,7 @@ const TotalCommentText = styled(Typography)`
 
 interface CustomBtnProps {
     margin?: string;
+    $marginRight?: string;
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
@@ -471,6 +501,7 @@ const CustomBtn = styled(Button)<CustomBtnProps>`
     width: 7rem;
     height: 2.5rem;
     margin: ${(props) => `${props.margin}`};
+    margin-right${(props) => `${props.$marginRight}`};
     :hover {
         box-shadow: none;
     }

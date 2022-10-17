@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { userImageState, userInfoState } from '../../store/user';
-import { changeUserImage, getWithdrawal } from '../../api/auth';
+import { changeUserImage, changeUserInfo, getWithdrawal } from '../../api/auth';
 import { useEffect, useRef, useState } from 'react';
 import imageCompression from 'browser-image-compression';
 import handlingDataForm from '../utils/handlingDataForm';
@@ -102,6 +102,7 @@ const Profile = () => {
     const handleModifyNickname = () => {
         if (nicknameModify === false) {
             setUserInfo({ ...userInfo, nickName: nickname });
+            changeUserInfo('newNickName', nickname);
         }
         setNicknameModify(!nicknameModify);
     };

@@ -36,11 +36,11 @@ const Register = () => {
 
     const [id, setId] = useState('');
     const [checkId, setCheckId] = useState(false);
-    const [overlappingId, setOverlappingId] = useState<boolean>(true);
+    const [overlappingId, setOverlappingId] = useState(true);
 
     const [nickName, setNickName] = useState('');
     const [checkNickName, setCheckNickName] = useState(false);
-    const [overlappingNickName, setOverlappingNickName] = useState<boolean>(true);
+    const [overlappingNickName, setOverlappingNickName] = useState(true);
 
     const [password, setPassword] = useState(''); // 비밀번호
     const [checkPw, setCheckPw] = useState(false);
