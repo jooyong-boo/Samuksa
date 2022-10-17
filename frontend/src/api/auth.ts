@@ -86,6 +86,7 @@ export const checkDuplicate = async (info: string, check: string) => {
         return err.response.data;
     }
 };
+
 // 이메일 인증, 체크
 export const requestCheckEmail = async (email: string, checkEmail: string, authNum?: string, checkAuthNum?: string) => {
     try {
@@ -163,10 +164,13 @@ export const changeUserImage = async (formData: FormData) => {
 };
 
 // 프로필 정보 변경
-// export const changeUserInfo =async (newNickName, newPassword, password, userId) => {
-//     try {
-//         const result = await instance.patch('/user/user-info', {
-
-//         })
-//     }
-// }
+export const changeUserInfo = async (change: string, info: string) => {
+    try {
+        const result = await instance.patch('/user/user-info', {
+            [`${change}`]: info,
+        });
+        return result;
+    } catch (err) {
+        console.log(err);
+    }
+};
