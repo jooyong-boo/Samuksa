@@ -20,6 +20,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../utils/RandomNickname';
 import { getCommentById, getPostsById } from '../../api/post';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
+import { TiEdit } from 'react-icons/ti';
+import { HiOutlineTrash } from 'react-icons/hi';
+
 interface userInfos {
     userId?: string;
     nickName?: string;
@@ -51,6 +54,8 @@ const PostViewer = () => {
     const { userId, nickName, email }: userInfos = userInfo;
     const [newComment, setNewComment] = useState('');
     const [commentModify, setCommentModify] = useState(false);
+
+    console.log(newComment);
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -157,31 +162,42 @@ const PostViewer = () => {
                 {data !== '' ? (
                     <PostContentBox>
                         <PostContent>{parse(DOMPurify.sanitize(data.content))}</PostContent>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                alignItems: 'center',
+                            }}
+                        >
                             <div
                                 style={{
                                     border: '1px solid #EAEAEA',
-                                    display: 'inline-flex',
+                                    display: 'flex',
                                     borderRadius: '5px',
                                     margin: '1rem 0',
+                                    width: '15%',
+                                    justifyContent: 'center',
                                 }}
                             >
-                                <Button>
+                                <button
+                                    style={{ flexGrow: '1', border: 'none', backgroundColor: 'white', margin: '5px' }}
+                                >
                                     <AiOutlineDown />
-                                </Button>
+                                </button>
                                 <span
                                     style={{
                                         borderLeft: '1px solid #EAEAEA',
                                         borderRight: '1px solid #EAEAEA',
                                         padding: '0.5rem 1rem',
-                                        height: '100%',
                                     }}
                                 >
                                     0
                                 </span>
-                                <Button>
+                                <button
+                                    style={{ flexGrow: '1', border: 'none', backgroundColor: 'white', margin: '5px' }}
+                                >
                                     <AiOutlineUp />
-                                </Button>
+                                </button>
                             </div>
                         </div>
                     </PostContentBox>
@@ -239,21 +255,32 @@ const PostViewer = () => {
                                                     textAlign: 'end',
                                                     flexGrow: 1,
                                                     paddingRight: '1rem',
+                                                    display: 'flex',
+                                                    justifyContent: 'flex-end',
                                                 }}
                                             >
                                                 <span
-                                                    style={{ marginRight: '0.5rem', fontSize: '0.85rem' }}
+                                                    style={{
+                                                        marginRight: '0.5rem',
+                                                        fontSize: '1.5rem',
+                                                        backgroundColor: '#eaeaea',
+                                                        borderRadius: '5px',
+                                                    }}
                                                     onClick={changeCommentModify}
                                                 >
-                                                    수정
+                                                    <TiEdit />
                                                 </span>
                                                 <span
-                                                    style={{ fontSize: '0.85rem' }}
+                                                    style={{
+                                                        fontSize: '1.5rem',
+                                                        backgroundColor: '#eaeaea',
+                                                        borderRadius: '5px',
+                                                    }}
                                                     onClick={() => {
                                                         commentDelete(createdAt);
                                                     }}
                                                 >
-                                                    삭제
+                                                    <HiOutlineTrash />
                                                 </span>
                                             </div>
                                         ) : null}
@@ -265,7 +292,7 @@ const PostViewer = () => {
                                                     width: '100%',
                                                 }}
                                                 defaultValue={comment.content}
-                                                // onChange={handleChangeComment}
+                                                onChange={handleChangeComment}
                                             />
                                             <Button variant="outlined">취소</Button>
                                             <CustomBtn variant="contained" margin={'1rem'}>
