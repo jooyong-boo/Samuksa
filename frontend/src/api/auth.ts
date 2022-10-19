@@ -52,6 +52,7 @@ export const login = async ({ userId, passwd }: { userId: string; passwd: string
             return result;
         }
     } catch (err) {
+        console.log(err);
         return err;
     }
 };
