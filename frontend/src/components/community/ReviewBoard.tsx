@@ -2,14 +2,8 @@ import {
     Avatar,
     Button,
     createTheme,
-    FormControl,
-    IconButton,
-    Input,
-    InputAdornment,
-    List,
     Menu,
     MenuItem,
-    SelectChangeEvent,
     Stack,
     Table,
     TableBody,
@@ -160,31 +154,6 @@ const ReviewBoard = () => {
     const handleChangeSearchOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSearchOption(e.target.value);
     };
-
-    // useEffect(() => {
-    //     const readPost = localStorage.getItem('reviewReadPost');
-    //     const newPosts = postsRecoil.map((item: any) => {
-    //         if (readPost?.includes(item.id)) {
-    //             return Object.assign(
-    //                 {},
-    //                 item,
-    //                 { read: true },
-    //                 { nickName: RandomNickname() },
-    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-    //             );
-    //         } else {
-    //             return Object.assign(
-    //                 {},
-    //                 item,
-    //                 { nickName: RandomNickname() },
-    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-    //             );
-    //         }
-    //     });
-
-    //     setPosts(newPosts);
-    //     setUsePosts(newPosts);
-    // }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);

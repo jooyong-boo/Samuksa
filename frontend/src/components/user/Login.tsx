@@ -75,9 +75,9 @@ const Login = () => {
                     notifyError('서버와의 연결이 끊겼습니다.');
                 }
                 if (e.code === 'ERR_BAD_REQUEST') {
-                    if (e.response.data.message === 'ID REGISTERED') {
+                    if (e.response.data.message === '아이디가 없습니다') {
                         notifyError('존재하지 않는 아이디입니다.');
-                    } else if (e.response.data.message === 'PASSWORD NOT MATCH') {
+                    } else if (e.response.data.message === 'Unauthorized') {
                         notifyError(
                             <p>
                                 아이디 또는 비밀번호가 틀립니다.

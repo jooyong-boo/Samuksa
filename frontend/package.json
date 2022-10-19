@@ -27,6 +27,7 @@
         "@types/react-toastify": "^4.1.0",
         "@types/recoil": "^0.0.9",
         "@types/styled-components": "^5.1.26",
+        "@types/uuid": "^8.3.4",
         "awesome-typescript-loader": "^5.2.1",
         "axios": "^0.27.2",
         "browser-image-compression": "^2.0.0",
@@ -52,7 +53,7 @@
         "yarn": "^1.22.19"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "NODE_PATH=src react-scripts start",
         "build": "GENERATE_SOURCEMAP=false react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

@@ -447,9 +447,7 @@ const Header = () => {
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                     </UserIconButton>
                                 </Tooltip>
-                                <UserNickNameText>
-                                    {userInfo.nickName ? `${userInfo.nickName} 님` : ''}
-                                </UserNickNameText>
+                                {userInfo.nickName ? <UserNickNameText>{userInfo.nickName}</UserNickNameText> : null}
                                 <UserSelectMenu
                                     id="menu"
                                     anchorEl={anchorElUser}
