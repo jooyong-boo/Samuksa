@@ -18,18 +18,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getUserInfo } from '../../api/auth';
 import { getRandomNumber } from './PostViewer';
 import { getPostState } from '../../store/atom';
-
-const ITEM_HEIGHT = 45;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 100,
-        },
-    },
-};
-const totalBoard = ['리뷰게시판', 'TIP게시판'];
+import UserInfo from './PostEdidor/UserInfo';
+import BoardSelect from './PostEdidor/\bBoardSelect';
 
 interface userInfos {
     userId?: string;
@@ -77,7 +67,6 @@ const PostEditor = () => {
         const data = editorRef.current?.getInstance().getHTML();
         setContent(data);
     };
-    // console.log(title, content, board);
 
     // 임시저장 테스트중
     const handleTransientStorage = () => {
@@ -160,34 +149,10 @@ const PostEditor = () => {
         <Background>
             <EditorPaper elevation={0}>
                 <EditorTypography>글작성</EditorTypography>
-                <EditorUserInfoBox>
-                    {userInfo && (
-                        <>
-                            <UserAvatar src={userImage} />
-                            <UserTypography>{nickName}</UserTypography>
-                        </>
-                    )}
-                </EditorUserInfoBox>
+                <UserInfo />
                 <FormControl fullWidth>
                     <Typography>게시판</Typography>
-                    <BoardSelect
-                        labelId="board"
-                        // defaultValue="게시판을 선택해주세요"
-                        value={board}
-                        MenuProps={MenuProps}
-                        displayEmpty
-                        fullWidth
-                        renderValue={board !== '' ? undefined : () => '게시판을 선택해주세요'}
-                        onChange={(e) => {
-                            setBoard(String(e.target.value));
-                        }}
-                    >
-                        {totalBoard.map((val) => (
-                            <MenuItem key={val} value={val}>
-                                {val}
-                            </MenuItem>
-                        ))}
-                    </BoardSelect>
+                    <BoardSelect board={board} setBoard={setBoard} />
                     <Typography>제목</Typography>
                     <BoardTitle placeholder="제목을 입력해 주세요" value={title} onChange={onChangeTitle} />
                 </FormControl>
@@ -277,35 +242,6 @@ const EditorTypography = styled(Typography)`
     border-bottom: 1px solid #eaeaea;
     font-size: 1.4rem;
     font-weight: 600;
-`;
-
-const EditorUserInfoBox = styled.div`
-    display: flex;
-    align-items: center;
-    padding-top: 1rem;
-    margin-bottom: 0.5rem;
-`;
-
-const UserAvatar = styled(Avatar)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    vertical-align: middle;
-    width: 40px;
-    height: 40px;
-    margin-right: 0.3rem;
-`;
-
-const UserTypography = styled(Typography)`
-    font-size: 1.2rem;
-    font-weight: medium;
-`;
-
-const BoardSelect = styled(Select)`
-    background-color: white;
-    border-radius: 5px;
-    opacity: 0.8;
-    height: 3rem;
-    margin: 0.3rem 0 1rem 0;
 `;
 
 const BoardTitle = styled.input`

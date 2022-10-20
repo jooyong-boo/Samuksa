@@ -278,46 +278,6 @@ const PostCommentBox = styled.div`
     margin: 1rem 0;
 `;
 
-const CommentDiv = styled.div`
-    border-bottom: 1px solid #eaeaea;
-    &:last-child {
-        border-bottom: none;
-    }
-`;
-
-const PostCommentsInfo = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const CommentAvatar = styled(Avatar)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    vertical-align: middle;
-    width: 40px;
-    height: 40px;
-    margin-right: 0.5rem;
-`;
-
-const CommentUserInfoBox = styled.div`
-    margin: 1rem 0;
-`;
-
-interface CommentUserInfoTextProps {
-    color: string;
-    fontWeight?: string;
-}
-
-const CommentUserInfoText = styled(Typography)<CommentUserInfoTextProps>`
-    color: ${(props) => `${props.color}`};
-    font-weight: ${(props) => `${props.fontWeight}`};
-`;
-
-const CommentText = styled(Typography)`
-    color: rgb(55 65 81);
-    margin-bottom: 1rem;
-`;
-
 const BottomCommentBox = styled.div`
     margin: 1rem 0;
     display: flex;
@@ -329,9 +289,6 @@ const BottomCommentBox = styled.div`
 
 const UserCommentWrapper = styled.div`
     width: 100%;
-    /* border: 2px solid rgba(0, 0, 0, 0.1); */
-    /* border-radius: 5px; */
-    /* padding: 1rem; */
     margin-bottom: 1rem;
 `;
 
