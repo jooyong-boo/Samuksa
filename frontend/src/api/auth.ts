@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 type Register = {
-    id: string;
+    userId: string;
     password: string;
     nickName: string;
     email: string;
@@ -24,10 +24,10 @@ instance.interceptors.request.use((config) => {
     return config;
 });
 
-export const signUp = async ({ id, password, nickName, email }: Register) => {
+export const signUp = async ({ userId, password, nickName, email }: Register) => {
     try {
         const { data } = await instance.post('/signup', {
-            userId: id,
+            userId,
             nickName,
             password,
             email,
@@ -39,11 +39,11 @@ export const signUp = async ({ id, password, nickName, email }: Register) => {
     }
 };
 
-export const login = async ({ userId, passwd }: { userId: string; passwd: string }) => {
+export const login = async ({ userId, password }: { userId: string; password: string }) => {
     try {
         const result = await instance.post('/login', {
             userId,
-            password: passwd,
+            password,
         });
         console.log(result);
         if (result.status === 200) {
