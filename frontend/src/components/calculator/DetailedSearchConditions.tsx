@@ -25,19 +25,11 @@ import {
     selectFishState,
 } from '../../store/atom';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
+import { notifyError } from 'components/utils/notify';
 
 const DetailedSearchConditions = () => {
-    const notify = (text: string) =>
-        toast.warning(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-
     const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
     const [selectFish, setSelectFish] = useRecoilState<any[]>(selectFishState);
     const resetSelectFish = useResetRecoilState(selectFishState);
@@ -120,17 +112,17 @@ const DetailedSearchConditions = () => {
     const addCondition = () => {
         if (selectFish.length === 0) {
             // return alert('어종을 선택해주세요');
-            return notify('어종을 선택해주세요');
+            return notifyError('어종을 선택해주세요');
         } else if (amount === 0 && totalAmount > 0) {
-            return notify('분량을 선택해주세요');
+            return notifyError('분량을 선택해주세요');
         } else if (amount === 0 && selectCondition.length > 0) {
-            return notify('분량 부족');
+            return notifyError('분량 부족');
         } else if (farmStatus.length === 0) {
             // return alert('양식 여부를 체크해주세요');
-            return notify('양식 여부를 체크해주세요');
+            return notifyError('양식 여부를 체크해주세요');
         } else {
             selectCondition.some((item) => item.id === selectFish[0].fishInfoId)
-                ? notify('선택한 어종이 이미 있습니다.')
+                ? notifyError('선택한 어종이 이미 있습니다.')
                 : setSelectCondition([
                       ...selectCondition,
                       {
