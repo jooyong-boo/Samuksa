@@ -10,9 +10,8 @@ import Spinner from '../../components/assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { NavLink } from 'react-router-dom';
+import { notifySuccess } from 'components/utils/notify';
 
 interface loadingStats {
     loading: boolean;
@@ -20,24 +19,6 @@ interface loadingStats {
 }
 
 const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: React.ForwardedRef<HTMLDivElement>) => {
-    const notifyError = (text: ReactElement | string) => {
-        dismissAll();
-        toast.error(text, {
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: true,
-        });
-    };
-    const notifySuccess = (text: ReactElement | string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const [result, setResult] = useRecoilState<any[]>(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
     const [selectResult, setSelectResult] = useState<null | any>(null);
