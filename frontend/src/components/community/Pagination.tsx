@@ -83,7 +83,6 @@ const Pagination = ({ total, limit, postPage, setPostPage }: pagination) => {
             <div style={{ margin: '0 1rem' }}>
                 {currentGroup &&
                     currentGroup.map((btn: number) => {
-                        // console.log(currentGroup);
                         return (
                             <Button
                                 key={btn}
@@ -114,11 +113,11 @@ const PaginationList = styled(List)`
 
 const Button = styled.button`
     border: none;
-    /* padding: 0px 0.4rem; */
-    margin: 0 0.4rem;
+    padding: 0px 0.5rem;
+    /* margin: 0 0.4rem; */
     background: white;
     color: #5a5a5a;
-    font-size: 1rem;
+    font-size: 1.1rem;
 
     &:hover {
         color: ${({ theme }) => theme.colors.main};
