@@ -1,39 +1,22 @@
 import { Button, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, reviewPostPageState } from '../../store/atom';
-import { userInfoState } from '../../store/user';
 import Pagination from './Pagination';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
 import MobileBoard from './FreeBoard/MobileBoard';
 import SearchMenu from './FreeBoard/SearchMenu';
 import SortMenu from './FreeBoard/SortMenu';
 import TableBoard from './FreeBoard/TableBoard';
+import WriteBtn from './FreeBoard/WriteBtn';
 
 const ReviewBoard = () => {
-    const notifyError = (text: string) => {
-        dismissAll();
-        toast.error(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
-    const navigate = useNavigate();
     const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState<number>(1);
-    const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState);
+    const [postPage, setPostPage] = useRecoilState<number>(reviewPostPageState); //
     const offset = (postPage - 1) * limit;
-    const userInfo = useRecoilValue<any>(userInfoState);
     const postsRecoil = useRecoilValue<any[]>(getPostState);
     const [posts, setPosts] = useState(postsRecoil);
     const [usePosts, setUsePosts] = useState<any[]>(postsRecoil);
@@ -42,15 +25,6 @@ const ReviewBoard = () => {
 
     const openSearch = () => {
         setOpen(!open);
-    };
-
-    const goWriting = () => {
-        if (Object.keys(userInfo).length) {
-            navigate('/write', { state: '/review' });
-        } else {
-            navigate('/login');
-            notifyError('글작성을 하려면 로그인해야합니다.');
-        }
     };
 
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -65,10 +39,7 @@ const ReviewBoard = () => {
             <BoardContainer>
                 <BoardTopWrapper>
                     {/* <BoardTitleText>리뷰게시판</BoardTitleText> */}
-                    <WriteBtn variant="contained" onClick={goWriting}>
-                        <StyleCreateIcon />
-                        글쓰기
-                    </WriteBtn>
+                    <WriteBtn />
                     <div>
                         <SearchBtn variant="outlined" onClick={openSearch}>
                             <StyleSearchIcon />
@@ -94,7 +65,7 @@ const ReviewBoard = () => {
                         />
                     </div>
                 </BoardTopWrapper>
-                {open ? <SearchMenu posts={posts} notifyError={notifyError} setUsePosts={setUsePosts} /> : null}
+                {open ? <SearchMenu posts={posts} setUsePosts={setUsePosts} /> : null}
                 <TableBoard usePosts={usePosts} offset={offset} limit={limit} />
                 <MobileBoard usePosts={usePosts} offset={offset} limit={limit} />
                 <PaginationStack>
@@ -135,7 +106,8 @@ const Background = styled.div`
 `;
 
 const BoardContainer = styled.div`
-    width: 80%;
+    width: 100%;
+    max-width: 1200px;
     text-align: center;
     overflow: auto;
 `;
@@ -152,10 +124,12 @@ const BoardTopWrapper = styled.div`
     }
 `;
 
-const WriteBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
+const SearchBtn = styled(Button)`
+    background-color: white;
+    color: ${({ theme }) => theme.colors.main};
+    margin-right: 0.3rem;
+    border-color: #a7a7a7;
     font-weight: 700;
-    color: white;
     box-shadow: none;
     width: 6rem;
     height: 2.5rem;
@@ -166,20 +140,9 @@ const WriteBtn = styled(Button)`
     }
 `;
 
-const SearchBtn = styled(WriteBtn)`
-    background-color: white;
-    color: ${({ theme }) => theme.colors.main};
-    margin-right: 0.3rem;
-    border-color: #a7a7a7;
-`;
-
 const SortBtn = styled(SearchBtn)`
     margin-right: 0;
-`;
-
-const StyleCreateIcon = styled(CreateIcon)`
-    margin-right: 0.4rem;
-    width: 1.3rem;
+    width: auto;
 `;
 
 const StyleSearchIcon = styled(SearchIcon)`
@@ -195,6 +158,7 @@ const SortTypography = styled(Typography)`
     font-size: 0.8rem;
     color: #374151;
     font-weight: 500;
+    margin-left: 0.1rem;
 `;
 
 const PaginationStack = styled(Stack)`

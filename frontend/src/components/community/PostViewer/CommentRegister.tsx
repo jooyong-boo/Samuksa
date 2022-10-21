@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Button, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { notifyError, notifySuccess } from 'components/utils/notify';
 
 interface UserInfoProps {
     userId?: string;
@@ -13,11 +14,10 @@ interface CommentProps {
     comments: any[];
     setComments: Dispatch<SetStateAction<any>>;
     userInfo: UserInfoProps;
-    notifySuccess: (text: string) => void;
     loginStatus: boolean;
 }
 
-const CommentRegister = ({ comments, setComments, userInfo, notifySuccess, loginStatus }: CommentProps) => {
+const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: CommentProps) => {
     const [newComment, setNewComment] = useState('');
     const { userId, nickName, email } = userInfo;
 
@@ -42,9 +42,9 @@ const CommentRegister = ({ comments, setComments, userInfo, notifySuccess, login
                 setNewComment('');
                 notifySuccess('등록 성공');
             } else if (!userInfo) {
-                notifySuccess('로그인 해주세요');
+                notifyError('로그인 해주세요');
             } else if (!newComment) {
-                notifySuccess('댓글을 작성해주세요');
+                notifyError('댓글을 작성해주세요');
             }
         }
     };

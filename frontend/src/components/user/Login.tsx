@@ -1,58 +1,41 @@
-import { Button, Link, TextField, Typography } from '@mui/material';
-import React, { ReactElement } from 'react';
+import { Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getUserInfo, login } from '../../api/auth';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userIdState, userInfoState } from '../../store/user';
+import { userInfoState, userLoginFormState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
+import { notifyError, notifySuccess } from 'components/utils/notify';
+import InputWithLabel from './Login/InputWithLabel';
 
 const Login = () => {
-    const notifyError = (text: ReactElement | string) => {
-        dismissAll();
-        toast.error(text, {
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: true,
-        });
-    };
-    const notifySuccess = (text: ReactElement | string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const navigate = useNavigate();
 
     const userInfo = useSetRecoilState(userInfoState);
 
-    const [userId, setUserId] = useRecoilState(userIdState);
-    const [passwd, setPasswd] = useState('');
+    const [userForm, setUserForm] = useRecoilState(userLoginFormState);
+    const { userId, password } = userForm;
     const [idSaveStatus, setIdSaveStatus] = useState<boolean>(false);
 
     const getLogin = async () => {
-        if (userId === '') {
+        if (userForm.userId === '') {
             notifyError('아이디를 입력해주세요');
             return;
-        } else if (passwd === '') {
+        } else if (userForm.password === '') {
             notifyError('비밀번호를 입력해주세요');
             return;
         }
-        login({ userId, passwd })
+        let { userId, password } = userForm;
+        login({ userId, password })
             .then((res) => {
                 if (res.status !== 200) {
                     throw res;
                 }
                 if (res.status === 200) {
                     navigate('/');
+                    setUserForm({ ...userForm, password: '' });
                 }
                 if (idSaveStatus) {
                     localStorage.setItem('id', userId);
@@ -70,7 +53,7 @@ const Login = () => {
                 });
             })
             .catch((e) => {
-                setPasswd('');
+                setUserForm({ ...userForm, password: '' });
                 if (e.code === 'ERR_NETWORK') {
                     notifyError('서버와의 연결이 끊겼습니다.');
                 }
@@ -89,17 +72,10 @@ const Login = () => {
             });
     };
 
-    const handleChangeUserId = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUserId(e.target.value);
-    };
-
-    const handleChangePasswd = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPasswd(e.target.value);
-    };
-
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIdSaveStatus(e.target.checked);
         if (e.target.checked) {
+            let { userId } = userForm;
             localStorage.setItem('id', userId);
         } else {
             localStorage.removeItem('id');
@@ -114,72 +90,54 @@ const Login = () => {
 
     useEffect(() => {
         if (localStorage.getItem('id')) {
-            setUserId(localStorage.getItem('id') || '');
+            setUserForm({ ...userForm, userId: localStorage.getItem('id') || '' });
             setIdSaveStatus(true);
         }
     }, []);
 
     return (
-        <>
-            <Background>
-                <Card>
-                    <LoginTitle>로그인</LoginTitle>
-                    <LoginSubTitle>원활한 서비스 이용을 위해 로그인해주세요.</LoginSubTitle>
-                    <LoginBox>
-                        <>
-                            <CustomTypography>아이디</CustomTypography>
-                            <TextField
-                                id="id"
-                                variant="outlined"
-                                size="small"
-                                placeholder="아이디 입력"
-                                fullWidth
-                                onChange={handleChangeUserId}
-                                value={userId}
-                                onKeyPress={(e) => {
-                                    handleEnterLogin(e);
-                                }}
-                            />
-                        </>
-                        <PasswdDiv>
-                            <CustomTypography>비밀번호</CustomTypography>
-                            <TextField
-                                id="password"
-                                variant="outlined"
-                                type="password"
-                                size="small"
-                                placeholder="비밀번호 입력"
-                                fullWidth
-                                autoComplete="off"
-                                onChange={handleChangePasswd}
-                                value={passwd}
-                                onKeyPress={(e) => {
-                                    handleEnterLogin(e);
-                                }}
-                            />
-                        </PasswdDiv>
-                        <IdSaveAndLoginBox>
-                            <SaveIdTypography>
-                                <SaveIdCheckbox type="checkbox" checked={idSaveStatus} onChange={handleCheckbox} />
-                                아이디 저장
-                            </SaveIdTypography>
-                            <CustomNavLink to={`/register`}>계정찾기</CustomNavLink>
-                        </IdSaveAndLoginBox>
-                        <LoginBtnDiv>
-                            <LoginBtn variant="contained" type="submit" onClick={getLogin}>
-                                로그인
-                            </LoginBtn>
-                            <Typography>
-                                <AskingSpan>아직 회원이 아니신가요?</AskingSpan>
-                                <CustomNavLink to={`/register`}>회원가입</CustomNavLink>
-                            </Typography>
-                        </LoginBtnDiv>
-                        <SNSTypography>SNS로그인</SNSTypography>
-                        <KakaoLogin />
-                    </LoginBox>
-                </Card>
-            </Background>
-        </>
+        <Background>
+            <Card>
+                <LoginTitle>로그인</LoginTitle>
+                <LoginSubTitle>원활한 서비스 이용을 위해 로그인해주세요.</LoginSubTitle>
+                <LoginBox>
+                    <InputWithLabel
+                        label="아이디"
+                        id="userId"
+                        type="string"
+                        value={userId}
+                        handleEnterLogin={handleEnterLogin}
+                    />
+                    <PasswordDiv>
+                        <InputWithLabel
+                            label="비밀번호"
+                            id="password"
+                            type="password"
+                            value={password}
+                            handleEnterLogin={handleEnterLogin}
+                        />
+                    </PasswordDiv>
+                    <IdSaveAndLoginBox>
+                        <SaveIdTypography>
+                            <SaveIdCheckbox type="checkbox" checked={idSaveStatus} onChange={handleCheckbox} />
+                            아이디 저장
+                        </SaveIdTypography>
+                        <CustomNavLink to={`/register`}>계정찾기</CustomNavLink>
+                    </IdSaveAndLoginBox>
+                    <LoginBtnDiv>
+                        <LoginBtn variant="contained" type="submit" onClick={getLogin}>
+                            로그인
+                        </LoginBtn>
+                        <Typography>
+                            <AskingSpan>아직 회원이 아니신가요?</AskingSpan>
+                            <CustomNavLink to={`/register`}>회원가입</CustomNavLink>
+                        </Typography>
+                    </LoginBtnDiv>
+                    <SNSTypography>SNS로그인</SNSTypography>
+                    <KakaoLogin />
+                </LoginBox>
+            </Card>
+        </Background>
     );
 };
 
@@ -232,20 +190,11 @@ const LoginSubTitle = styled(Typography)`
 const LoginBox = styled.div`
     width: 60%;
     height: 70%;
-    padding-top: 1.7rem;
     margin: auto;
 `;
 
-const PasswdDiv = styled.div`
+const PasswordDiv = styled.div`
     padding-top: 1rem;
-`;
-
-const CustomTypography = styled(Typography)`
-    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '1rem')};
-    color: ${(props) => (props.color ? `${props.color}` : 'black')};
-    font-weight: bold;
-    margin-bottom: 0.3rem;
-    text-align: left;
 `;
 
 const IdSaveAndLoginBox = styled.div`

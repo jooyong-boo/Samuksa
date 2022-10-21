@@ -12,6 +12,14 @@ export const userIdState = atom({
     default: '',
 });
 
+export const userLoginFormState = atom({
+    key: `userLoginFormState/${v1()}`,
+    default: {
+        userId: '',
+        password: '',
+    },
+});
+
 export const userInfoState = atom({
     key: `userInfoState/${v1()}`,
     default: {},

@@ -11,14 +11,13 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
+import { notifyError, notifySuccess } from './utils/notify';
 
 interface userInfoProps {
     userId?: string;
@@ -29,24 +28,6 @@ interface userInfoProps {
 }
 
 const Header = () => {
-    const notify = (text: ReactElement | string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const notifyError = (text: ReactElement | string) => {
-        dismissAll();
-        toast.error(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -150,7 +131,7 @@ const Header = () => {
                     setUserInfo({});
                     setUserIdState('');
                     setImage('/broken-image.jpg');
-                    notify('다음에 또 만나요!');
+                    notifySuccess('다음에 또 만나요!');
                 }
             });
             localStorage.removeItem('jwtToken');
@@ -160,7 +141,7 @@ const Header = () => {
             setUserInfo({});
             setUserIdState('');
             setImage('/broken-image.jpg');
-            notify('다음에 또 만나요!');
+            notifySuccess('다음에 또 만나요!');
         }
     };
 

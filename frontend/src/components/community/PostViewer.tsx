@@ -11,8 +11,6 @@ import { loginStatusState, userImageState, userInfoState } from '../../store/use
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../utils/TimeForToday';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { RandomNickname } from '../utils/RandomNickname';
 import { getCommentById, getPostsById } from '../../api/post';
@@ -27,16 +25,6 @@ interface userInfos {
 }
 
 const PostViewer = () => {
-    const notifySuccess = (text: string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const { id } = useParams<{ id?: string }>();
     const navigate = useNavigate();
     const location = useLocation();
@@ -64,15 +52,18 @@ const PostViewer = () => {
         commentRef.current?.scrollIntoView({ block: 'start' });
     };
 
-    const handlePrevPost = () => {
-        if (Number(params.id) - 1 > 0) {
-            navigate(`/board/${location.pathname.split('/')[2]}/post/${Number(params.id) - 1}`);
-        }
-    };
-
-    const handleNextPost = () => {
-        if (Number(params.id) < postList.length) {
-            navigate(`/board/${location.pathname.split('/')[2]}/post/${Number(params.id) + 1}`);
+    const handleMovePost = (direction: string) => {
+        switch (direction) {
+            case 'prev':
+                if (Number(params.id) - 1 > 0) {
+                    navigate(`/board/${location.pathname.split('/')[2]}/post/${Number(params.id) - 1}`);
+                }
+                break;
+            case 'next':
+                if (Number(params.id) < postList.length) {
+                    navigate(`/board/${location.pathname.split('/')[2]}/post/${Number(params.id) + 1}`);
+                }
+                break;
         }
     };
 
@@ -82,11 +73,8 @@ const PostViewer = () => {
     }, [id]);
 
     const goList = () => {
-        if (location.pathname.includes('/tip')) {
-            navigate('/board/tip');
-        } else if (location.pathname.includes('/review')) {
-            navigate('/board/review');
-        }
+        const page = location.pathname.split('/')[2];
+        navigate(`/board/${page}`);
     };
 
     return (
@@ -137,7 +125,6 @@ const PostViewer = () => {
                                 setComments={setComments}
                                 comments={comments}
                                 userInfo={userInfo}
-                                notifySuccess={notifySuccess}
                                 loginStatus={loginStatus}
                             />
                         </CommentBox>
@@ -157,14 +144,25 @@ const PostViewer = () => {
                         })}
                 </PostCommentBox>
                 <BottomCommentBox>
-                    <CustomBtn variant="contained" margin={'1rem 0'} onClick={goList}>
+                    <CustomBtn variant="contained" onClick={goList}>
                         목록
                     </CustomBtn>
                     <PageMoveBox>
-                        <CustomBtn variant="contained" margin={'1rem'} onClick={handlePrevPost}>
+                        <CustomBtn
+                            variant="contained"
+                            margin={'0 1rem'}
+                            onClick={() => {
+                                handleMovePost('prev');
+                            }}
+                        >
                             이전글
                         </CustomBtn>
-                        <CustomBtn variant="contained" margin={'1rem 0'} onClick={handleNextPost}>
+                        <CustomBtn
+                            variant="contained"
+                            onClick={() => {
+                                handleMovePost('next');
+                            }}
+                        >
                             다음글
                         </CustomBtn>
                     </PageMoveBox>
@@ -346,4 +344,5 @@ const PageMoveBox = styled.div`
     display: flex;
     width: 100%;
     justify-content: center;
+    margin: 1rem;
 `;

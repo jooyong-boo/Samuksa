@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { notifyError } from 'components/utils/notify';
 
 interface SearchMenuProps {
     posts: any[];
-    notifyError: (text: string) => void;
     setUsePosts: Dispatch<SetStateAction<any>>;
 }
 
-const SearchMenu = ({ posts, notifyError, setUsePosts }: SearchMenuProps) => {
+const SearchMenu = ({ posts, setUsePosts }: SearchMenuProps) => {
     const [searchOption, setSearchOption] = useState('제목');
     const [searchPosts, setSearchPosts] = useState('');
 

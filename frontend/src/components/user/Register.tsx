@@ -5,36 +5,18 @@ import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { signUp, checkDuplicate, requestCheckEmail } from '../../api/auth';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useSetRecoilState } from 'recoil';
-import { userIdState } from '../../store/user';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userIdState, userLoginFormState } from '../../store/user';
 import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 import { FcCheckmark } from 'react-icons/fc';
+import { notifyError, notifySuccess } from 'components/utils/notify';
 
 const Register = () => {
     const navigate = useNavigate();
-    const notifyError = (text: ReactElement | string) => {
-        dismissAll();
-        toast.warning(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const notifySuccess = (text: ReactElement | string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
 
-    const setUserId = useSetRecoilState(userIdState);
+    const [userForm, setUserForm] = useRecoilState(userLoginFormState);
 
-    const [id, setId] = useState('');
+    const [userId, setUserId] = useState('');
     const [checkId, setCheckId] = useState(false);
     const [overlappingId, setOverlappingId] = useState(true);
 
@@ -42,16 +24,21 @@ const Register = () => {
     const [checkNickName, setCheckNickName] = useState(false);
     const [overlappingNickName, setOverlappingNickName] = useState(true);
 
-    const [password, setPassword] = useState(''); // 비밀번호
+    // 비밀번호
+    const [password, setPassword] = useState('');
     const [checkPw, setCheckPw] = useState(false);
-    const [passwordConfirm, setPasswordConfirm] = useState(''); //비밀번호 확인
+
+    //비밀번호 확인
+    const [passwordConfirm, setPasswordConfirm] = useState('');
     const [checkPwConfirm, setCheckPwConfirm] = useState(false);
+
     const [passwordView, setPasswordView] = useState(false);
 
     // 이메일
     const [email, setEmail] = useState('');
     const [checkEmail, setCheckEmail] = useState(true);
     const [viewAuthNum, setViewAuthNum] = useState(false);
+
     // 이메일 인증번호
     const [authNum, setAuthNum] = useState('');
     const [checkAuthNum, setCheckAuthNum] = useState(true);
@@ -126,7 +113,7 @@ const Register = () => {
     };
 
     const checkOverlappingId = () => {
-        checkDuplicate(id, 'userId').then((res) => {
+        checkDuplicate(userId, 'userId').then((res) => {
             console.log(res);
             if (res === 'success') {
                 setOverlappingId(false);
@@ -196,19 +183,20 @@ const Register = () => {
     };
 
     const onSignUp = () => {
-        if (id && nickName && password && email) {
+        if (userId && nickName && password && email) {
             if (
-                (checkId && checkNickName && checkPw && checkPwConfirm) === false &&
+                (checkId && checkPw && checkPwConfirm) === false &&
                 checkEmail === false &&
-                checkAuthNum === false
+                checkAuthNum === false &&
+                checkNickName === true
             ) {
-                signUp({ id, password, nickName, email })
+                signUp({ userId, password, nickName, email })
                     .then(() => {
                         navigate('/login');
                     })
                     .then(() => {
-                        localStorage.setItem('id', id);
-                        setUserId(id);
+                        localStorage.setItem('id', userId);
+                        setUserForm({ ...userForm, userId });
                         notifySuccess('회원가입을 축하합니다!');
                     });
             } else {
@@ -225,7 +213,7 @@ const Register = () => {
 
     useEffect(() => {
         setOverlappingId(true);
-    }, [id]);
+    }, [userId]);
 
     useEffect(() => {
         setOverlappingNickName(true);
@@ -269,7 +257,7 @@ const Register = () => {
                                     autoComplete="off"
                                     color={checkId ? 'primary' : 'error'}
                                     onChange={(e) => {
-                                        onChange(setId, 'id', e);
+                                        onChange(setUserId, 'id', e);
                                     }}
                                 />
                                 <CustomBtn variant="contained" disabled={!checkId} onClick={checkOverlappingId}>
@@ -305,7 +293,7 @@ const Register = () => {
                                     <CustomTypography>비밀번호</CustomTypography>
                                     {checkPwConfirm ? <FcCheckmark /> : null}
                                 </div>
-                                <TextField
+                                <RegisterTextField
                                     id="password"
                                     variant="outlined"
                                     size="small"
@@ -320,7 +308,7 @@ const Register = () => {
                                 />
                             </InputBox>
                             <InputBox paddingTop={'0.5rem'} display={'block'}>
-                                <TextField
+                                <RegisterTextField
                                     id="passwordConfirm"
                                     variant="outlined"
                                     size="small"
@@ -392,12 +380,10 @@ const Register = () => {
                             >
                                 회원가입
                             </RegisterBtn>
-                            <>
-                                <Typography>
-                                    <AskingSpan>이미 회원이신가요?</AskingSpan>
-                                    <CustomNavLink to={`/login`}>로그인</CustomNavLink>
-                                </Typography>
-                            </>
+                            <Typography>
+                                <AskingSpan>이미 회원이신가요?</AskingSpan>
+                                <CustomNavLink to={`/login`}>로그인</CustomNavLink>
+                            </Typography>
                         </div>
                     </RegisterContainer>
                 </Card>
