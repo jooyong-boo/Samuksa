@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonGroup, FormControl, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
+import { Button, FormControl, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -13,13 +13,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { getUserInfo } from '../../api/auth';
 import { getRandomNumber } from './PostViewer';
 import { getPostState } from '../../store/atom';
-import UserInfo from './PostEdidor/UserInfo';
-import BoardSelect from './PostEdidor/\bBoardSelect';
+import UserInfo from './PostEditor/UserInfo';
+import BoardSelect from './PostEditor/BoardSelect';
+import { notifySuccess } from 'components/utils/notify';
 
 interface userInfos {
     userId?: string;
@@ -28,16 +26,6 @@ interface userInfos {
 }
 
 const PostEditor = () => {
-    const notify = (text: string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1500,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const navigate = useNavigate();
     const editorRef: any = useRef(null);
     const [title, setTitle] = useState('');
@@ -81,7 +69,7 @@ const PostEditor = () => {
             if (window.confirm('이미 임시저장한 글이 있습니다, 새로 저장할까요?')) {
                 setTransientStorage(data);
                 localStorage.setItem('transientStorage', JSON.stringify(data));
-                notify('임시저장 완료');
+                notifySuccess('임시저장 완료');
                 return;
             } else {
                 return;
@@ -89,7 +77,7 @@ const PostEditor = () => {
         } else {
             localStorage.setItem('transientStorage', JSON.stringify(data));
             setTransientStorage(data);
-            notify('임시저장 완료');
+            notifySuccess('임시저장 완료');
         }
     };
 
@@ -98,7 +86,7 @@ const PostEditor = () => {
             if (window.confirm('임시저장 글을 삭제할까요?')) {
                 localStorage.removeItem('transientStorage');
                 setTransientStorage([]);
-                notify('삭제완료');
+                notifySuccess('삭제완료');
             }
         }
     };
@@ -177,13 +165,7 @@ const PostEditor = () => {
                     language="ko-KR"
                 />
                 <ButtonBox>
-                    <SubmitBtn variant="contained" onClick={onSave}>
-                        등록
-                    </SubmitBtn>
                     {transientStorage.length ? (
-                        // <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
-                        //     <Button onClick={transientStorage}>임시저장</Button>
-                        // </ButtonGroup>
                         <CuntomBtn variant="outlined" margin={'0 0.5rem'} onClick={handleDeleteTransientStorage}>
                             임시저장 삭제
                         </CuntomBtn>
@@ -192,8 +174,11 @@ const PostEditor = () => {
                             임시저장
                         </CuntomBtn>
                     )}
-                    <CuntomBtn variant="outlined" onClick={goBack}>
+                    <CuntomBtn variant="outlined" margin={'0 0.5rem 0 0'} onClick={goBack}>
                         취소
+                    </CuntomBtn>
+                    <CuntomBtn variant="contained" onClick={onSave}>
+                        등록
                     </CuntomBtn>
                 </ButtonBox>
             </EditorPaper>
@@ -208,11 +193,6 @@ const Background = styled.div`
     width: 100vw;
     height: 100vh;
     padding-top: 70px;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
     overflow: hidden;
     margin: auto;
 `;
@@ -238,7 +218,7 @@ const EditorPaper = styled(Paper)`
 
 const EditorTypography = styled(Typography)`
     color: #575757;
-    padding: 0px 0px 13px 19px;
+    padding: 0px 0px 13px 0px;
     border-bottom: 1px solid #eaeaea;
     font-size: 1.4rem;
     font-weight: 600;
@@ -253,21 +233,10 @@ const BoardTitle = styled.input`
 `;
 
 const ButtonBox = styled.div`
-    width: 99%;
+    width: 100%;
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem;
-`;
-
-const SubmitBtn = styled(Button)`
-    width: 7rem;
-    height: 3rem;
-    box-shadow: none;
-    background-color: ${({ theme }) => theme.colors.main};
-    font-weight: 700;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 interface CustomBtnProps {
@@ -278,4 +247,9 @@ const CuntomBtn = styled(Button)<CustomBtnProps>`
     width: 7rem;
     height: 3rem;
     margin: ${(props) => `${props.margin}`};
+    box-shadow: none;
+    font-weight: 600;
+    &:hover {
+        box-shadow: none;
+    }
 `;
