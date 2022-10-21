@@ -4,10 +4,9 @@ import styled from 'styled-components';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import SearchResults from './SearchResults';
 import { useState } from 'react';
+import { notifyError } from 'components/utils/notify';
 
 interface amount {
     setTotalAmount: React.Dispatch<React.SetStateAction<number>>;
@@ -16,16 +15,6 @@ interface amount {
 }
 
 const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amount) => {
-    const notify = (text: ReactElement | string) => {
-        dismissAll();
-        toast.warning(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const contactRef = useRef<HTMLDivElement>(null);
 
     const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
@@ -45,7 +34,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         e.preventDefault();
         if (selectCondition.length === 0) {
-            notify('선택한 조건이 없습니다.');
+            notifyError('선택한 조건이 없습니다.');
         } else {
             setLoading(true);
             getFishRecommendData({ personNum, money, area })
@@ -63,7 +52,7 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                 })
                 .catch((e) => {
                     setLoading(false);
-                    notify(
+                    notifyError(
                         <p>
                             찾을 수 있는 조합이 없습니다.
                             <br /> 조건을 다시 정해주세요.
@@ -118,7 +107,6 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                                             >
                                                 조건 삭제
                                             </DeleteConditionBtn>
-                                            <ToastContainer />
                                         </CardActions>
                                     </SelectedConditionListBox>
                                 </ListItem>
