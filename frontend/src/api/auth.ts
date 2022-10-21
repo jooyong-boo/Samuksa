@@ -1,8 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { stubString } from 'lodash';
 
 type Register = {
-    id: string;
+    userId: string;
     password: string;
     nickName: string;
     email: string;
@@ -19,101 +18,82 @@ instance.interceptors.request.use((config) => {
     if (token) {
         config.headers = {
             ...config.headers,
-            'X-AUTH-TOKEN': token,
+            Authorization: `Bearer ${token}`,
         };
     }
     return config;
 });
 
-export const signUp = async ({ id, password, nickName, email }: Register) => {
+export const signUp = async ({ userId, password, nickName, email }: Register) => {
     try {
-        const { data } = await instance.post('/signup', null, {
-            params: {
-                userId: id,
-                userName: nickName,
-                passwd: password,
-                userEmail: email,
-            },
+        const { data } = await instance.post('/signup', {
+            userId,
+            nickName,
+            password,
+            email,
         });
+        console.log(data);
         return data;
     } catch (err) {
         return err;
     }
 };
 
-export const login = async ({ userId, passwd }: { userId: string; passwd: string }) => {
+export const login = async ({ userId, password }: { userId: string; password: string }) => {
     try {
-        const result = await instance.post('/user/login', null, {
-            params: {
-                userId: userId,
-                passwd: passwd,
-            },
+        const result = await instance.post('/login', {
+            userId,
+            password,
         });
-        if (result.status === 201) {
-            localStorage.setItem('jwtToken', result.data.accessToken);
-            localStorage.setItem('refreshToken', result.data.refreshToken);
+        console.log(result);
+        if (result.status === 200) {
+            localStorage.setItem('jwtToken', result.headers[`access-token`]);
+            localStorage.setItem('refreshToken', result.headers[`refresh-token`]);
             return result;
         }
-    } catch (err) {
-        return err;
-    }
-};
-
-export const logout = async ({ AToken }: { AToken: string }) => {
-    try {
-        const result = await instance.delete('/user/login', {
-            params: {
-                'A-Token': AToken,
-            },
-        });
     } catch (err) {
         console.log(err);
         return err;
     }
 };
 
-export const checkIdAxios = async ({ id }: { id: string }) => {
+export const logout = async (accessToken: string) => {
     try {
-        const { data } = await instance.get('/signup/existence-id', {
-            params: { userId: id },
-        });
-        return data;
-    } catch (err) {
-        console.log(err.response);
-    }
-};
-
-export const checkNickNameAxios = async ({ nickName }: { nickName: string }) => {
-    try {
-        const { data } = await instance.get('/signup/existence-name', {
-            params: { userName: nickName },
-        });
-        return data;
-    } catch (err) {
-        console.log(err.response);
-    }
-};
-
-export const checkEmailAxios = async ({ email }: { email: string }) => {
-    try {
-        const data = await instance.post('/signup/message', null, {
-            params: {
-                userEmail: email,
+        const result = await instance.delete('/login/jwt', {
+            data: {
+                accessToken,
             },
         });
-        return data;
+        console.log(result);
+        return result;
     } catch (err) {
-        console.log(err.response);
+        console.log(err);
+        return err;
     }
 };
 
-export const checkEmailAuthAxios = async ({ authNum, email }: { authNum: string; email: string }) => {
+// 중복 확인
+export const checkDuplicate = async (info: string, check: string) => {
     try {
-        const data = await instance.post('/signup/message-auth', null, {
+        const { data } = await instance.get('/signup/existence-info', {
             params: {
-                Key: authNum,
-                userEmail: email,
+                [`${check}`]: info,
             },
+        });
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err.response);
+        return err.response.data;
+    }
+};
+
+// 이메일 인증, 체크
+export const requestCheckEmail = async (email: string, checkEmail: string, authNum?: string, checkAuthNum?: string) => {
+    try {
+        const data = await instance.post('/signup/message', {
+            [`${checkEmail}`]: email,
+            [`${checkAuthNum}`]: authNum,
         });
         return data;
     } catch (err) {
@@ -121,6 +101,7 @@ export const checkEmailAuthAxios = async ({ authNum, email }: { authNum: string;
     }
 };
 
+//유저정보
 export const getUserInfo = async () => {
     try {
         const result = await instance.get('/user/user-info');
@@ -134,6 +115,7 @@ export const getUserInfo = async () => {
     }
 };
 
+// 회원 탈퇴
 export const getWithdrawal = async (userId: string, passwd: string) => {
     try {
         const { data } = await instance.delete('/user/user-info', {
@@ -147,14 +129,12 @@ export const getWithdrawal = async (userId: string, passwd: string) => {
         console.log(e);
     }
 };
-
-export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; RToken: string }) => {
+// 토큰 재발급
+export const getTokenReissuance = async (accessToken: string, refreshToken: string) => {
     try {
-        const result = await instance.post('/user/refresh-token', null, {
-            params: {
-                'A-Token': AToken,
-                'R-Token': RToken,
-            },
+        const result = await instance.post('/login/refresh-token', {
+            accessToken,
+            refreshToken,
         });
         // console.log(result);
         if (result.status === 200) {
@@ -162,5 +142,36 @@ export const getTokenReissuance = async ({ AToken, RToken }: { AToken: string; R
         }
     } catch (err) {
         return err;
+    }
+};
+// 유저 이미지
+export const changeUserImage = async (formData: FormData) => {
+    try {
+        const result = await instance.post(
+            '/user/upload-image',
+            {
+                formData,
+            },
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        );
+        console.log(result);
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+// 프로필 정보 변경
+export const changeUserInfo = async (change: string, info: string) => {
+    try {
+        const result = await instance.patch('/user/user-info', {
+            [`${change}`]: info,
+        });
+        return result;
+    } catch (err) {
+        console.log(err);
     }
 };

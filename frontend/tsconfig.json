@@ -13,7 +13,8 @@
         "noImplicitAny": true,
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "lib": ["dom", "dom.iterable"]
+        "lib": ["dom", "dom.iterable"],
+        "baseUrl": "./src"
     },
     "types": ["react/next", "react-dom/next"],
     "include": ["./src/"]

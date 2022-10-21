@@ -11,42 +11,23 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
+import { notifyError, notifySuccess } from './utils/notify';
 
 interface userInfoProps {
-    passWd?: null;
-    userEmail?: string;
     userId?: string;
+    nickName?: string;
+    email?: string;
+    profileImage?: string;
     userIdx?: number;
-    userNickName?: string;
 }
 
 const Header = () => {
-    const notify = (text: ReactElement | string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const notifyError = (text: ReactElement | string) => {
-        dismissAll();
-        toast.error(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -141,7 +122,18 @@ const Header = () => {
     const handleLogout = (name: string) => {
         if (name === '로그아웃') {
             const AToken = localStorage.getItem('jwtToken') || '';
-            logout({ AToken });
+            logout(AToken).then((res) => {
+                if (res.status === 200) {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('kakaoAuth');
+                    navigate('/');
+                    setUserInfo({});
+                    setUserIdState('');
+                    setImage('/broken-image.jpg');
+                    notifySuccess('다음에 또 만나요!');
+                }
+            });
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('kakaoAuth');
@@ -149,7 +141,7 @@ const Header = () => {
             setUserInfo({});
             setUserIdState('');
             setImage('/broken-image.jpg');
-            notify('다음에 또 만나요!');
+            notifySuccess('다음에 또 만나요!');
         }
     };
 
@@ -211,7 +203,7 @@ const Header = () => {
                     } else {
                         const AToken = localStorage.getItem('jwtToken') || '';
                         const RToken = localStorage.getItem('refreshToken') || '';
-                        getTokenReissuance({ AToken, RToken })
+                        getTokenReissuance(AToken, RToken)
                             .then((res) => {
                                 if (res?.data?.accessToken && res.data.refreshToken) {
                                     localStorage.setItem('jwtToken', res.data.accessToken);
@@ -395,8 +387,8 @@ const Header = () => {
                                     <MobileUserBox>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                         <div>
-                                            <UserNickNameText>{userInfo.userNickName}</UserNickNameText>
-                                            <UserEmailText>{userInfo.userEmail}</UserEmailText>
+                                            <UserNickNameText>{userInfo.nickName}</UserNickNameText>
+                                            <UserEmailText>{userInfo.email}</UserEmailText>
                                         </div>
                                     </MobileUserBox>
                                 ) : null}
@@ -436,9 +428,7 @@ const Header = () => {
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                     </UserIconButton>
                                 </Tooltip>
-                                <UserNickNameText>
-                                    {userInfo.userNickName ? `${userInfo.userNickName} 님` : ''}
-                                </UserNickNameText>
+                                {userInfo.nickName ? <UserNickNameText>{userInfo.nickName}</UserNickNameText> : null}
                                 <UserSelectMenu
                                     id="menu"
                                     anchorEl={anchorElUser}

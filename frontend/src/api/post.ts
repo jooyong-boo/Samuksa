@@ -1,9 +1,37 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+
+const axiosConfig: AxiosRequestConfig = {
+    baseURL: process.env.REACT_APP_SamuksaUser_URL,
+};
+
+const instance = axios.create(axiosConfig);
+
+instance.interceptors.request.use((config) => {
+    const token = localStorage.getItem('jwtToken');
+    if (token) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`,
+        };
+    }
+    return config;
+});
 
 // 전체 게시물 목록
 export const getPosts = async () => {
     try {
         const { data } = await axios.get('https://koreanjson.com/posts');
+        return data;
+    } catch (err) {
+        console.log(err.response);
+    }
+};
+
+export const getRealPosts = async () => {
+    try {
+        const { data } = await instance.get('/board', {
+            data: {},
+        });
         return data;
     } catch (err) {
         console.log(err.response);
@@ -30,33 +58,12 @@ export const getCommentById = async (id: string | undefined) => {
     }
 };
 
-type newPost = {
-    date: string;
-    title: string;
-    content: string;
-    avatar: string;
-    userNickName?: string;
-    read: boolean;
-    id: number;
-};
-
-// 게시물 등록
-export const setNewPost = async ({ date, title, content, avatar, userNickName, read, id }: newPost) => {
+// 게시물 생성
+export const createPost = async (id: string | undefined) => {
     try {
-        const { data } = await axios.post('https://koreanjson.com/posts', {
-            params: {
-                id: userNickName,
-                title,
-                content,
-                createdAt: date,
-                updatedAt: date,
-                UserId: id,
-                avatar,
-                read,
-            },
-        });
+        const { data } = await instance.post('/board/create');
         return data;
     } catch (err) {
-        console.log(err);
+        console.log(err.response);
     }
 };

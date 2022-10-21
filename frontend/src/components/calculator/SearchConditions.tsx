@@ -28,9 +28,8 @@ import {
 } from '../../store/atom';
 import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../../api/recommend';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import React from 'react';
+import { notifyError } from 'components/utils/notify';
 
 const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;
@@ -52,14 +51,6 @@ interface FishInfo {
 }
 
 const SearchConditions = () => {
-    const notify = (text: string) =>
-        toast.warning(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    const dismissAll = () => toast.dismiss();
-
     const getArea = useRecoilValue(getAreaState);
 
     const [personNum, setPersonNum] = useRecoilState(personNumState);
@@ -84,8 +75,7 @@ const SearchConditions = () => {
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
         if (Number(value) >= 35) {
-            dismissAll();
-            notify('인원수는 35명 이하로 해주세요');
+            notifyError('인원수는 35명 이하로 해주세요');
             setPersonNum(String(35));
         }
     };
@@ -95,8 +85,7 @@ const SearchConditions = () => {
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
         if (Number(value) > 10000000) {
-            dismissAll();
-            notify('가격은 천만원 이하로 해주세요');
+            notifyError('가격은 천만원 이하로 해주세요');
             setMoney(String(10000000));
         }
     };
@@ -104,14 +93,12 @@ const SearchConditions = () => {
     const searchForFishByRegion = () => {
         if (Number(money) < 50000) {
             // alert('가격은 50000이상으로 해주세요');
-            dismissAll();
-            notify('가격을 50000이상으로 해주세요');
+            notifyError('가격을 50000이상으로 해주세요');
             setMoney(String(50000));
             return;
         } else if (Number(personNum) <= 0) {
             // alert('인원은 1 이상으로 해주세요');
-            dismissAll();
-            notify('인원을 입력해주세요');
+            notifyError('인원을 입력해주세요');
             // setPersonNum(1);
             return;
         }
@@ -136,7 +123,7 @@ const SearchConditions = () => {
         getAreaTotalFishData({ area }).then((res) =>
             res
                 ? (setFishList(res.map((item: FishInfo) => ({ ...item, active: false }))), setSelect(false))
-                : (dismissAll(), notify('해당 가격으론 찾을 수 있는 조합이 없어요!')),
+                : notifyError('해당 가격으론 찾을 수 있는 조합이 없어요!'),
         );
     };
 

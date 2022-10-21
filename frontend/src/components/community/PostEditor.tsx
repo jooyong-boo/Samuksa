@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonGroup, FormControl, Input, MenuItem, Paper, Select, Typography } from '@mui/material';
+import { Button, FormControl, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -13,42 +13,19 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { getUserInfo } from '../../api/auth';
 import { getRandomNumber } from './PostViewer';
 import { getPostState } from '../../store/atom';
-import { setNewPost } from '../../api/post';
-
-const ITEM_HEIGHT = 45;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 100,
-        },
-    },
-};
-const totalBoard = ['리뷰게시판', 'TIP게시판'];
+import UserInfo from './PostEditor/UserInfo';
+import BoardSelect from './PostEditor/BoardSelect';
+import { notifySuccess } from 'components/utils/notify';
 
 interface userInfos {
     userId?: string;
-    userNickName?: string;
-    userEmail?: string;
+    nickName?: string;
+    email?: string;
 }
 
 const PostEditor = () => {
-    const notify = (text: string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 1500,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
-
     const navigate = useNavigate();
     const editorRef: any = useRef(null);
     const [title, setTitle] = useState('');
@@ -58,7 +35,7 @@ const PostEditor = () => {
     const postsRecoil = useRecoilValue<any[]>(getPostState);
     const userInfo = useRecoilValue(userInfoState);
 
-    const { userNickName }: userInfos = userInfo;
+    const { nickName }: userInfos = userInfo;
     const userImage = useRecoilValue(userImageState);
 
     const [transientStorage, setTransientStorage] = useState<any>([]);
@@ -78,7 +55,6 @@ const PostEditor = () => {
         const data = editorRef.current?.getInstance().getHTML();
         setContent(data);
     };
-    // console.log(title, content, board);
 
     // 임시저장 테스트중
     const handleTransientStorage = () => {
@@ -93,7 +69,7 @@ const PostEditor = () => {
             if (window.confirm('이미 임시저장한 글이 있습니다, 새로 저장할까요?')) {
                 setTransientStorage(data);
                 localStorage.setItem('transientStorage', JSON.stringify(data));
-                notify('임시저장 완료');
+                notifySuccess('임시저장 완료');
                 return;
             } else {
                 return;
@@ -101,7 +77,7 @@ const PostEditor = () => {
         } else {
             localStorage.setItem('transientStorage', JSON.stringify(data));
             setTransientStorage(data);
-            notify('임시저장 완료');
+            notifySuccess('임시저장 완료');
         }
     };
 
@@ -110,7 +86,7 @@ const PostEditor = () => {
             if (window.confirm('임시저장 글을 삭제할까요?')) {
                 localStorage.removeItem('transientStorage');
                 setTransientStorage([]);
-                notify('삭제완료');
+                notifySuccess('삭제완료');
             }
         }
     };
@@ -126,11 +102,10 @@ const PostEditor = () => {
             title,
             content,
             avatar,
-            nickName: userNickName,
+            nickName,
             read,
             userId: id,
         };
-        setNewPost({ date, title, content, avatar, userNickName, read, id }).then((res) => console.log(res));
         console.log(data);
     };
 
@@ -162,34 +137,10 @@ const PostEditor = () => {
         <Background>
             <EditorPaper elevation={0}>
                 <EditorTypography>글작성</EditorTypography>
-                <EditorUserInfoBox>
-                    {userInfo && (
-                        <>
-                            <UserAvatar src={userImage} />
-                            <UserTypography>{userNickName}</UserTypography>
-                        </>
-                    )}
-                </EditorUserInfoBox>
+                <UserInfo />
                 <FormControl fullWidth>
                     <Typography>게시판</Typography>
-                    <BoardSelect
-                        labelId="board"
-                        // defaultValue="게시판을 선택해주세요"
-                        value={board}
-                        MenuProps={MenuProps}
-                        displayEmpty
-                        fullWidth
-                        renderValue={board !== '' ? undefined : () => '게시판을 선택해주세요'}
-                        onChange={(e) => {
-                            setBoard(String(e.target.value));
-                        }}
-                    >
-                        {totalBoard.map((val) => (
-                            <MenuItem key={val} value={val}>
-                                {val}
-                            </MenuItem>
-                        ))}
-                    </BoardSelect>
+                    <BoardSelect board={board} setBoard={setBoard} />
                     <Typography>제목</Typography>
                     <BoardTitle placeholder="제목을 입력해 주세요" value={title} onChange={onChangeTitle} />
                 </FormControl>
@@ -214,13 +165,7 @@ const PostEditor = () => {
                     language="ko-KR"
                 />
                 <ButtonBox>
-                    <SubmitBtn variant="contained" onClick={onSave}>
-                        등록
-                    </SubmitBtn>
                     {transientStorage.length ? (
-                        // <ButtonGroup variant="outlined" sx={{ width: '10rem', height: '3rem', marginLeft: '1rem' }}>
-                        //     <Button onClick={transientStorage}>임시저장</Button>
-                        // </ButtonGroup>
                         <CuntomBtn variant="outlined" margin={'0 0.5rem'} onClick={handleDeleteTransientStorage}>
                             임시저장 삭제
                         </CuntomBtn>
@@ -229,8 +174,11 @@ const PostEditor = () => {
                             임시저장
                         </CuntomBtn>
                     )}
-                    <CuntomBtn variant="outlined" onClick={goBack}>
+                    <CuntomBtn variant="outlined" margin={'0 0.5rem 0 0'} onClick={goBack}>
                         취소
+                    </CuntomBtn>
+                    <CuntomBtn variant="contained" onClick={onSave}>
+                        등록
                     </CuntomBtn>
                 </ButtonBox>
             </EditorPaper>
@@ -245,11 +193,6 @@ const Background = styled.div`
     width: 100vw;
     height: 100vh;
     padding-top: 70px;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
     overflow: hidden;
     margin: auto;
 `;
@@ -275,39 +218,10 @@ const EditorPaper = styled(Paper)`
 
 const EditorTypography = styled(Typography)`
     color: #575757;
-    padding: 0px 0px 13px 19px;
+    padding: 0px 0px 13px 0px;
     border-bottom: 1px solid #eaeaea;
     font-size: 1.4rem;
     font-weight: 600;
-`;
-
-const EditorUserInfoBox = styled.div`
-    display: flex;
-    align-items: center;
-    padding-top: 1rem;
-    margin-bottom: 0.5rem;
-`;
-
-const UserAvatar = styled(Avatar)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    vertical-align: middle;
-    width: 40px;
-    height: 40px;
-    margin-right: 0.3rem;
-`;
-
-const UserTypography = styled(Typography)`
-    font-size: 1.2rem;
-    font-weight: medium;
-`;
-
-const BoardSelect = styled(Select)`
-    background-color: white;
-    border-radius: 5px;
-    opacity: 0.8;
-    height: 3rem;
-    margin: 0.3rem 0 1rem 0;
 `;
 
 const BoardTitle = styled.input`
@@ -319,21 +233,10 @@ const BoardTitle = styled.input`
 `;
 
 const ButtonBox = styled.div`
-    width: 99%;
+    width: 100%;
     display: flex;
     justify-content: flex-end;
     margin-top: 1rem;
-`;
-
-const SubmitBtn = styled(Button)`
-    width: 7rem;
-    height: 3rem;
-    box-shadow: none;
-    background-color: ${({ theme }) => theme.colors.main};
-    font-weight: 700;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 interface CustomBtnProps {
@@ -344,4 +247,9 @@ const CuntomBtn = styled(Button)<CustomBtnProps>`
     width: 7rem;
     height: 3rem;
     margin: ${(props) => `${props.margin}`};
+    box-shadow: none;
+    font-weight: 600;
+    &:hover {
+        box-shadow: none;
+    }
 `;

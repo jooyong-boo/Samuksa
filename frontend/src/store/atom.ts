@@ -1,99 +1,88 @@
 import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts, getPostsById } from '../api/post';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { RandomNickname } from '../components/utils/RandomNickname';
 import { getRandomNumber } from '../components/community/PostViewer';
-
-const notifyError = (text: string) => {
-    dismissAll();
-    toast.error(text, {
-        position: 'top-center',
-        autoClose: 1000,
-        hideProgressBar: true,
-    });
-};
-const dismissAll = () => toast.dismiss();
+import { v1 } from 'uuid';
 
 export const personNumState = atom({
-    key: 'personNumState',
+    key: `personNumState/${v1()}`,
     default: '',
 });
 
 export const moneyState = atom({
-    key: 'moneyState',
+    key: `moneyState/${v1()}`,
     default: '',
 });
 
 export const areaState = atom({
-    key: 'areaState',
+    key: `areaState/${v1()}`,
     default: '노량진',
 });
 
 // 조건부 스타일링용
 export const selectState = atom({
-    key: 'selectState',
+    key: `selectState/${v1()}`,
     default: true,
 });
 
 // 선택 조건목록
 export const selectConditions = atom({
-    key: 'selectConditions',
+    key: `selectConditions/${v1()}`,
     default: [],
 });
 
 // 지역별 전체 어종
 export const fishDetailRecommendInfo = atom({
-    key: 'fishDetailRecommendInfo',
+    key: `fishDetailRecommendInfo/${v1()}`,
     default: [],
 });
 
 // 선택한 어종
 export const selectFishState = atom({
-    key: 'selectFishState',
+    key: `selectFishState/${v1()}`,
     default: [],
 });
 
 // 선택 분량
 export const amountState = atom({
-    key: 'amountState',
+    key: `amountState/${v1()}`,
     default: 0,
 });
 
 // 총 분량
 export const totalAmountState = atom({
-    key: 'totalAmountState',
+    key: `totalAmountState/${v1()}`,
     default: 0,
 });
 
 // 양식 여부
 export const farmState = atom({
-    key: 'farmState',
+    key: `farmState/${v1()}`,
     default: [],
 });
 
 //추천 수산물
 export const recommendListState = atom({
-    key: 'recommendListState',
+    key: `recommendListState/${v1()}`,
     default: [],
 });
 
 // 검색결과 조합 선택
 export const recommendListSelectState = atom({
-    key: 'recommendListSelectState',
+    key: `recommendListSelectState/${v1()}`,
     default: [],
 });
 
 // 검색결과 선택한 조합 상세
 export const selectRecommendDetailState = atom({
-    key: 'selectRecommendDetailState',
+    key: `selectRecommendDetailState/${v1()}`,
     default: [],
 });
 
 // 수산물 판매지역
 export const getAreaState = selector({
-    key: 'getAreaState',
+    key: `getAreaState/${v1()}`,
     get: async ({ get }) => {
         const response = await getArea();
         if (response.code === 'ERR_NETWORK') {
@@ -106,7 +95,7 @@ export const getAreaState = selector({
 
 // 게시글 목록
 export const getPostState = selector({
-    key: 'getPostState',
+    key: `getPostState/${v1()}`,
     get: async ({ get }) => {
         const response = await getPosts();
         const readPost = localStorage.getItem('reviewReadPost');
@@ -134,25 +123,25 @@ export const getPostState = selector({
 
 // 게시글 조회
 export const getPostViewState = atom({
-    key: 'getPostViewState',
+    key: `getPostViewState/${v1()}`,
     default: [],
 });
 
 // 게시판 탭 저장
 export const tabState = atom({
-    key: 'tapState',
+    key: `tapState/${v1()}`,
     default: 0,
 });
 
 // 리뷰게시판 페이지버튼 저장
 export const reviewPostPageState = atom({
-    key: 'reviewPostPageState',
+    key: `reviewPostPageState/${v1()}`,
     default: 1,
 });
 
 // 팁게시판 페이지버튼 저장
 export const tipPostPageState = atom({
-    key: 'tipPostPageState',
+    key: `tipPostPageState/${v1()}`,
     default: 1,
 });
 

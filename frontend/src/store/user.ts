@@ -1,28 +1,37 @@
 import { atom, selector } from 'recoil';
 import { getUserInfo } from '../api/auth';
+import { v1 } from 'uuid';
 
 export const loginStatusState = atom({
-    key: 'loginStatusState',
+    key: `loginStatusState/${v1()}`,
     default: false,
 });
 
 export const userIdState = atom({
-    key: 'userIdState',
+    key: `userIdState/${v1()}`,
     default: '',
 });
 
+export const userLoginFormState = atom({
+    key: `userLoginFormState/${v1()}`,
+    default: {
+        userId: '',
+        password: '',
+    },
+});
+
 export const userInfoState = atom({
-    key: 'userInfoState',
+    key: `userInfoState/${v1()}`,
     default: {},
 });
 
 export const userImageState = atom({
-    key: 'userImageState',
+    key: `userImageState/${v1()}`,
     default: '/broken-image.jpg',
 });
 
 export const userInfoSelector = selector({
-    key: 'userInfoSelector',
+    key: `userInfoSelector/${v1()}`,
     get: async ({ get }) => {
         try {
             const response = await getUserInfo();

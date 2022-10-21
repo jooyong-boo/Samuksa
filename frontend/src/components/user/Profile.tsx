@@ -1,29 +1,26 @@
-import { Avatar, Button, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { userImageState, userInfoState } from '../../store/user';
-import { getWithdrawal } from '../../api/auth';
-import { useEffect, useRef, useState } from 'react';
-import imageCompression from 'browser-image-compression';
-import handlingDataForm from '../utils/handlingDataForm';
+import { userInfoState } from '../../store/user';
+import { changeUserInfo, getWithdrawal } from '../../api/auth';
+import { useEffect, useState } from 'react';
+import UserImage from './Profile/UserImage';
+import UserInfoInput from './Profile/UserInfoInput';
 
 interface userInfos {
     userId?: string;
-    userNickName?: string;
-    userEmail?: string;
+    nickName?: string;
+    email?: string;
+    profileImage?: string;
 }
 
 const Profile = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-    const [image, setImage] = useRecoilState<string | ArrayBuffer | null>(userImageState);
-    const fileInput = useRef<HTMLInputElement | null>(null);
-    const { userId, userNickName, userEmail }: userInfos = userInfo;
-    const [nickname, setNickname] = useState('');
-    const [email, setEmail] = useState('');
-    const [nicknameModify, setNicknameModify] = useState(true);
+    const { userId, nickName, email, profileImage }: userInfos = userInfo;
+    const [userEmail, setEmail] = useState('');
     const [emailModify, setEmailModify] = useState(true);
-
+    // console.log(userInfo);
     const navigate = useNavigate();
 
     const withdrawal = () => {
@@ -37,76 +34,11 @@ const Profile = () => {
         }
     };
 
-    // 이미지 업로드
-    const onChange = (e: any) => {
-        const value = e?.target?.files[0];
-        if (value) {
-            setImage(() => value);
-        } else {
-            //업로드 취소할 시
-            setImage('/broken-image.jpg');
-            return;
-        }
-        //화면에 프로필 사진 표시
-        const reader = new FileReader();
-        actionImgCompress(value)
-            .then((result: File) => {
-                reader.readAsDataURL(result);
-            })
-            .then(() => {
-                reader.onload = () => {
-                    const base64data = reader.result;
-                    if (reader.readyState === 2) {
-                        setImage(base64data);
-                        console.log(base64data);
-                    }
-                };
-            });
-    };
-
-    // 이미지 압축
-    const actionImgCompress = async (fileSrc: any) => {
-        console.log('압축 시작');
-
-        const options = {
-            maxSizeMb: 1,
-            maxWidthOrHeight: 200,
-            useWebWorker: true,
-        };
-        try {
-            const compressedFile = await imageCompression(fileSrc, options);
-            console.log(compressedFile);
-            const reader = new FileReader();
-            reader.readAsDataURL(compressedFile);
-            reader.onloadend = () => {
-                // 변환 완료!
-                const base64data = reader.result;
-
-                // formData 만드는 함수
-                handlingDataForm(base64data);
-            };
-            return compressedFile;
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const handleModifyNickname = () => {
-        if (nicknameModify === false) {
-            setUserInfo({ ...userInfo, userNickName: nickname });
-        }
-        setNicknameModify(!nicknameModify);
-    };
-
     const handleModifyEmail = () => {
         if (emailModify === false) {
-            setUserInfo({ ...userInfo, userEmail: email });
+            setUserInfo({ ...userInfo, email: userEmail });
         }
         setEmailModify(!emailModify);
-    };
-
-    const changeNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNickname(e.target.value);
     };
 
     const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,8 +46,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        setNickname(userNickName || '');
-        setEmail(userEmail || '');
+        setEmail(email || '');
     }, [userInfo]);
 
     return (
@@ -124,53 +55,26 @@ const Profile = () => {
                 <ProfileContainer>
                     <TitleTypography>프로필</TitleTypography>
                     <UserInfoDiv>
-                        <div>
-                            <ProfileAvatar
-                                src={String(image)}
-                                onClick={() => {
-                                    fileInput.current?.click();
-                                }}
-                            />
-                            <ImageInput
-                                type="file"
-                                accept="image/jpg,image/png,image/jpeg"
-                                name="profile_img"
-                                onChange={onChange}
-                                ref={fileInput}
-                            />
-                        </div>
-                        <div>
-                            <Button
-                                onClick={() => {
-                                    fileInput.current?.click();
-                                }}
-                            >
-                                이미지 변경
-                            </Button>
-                        </div>
+                        <UserImage />
                         <ModifyDiv>
                             <CustomTypography>아이디</CustomTypography>
                             <ProfileInput disabled={true} value={userId || ''} />
                         </ModifyDiv>
 
                         <ModifyDiv>
-                            <CustomTypography>닉네임</CustomTypography>
-                            <ProfileInput
-                                disabled={nicknameModify}
-                                value={nickname || ''}
-                                onChange={changeNickname}
-                                placeholder="2~9자 한글 또는 영문"
+                            <UserInfoInput
+                                label="닉네임"
+                                value={nickName}
+                                id="nickName"
+                                placeholder="3~9자 한글 또는 영문"
                             />
-                            <ModifyButton onClick={handleModifyNickname}>
-                                {nicknameModify ? '수정' : '확인'}
-                            </ModifyButton>
                         </ModifyDiv>
                         <ModifyDiv>
                             <CustomTypography>이메일</CustomTypography>
                             <ProfileInput
                                 $marginBottom={'0.5rem'}
                                 disabled={emailModify}
-                                value={email || ''}
+                                value={userEmail || ''}
                                 onChange={changeEmail}
                             />
                             <ModifyButton $marginBottom={'0.5rem'} onClick={handleModifyEmail}>
@@ -251,22 +155,6 @@ const CustomTypography = styled(Typography)`
     margin-bottom: 0.3rem;
     text-align: left;
     width: 100%;
-`;
-
-const ProfileAvatar = styled(Avatar)`
-    width: 6rem;
-    height: 6rem;
-    cursor: pointer;
-    transition: all 0.3s;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-        opacity: 0.8;
-        transition: all 0.3s;
-    }
-`;
-
-const ImageInput = styled.input`
-    display: none;
 `;
 
 interface ProfileInputProps {

@@ -21,11 +21,11 @@ import {
     personNumState,
     selectState,
 } from '../store/atom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 import React, { useContext } from 'react';
+import Title from './main/Title';
+import { notifyError } from './utils/notify';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -39,18 +39,7 @@ const MenuProps = {
 };
 
 const Main = () => {
-    const notify = (text: string) =>
-        toast.warning(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    const dismissAll = () => toast.dismiss();
-
     const navigate = useNavigate();
-
-    const theme = useContext(ThemeContext);
-
     const getArea = useRecoilValue(getAreaState);
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
@@ -65,9 +54,7 @@ const Main = () => {
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
         if (Number(value) >= 35) {
-            // alert('인원은 1 이상으로 해주세요');
-            dismissAll();
-            notify('인원수는 35명 이하로 해주세요');
+            notifyError('인원수는 35명 이하로 해주세요');
             setPersonNum(String(35));
         }
     };
@@ -77,8 +64,7 @@ const Main = () => {
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
         if (Number(value) > 10000000) {
-            dismissAll();
-            notify('가격은 천만원 이하로 해주세요');
+            notifyError('가격은 천만원 이하로 해주세요');
             setMoney(String(10000000));
         }
     };
@@ -90,16 +76,11 @@ const Main = () => {
     const onClick = (e: React.MouseEvent<HTMLElement>) => {
         if (Number(personNum) <= 0) {
             e.preventDefault();
-            // alert('인원은 1 이상으로 해주세요');
-            dismissAll();
-            notify('인원을 입력해주세요');
-            // setPersonNum(1);
+            notifyError('인원을 입력해주세요');
             return;
         } else if (Number(money) < 50000) {
             e.preventDefault();
-            // alert('가격은 50000이상으로 해주세요');
-            dismissAll();
-            notify('가격을 50000이상으로 해주세요');
+            notifyError('가격을 50000이상으로 해주세요');
             setMoney(String(50000));
             return;
         }
@@ -112,7 +93,7 @@ const Main = () => {
             res
                 ? (setFishList(res.map((item: {}) => (item ? { ...item, active: false } : { ...item }))),
                   setSelect(false))
-                : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'),
+                : notifyError('해당 가격으론 찾을 수 있는 조합이 없어요!'),
         );
         navigate('/calculator');
     };
@@ -120,16 +101,7 @@ const Main = () => {
     return (
         <>
             <Background>
-                <Container>
-                    <MainTitle>모두가 편히</MainTitle>
-                    <MainTitle marginLeft={'1rem'}>떠먹는 그날까지,</MainTitle>
-                    <MainTitle color={theme.colors.main} marginLeft={'1rem'}>
-                        사먹사
-                    </MainTitle>
-                </Container>
-                <MainTitle marginBottom={'2rem'} fontSize={'1.78rem'} fontWeight={'600'}>
-                    고민하지말고 편하게 추천 받아보세요.
-                </MainTitle>
+                <Title />
                 <SearchForm onSubmit={onSubmit}>
                     <CustomBox>
                         <CustomTextField
@@ -140,7 +112,6 @@ const Main = () => {
                             variant="outlined"
                             value={personNum}
                             onChange={handlePersonNumChange}
-                            // autoFocus
                             autoComplete="off"
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">명</InputAdornment>,
@@ -203,30 +174,6 @@ const Background = styled.div`
     align-items: center;
     overflow: hidden;
     margin: auto;
-`;
-
-const Container = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-`;
-
-interface MainTitleProps {
-    fontSize?: any;
-    fontWeight?: any;
-    color?: any;
-    marginLeft?: any;
-    marginBottom?: any;
-}
-
-const MainTitle = styled(Typography)<MainTitleProps>`
-    font-size: ${(props) => (props.fontSize ? `${props.fontSize}` : '3.85rem')};
-    font-weight: ${(props) => (props.fontWeight ? `${props.fontWeight}` : '900')};
-    text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
-    color: ${(props) => (props.color ? `${props.color}` : 'white')};
-    margin-left: ${(props) => (props.marginLeft ? `${props.marginLeft}` : '0')};
-    margin-bottom: ${(props) => (props.marginBottom ? `${props.marginBottom}` : '0')};
 `;
 
 const SearchForm = styled.form`

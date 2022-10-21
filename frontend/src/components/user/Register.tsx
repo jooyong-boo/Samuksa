@@ -4,56 +4,45 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { signUp, checkIdAxios, checkNickNameAxios, checkEmailAxios, checkEmailAuthAxios } from '../../api/auth';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useSetRecoilState } from 'recoil';
-import { userIdState } from '../../store/user';
+import { signUp, checkDuplicate, requestCheckEmail } from '../../api/auth';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userIdState, userLoginFormState } from '../../store/user';
 import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
+import { FcCheckmark } from 'react-icons/fc';
+import { notifyError, notifySuccess } from 'components/utils/notify';
 
 const Register = () => {
     const navigate = useNavigate();
-    const notifyError = (text: ReactElement | string) => {
-        dismissAll();
-        toast.warning(text, {
-            position: 'top-center',
-            autoClose: 1000,
-            hideProgressBar: true,
-        });
-    };
-    const notifySuccess = (text: ReactElement | string) => {
-        dismissAll();
-        toast.success(text, {
-            position: 'top-center',
-            autoClose: 2000,
-            hideProgressBar: true,
-        });
-    };
-    const dismissAll = () => toast.dismiss();
 
-    const setUserId = useSetRecoilState(userIdState);
+    const [userForm, setUserForm] = useRecoilState(userLoginFormState);
 
-    const [id, setId] = useState('');
-    const [checkId, setCheckId] = useState(true);
-    const [overlappingId, setOverlappingId] = useState<string | boolean>('');
+    const [userId, setUserId] = useState('');
+    const [checkId, setCheckId] = useState(false);
+    const [overlappingId, setOverlappingId] = useState(true);
 
     const [nickName, setNickName] = useState('');
-    const [checkNickName, setCheckNickName] = useState(true);
-    const [overlappingNickName, setOverlappingNickName] = useState<string | boolean>('');
+    const [checkNickName, setCheckNickName] = useState(false);
+    const [overlappingNickName, setOverlappingNickName] = useState(true);
 
-    const [password, setPassword] = useState(''); // 비밀번호
-    const [checkPw, setCheckPw] = useState(true);
-    const [passwordConfirm, setPasswordConfirm] = useState(''); //비밀번호 확인
-    const [checkPwConfirm, setCheckPwConfirm] = useState(true);
+    // 비밀번호
+    const [password, setPassword] = useState('');
+    const [checkPw, setCheckPw] = useState(false);
+
+    //비밀번호 확인
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+    const [checkPwConfirm, setCheckPwConfirm] = useState(false);
+
     const [passwordView, setPasswordView] = useState(false);
 
     // 이메일
     const [email, setEmail] = useState('');
-    const [checkEmail, setCheckEmail] = useState(false);
+    const [checkEmail, setCheckEmail] = useState(true);
     const [viewAuthNum, setViewAuthNum] = useState(false);
+
     // 이메일 인증번호
     const [authNum, setAuthNum] = useState('');
-    const [checkAuthNum, setCheckAuthNum] = useState(false);
+    const [checkAuthNum, setCheckAuthNum] = useState(true);
+    const [successAuth, setSuccessAuth] = useState(false);
 
     const onChange = (
         change: (value: string) => void,
@@ -61,46 +50,46 @@ const Register = () => {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
         let inputChange = e.target.value;
-        if (check === id) {
+        if (check === 'id') {
             const IdReg = new RegExp(/^[a-z0-9]{4,12}$/);
             change(inputChange);
             if (IdReg.test(inputChange)) {
-                setCheckId(false);
-            } else {
                 setCheckId(true);
+            } else {
+                setCheckId(false);
             }
         }
-        if (check === nickName) {
-            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣][a-zA-Zㄱ-힣 ]{1,8}$/);
+        if (check === 'nickName') {
+            const nickNameReg = new RegExp(/^[a-zA-Zㄱ-힣 ]{3,12}$/);
             change(inputChange);
             if (nickNameReg.test(inputChange)) {
-                setCheckNickName(false);
-            } else {
                 setCheckNickName(true);
+            } else {
+                setCheckNickName(false);
             }
         }
-        if (check === password) {
+        if (check === 'password') {
             const passwordReg = new RegExp(/^(?=.*[A-Za-z0-9])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z0-9\d$@$!%*#?&]{8,16}$/);
             change(inputChange);
             if (passwordReg.test(inputChange)) {
-                setCheckPw(false);
-            } else {
                 setCheckPw(true);
-                setCheckPwConfirm(true);
+            } else {
+                setCheckPw(false);
+                setCheckPwConfirm(false);
             }
         }
-        if (check === passwordConfirm) {
+        if (check === 'passwordConfirm') {
             const passwordConfirmReg = new RegExp(
                 /^(?=.*[A-Za-z0-9])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z0-9\d$@$!%*#?&]{8,16}$/,
             );
             change(inputChange);
             if (passwordConfirmReg.test(inputChange) && password === passwordConfirm) {
-                setCheckPwConfirm(false);
-            } else {
                 setCheckPwConfirm(true);
+            } else {
+                setCheckPwConfirm(false);
             }
         }
-        if (check === email) {
+        if (check === 'email') {
             const emailReg = new RegExp(
                 /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
             );
@@ -112,7 +101,7 @@ const Register = () => {
                 setCheckAuthNum(false);
             }
         }
-        if (check === authNum) {
+        if (check === 'authNum') {
             const emailAuthReg = new RegExp(/^[0-9a-zA-Z]{8}$/);
             if (emailAuthReg.test(inputChange)) {
                 setCheckAuthNum(true);
@@ -124,45 +113,68 @@ const Register = () => {
     };
 
     const checkOverlappingId = () => {
-        checkIdAxios({ id }).then((res) => {
-            setOverlappingId(res);
-            setCheckId(true);
+        checkDuplicate(userId, 'userId').then((res) => {
+            console.log(res);
+            if (res === 'success') {
+                setOverlappingId(false);
+                setCheckId(false);
+                notifySuccess('아이디 인증완료');
+            }
+            if (res?.message === 'existence id') {
+                setOverlappingId(true);
+                notifyError('이미 존재하는 아이디입니다.');
+            }
         });
     };
 
     const checkOverlappingNickName = () => {
-        checkNickNameAxios({ nickName }).then((res) => {
-            setOverlappingNickName(res);
-            setCheckNickName(true);
+        checkDuplicate(nickName, 'nickName').then((res) => {
+            console.log(res);
+            if (res === 'success') {
+                setOverlappingNickName(false);
+                setCheckNickName(false);
+                notifySuccess('닉네임 인증완료');
+            }
+            if (res.message === 'existence id') {
+                setOverlappingNickName(true);
+                notifyError('이미 존재하는 닉네임입니다.');
+            }
         });
     };
 
     const onClickEmailAuth = () => {
-        checkEmailAxios({ email }).then((res) => {
-            console.log(res);
-            if (res?.data && res?.status === 201) {
-                setCheckEmail(false);
-                setViewAuthNum(true);
-                notifySuccess(
-                    <p>
-                        입력한 이메일로 인증번호를 발송했습니다.
-                        <br /> 우편함을 확인해주세요
-                    </p>,
-                );
-            } else {
-                setCheckEmail(false);
+        checkDuplicate(email, 'email').then((res) => {
+            if (res === 'success') {
+                requestCheckEmail(email, 'email').then((res) => {
+                    console.log(res);
+                    if (res?.data && res?.status === 200) {
+                        setCheckEmail(false);
+                        setCheckAuthNum(false);
+                        setViewAuthNum(true);
+                        notifySuccess(
+                            <p>
+                                입력한 이메일로 인증번호를 발송했습니다.
+                                <br /> 우편함을 확인해주세요
+                            </p>,
+                        );
+                    }
+                });
+            }
+            if (res.message === 'existence email') {
+                notifyError('이미 등록된 이메일입니다.');
             }
         });
     };
 
     const onClickEmailAuthCheck = () => {
-        checkEmailAuthAxios({ authNum, email }).then((res) => {
+        requestCheckEmail(email, 'email', authNum, 'authKey').then((res) => {
             console.log(res);
             if (res?.data === 'success') {
                 notifySuccess('이메일 인증완료');
-                setCheckEmail(false);
+                // setCheckEmail(false);
                 setCheckAuthNum(false);
                 setViewAuthNum(false);
+                setSuccessAuth(true);
             } else {
                 notifyError('인증번호를 재확인해주세요');
                 // setCheckAuthNum(false);
@@ -171,19 +183,20 @@ const Register = () => {
     };
 
     const onSignUp = () => {
-        if (id && nickName && password && email) {
+        if (userId && nickName && password && email) {
             if (
-                (checkId && checkNickName && checkPw && checkPwConfirm) === false &&
-                checkEmail === true &&
-                checkAuthNum === true
+                (checkId && checkPw && checkPwConfirm) === false &&
+                checkEmail === false &&
+                checkAuthNum === false &&
+                checkNickName === true
             ) {
-                signUp({ id, password, nickName, email })
+                signUp({ userId, password, nickName, email })
                     .then(() => {
                         navigate('/login');
                     })
                     .then(() => {
-                        localStorage.setItem('id', id);
-                        setUserId(id);
+                        localStorage.setItem('id', userId);
+                        setUserForm({ ...userForm, userId });
                         notifySuccess('회원가입을 축하합니다!');
                     });
             } else {
@@ -199,19 +212,19 @@ const Register = () => {
     };
 
     useEffect(() => {
-        setOverlappingId('');
-    }, [id]);
+        setOverlappingId(true);
+    }, [userId]);
 
     useEffect(() => {
-        setOverlappingNickName('');
+        setOverlappingNickName(true);
     }, [nickName]);
 
     useEffect(() => {
         if (password !== passwordConfirm || passwordConfirm === '') {
-            setCheckPwConfirm(true);
-        } else {
             setCheckPwConfirm(false);
-            setCheckPw(false);
+        } else {
+            setCheckPwConfirm(true);
+            setCheckPw(true);
         }
     }, [password, passwordConfirm]);
 
@@ -231,7 +244,10 @@ const Register = () => {
                     <RegisterContainer>
                         <RegisterTitle>회원가입</RegisterTitle>
                         <InputAreaContainer>
-                            <CustomTypography>아이디</CustomTypography>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <CustomTypography>아이디</CustomTypography>
+                                {overlappingId ? null : <FcCheckmark />}
+                            </div>
                             <InputBox>
                                 <RegisterTextField
                                     id="id"
@@ -239,63 +255,45 @@ const Register = () => {
                                     size="small"
                                     placeholder="4~12자 영문, 숫자"
                                     autoComplete="off"
-                                    color={checkId ? 'error' : 'primary'}
+                                    color={checkId ? 'primary' : 'error'}
                                     onChange={(e) => {
-                                        onChange(setId, id, e);
+                                        onChange(setUserId, 'id', e);
                                     }}
                                 />
-                                <CustomBtn variant="contained" disabled={checkId} onClick={checkOverlappingId}>
+                                <CustomBtn variant="contained" disabled={!checkId} onClick={checkOverlappingId}>
                                     중복체크
                                 </CustomBtn>
                             </InputBox>
-                            <>
-                                {overlappingId === true ? (
-                                    <PossibleStatusTypography color={'red'}>
-                                        이미 존재하는 아이디입니다.
-                                    </PossibleStatusTypography>
-                                ) : null}
-                                {overlappingId === false ? (
-                                    <PossibleStatusTypography color={'green'}>
-                                        사용 가능한 아이디입니다.
-                                    </PossibleStatusTypography>
-                                ) : null}
-                            </>
-                            <CustomTypography>닉네임</CustomTypography>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <CustomTypography>닉네임</CustomTypography>
+                                {overlappingNickName ? null : <FcCheckmark />}
+                            </div>
                             <InputBox>
                                 <RegisterTextField
                                     id="nickName"
                                     variant="outlined"
                                     size="small"
-                                    placeholder="2~9자 한글 또는 영문"
+                                    placeholder="3~12자 한글 또는 영문"
                                     autoComplete="off"
-                                    color={checkNickName ? 'error' : 'primary'}
+                                    color={checkNickName ? 'primary' : 'error'}
                                     onChange={(e) => {
-                                        onChange(setNickName, nickName, e);
+                                        onChange(setNickName, 'nickName', e);
                                     }}
                                 />
                                 <CustomBtn
                                     variant="contained"
-                                    disabled={checkNickName}
+                                    disabled={!checkNickName}
                                     onClick={checkOverlappingNickName}
                                 >
                                     중복체크
                                 </CustomBtn>
                             </InputBox>
-                            <>
-                                {overlappingNickName === false ? (
-                                    <PossibleStatusTypography color={'green'}>
-                                        사용 가능한 닉네임입니다.
-                                    </PossibleStatusTypography>
-                                ) : null}
-                                {overlappingNickName === true ? (
-                                    <PossibleStatusTypography color={'red'}>
-                                        이미 존재하는 닉네임입니다.
-                                    </PossibleStatusTypography>
-                                ) : null}
-                            </>
                             <InputBox paddingTop={'1rem'} display={'block'}>
-                                <CustomTypography>비밀번호</CustomTypography>
-                                <TextField
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <CustomTypography>비밀번호</CustomTypography>
+                                    {checkPwConfirm ? <FcCheckmark /> : null}
+                                </div>
+                                <RegisterTextField
                                     id="password"
                                     variant="outlined"
                                     size="small"
@@ -303,14 +301,14 @@ const Register = () => {
                                     placeholder="8~16자리 영문, 숫자, 특수문자 조합"
                                     autoComplete="off"
                                     fullWidth
-                                    color={checkPw ? 'error' : 'primary'}
+                                    color={checkPw ? 'primary' : 'error'}
                                     onChange={(e) => {
-                                        onChange(setPassword, password, e);
+                                        onChange(setPassword, 'password', e);
                                     }}
                                 />
                             </InputBox>
                             <InputBox paddingTop={'0.5rem'} display={'block'}>
-                                <TextField
+                                <RegisterTextField
                                     id="passwordConfirm"
                                     variant="outlined"
                                     size="small"
@@ -318,16 +316,19 @@ const Register = () => {
                                     placeholder="비밀번호 확인"
                                     autoComplete="off"
                                     fullWidth
-                                    color={checkPwConfirm ? 'error' : 'primary'}
+                                    color={checkPwConfirm ? 'primary' : 'error'}
                                     onChange={(e) => {
-                                        onChange(setPasswordConfirm, passwordConfirm, e);
+                                        onChange(setPasswordConfirm, 'passwordConfirm', e);
                                     }}
                                 />
                                 <Button onClick={ClickViewPassword}>
                                     {passwordView ? '비밀번호 가리기' : '비밀번호 보기'}
                                 </Button>
                             </InputBox>
-                            <CustomTypography>이메일</CustomTypography>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <CustomTypography>이메일</CustomTypography>
+                                {successAuth ? <FcCheckmark /> : null}
+                            </div>
                             <InputBox>
                                 <RegisterTextField
                                     id="email"
@@ -337,7 +338,7 @@ const Register = () => {
                                     fullWidth
                                     color={checkEmail ? 'primary' : 'error'}
                                     onChange={(e) => {
-                                        onChange(setEmail, email, e);
+                                        onChange(setEmail, 'email', e);
                                     }}
                                 />
                                 <CustomBtn variant="contained" onClick={onClickEmailAuth} disabled={!checkEmail}>
@@ -355,7 +356,7 @@ const Register = () => {
                                             placeholder="인증번호 입력"
                                             color={checkAuthNum ? 'primary' : 'error'}
                                             onChange={(e) => {
-                                                onChange(setAuthNum, authNum, e);
+                                                onChange(setAuthNum, 'authNum', e);
                                             }}
                                         />
                                         <CustomBtn
@@ -379,12 +380,10 @@ const Register = () => {
                             >
                                 회원가입
                             </RegisterBtn>
-                            <>
-                                <Typography>
-                                    <AskingSpan>이미 회원이신가요?</AskingSpan>
-                                    <CustomNavLink to={`/login`}>로그인</CustomNavLink>
-                                </Typography>
-                            </>
+                            <Typography>
+                                <AskingSpan>이미 회원이신가요?</AskingSpan>
+                                <CustomNavLink to={`/login`}>로그인</CustomNavLink>
+                            </Typography>
                         </div>
                     </RegisterContainer>
                 </Card>
@@ -456,7 +455,7 @@ const CustomTypography = styled(Typography)`
     margin: auto;
     font-size: 1rem;
     font-weight: bold;
-    margin: 0.5rem 0 0.3rem 0; ;
+    margin: 0.5rem 0.1rem 0.3rem 0; ;
 `;
 
 const CustomBtn = styled(Button)`
