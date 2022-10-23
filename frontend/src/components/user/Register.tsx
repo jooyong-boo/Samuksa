@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { signUp, checkDuplicate, requestCheckEmail } from '../../api/auth';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userIdState, userLoginFormState } from '../../store/user';
-import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
+// import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 import { FcCheckmark } from 'react-icons/fc';
 import { notifyError, notifySuccess } from 'components/utils/notify';
 
@@ -230,11 +230,11 @@ const Register = () => {
 
     let code = new URL(window.location.href).searchParams.get('code');
     useEffect(() => {
-        if (code) {
-            kakaoLogin(code).then(() => {
-                kakaoUserInfo();
-            });
-        }
+        // if (code) {
+        //     kakaoLogin(code).then(() => {
+        //         kakaoUserInfo();
+        //     });
+        // }
     }, [code]);
 
     return (

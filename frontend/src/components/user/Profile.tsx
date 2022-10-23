@@ -2,11 +2,12 @@ import { Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { userInfoState } from '../../store/user';
 import { changeUserInfo, getWithdrawal } from '../../api/auth';
+import { userInfoState } from 'store/user';
 import { useEffect, useState } from 'react';
 import UserImage from './Profile/UserImage';
 import UserInfoInput from './Profile/UserInfoInput';
+import WithDrawalButton from './Profile/WithDrawalButton';
 
 interface userInfos {
     userId?: string;
@@ -87,9 +88,10 @@ const Profile = () => {
                                 </>
                             )}
                         </ModifyDiv>
-                        <Button variant="outlined" onClick={withdrawal}>
+                        <WithDrawalButton />
+                        {/* <Button variant="outlined" onClick={withdrawal}>
                             회원 탈퇴
-                        </Button>
+                        </Button> */}
                     </UserInfoDiv>
                 </ProfileContainer>
             </Card>

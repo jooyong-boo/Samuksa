@@ -116,12 +116,12 @@ export const getUserInfo = async () => {
 };
 
 // 회원 탈퇴
-export const getWithdrawal = async (userId: string, passwd: string) => {
+export const getWithdrawal = async (userId: string, password: string) => {
     try {
         const { data } = await instance.delete('/user/user-info', {
             params: {
                 userId,
-                passwd,
+                password,
             },
         });
         return data;
