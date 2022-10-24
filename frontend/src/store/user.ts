@@ -34,7 +34,7 @@ export const userInfoSelector = selector({
     key: `userInfoSelector/${v1()}`,
     get: async ({ get }) => {
         try {
-            const response = await getUserInfo();
+            const response: any = await getUserInfo();
             if (response?.data?.userId) {
                 return response.data;
             } else {
