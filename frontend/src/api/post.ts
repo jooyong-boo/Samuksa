@@ -22,7 +22,7 @@ export const getPosts = async () => {
     try {
         const { data } = await axios.get('https://koreanjson.com/posts');
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
@@ -33,7 +33,7 @@ export const getRealPosts = async () => {
             data: {},
         });
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
@@ -43,7 +43,7 @@ export const getPostsById = async (id: string | undefined) => {
     try {
         const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
@@ -53,7 +53,7 @@ export const getCommentById = async (id: string | undefined) => {
     try {
         const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
@@ -63,7 +63,7 @@ export const createPost = async (id: string | undefined) => {
     try {
         const { data } = await instance.post('/board/create');
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
