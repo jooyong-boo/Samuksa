@@ -185,10 +185,12 @@ const Register = () => {
     const onSignUp = () => {
         if (userId && nickName && password && email) {
             if (
-                (checkId && checkPw && checkPwConfirm) === false &&
+                checkId === false &&
                 checkEmail === false &&
                 checkAuthNum === false &&
-                checkNickName === true
+                checkNickName === false &&
+                checkPw === true &&
+                checkPwConfirm === true
             ) {
                 signUp({ userId, password, nickName, email })
                     .then(() => {
@@ -200,6 +202,8 @@ const Register = () => {
                         notifySuccess('회원가입을 축하합니다!');
                     });
             } else {
+                console.log(userId, nickName, password, email);
+                console.log(checkId, checkPw, checkPwConfirm, checkEmail, checkAuthNum, checkNickName);
                 notifyError('확인이 안된 항목이 있습니다.');
             }
         } else {
