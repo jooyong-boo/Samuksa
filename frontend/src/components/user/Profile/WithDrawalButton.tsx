@@ -1,7 +1,10 @@
 import { Button } from '@mui/material';
+import Modal from 'components/common/Modal';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from 'store/user';
+import styled from 'styled-components';
 
 interface userInfos {
     userId?: string;
@@ -9,8 +12,13 @@ interface userInfos {
 
 const WithDrawalButton = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const [open, setOpen] = useState(false);
     const { userId }: userInfos = userInfo;
     const navigate = useNavigate();
+
+    const showModal = () => {
+        setOpen(true);
+    };
 
     const withdrawal = () => {
         let confirmWithdrawal = window.confirm('정말 탈퇴하시겠어요?');
@@ -23,9 +31,12 @@ const WithDrawalButton = () => {
         }
     };
     return (
-        <Button variant="outlined" onClick={withdrawal}>
-            회원 탈퇴
-        </Button>
+        <>
+            <Button variant="outlined" onClick={showModal}>
+                회원 탈퇴
+            </Button>
+            {open && <Modal setOpen={setOpen} />}
+        </>
     );
 };
 
