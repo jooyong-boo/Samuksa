@@ -82,7 +82,7 @@ export const checkDuplicate = async (info: string, check: string) => {
         });
         console.log(data);
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
         return err.response.data;
     }
@@ -96,7 +96,7 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
             [`${checkAuthNum}`]: authNum,
         });
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
@@ -105,6 +105,7 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
 export const getUserInfo = async () => {
     try {
         const result = await instance.get('/user/user-info');
+        console.log(result);
         if (result.data) {
             return result;
         } else {
@@ -131,11 +132,20 @@ export const getWithdrawal = async (userId: string, password: string) => {
 };
 // 토큰 재발급
 export const getTokenReissuance = async (accessToken: string, refreshToken: string) => {
+    const token = localStorage.getItem('refreshToken');
     try {
-        const result = await instance.post('/login/refresh-token', {
-            accessToken,
-            refreshToken,
-        });
+        const result = await instance.post(
+            '/login/refresh-token',
+            {
+                accessToken,
+                refreshToken,
+            },
+            {
+                headers: {
+                    'Refresh-Authorization': `Bearer ${token}`,
+                },
+            },
+        );
         // console.log(result);
         if (result.status === 200) {
             return result;

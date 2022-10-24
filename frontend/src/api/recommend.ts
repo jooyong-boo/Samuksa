@@ -28,7 +28,7 @@ export const getAreaTotalFishData = async ({ area }: { area: string }) => {
         const { data } = await instance.get('/fish/info', { params: { saleArea: area } });
         // console.log(data)
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };
@@ -48,7 +48,7 @@ export const getFarmType = async ({ fishName }: { fishName: string }) => {
     try {
         const { data } = await instance.get('/fish/farmType', { params: { fishName: fishName } });
         return data;
-    } catch (err) {
+    } catch (err: any) {
         console.log(err.response);
     }
 };

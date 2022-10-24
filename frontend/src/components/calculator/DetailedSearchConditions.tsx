@@ -30,15 +30,15 @@ import { useCallback } from 'react';
 import { notifyError } from 'components/utils/notify';
 
 const DetailedSearchConditions = () => {
-    const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
-    const [selectFish, setSelectFish] = useRecoilState<any[]>(selectFishState);
+    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
+    const [selectFish, setSelectFish] = useRecoilState(selectFishState);
     const resetSelectFish = useResetRecoilState(selectFishState);
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [totalAmount, setTotalAmount] = useState(0);
     const [fish, setFish] = useState<any[]>(fishList);
     const [amount, setAmount] = useRecoilState(amountState);
-    const [farm, setFarm] = useRecoilState(farmState);
+    const [farm, setFarm] = useRecoilState<any[]>(farmState);
     const [farmStatus, setFarmStatus] = useState<string[]>([]);
 
     useMemo(() => {

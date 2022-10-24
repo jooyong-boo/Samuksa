@@ -22,7 +22,7 @@ const handlingDataForm = async (dataURI: any) => {
     try {
         const changeAvatar = await changeUserImage(formData);
         console.log(changeAvatar);
-    } catch (error) {
+    } catch (error: any) {
         console.log(error.response.data.errors);
     }
 };

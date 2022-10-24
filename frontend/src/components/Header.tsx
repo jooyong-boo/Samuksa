@@ -35,7 +35,7 @@ const Header = () => {
 
     const [loginStatus, setLoginStatus] = useRecoilState(loginStatusState);
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
-    const [image, setImage] = useRecoilState<string | null>(userImageState);
+    const [image, setImage] = useRecoilState<string>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
     const [reviewPostPage, setReviewPostPage] = useRecoilState<number>(reviewPostPageState);
     const [tioPostPage, setTipPostPage] = useRecoilState<number>(tipPostPageState);
@@ -122,7 +122,7 @@ const Header = () => {
     const handleLogout = (name: string) => {
         if (name === '로그아웃') {
             const AToken = localStorage.getItem('jwtToken') || '';
-            logout(AToken).then((res) => {
+            logout(AToken).then((res: any) => {
                 if (res.status === 200) {
                     localStorage.removeItem('jwtToken');
                     localStorage.removeItem('refreshToken');
@@ -177,7 +177,7 @@ const Header = () => {
     useEffect(() => {
         if (loginStatus) {
             getUserInfo()
-                .then((res) => {
+                .then((res: any) => {
                     if (res?.data?.userId) {
                         setUserInfo(res.data);
                     } else {
@@ -204,7 +204,7 @@ const Header = () => {
                         const AToken = localStorage.getItem('jwtToken') || '';
                         const RToken = localStorage.getItem('refreshToken') || '';
                         getTokenReissuance(AToken, RToken)
-                            .then((res) => {
+                            .then((res: any) => {
                                 if (res?.data?.accessToken && res.data.refreshToken) {
                                     localStorage.setItem('jwtToken', res.data.accessToken);
                                     localStorage.setItem('refreshToken', res.data.refreshToken);
@@ -212,7 +212,7 @@ const Header = () => {
                             })
                             .then(() => {
                                 getUserInfo()
-                                    .then((res) => {
+                                    .then((res: any) => {
                                         if (res?.data?.userId) {
                                             setUserInfo(res.data);
                                         } else {

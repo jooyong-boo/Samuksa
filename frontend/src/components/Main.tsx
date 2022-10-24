@@ -23,7 +23,6 @@ import {
 } from '../store/atom';
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
-import React, { useContext } from 'react';
 import Title from './main/Title';
 import { notifyError } from './utils/notify';
 
@@ -69,7 +68,7 @@ const Main = () => {
         }
     };
 
-    const handleAreaChange = (e: SelectChangeEvent) => {
+    const handleAreaChange = (e: SelectChangeEvent<unknown>) => {
         setArea(e.target.value as string);
     };
 
@@ -136,7 +135,9 @@ const Main = () => {
                                 labelId="지역"
                                 title="지역"
                                 value={getArea ? area : ''}
-                                onChange={handleAreaChange}
+                                onChange={(e) => {
+                                    handleAreaChange(e);
+                                }}
                                 MenuProps={MenuProps}
                                 fullWidth
                             >

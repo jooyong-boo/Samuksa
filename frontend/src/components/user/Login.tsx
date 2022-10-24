@@ -29,7 +29,7 @@ const Login = () => {
         }
         let { userId, password } = userForm;
         login({ userId, password })
-            .then((res) => {
+            .then((res: any) => {
                 if (res.status !== 200) {
                     throw res;
                 }
@@ -42,7 +42,7 @@ const Login = () => {
                 }
             })
             .then(() => {
-                getUserInfo().then((res) => {
+                getUserInfo().then((res: any) => {
                     if (res.code === 500) {
                         return;
                     }
