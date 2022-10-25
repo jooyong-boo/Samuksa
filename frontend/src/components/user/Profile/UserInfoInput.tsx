@@ -1,4 +1,6 @@
 import { Button, Typography } from '@mui/material';
+import { changeUserInfoAxios } from 'api/auth';
+import { notifyError } from 'components/utils/notify';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from 'store/user';
@@ -20,10 +22,11 @@ interface UserInfoInputProps {
 
 const UserInfoInput = ({ label, value, id, placeholder }: UserInfoInputProps) => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+    const { userId, nickName }: userInfos = userInfo;
     const [userForm, serUserForm] = useState({ [id]: value });
-
+    const [password, setPassword] = useState('');
     const [modify, setModify] = useState(true);
-    console.log(userForm);
+
     const changeUserInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
         serUserForm({ ...userForm, [id]: value });
@@ -31,10 +34,22 @@ const UserInfoInput = ({ label, value, id, placeholder }: UserInfoInputProps) =>
 
     const handleModifyUserInfo = () => {
         if (modify === false) {
-            setUserInfo({ ...userInfo, ...userForm });
+            changeUserInfoAxios('newNickName', userForm[id], userId, password).then((res) => {
+                if (res?.data === 'success') {
+                    setUserInfo({ ...userInfo, ...userForm });
+                } else {
+                    notifyError('비밀번호를 확인해주세요');
+                    serUserForm({ ...userForm, nickName });
+                }
+            });
         }
         setModify(!modify);
     };
+
+    const handleChangePassword = (e: any) => {
+        setPassword(e.target.value);
+    };
+
     return (
         <>
             <CustomTypography>{label}</CustomTypography>
@@ -44,8 +59,20 @@ const UserInfoInput = ({ label, value, id, placeholder }: UserInfoInputProps) =>
                 value={userForm[id] || ''}
                 onChange={changeUserInfo}
                 placeholder={placeholder}
+                $marginBottom={!modify ? '0.5rem' : ''}
             />
-            <ModifyButton onClick={handleModifyUserInfo}>{modify ? '수정' : '확인'}</ModifyButton>
+            <ModifyButton onClick={handleModifyUserInfo} $marginBottom={!modify ? '0.5rem' : ''}>
+                {modify ? '수정' : '확인'}{' '}
+            </ModifyButton>
+            {!modify ? (
+                <ProfileInput
+                    id={password}
+                    value={password}
+                    type="password"
+                    onChange={handleChangePassword}
+                    placeholder="비밀번호를 입력해주세요"
+                />
+            ) : null}
         </>
     );
 };

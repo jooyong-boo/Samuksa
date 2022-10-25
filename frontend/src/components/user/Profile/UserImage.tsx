@@ -14,7 +14,7 @@ interface userInfos {
 }
 
 const UserImage = () => {
-    const [image, setImage] = useRecoilState<string | ArrayBuffer | null>(userImageState);
+    const [image, setImage] = useRecoilState<string>(userImageState);
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const { userId, nickName, email, profileImage }: userInfos = userInfo;
     const fileInput = useRef<HTMLInputElement | null>(null);
@@ -38,14 +38,15 @@ const UserImage = () => {
         //화면에 프로필 사진 표시
         const reader = new FileReader();
         actionImgCompress(value)
-            .then((result: File) => {
+            .then((result: any) => {
                 reader.readAsDataURL(result);
             })
             .then(() => {
                 reader.onload = () => {
                     const base64data = reader.result;
+                    console.log(typeof base64data);
                     if (reader.readyState === 2) {
-                        setImage(base64data);
+                        setImage(base64data as any);
                         // console.log(base64data);
                     }
                 };

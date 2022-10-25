@@ -37,7 +37,7 @@ const DetailedSearchConditions = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [totalAmount, setTotalAmount] = useState(0);
     const [fish, setFish] = useState<any[]>(fishList);
-    const [amount, setAmount] = useRecoilState(amountState);
+    const [amount, setAmount] = useRecoilState<number>(amountState);
     const [farm, setFarm] = useRecoilState<any[]>(farmState);
     const [farmStatus, setFarmStatus] = useState<string[]>([]);
 
@@ -94,11 +94,9 @@ const DetailedSearchConditions = () => {
         // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
     };
 
-    const changeAmount = useCallback((event: MouseEvent, newAmount: number) => {
-        event.preventDefault();
-        setAmount(newAmount);
-        // console.log(amount)
-    }, []);
+    const changeAmount = (_: Event, newValue: number | number[]) => {
+        setAmount(newValue as number);
+    };
 
     const changeHandler = (checked: boolean, id: string) => {
         if (checked) {

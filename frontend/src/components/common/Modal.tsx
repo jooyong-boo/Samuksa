@@ -4,13 +4,15 @@ import styled from 'styled-components';
 
 interface ModalProps {
     setOpen: (x: boolean) => void;
+    withdrawal: (userId: string, password: string) => void;
 }
 
-const Modal = ({ setOpen }: ModalProps) => {
+const Modal = ({ setOpen, withdrawal }: ModalProps) => {
     const [userInfo, setUserInfo] = useState({
         userId: '',
         password: '',
     });
+    const { userId, password } = userInfo;
 
     const closeModal = () => {
         setOpen(false);
@@ -22,8 +24,10 @@ const Modal = ({ setOpen }: ModalProps) => {
         }
     };
 
-    const handleChangeUserInfo = (e: React.KeyboardEvent) => {
-        console.log(e);
+    const handleChangeUserInfo = (e: React.ChangeEvent) => {
+        let target = e.target.id;
+        let newValue = (e.target as HTMLInputElement).value;
+        setUserInfo({ ...userInfo, [target]: newValue });
     };
 
     return (
@@ -31,12 +35,29 @@ const Modal = ({ setOpen }: ModalProps) => {
             <ModalBox>
                 <Typography sx={{ textAlign: 'center' }}>회원탈퇴</Typography>
                 <ButtonBox>
-                    <StyledInput id="userId" type="text" placeholder="아이디를 입력해주세요" />
-                    <StyledInput id="password" type="password" placeholder="비밀번호를 입력해주세요" />
+                    <StyledInput
+                        id="userId"
+                        type="text"
+                        placeholder="아이디를 입력해주세요"
+                        onChange={handleChangeUserInfo}
+                    />
+                    <StyledInput
+                        id="password"
+                        type="password"
+                        placeholder="비밀번호를 입력해주세요"
+                        onChange={handleChangeUserInfo}
+                    />
                     <StyledButton variant="outlined" onClick={closeModal}>
                         닫기
                     </StyledButton>
-                    <StyledButton variant="contained">회원탈퇴</StyledButton>
+                    <StyledButton
+                        variant="contained"
+                        onClick={() => {
+                            withdrawal(userId, password);
+                        }}
+                    >
+                        회원탈퇴
+                    </StyledButton>
                 </ButtonBox>
             </ModalBox>
         </Container>

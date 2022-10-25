@@ -175,10 +175,12 @@ export const changeUserImage = async (formData: FormData) => {
 };
 
 // 프로필 정보 변경
-export const changeUserInfo = async (change: string, info: string) => {
+export const changeUserInfoAxios = async (change: string, info?: string, userId?: string, password?: string) => {
     try {
         const result = await instance.patch('/user/user-info', {
             [`${change}`]: info,
+            userId,
+            password,
         });
         return result;
     } catch (err) {
