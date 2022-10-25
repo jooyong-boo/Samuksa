@@ -2,7 +2,7 @@ import { Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { changeUserInfo, getWithdrawal } from '../../api/auth';
+import { getWithdrawal } from '../../api/auth';
 import { userInfoState } from 'store/user';
 import { useEffect, useState } from 'react';
 import UserImage from './Profile/UserImage';
