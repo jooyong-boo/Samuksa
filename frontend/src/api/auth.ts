@@ -179,8 +179,6 @@ export const changeUserInfoAxios = async (change: string, info?: string, userId?
     try {
         const result = await instance.patch('/user/user-info', {
             [`${change}`]: info,
-            userId,
-            password,
         });
         return result;
     } catch (err) {
