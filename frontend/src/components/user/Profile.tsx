@@ -89,9 +89,9 @@ const Profile = () => {
                             )}
                         </ModifyDiv>
                         <WithDrawalButton />
-                        {/* <Button variant="outlined" onClick={withdrawal}>
+                        <Button variant="outlined" onClick={withdrawal}>
                             회원 탈퇴
-                        </Button> */}
+                        </Button>
                     </UserInfoDiv>
                 </ProfileContainer>
             </Card>
