@@ -1,11 +1,8 @@
 import { Box, Fab } from '@mui/material';
 import styled from 'styled-components';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { throttle } from 'lodash';
-import { useRef } from 'react';
 
 const TopScrollBtn = () => {
     const [scroll, setScroll] = useState(false);
