@@ -24,3 +24,19 @@
 - `김재성` - [@JS-2](https://github.com/JS-2)
 - `서원호` - [@wonho-seo](https://github.com/wonho-seo)
 - `부주용` - [@jooyong-boo](https://github.com/jooyong-boo)
+
+## 기능
+
+* 회원가입
+
+![회원가입-비밀번호까지](https://user-images.githubusercontent.com/93763666/208015745-dcf22eac-3a05-47c7-9e9d-f2ca625aa6a5.gif)
+![회원가입-이메일인증](https://user-images.githubusercontent.com/93763666/208015760-768018ec-efd9-430a-a8d1-d784087a1090.gif)
+
+* 로그인
+
+![로그인](https://user-images.githubusercontent.com/93763666/208015897-9874c9c1-8e53-4e5b-b737-981d14778b5e.gif)
+
+* 수산물 계산기
+
+![수산물 계산](https://user-images.githubusercontent.com/93763666/208015914-017ad3fe-d76a-4a7f-95d1-e2ede82939e7.gif)
+
