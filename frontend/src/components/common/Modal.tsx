@@ -39,12 +39,14 @@ const Modal = ({ setOpen, withdrawal }: ModalProps) => {
                         id="userId"
                         type="text"
                         placeholder="아이디를 입력해주세요"
+                        autoComplete="off"
                         onChange={handleChangeUserInfo}
                     />
                     <StyledInput
                         id="password"
                         type="password"
                         placeholder="비밀번호를 입력해주세요"
+                        autoComplete="off"
                         onChange={handleChangeUserInfo}
                     />
                     <StyledButton variant="outlined" onClick={closeModal}>
@@ -75,7 +77,7 @@ const Container = styled.div`
 
 const ModalBox = styled.div`
     width: 300px;
-    height: 200px;
+    height: 300px;
     z-index: 999;
     position: absolute;
     top: 50%;
@@ -85,6 +87,9 @@ const ModalBox = styled.div`
     border: 1px solid black;
     border-radius: 8px;
     padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 `;
 
 const ButtonBox = styled.div`
