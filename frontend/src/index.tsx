@@ -16,25 +16,30 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { muiTheme } from './components/styles/muiTheme';
 import { styledTheme } from './components/styles/styledTheme';
 import { toastTheme } from './components/styles/toastTheme';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-
+const queryClient = new QueryClient();
 setAuthorizationToken(localStorage.jwtToken);
 root.render(
     <React.StrictMode>
         <RecoilRoot>
-            <BrowserRouter>
-                <StyledEngineProvider injectFirst>
-                    <StyledThemeProvider theme={styledTheme}>
-                        <MuiThemeProvider theme={muiTheme}>
-                            <ToastContainer toastStyle={toastTheme} />
-                            <Header />
-                            <App />
-                            <TopScrollBtn />
-                        </MuiThemeProvider>
-                    </StyledThemeProvider>
-                </StyledEngineProvider>
-            </BrowserRouter>
+            <QueryClientProvider client={queryClient}>
+                <BrowserRouter>
+                    <StyledEngineProvider injectFirst>
+                        <StyledThemeProvider theme={styledTheme}>
+                            <MuiThemeProvider theme={muiTheme}>
+                                <ToastContainer toastStyle={toastTheme} />
+                                <Header />
+                                <App />
+                                <TopScrollBtn />
+                            </MuiThemeProvider>
+                        </StyledThemeProvider>
+                    </StyledEngineProvider>
+                </BrowserRouter>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
         </RecoilRoot>
     </React.StrictMode>,
 );

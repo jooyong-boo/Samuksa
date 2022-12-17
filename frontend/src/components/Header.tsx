@@ -423,9 +423,12 @@ const Header = () => {
                         })}
                         {loginStatus ? (
                             <UserBox>
-                                <Tooltip title="사용자 메뉴">
+                                <Tooltip title="메뉴">
                                     <UserIconButton onClick={handleOpenUserMenu}>
-                                        <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
+                                        <UserAvatar
+                                            src={userInfo.profileImage ? userInfo.profileImage : String(image)}
+                                            $loginStatus={loginStatus ? 'true' : ''}
+                                        />
                                     </UserIconButton>
                                 </Tooltip>
                                 {userInfo.nickName ? <UserNickNameText>{userInfo.nickName}</UserNickNameText> : null}

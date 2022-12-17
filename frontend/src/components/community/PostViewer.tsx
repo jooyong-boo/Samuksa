@@ -116,7 +116,11 @@ const PostViewer = () => {
                     <UserCommentWrapper>
                         <CommentBox>
                             <CommentUserAvatarContainer>
-                                {loginStatus ? <CommentUserAvatar src={userImage} /> : null}
+                                {loginStatus ? (
+                                    <CommentUserAvatar
+                                        src={userInfo.profileImage ? userInfo.profileImage : userImage}
+                                    />
+                                ) : null}
                                 {/* <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
                                     {loginStatus && nickName}
                                 </CommentUserInfoText> */}

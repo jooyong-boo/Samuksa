@@ -1,13 +1,13 @@
 import { Button, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { getWithdrawal } from '../../api/auth';
+import { changeUserInfoAxios } from '../../api/auth';
 import { userInfoState } from 'store/user';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UserImage from './Profile/UserImage';
 import UserInfoInput from './Profile/UserInfoInput';
 import WithDrawalButton from './Profile/WithDrawalButton';
+import { notifyError, notifySuccess } from 'components/utils/notify';
 
 interface userInfos {
     userId?: string;
@@ -19,36 +19,33 @@ interface userInfos {
 const Profile = () => {
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const { userId, nickName, email, profileImage }: userInfos = userInfo;
-    const [userEmail, setEmail] = useState('');
-    const [emailModify, setEmailModify] = useState(true);
-    // console.log(userInfo);
-    const navigate = useNavigate();
+    const [passwordModify, setPasswordModify] = useState(true);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
 
-    const withdrawal = () => {
-        let confirmWithdrawal = window.confirm('정말 탈퇴하시겠어요?');
-        if (confirmWithdrawal) {
-            // getWithdrawal();
-            alert('탈퇴 완료');
-            navigate('/');
-        } else {
-            return;
+    const handleClickPassword = () => {
+        if (!passwordModify) {
+            changeUserInfoAxios('newPassword', newPassword, userId, currentPassword).then((res) => {
+                if (res?.data === 'success') {
+                    setCurrentPassword('');
+                    setNewPassword('');
+                    notifySuccess('비밀번호 변경 완료');
+                } else {
+                    notifyError('비밀번호를 확인해주세요');
+                    return;
+                }
+            });
         }
+        setPasswordModify(!passwordModify);
     };
 
-    const handleModifyEmail = () => {
-        if (emailModify === false) {
-            setUserInfo({ ...userInfo, email: userEmail });
-        }
-        setEmailModify(!emailModify);
+    const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setCurrentPassword(e.target.value);
     };
 
-    const changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
+    const handleChangeNewPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNewPassword(e.target.value);
     };
-
-    useEffect(() => {
-        setEmail(email || '');
-    }, [userInfo]);
 
     return (
         <Background>
@@ -61,6 +58,30 @@ const Profile = () => {
                             <CustomTypography>아이디</CustomTypography>
                             <ProfileInput disabled={true} value={userId || ''} />
                         </ModifyDiv>
+                        <ModifyDiv>
+                            <CustomTypography>비밀번호</CustomTypography>
+                            <ProfileInput
+                                $marginBottom={'0.5rem'}
+                                disabled={passwordModify}
+                                value={currentPassword}
+                                onChange={handleChangePassword}
+                                placeholder="현재 비밀번호"
+                                autoComplete="off"
+                                type="password"
+                            />
+                            <ModifyButton $marginBottom={'0.5rem'} onClick={handleClickPassword}>
+                                {passwordModify ? '수정' : '확인'}
+                            </ModifyButton>
+                            {passwordModify ? null : (
+                                <ProfileInput
+                                    $marginBottom={'0.5rem'}
+                                    placeholder="새 비밀번호"
+                                    value={newPassword}
+                                    onChange={handleChangeNewPassword}
+                                    type="password"
+                                />
+                            )}
+                        </ModifyDiv>
 
                         <ModifyDiv>
                             <UserInfoInput
@@ -72,26 +93,9 @@ const Profile = () => {
                         </ModifyDiv>
                         <ModifyDiv>
                             <CustomTypography>이메일</CustomTypography>
-                            <ProfileInput
-                                $marginBottom={'0.5rem'}
-                                disabled={emailModify}
-                                value={userEmail || ''}
-                                onChange={changeEmail}
-                            />
-                            <ModifyButton $marginBottom={'0.5rem'} onClick={handleModifyEmail}>
-                                {emailModify ? '수정' : '확인'}
-                            </ModifyButton>
-                            {emailModify ? null : (
-                                <>
-                                    <ProfileInput placeholder="인증번호 입력" />
-                                    <ModifyButton>확인</ModifyButton>
-                                </>
-                            )}
+                            <ProfileInput $marginBottom={'0.5rem'} disabled={true} value={email} />
                         </ModifyDiv>
                         <WithDrawalButton />
-                        <Button variant="outlined" onClick={withdrawal}>
-                            회원 탈퇴
-                        </Button>
                     </UserInfoDiv>
                 </ProfileContainer>
             </Card>
