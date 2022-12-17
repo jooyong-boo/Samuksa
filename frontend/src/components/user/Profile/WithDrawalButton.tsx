@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from 'store/user';
-import styled from 'styled-components';
 
 interface userInfos {
     userId?: string;
@@ -29,7 +28,7 @@ const WithDrawalButton = () => {
                 console.log(res);
 
                 notifySuccess('탈퇴 완료');
-                // navigate('/');
+                navigate('/');
             });
         }
     };
