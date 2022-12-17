@@ -32,7 +32,6 @@ export const signUp = async ({ userId, password, nickName, email }: Register) =>
             password,
             email,
         });
-        console.log(data);
         return data;
     } catch (err) {
         return err;
@@ -45,14 +44,12 @@ export const login = async ({ userId, password }: { userId: string; password: st
             userId,
             password,
         });
-        console.log(result);
         if (result.status === 200) {
             localStorage.setItem('jwtToken', result.headers[`access-token`]);
             localStorage.setItem('refreshToken', result.headers[`refresh-token`]);
             return result;
         }
     } catch (err) {
-        console.log(err);
         return err;
     }
 };
@@ -64,10 +61,8 @@ export const logout = async (accessToken: string) => {
                 accessToken,
             },
         });
-        console.log(result);
         return result;
     } catch (err) {
-        console.log(err);
         return err;
     }
 };
@@ -80,10 +75,8 @@ export const checkDuplicate = async (info: string, check: string) => {
                 [`${check}`]: info,
             },
         });
-        console.log(data);
         return data;
     } catch (err: any) {
-        console.log(err.response);
         return err.response.data;
     }
 };
@@ -97,7 +90,7 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
         });
         return data;
     } catch (err: any) {
-        console.log(err.response);
+        return err;
     }
 };
 
@@ -105,7 +98,6 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
 export const getUserInfo = async () => {
     try {
         const result = await instance.get('/user/user-info');
-        console.log(result);
         if (result.data) {
             return result;
         } else {
@@ -126,8 +118,8 @@ export const getWithdrawal = async (userId: string, password: string) => {
             },
         });
         return data;
-    } catch (e) {
-        console.log(e);
+    } catch (err) {
+        return err;
     }
 };
 // 토큰 재발급
@@ -146,7 +138,6 @@ export const getTokenReissuance = async (accessToken: string, refreshToken: stri
                 },
             },
         );
-        // console.log(result);
         if (result.status === 200) {
             return result;
         }
@@ -157,20 +148,13 @@ export const getTokenReissuance = async (accessToken: string, refreshToken: stri
 // 유저 이미지
 export const changeUserImage = async (formData: FormData) => {
     try {
-        const result = await instance.post(
-            '/user/upload-image',
-            {
-                formData,
+        const result = await instance.post('/user/upload-image', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
             },
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            },
-        );
-        console.log(result);
+        });
     } catch (err) {
-        console.log(err);
+        return err;
     }
 };
 
@@ -179,6 +163,8 @@ export const changeUserInfoAxios = async (change: string, info?: string, userId?
     try {
         const result = await instance.patch('/user/user-info', {
             [`${change}`]: info,
+            userId,
+            password,
         });
         return result;
     } catch (err) {
