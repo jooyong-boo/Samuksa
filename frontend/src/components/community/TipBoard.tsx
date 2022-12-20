@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink, useOutletContext } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { getPostState, tipPostPageState } from '../../store/atom';
@@ -37,6 +37,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
 import { getCommentById } from '../../api/post';
 import { getRandomNumber } from './PostViewer';
+import useGetPost from 'api/hooks/post/useGetPost';
+import TableBoard from './FreeBoard/TableBoard';
+import MobileBoard from './FreeBoard/MobileBoard';
 
 const tipBoardHead = ['No', '제목', '글쓴이', '작성시간', '추천수', '조회수'];
 
@@ -64,6 +67,10 @@ const SortPages = [
     },
 ];
 
+interface OutletProps {
+    selectTab: number;
+}
+
 const TipBoard = () => {
     const notifyError = (text: string) => {
         dismissAll();
@@ -89,6 +96,9 @@ const TipBoard = () => {
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState('오래된순');
     const [searchOption, setSearchOption] = useState('제목');
+
+    const { selectTab } = useOutletContext<OutletProps>();
+    const [data, isLoading] = useGetPost(postPage - 1, limit, selectTab);
 
     const openSearch = () => {
         setOpen(!open);
@@ -278,110 +288,9 @@ const TipBoard = () => {
                         </SearchBox>
                     </SearchContainer>
                 ) : null}
-                <ThemeProvider theme={theme}>
-                    <CustomTableContainer>
-                        <Table aria-label="review table">
-                            <TableHead>
-                                <TableRow>
-                                    {tipBoardHead.map((item) => (
-                                        <TableCell key={item} sx={tableTopTextStyle}>
-                                            {item}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                    const { id, title, UserId, createdAt, read, nickName, avatar } = item;
-                                    const newCreateAt = new Date(createdAt);
-                                    const year = newCreateAt.getFullYear();
-                                    const month = newCreateAt.getMonth();
-                                    const date = newCreateAt.getDate();
 
-                                    return (
-                                        <TableRow
-                                            key={id}
-                                            sx={{
-                                                '&:last-child td, &:last-child th': { border: 0 },
-                                                ':hover': {
-                                                    backgroundColor: '#F4F4F4',
-                                                },
-                                            }}
-                                        >
-                                            <TableCell sx={tableTextStyle}>{id}</TableCell>
-                                            <TableCell component="th" scope="row" sx={titleTextStyle}>
-                                                <TitleNavLink
-                                                    to={`post/${id}`}
-                                                    read={read ? 'true' : ''}
-                                                    onClick={() => {
-                                                        AddReadPost(id);
-                                                    }}
-                                                >
-                                                    {title}
-                                                    {/* <Typography>
-                                                        {postComment.length > 0 ? postComment[id - 1].length : ''}
-                                                    </Typography> */}
-                                                </TitleNavLink>
-                                            </TableCell>
-                                            <TableCell sx={tableTextStyle}>
-                                                <PostUserInfoDiv>
-                                                    <StyledAvatar src={avatar} />
-                                                    <NickNameInfo>{nickName}</NickNameInfo>
-                                                </PostUserInfoDiv>
-                                            </TableCell>
-                                            <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
-                                            <TableCell sx={tableTextStyle}>{UserId}</TableCell>
-                                            <TableCell sx={tableTextStyle}>{UserId}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </CustomTableContainer>
-                    <MobileBoardContainer>
-                        <StyledUl>
-                            {usePosts.slice(offset, offset + limit).map((item: any) => {
-                                const { id, title, UserId, createdAt, read, nickName, avatar } = item;
-                                const newCreateAt = new Date(createdAt);
-                                const year = newCreateAt.getFullYear();
-                                const month = newCreateAt.getMonth();
-                                const date = newCreateAt.getDate();
-
-                                return (
-                                    <div key={id}>
-                                        <MobileLi>
-                                            <div>
-                                                <MobileWriterWrapper>
-                                                    <StyledAvatar src={avatar} />
-                                                    <NickNameInfo>{nickName}</NickNameInfo>
-                                                </MobileWriterWrapper>
-                                                <TitleInfo>
-                                                    <TitleNavLink
-                                                        to={`post/${id}`}
-                                                        read={read ? 'true' : ''}
-                                                        onClick={() => {
-                                                            AddReadPost(id);
-                                                        }}
-                                                    >
-                                                        {title}
-                                                    </TitleNavLink>
-                                                </TitleInfo>
-                                            </div>
-                                            <MobilePostAdditionalInfoWrapper>
-                                                <MobilePostAddInfoLeft>
-                                                    <MobilePostAddInfoText>조회: {id}</MobilePostAddInfoText>
-                                                    <MobilePostAddInfoText>댓글: {id}</MobilePostAddInfoText>
-                                                    <MobilePostAddInfoText>추천: {UserId}</MobilePostAddInfoText>
-                                                </MobilePostAddInfoLeft>
-                                                <MobilePostAddInfoRightText>{`${year}년 ${month}월 ${date}일`}</MobilePostAddInfoRightText>
-                                            </MobilePostAdditionalInfoWrapper>
-                                        </MobileLi>
-                                    </div>
-                                );
-                            })}
-                        </StyledUl>
-                    </MobileBoardContainer>
-                </ThemeProvider>
+                <TableBoard usePosts={data?.content} offset={offset} limit={limit} />
+                <MobileBoard usePosts={usePosts} offset={offset} limit={limit} />
                 <PaginationStack>
                     <Pagination
                         total={postsRecoil.length}
@@ -420,7 +329,8 @@ const Background = styled.div`
 `;
 
 const BoardContainer = styled.div`
-    width: 80%;
+    width: 100%;
+    max-width: 1200px;
     text-align: center;
     overflow: auto;
 `;

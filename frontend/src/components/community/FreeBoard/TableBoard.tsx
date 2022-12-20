@@ -11,7 +11,6 @@ import {
     Typography,
 } from '@mui/material';
 import timeForToday from 'components/utils/TimeForToday';
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -47,16 +46,12 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {usePosts.slice(offset, offset + limit).map((item: any) => {
-                            const { id, title, UserId, createdAt, read, nickName, avatar } = item;
-                            const newCreateAt = new Date(createdAt);
-                            const year = newCreateAt.getFullYear();
-                            const month = newCreateAt.getMonth();
-                            const date = newCreateAt.getDate();
+                        {usePosts?.slice(offset, offset + limit).map((item: any) => {
+                            const { idx, title, nickName, profileImage, ctime, recommendNumber, read } = item;
 
                             return (
                                 <TableRow
-                                    key={id}
+                                    key={idx}
                                     sx={{
                                         '&:last-child td, &:last-child th': { border: 0 },
                                         ':hover': {
@@ -64,13 +59,13 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                         },
                                     }}
                                 >
-                                    <TableCell sx={tableTextStyle}>{id}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{idx}</TableCell>
                                     <TableCell component="th" scope="row" sx={titleTextStyle}>
                                         <TitleNavLink
-                                            to={`post/${id}`}
+                                            to={`post/${idx}`}
                                             read={read ? 'true' : ''}
                                             onClick={() => {
-                                                AddReadPost(id);
+                                                AddReadPost(idx);
                                             }}
                                         >
                                             {title}
@@ -81,13 +76,13 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                     </TableCell>
                                     <TableCell sx={tableTextStyle}>
                                         <PostUserInfoDiv>
-                                            <StyledAvatar src={avatar} />
+                                            <StyledAvatar src={profileImage} />
                                             <NickNameInfo>{nickName}</NickNameInfo>
                                         </PostUserInfoDiv>
                                     </TableCell>
-                                    <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
-                                    <TableCell sx={tableTextStyle}>{UserId}</TableCell>
-                                    <TableCell sx={tableTextStyle}>{UserId}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{timeForToday(ctime)}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{recommendNumber}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{recommendNumber}</TableCell>
                                 </TableRow>
                             );
                         })}
@@ -129,7 +124,7 @@ const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
 const PostUserInfoDiv = styled.div`
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     margin: auto;
 `;
 
