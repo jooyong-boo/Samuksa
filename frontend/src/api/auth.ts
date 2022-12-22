@@ -26,10 +26,9 @@ instance.interceptors.request.use((config) => {
 });
 
 instance.interceptors.response.use((res) => {
-    console.log(res);
-    if (res.config.headers?.Authorization) {
-        const token = res.config.headers?.Authorization;
-        localStorage.setItem('jwtToken', JSON.stringify(token));
+    if (res.headers[`access-token`]) {
+        const token = res.headers[`access-token`];
+        localStorage.setItem('jwtToken', token);
     }
     return res;
 });
