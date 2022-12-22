@@ -14,6 +14,7 @@ import TableBoard from './FreeBoard/TableBoard';
 import WriteBtn from './FreeBoard/WriteBtn';
 import { useOutletContext } from 'react-router-dom';
 import useGetPost from 'api/hooks/post/useGetPost';
+import Loading from 'components/common/Loading';
 
 interface OutletProps {
     selectTab: number;
@@ -76,11 +77,17 @@ const ReviewBoard = () => {
                     </div>
                 </BoardTopWrapper>
                 {open ? <SearchMenu posts={posts} setUsePosts={setUsePosts} /> : null}
-                <TableBoard usePosts={data?.content} offset={offset} limit={limit} />
-                <MobileBoard usePosts={usePosts} offset={offset} limit={limit} />
+                {!isLoading ? (
+                    <>
+                        <TableBoard usePosts={data?.content} offset={offset} limit={limit} />
+                        <MobileBoard usePosts={usePosts} offset={offset} limit={limit} />
+                    </>
+                ) : (
+                    <Loading />
+                )}
                 <PaginationStack>
                     <Pagination
-                        total={postsRecoil.length}
+                        total={data?.content.length}
                         limit={limit}
                         postPage={postPage}
                         setPostPage={setPostPage}
