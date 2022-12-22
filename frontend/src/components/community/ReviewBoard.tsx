@@ -29,6 +29,7 @@ const ReviewBoard = () => {
     const [usePosts, setUsePosts] = useState<any[]>(postsRecoil);
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState('최신순');
+    // const [tab, setTab] = useState(0);
 
     const { selectTab } = useOutletContext<OutletProps>();
     const [data, isLoading] = useGetPost(postPage - 1, limit, selectTab);
@@ -80,7 +81,7 @@ const ReviewBoard = () => {
                 {!isLoading ? (
                     <>
                         <TableBoard usePosts={data?.content} offset={offset} limit={limit} />
-                        <MobileBoard usePosts={usePosts} offset={offset} limit={limit} />
+                        <MobileBoard usePosts={data?.content} offset={offset} limit={limit} />
                     </>
                 ) : (
                     <Loading />
