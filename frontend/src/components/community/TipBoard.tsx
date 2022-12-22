@@ -96,9 +96,11 @@ const TipBoard = () => {
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState('오래된순');
     const [searchOption, setSearchOption] = useState('제목');
+    // const [tab, setTab] = useState(1);
 
     const { selectTab } = useOutletContext<OutletProps>();
     const [data, isLoading] = useGetPost(postPage - 1, limit, selectTab);
+    console.log(data);
 
     const openSearch = () => {
         setOpen(!open);
@@ -172,30 +174,6 @@ const TipBoard = () => {
         let sortUsePosts = [...postsRecoil];
         setUsePosts(sortUsePosts.sort((a, b) => b.id - a.id));
     }, [postsRecoil]);
-
-    // useEffect(() => {
-    //     const readPost = localStorage.getItem('tipReadPost');
-    //     const newPosts = reversePosts.map((item: any) => {
-    //         if (readPost?.includes(item.id)) {
-    //             return Object.assign(
-    //                 {},
-    //                 item,
-    //                 { read: true },
-    //                 { nickName: RandomNickname() },
-    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-    //             );
-    //         } else {
-    //             return Object.assign(
-    //                 {},
-    //                 item,
-    //                 { nickName: RandomNickname() },
-    //                 { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
-    //             );
-    //         }
-    //     });
-    //     setReversePosts(newPosts);
-    //     setUsePosts(newPosts);
-    // }, [postsRecoil]);
 
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const Menuopen = Boolean(anchorElNav);
@@ -290,10 +268,10 @@ const TipBoard = () => {
                 ) : null}
 
                 <TableBoard usePosts={data?.content} offset={offset} limit={limit} />
-                <MobileBoard usePosts={usePosts} offset={offset} limit={limit} />
+                <MobileBoard usePosts={data?.content} offset={offset} limit={limit} />
                 <PaginationStack>
                     <Pagination
-                        total={postsRecoil.length}
+                        total={data?.content.length}
                         limit={limit}
                         postPage={postPage}
                         setPostPage={setPostPage}

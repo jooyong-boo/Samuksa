@@ -3,7 +3,7 @@ import { getRealPosts } from 'api/post';
 
 const useGetPost = (page: number, size: number, type: number) => {
     const { isLoading, isError, data, error } = useQuery({
-        queryKey: ['post', page],
+        queryKey: ['post', type],
         queryFn: () => getRealPosts(page, size, type),
         keepPreviousData: true,
         select: (data) => data.data,
