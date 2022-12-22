@@ -9,6 +9,7 @@ type Register = {
 
 const axiosConfig: AxiosRequestConfig = {
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
+    withCredentials: true,
 };
 
 const instance = axios.create(axiosConfig);
@@ -22,6 +23,15 @@ instance.interceptors.request.use((config) => {
         };
     }
     return config;
+});
+
+instance.interceptors.response.use((res) => {
+    console.log(res);
+    if (res.config.headers?.Authorization) {
+        const token = res.config.headers?.Authorization;
+        localStorage.setItem('jwtToken', JSON.stringify(token));
+    }
+    return res;
 });
 
 export const signUp = async ({ userId, password, nickName, email }: Register) => {
@@ -46,7 +56,6 @@ export const login = async ({ userId, password }: { userId: string; password: st
         });
         if (result.status === 200) {
             localStorage.setItem('jwtToken', result.headers[`access-token`]);
-            localStorage.setItem('refreshToken', result.headers[`refresh-token`]);
             return result;
         }
     } catch (err) {
@@ -122,29 +131,29 @@ export const getWithdrawal = async (userId: string, password: string) => {
         return err;
     }
 };
-// 토큰 재발급
-export const getTokenReissuance = async (accessToken: string, refreshToken: string) => {
-    const token = localStorage.getItem('refreshToken');
-    try {
-        const result = await instance.post(
-            '/login/refresh-token',
-            {
-                accessToken,
-                refreshToken,
-            },
-            {
-                headers: {
-                    'Refresh-Authorization': `Bearer ${token}`,
-                },
-            },
-        );
-        if (result.status === 200) {
-            return result;
-        }
-    } catch (err) {
-        return err;
-    }
-};
+// // 토큰 재발급
+// export const getTokenReissuance = async (accessToken: string, refreshToken: string) => {
+//     const token = localStorage.getItem('refreshToken');
+//     try {
+//         const result = await instance.post(
+//             '/login/refresh-token',
+//             {
+//                 accessToken,
+//                 refreshToken,
+//             },
+//             {
+//                 headers: {
+//                     'Refresh-Authorization': `Bearer ${token}`,
+//                 },
+//             },
+//         );
+//         if (result.status === 200) {
+//             return result;
+//         }
+//     } catch (err) {
+//         return err;
+//     }
+// };
 // 유저 이미지
 export const changeUserImage = async (formData: FormData) => {
     try {

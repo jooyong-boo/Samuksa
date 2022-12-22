@@ -30,6 +30,7 @@ const PostEditor = () => {
     const editorRef: any = useRef(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [type, setType] = useState(0);
     const [board, setBoard] = useState('');
 
     const postsRecoil = useRecoilValue<any[]>(getPostState);
@@ -127,9 +128,11 @@ const PostEditor = () => {
     useEffect(() => {
         if (prevLocation === '/review' && !localStorage.getItem('transientStorage')) {
             setBoard('리뷰게시판');
+            setType(0);
         }
         if (prevLocation === '/tip' && !localStorage.getItem('transientStorage')) {
             setBoard('TIP게시판');
+            setType(1);
         }
     }, []);
 

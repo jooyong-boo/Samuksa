@@ -114,7 +114,6 @@ const PaginationList = styled(List)`
 const Button = styled.button`
     border: none;
     padding: 0px 0.5rem;
-    /* margin: 0 0.4rem; */
     background: white;
     color: #5a5a5a;
     font-size: 1.1rem;

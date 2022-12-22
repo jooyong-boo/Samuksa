@@ -10,7 +10,7 @@ import SetMealIcon from '@mui/icons-material/SetMeal';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Button, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
-import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
+import { getUserInfo, logout } from '../api/auth';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import { ReactElement } from 'react';
@@ -200,77 +200,6 @@ const Header = () => {
                                 <br /> 인터넷 연결을 확인해주세요.
                             </p>,
                         );
-                    } else {
-                        const AToken = localStorage.getItem('jwtToken') || '';
-                        const RToken = localStorage.getItem('refreshToken') || '';
-                        getTokenReissuance(AToken, RToken)
-                            .then((res: any) => {
-                                if (res?.data?.accessToken && res.data.refreshToken) {
-                                    localStorage.setItem('jwtToken', res.data.accessToken);
-                                    localStorage.setItem('refreshToken', res.data.refreshToken);
-                                }
-                            })
-                            .then(() => {
-                                getUserInfo()
-                                    .then((res: any) => {
-                                        if (res?.data?.userId) {
-                                            setUserInfo(res.data);
-                                        } else {
-                                            throw res;
-                                        }
-                                    })
-                                    .catch((e) => {
-                                        if (e.code === 'ERR_NETWORK') {
-                                            localStorage.removeItem('jwtToken');
-                                            localStorage.removeItem('refreshToken');
-                                            localStorage.removeItem('kakaoAuth');
-                                            setLoginStatus(false);
-                                            setUserInfo({});
-                                            setUserIdState('');
-                                            setImage('/broken-image.jpg');
-                                            return notifyError(
-                                                <p>
-                                                    서버와의 연결이 원활하지 않습니다.
-                                                    <br /> 새로고침을 하거나
-                                                    <br /> 인터넷 연결을 확인해주세요.
-                                                </p>,
-                                            );
-                                        }
-                                    });
-                            })
-                            .catch((e) => {
-                                console.log(e);
-                                if (e.response.data.code === 401 && e.response.data.message === 'INVALID_TOKEN') {
-                                    localStorage.removeItem('jwtToken');
-                                    localStorage.removeItem('refreshToken');
-                                    localStorage.removeItem('kakaoAuth');
-                                    setLoginStatus(false);
-                                    setUserInfo({});
-                                    setUserIdState('');
-                                    setImage('/broken-image.jpg');
-                                    return notifyError(
-                                        <p>
-                                            아이디 인증시간이 만료되었습니다.
-                                            <br /> 재로그인 해주세요
-                                        </p>,
-                                    );
-                                } else if (e.code === 'ERR_NETWORK') {
-                                    localStorage.removeItem('jwtToken');
-                                    localStorage.removeItem('refreshToken');
-                                    localStorage.removeItem('kakaoAuth');
-                                    setLoginStatus(false);
-                                    setUserInfo({});
-                                    setUserIdState('');
-                                    setImage('/broken-image.jpg');
-                                    return notifyError(
-                                        <p>
-                                            서버와의 연결이 원활하지 않습니다.
-                                            <br /> 새로고침을 하거나
-                                            <br /> 인터넷 연결을 확인해주세요.
-                                        </p>,
-                                    );
-                                }
-                            });
                     }
                 });
         }

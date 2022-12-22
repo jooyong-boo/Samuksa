@@ -55,7 +55,7 @@ const Board = () => {
                         );
                     })}
                 </BoardTabs>
-                <Outlet />
+                <Outlet context={{ selectTab }} />
             </BoardBox>
         </Background>
     );
