@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 const axiosConfig: AxiosRequestConfig = {
     baseURL: process.env.REACT_APP_SamuksaUser_URL,
+    withCredentials: true,
 };
 
 const instance = axios.create(axiosConfig);
