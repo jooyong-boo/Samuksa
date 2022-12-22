@@ -22,27 +22,27 @@ const MobileBoard = ({ usePosts, offset, limit }: PostListProps) => {
     return (
         <MobileBoardContainer>
             <StyledUl>
-                {usePosts.slice(offset, offset + limit).map((item: any) => {
-                    const { id, title, UserId, createdAt, read, nickName, avatar } = item;
-                    const newCreateAt = new Date(createdAt);
+                {usePosts?.slice(offset, offset + limit).map((item: any) => {
+                    const { idx, title, nickName, profileImage, ctime, recommendNumber, read } = item;
+                    const newCreateAt = new Date(ctime);
                     const year = newCreateAt.getFullYear();
                     const month = newCreateAt.getMonth();
                     const date = newCreateAt.getDate();
 
                     return (
-                        <div key={id}>
+                        <div key={idx}>
                             <MobileLi>
                                 <div>
                                     <MobileWriterWrapper>
-                                        <StyledAvatar src={avatar} />
+                                        <StyledAvatar src={profileImage} />
                                         <NickNameInfo>{nickName}</NickNameInfo>
                                     </MobileWriterWrapper>
                                     <TitleInfo>
                                         <TitleNavLink
-                                            to={`post/${id}`}
+                                            to={`post/${idx}`}
                                             read={read ? 'true' : ''}
                                             onClick={() => {
-                                                AddReadPost(id);
+                                                AddReadPost(idx);
                                             }}
                                         >
                                             {title}
@@ -51,11 +51,13 @@ const MobileBoard = ({ usePosts, offset, limit }: PostListProps) => {
                                 </div>
                                 <MobilePostAdditionalInfoWrapper>
                                     <MobilePostAddInfoLeft>
-                                        <MobilePostAddInfoText>조회: {id}</MobilePostAddInfoText>
-                                        <MobilePostAddInfoText>댓글: {id}</MobilePostAddInfoText>
-                                        <MobilePostAddInfoText>추천: {UserId}</MobilePostAddInfoText>
+                                        <MobilePostAddInfoText>조회: {recommendNumber}</MobilePostAddInfoText>
+                                        <MobilePostAddInfoText>댓글: {recommendNumber}</MobilePostAddInfoText>
+                                        <MobilePostAddInfoText>추천: {recommendNumber}</MobilePostAddInfoText>
                                     </MobilePostAddInfoLeft>
-                                    <MobilePostAddInfoRightText>{`${year}년 ${month}월 ${date}일`}</MobilePostAddInfoRightText>
+                                    <MobilePostAddInfoRightText>{`${year}년 ${
+                                        month + 1
+                                    }월 ${date}일`}</MobilePostAddInfoRightText>
                                 </MobilePostAdditionalInfoWrapper>
                             </MobileLi>
                         </div>
