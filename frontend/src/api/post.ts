@@ -18,6 +18,14 @@ instance.interceptors.request.use((config) => {
     return config;
 });
 
+instance.interceptors.response.use((res) => {
+    if (res.headers[`access-token`]) {
+        const token = res.headers[`access-token`];
+        localStorage.setItem('jwtToken', token);
+    }
+    return res;
+});
+
 // 전체 게시물 목록
 export const getPosts = async () => {
     try {
