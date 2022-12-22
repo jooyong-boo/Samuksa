@@ -123,25 +123,23 @@ const Header = () => {
         if (name === '로그아웃') {
             const AToken = localStorage.getItem('jwtToken') || '';
             logout(AToken).then((res: any) => {
-                if (res.status === 200) {
+                if (res.status === 201) {
                     localStorage.removeItem('jwtToken');
-                    localStorage.removeItem('refreshToken');
                     localStorage.removeItem('kakaoAuth');
                     navigate('/');
                     setUserInfo({});
                     setUserIdState('');
                     setImage('/broken-image.jpg');
                     notifySuccess('다음에 또 만나요!');
+                } else {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('kakaoAuth');
+                    navigate('/');
+                    setUserInfo({});
+                    setUserIdState('');
+                    setImage('/broken-image.jpg');
                 }
             });
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('kakaoAuth');
-            navigate('/');
-            setUserInfo({});
-            setUserIdState('');
-            setImage('/broken-image.jpg');
-            notifySuccess('다음에 또 만나요!');
         }
     };
 
@@ -187,7 +185,6 @@ const Header = () => {
                 .catch((e) => {
                     if (e.code === 'ERR_NETWORK') {
                         localStorage.removeItem('jwtToken');
-                        localStorage.removeItem('refreshToken');
                         localStorage.removeItem('kakaoAuth');
                         setLoginStatus(false);
                         setUserInfo({});
@@ -200,6 +197,14 @@ const Header = () => {
                                 <br /> 인터넷 연결을 확인해주세요.
                             </p>,
                         );
+                    }
+                    if (e.status === 401) {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('kakaoAuth');
+                        setLoginStatus(false);
+                        setUserInfo({});
+                        setUserIdState('');
+                        setImage('/broken-image.jpg');
                     }
                 });
         }
