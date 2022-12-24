@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import { instanceAuth } from './globalConfig';
 
 type Register = {
     userId: string;
@@ -7,35 +7,9 @@ type Register = {
     email: string;
 };
 
-const axiosConfig: AxiosRequestConfig = {
-    baseURL: process.env.REACT_APP_SamuksaUser_URL,
-    withCredentials: true,
-};
-
-const instance = axios.create(axiosConfig);
-
-instance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('jwtToken');
-    if (token) {
-        config.headers = {
-            ...config.headers,
-            Authorization: `Bearer ${token}`,
-        };
-    }
-    return config;
-});
-
-instance.interceptors.response.use((res) => {
-    if (res.headers[`access-token`]) {
-        const token = res.headers[`access-token`];
-        localStorage.setItem('jwtToken', token);
-    }
-    return res;
-});
-
 export const signUp = async ({ userId, password, nickName, email }: Register) => {
     try {
-        const { data } = await instance.post('/signup', {
+        const { data } = await instanceAuth.post('/signup', {
             userId,
             nickName,
             password,
@@ -49,7 +23,7 @@ export const signUp = async ({ userId, password, nickName, email }: Register) =>
 
 export const login = async ({ userId, password }: { userId: string; password: string }) => {
     try {
-        const result = await instance.post('/login', {
+        const result = await instanceAuth.post('/login', {
             userId,
             password,
         });
@@ -64,7 +38,7 @@ export const login = async ({ userId, password }: { userId: string; password: st
 
 export const logout = async (accessToken: string) => {
     try {
-        const result = await instance.delete('/login/jwt', {
+        const result = await instanceAuth.delete('/login/jwt', {
             data: {
                 accessToken,
             },
@@ -78,7 +52,7 @@ export const logout = async (accessToken: string) => {
 // 중복 확인
 export const checkDuplicate = async (info: string, check: string) => {
     try {
-        const { data } = await instance.get('/signup/existence-info', {
+        const { data } = await instanceAuth.get('/signup/existence-info', {
             params: {
                 [`${check}`]: info,
             },
@@ -92,7 +66,7 @@ export const checkDuplicate = async (info: string, check: string) => {
 // 이메일 인증, 체크
 export const requestCheckEmail = async (email: string, checkEmail: string, authNum?: string, checkAuthNum?: string) => {
     try {
-        const data = await instance.post('/signup/message', {
+        const data = await instanceAuth.post('/signup/message', {
             [`${checkEmail}`]: email,
             [`${checkAuthNum}`]: authNum,
         });
@@ -105,7 +79,7 @@ export const requestCheckEmail = async (email: string, checkEmail: string, authN
 //유저정보
 export const getUserInfo = async () => {
     try {
-        const result = await instance.get('/user/user-info');
+        const result = await instanceAuth.get('/user/user-info');
         if (result.data) {
             return result;
         } else {
@@ -119,7 +93,7 @@ export const getUserInfo = async () => {
 // 회원 탈퇴
 export const getWithdrawal = async (userId: string, password: string) => {
     try {
-        const { data } = await instance.delete('/user/user-info', {
+        const { data } = await instanceAuth.delete('/user/user-info', {
             params: {
                 userId,
                 password,
@@ -156,7 +130,7 @@ export const getWithdrawal = async (userId: string, password: string) => {
 // 유저 이미지
 export const changeUserImage = async (formData: FormData) => {
     try {
-        const result = await instance.post('/user/upload-image', formData, {
+        const result = await instanceAuth.post('/user/upload-image', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -169,7 +143,7 @@ export const changeUserImage = async (formData: FormData) => {
 // 프로필 정보 변경
 export const changeUserInfoAxios = async (change: string, info?: string, userId?: string, password?: string) => {
     try {
-        const result = await instance.patch('/user/user-info', {
+        const result = await instanceAuth.patch('/user/user-info', {
             [`${change}`]: info,
             userId,
             password,

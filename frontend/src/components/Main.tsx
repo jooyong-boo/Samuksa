@@ -1,5 +1,5 @@
 import styled, { ThemeContext } from 'styled-components';
-import image from '../components/assets/img/mainImage.webp';
+import image from '../assets/img/mainImage.webp';
 import {
     Box,
     Button,
@@ -24,7 +24,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Introduction from './Introduction';
 import Title from './main/Title';
-import { notifyError } from './utils/notify';
+import { notifyError } from '../utils/notify';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;

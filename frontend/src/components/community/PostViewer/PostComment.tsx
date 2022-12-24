@@ -1,6 +1,6 @@
 import { Avatar, Button, TextField, Typography } from '@mui/material';
-import { RandomNickname } from 'components/utils/RandomNickname';
-import timeForToday from 'components/utils/TimeForToday';
+import { RandomNickname } from 'utils/RandomNickname';
+import timeForToday from 'utils/TimeForToday';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { TiEdit } from 'react-icons/ti';

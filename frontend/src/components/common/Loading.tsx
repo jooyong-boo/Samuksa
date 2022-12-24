@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Spinner from '../../components/assets/spinner/Spinner.gif';
-import LottieSinner from '../../components/assets/spinner/LottieSpinner.json';
+import Spinner from '../../assets/spinner/Spinner.gif';
+import LottieSinner from '../../assets/spinner/LottieSpinner.json';
 import Lottie from 'lottie-react';
 
 const Loading = () => {

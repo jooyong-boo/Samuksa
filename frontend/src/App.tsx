@@ -3,8 +3,8 @@ import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import UserInfoPage from './pages/auth/UserInfoPage';
-import RequireAuth from './components/utils/RequireAuth';
-import PublicAuth from './components/utils/PublicAuth';
+import RequireAuth from './utils/RequireAuth';
+import PublicAuth from './utils/PublicAuth';
 import BookmarkPage from './pages/BookmarkPage';
 
 const MainPage = lazy(() => import('./pages/MainPage'));

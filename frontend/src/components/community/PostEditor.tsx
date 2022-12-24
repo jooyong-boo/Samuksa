@@ -17,7 +17,7 @@ import { getRandomNumber } from './PostViewer';
 import { getPostState } from '../../store/atom';
 import UserInfo from './PostEditor/UserInfo';
 import BoardSelect from './PostEditor/BoardSelect';
-import { notifySuccess } from 'components/utils/notify';
+import { notifySuccess } from 'utils/notify';
 
 interface userInfos {
     userId?: string;

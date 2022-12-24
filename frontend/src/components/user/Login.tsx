@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userInfoState, userLoginFormState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
-import { notifyError, notifySuccess } from 'components/utils/notify';
+import { notifyError, notifySuccess } from 'utils/notify';
 import InputWithLabel from './Login/InputWithLabel';
 
 const Login = () => {

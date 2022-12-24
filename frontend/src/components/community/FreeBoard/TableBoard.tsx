@@ -10,7 +10,7 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import timeForToday from 'components/utils/TimeForToday';
+import timeForToday from 'utils/TimeForToday';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 

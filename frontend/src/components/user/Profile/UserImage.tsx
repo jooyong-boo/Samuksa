@@ -5,8 +5,8 @@ import imageCompression from 'browser-image-compression';
 import { useRecoilState } from 'recoil';
 import { userImageState, userInfoState } from 'store/user';
 import { getUserInfo } from 'api/auth';
-import handlingDataForm from 'components/utils/handlingDataForm';
-import { notifySuccess } from 'components/utils/notify';
+import handlingDataForm from 'utils/handlingDataForm';
+import { notifySuccess } from 'utils/notify';
 
 interface userInfos {
     userId?: string;

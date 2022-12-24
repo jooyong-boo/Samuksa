@@ -6,7 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
 import SearchResults from './SearchResults';
 import { useState } from 'react';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
 
 interface amount {
     setTotalAmount: React.Dispatch<React.SetStateAction<number>>;

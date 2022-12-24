@@ -1,35 +1,9 @@
-import axios, { AxiosRequestConfig } from 'axios';
-
-const axiosConfig: AxiosRequestConfig = {
-    baseURL: process.env.REACT_APP_SamuksaUser_URL,
-    withCredentials: true,
-};
-
-const instance = axios.create(axiosConfig);
-
-instance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('jwtToken');
-    if (token) {
-        config.headers = {
-            ...config.headers,
-            Authorization: `Bearer ${token}`,
-        };
-    }
-    return config;
-});
-
-instance.interceptors.response.use((res) => {
-    if (res.headers[`access-token`]) {
-        const token = res.headers[`access-token`];
-        localStorage.setItem('jwtToken', token);
-    }
-    return res;
-});
+import { instance, instanceAuth } from './globalConfig';
 
 // 전체 게시물 목록
 export const getPosts = async () => {
     try {
-        const { data } = await axios.get('https://koreanjson.com/posts');
+        const { data } = await instance.get('https://koreanjson.com/posts');
         return data;
     } catch (err: any) {
         console.log(err.response);
@@ -48,7 +22,7 @@ export const getRealPosts = (page: number, size: number, type: number) =>
 // 선택한 게시물 조회
 export const getPostsById = async (id: string | undefined) => {
     try {
-        const { data } = await axios.get(`https://koreanjson.com/posts/${id}`);
+        const { data } = await instance.get(`https://koreanjson.com/posts/${id}`);
         return data;
     } catch (err: any) {
         console.log(err.response);
@@ -58,7 +32,7 @@ export const getPostsById = async (id: string | undefined) => {
 // 게시물 댓글 조회
 export const getCommentById = async (id: string | undefined) => {
     try {
-        const { data } = await axios.get(`https://koreanjson.com/comments?postId=${id}`);
+        const { data } = await instance.get(`https://koreanjson.com/comments?postId=${id}`);
         return data;
     } catch (err: any) {
         console.log(err.response);
@@ -67,7 +41,7 @@ export const getCommentById = async (id: string | undefined) => {
 
 // 게시물 생성
 export const createPost = (content: string, title: string, type: number) =>
-    instance.post('/board/create', {
+    instanceAuth.post('/board/create', {
         boardCreateRequest: {
             content,
             title,
@@ -95,7 +69,7 @@ export const getPostComment = (boardTitleIdx: number, page: number, size: number
 
 // 게시물 삭제
 export const deletePost = (titleIdx: number) =>
-    instance.delete('/board/create', {
+    instanceAuth.delete('/board/create', {
         data: {
             titleIdx,
         },
@@ -103,7 +77,7 @@ export const deletePost = (titleIdx: number) =>
 
 // 게시물 수정
 export const patchPost = (text: string, title: string, titleIdx: number, type: number) =>
-    instance.patch('/board/create', {
+    instanceAuth.patch('/board/create', {
         data: {
             patchBoardRequest: {
                 text,
@@ -116,7 +90,7 @@ export const patchPost = (text: string, title: string, titleIdx: number, type: n
 
 // 댓글 생성
 export const createComment = (commentIdx: number, comment: string, titleIdx: number) =>
-    instance.post('/board/create/comments', {
+    instanceAuth.post('/board/create/comments', {
         data: {
             commentCreateRequest: {
                 commentIdx,
@@ -128,7 +102,7 @@ export const createComment = (commentIdx: number, comment: string, titleIdx: num
 
 // 댓글 수정
 export const patchComment = (comment: string, commentIdx: number) =>
-    instance.patch('/board/create/comments', {
+    instanceAuth.patch('/board/create/comments', {
         data: {
             patchCommentRequest: {
                 comment,
@@ -139,7 +113,7 @@ export const patchComment = (comment: string, commentIdx: number) =>
 
 // 댓글 삭제
 export const deleteComment = (commentsIdx: number) =>
-    instance.delete('/board/comments', {
+    instanceAuth.delete('/board/comments', {
         data: {
             commentsIdx,
         },

@@ -1,8 +1,8 @@
 import { kakaoAuth } from 'api/kakaoAuth';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import kakaoBtn from '../assets/img/kakaoLoginBtn.png';
-import kakao from '../assets/img/kakaoTalk.png';
+import kakaoBtn from '../../assets/img/kakaoLoginBtn.png';
+import kakao from '../../assets/img/kakaoTalk.png';
 
 const KakaoLogin = () => {
     const CLIENT_ID = process.env.REACT_APP_Kakao_Client_Id;

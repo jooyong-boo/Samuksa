@@ -1,9 +1,9 @@
 import { Grid, Typography } from '@mui/material';
 import { useContext } from 'react';
 import styled, { ThemeContext } from 'styled-components';
-import introduce1 from '../components/assets/img/introduce1.webp';
-import introduce2 from '../components/assets/img/introduce2.webp';
-import introduce3 from '../components/assets/img/introduce3.webp';
+import introduce1 from '../assets/img/introduce1.webp';
+import introduce2 from '../assets/img/introduce2.webp';
+import introduce3 from '../assets/img/introduce3.webp';
 import BackgroundWave from './BackgroundWave';
 
 const Introduction = () => {

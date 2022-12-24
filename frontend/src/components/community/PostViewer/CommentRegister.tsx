@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Button, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { notifyError, notifySuccess } from 'components/utils/notify';
+import { notifyError, notifySuccess } from 'utils/notify';
 
 interface UserInfoProps {
     userId?: string;

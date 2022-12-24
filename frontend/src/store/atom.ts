@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts, getPostsById } from '../api/post';
-import { RandomNickname } from '../components/utils/RandomNickname';
+import { RandomNickname } from '../utils/RandomNickname';
 import { getRandomNumber } from '../components/community/PostViewer';
 import { v1 } from 'uuid';
 
