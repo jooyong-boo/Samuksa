@@ -7,7 +7,7 @@ import { useState } from 'react';
 import UserImage from './Profile/UserImage';
 import UserInfoInput from './Profile/UserInfoInput';
 import WithDrawalButton from './Profile/WithDrawalButton';
-import { notifyError, notifySuccess } from 'components/utils/notify';
+import { notifyError, notifySuccess } from 'utils/notify';
 
 interface userInfos {
     userId?: string;

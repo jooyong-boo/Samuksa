@@ -4,7 +4,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from 'store/user';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
 
 const WriteBtn = () => {
     const userInfo = useRecoilValue<any>(userInfoState);

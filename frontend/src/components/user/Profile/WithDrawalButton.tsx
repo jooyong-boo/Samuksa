@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { getWithdrawal } from 'api/auth';
 import Modal from 'components/common/Modal';
-import { notifySuccess } from 'components/utils/notify';
+import { notifySuccess } from 'utils/notify';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';

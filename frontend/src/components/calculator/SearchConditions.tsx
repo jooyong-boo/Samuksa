@@ -29,7 +29,7 @@ import {
 import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../../api/recommend';
 import React from 'react';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
 
 const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;

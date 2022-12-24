@@ -27,7 +27,7 @@ import {
 import { useEffect } from 'react';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
 
 const DetailedSearchConditions = () => {
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);

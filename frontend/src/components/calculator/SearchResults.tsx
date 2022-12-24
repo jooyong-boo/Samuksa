@@ -4,14 +4,14 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import image from '../../components/assets/img/contemplative-reptile.webp';
+import image from '../../assets/img/contemplative-reptile.webp';
 import { areaState, recommendListState, selectConditions } from '../../store/atom';
-import Spinner from '../../components/assets/spinner/Spinner.gif';
+import Spinner from '../../assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { NavLink } from 'react-router-dom';
-import { notifySuccess } from 'components/utils/notify';
+import { notifySuccess } from 'utils/notify';
 
 interface loadingStats {
     loading: boolean;

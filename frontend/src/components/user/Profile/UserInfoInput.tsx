@@ -1,6 +1,6 @@
 import { Button, Typography } from '@mui/material';
 import { changeUserInfoAxios } from 'api/auth';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from 'store/user';

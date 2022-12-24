@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
 
 interface SearchMenuProps {
     posts: any[];

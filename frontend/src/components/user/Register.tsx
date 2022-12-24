@@ -9,7 +9,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userIdState, userLoginFormState } from '../../store/user';
 // import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 import { FcCheckmark } from 'react-icons/fc';
-import { notifyError, notifySuccess } from 'components/utils/notify';
+import { notifyError, notifySuccess } from 'utils/notify';
 
 const Register = () => {
     const navigate = useNavigate();

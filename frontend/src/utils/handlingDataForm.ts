@@ -1,4 +1,4 @@
-import { changeUserImage } from '../../api/auth';
+import { changeUserImage } from '../api/auth';
 
 const handlingDataForm = async (dataURI: any) => {
     const byteString = atob(dataURI.split(',')[1]);

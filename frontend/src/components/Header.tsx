@@ -17,7 +17,7 @@ import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import styled, { ThemeContext } from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
-import { notifyError, notifySuccess } from './utils/notify';
+import { notifyError, notifySuccess } from '../utils/notify';
 
 interface userInfoProps {
     userId?: string;
