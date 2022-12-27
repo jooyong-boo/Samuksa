@@ -1,25 +1,4 @@
-import {
-    Avatar,
-    Button,
-    createTheme,
-    FormControl,
-    IconButton,
-    Input,
-    InputAdornment,
-    List,
-    Menu,
-    MenuItem,
-    SelectChangeEvent,
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    ThemeProvider,
-    Typography,
-} from '@mui/material';
+import { Avatar, Button, createTheme, Menu, MenuItem, Stack, TableContainer, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate, NavLink, useOutletContext } from 'react-router-dom';
@@ -30,13 +9,9 @@ import { userInfoState } from '../../store/user';
 import Pagination from './Pagination';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import timeForToday from '../../utils/TimeForToday';
-import { RandomNickname } from '../../utils/RandomNickname';
 import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
-import { getCommentById } from '../../api/post';
-import { getRandomNumber } from './PostViewer';
 import useGetPost from 'api/hooks/post/useGetPost';
 import TableBoard from './FreeBoard/TableBoard';
 import MobileBoard from './FreeBoard/MobileBoard';

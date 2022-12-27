@@ -1,7 +1,7 @@
 import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts, getPostsById } from '../api/post';
-import { RandomNickname } from '../utils/RandomNickname';
+import { randomNickname } from '../utils/randomNickname';
 import { getRandomNumber } from '../components/community/PostViewer';
 import { v1 } from 'uuid';
 
@@ -130,14 +130,14 @@ export const getPostState = selector({
                     {},
                     item,
                     { read: true },
-                    { nickName: RandomNickname() },
+                    { nickName: randomNickname() },
                     { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
                 );
             } else {
                 return Object.assign(
                     {},
                     item,
-                    { nickName: RandomNickname() },
+                    { nickName: randomNickname() },
                     { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
                 );
             }
