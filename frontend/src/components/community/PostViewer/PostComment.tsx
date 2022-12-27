@@ -1,13 +1,10 @@
 import { Avatar, Button, TextField, Typography } from '@mui/material';
-import { RandomNickname } from 'utils/RandomNickname';
-import timeForToday from 'utils/TimeForToday';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { TiEdit } from 'react-icons/ti';
-import { useRecoilValue } from 'recoil';
-import { userImageState } from 'store/user';
 import styled from 'styled-components';
-import { getRandomNumber } from '../PostViewer';
+import Reply from './Reply';
+import UserInfo from './UserInfo';
 
 interface CommentProps {
     nickName: string;
@@ -22,9 +19,10 @@ interface CommentsProps {
 }
 
 interface UserInfoProps {
-    userId?: string;
-    nickName?: string;
-    email?: string;
+    userId: string;
+    nickName: string;
+    email: string;
+    profileImage: string;
 }
 
 interface CommentsProps {
@@ -37,8 +35,7 @@ interface CommentsProps {
 const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps) => {
     const [newComment, setNewComment] = useState('');
     const [commentModify, setCommentModify] = useState(false);
-    const userImage = useRecoilValue(userImageState);
-    const { userId } = userInfo;
+    const { userId, profileImage } = userInfo;
     const { nickName, id, createdAt, postId, content } = comment;
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -65,19 +62,13 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
     return (
         <CommentDiv>
             <PostCommentsInfo>
-                <CommentUserInfoDiv>
-                    {userId === id ? (
-                        <CommentAvatar src={userImage} />
-                    ) : (
-                        <CommentAvatar src={`https://randomuser.me/api/portraits/men/${getRandomNumber(1, 98)}.jpg`} />
-                    )}
-                    <CommentUserInfoBox>
-                        <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
-                            {nickName ? nickName : RandomNickname()}
-                        </CommentUserInfoText>
-                        <CommentUserInfoText color={'#979797'}>{timeForToday(createdAt)}</CommentUserInfoText>
-                    </CommentUserInfoBox>
-                </CommentUserInfoDiv>
+                <UserInfo
+                    userId={userId}
+                    id={id}
+                    profileImage={profileImage}
+                    nickName={nickName}
+                    createdAt={createdAt}
+                />
                 {userId === id ? (
                     <CommentUserEditBox>
                         <CommentEditBtn onClick={changeCommentModify}>
@@ -93,7 +84,14 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
                             삭제하기
                         </CommentEditBtn>
                     </CommentUserEditBox>
-                ) : null}
+                ) : (
+                    <CommentUserEditBox>
+                        <CommentEditBtn onClick={changeCommentModify}>
+                            <TiEdit />
+                            답글달기
+                        </CommentEditBtn>
+                    </CommentUserEditBox>
+                )}
             </PostCommentsInfo>
             {userId === id && commentModify ? (
                 <CommentUserEditTextareaBox>
@@ -122,6 +120,7 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
             ) : (
                 <CommentText>{content}</CommentText>
             )}
+            <Reply userInfo={userInfo} />
         </CommentDiv>
     );
 };

@@ -12,16 +12,18 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../../utils/TimeForToday';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { RandomNickname } from '../../utils/RandomNickname';
+import { randomNickname } from '../../utils/randomNickname';
 import { getCommentById, getPostsById } from '../../api/post';
 import PostComment from './PostViewer/PostComment';
 import PostRecommendBtn from './PostViewer/PostRecommendBtn';
 import CommentRegister from './PostViewer/CommentRegister';
+import UserInfo from './PostViewer/UserInfo';
 
 interface userInfos {
-    userId?: string;
-    nickName?: string;
-    email?: string;
+    userId: string;
+    nickName: string;
+    email: string;
+    profileImage: string;
 }
 
 const PostViewer = () => {
@@ -35,6 +37,8 @@ const PostViewer = () => {
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
+
+    const { userId, nickName, email, profileImage } = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -86,13 +90,20 @@ const PostViewer = () => {
                         <UserAvatar src={`https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`} />
                         <UserInfoBox>
                             <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
-                                {RandomNickname()}
+                                {randomNickname()}
                             </UserInfoTypography>
                             <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
                                 {timeForToday(data.createdAt)}
                             </UserInfoTypography>
                         </UserInfoBox>
                     </PostUserBox>
+                    {/* <UserInfo
+                        userId={userId}
+                        // id={id}
+                        profileImage={profileImage}
+                        nickName={nickName}
+                        createdAt={data.createdAt}
+                    /> */}
                     <PostInfoBox onClick={moveComment}>
                         조회
                         <PostStrong>{comments.length}</PostStrong>
