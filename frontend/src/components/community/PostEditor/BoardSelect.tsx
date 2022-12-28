@@ -18,11 +18,18 @@ const totalBoard = ['리뷰게시판', 'TIP게시판'];
 interface BoardSelectProps {
     board: string;
     setBoard: Dispatch<SetStateAction<string>>;
+    setType: Dispatch<SetStateAction<number>>;
 }
 
-const BoardSelect = ({ board, setBoard }: BoardSelectProps) => {
+const BoardSelect = ({ board, setBoard, setType }: BoardSelectProps) => {
     const handleChangeBoard = (e: SelectChangeEvent<unknown>) => {
         e.preventDefault();
+        if (e.target.value === '리뷰게시판') {
+            setType(0);
+        }
+        if (e.target.value === 'TIP게시판') {
+            setType(1);
+        }
         setBoard(String(e.target.value));
     };
     return (
