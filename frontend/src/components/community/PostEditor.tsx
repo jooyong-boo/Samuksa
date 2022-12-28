@@ -9,21 +9,12 @@ import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { userImageState, userInfoSelector, userInfoState } from '../../store/user';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { getRandomNumber } from './PostViewer';
-import { getPostState } from '../../store/atom';
 import UserInfo from './PostEditor/UserInfo';
 import BoardSelect from './PostEditor/BoardSelect';
 import { notifySuccess } from 'utils/notify';
-
-interface userInfos {
-    userId?: string;
-    nickName?: string;
-    email?: string;
-}
+import { useCreatePost } from 'api/hooks/post/useCreatePost';
 
 const PostEditor = () => {
     const navigate = useNavigate();
@@ -33,16 +24,12 @@ const PostEditor = () => {
     const [type, setType] = useState(0);
     const [board, setBoard] = useState('');
 
-    const postsRecoil = useRecoilValue<any[]>(getPostState);
-    const userInfo = useRecoilValue(userInfoState);
-
-    const { nickName }: userInfos = userInfo;
-    const userImage = useRecoilValue(userImageState);
-
     const [transientStorage, setTransientStorage] = useState<any>([]);
 
     const location = useLocation();
     const prevLocation = location.state;
+
+    const { mutate: createPost } = useCreatePost(content, title, type);
 
     const goBack = () => {
         navigate(-1);
@@ -64,6 +51,7 @@ const PostEditor = () => {
                 title,
                 content,
                 board,
+                type,
             },
         ];
         if (localStorage.getItem('transientStorage')) {
@@ -93,21 +81,7 @@ const PostEditor = () => {
     };
 
     const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const date = new Date().toISOString();
-        let avatar = `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`;
-        let read = false;
-        let id = postsRecoil.length + 1;
-        const data = {
-            createdAt: date,
-            updatedAt: date,
-            title,
-            content,
-            avatar,
-            nickName,
-            read,
-            userId: id,
-        };
-        console.log(data);
+        createPost();
     };
 
     useEffect(() => {
@@ -143,7 +117,7 @@ const PostEditor = () => {
                 <UserInfo />
                 <FormControl fullWidth>
                     <Typography>게시판</Typography>
-                    <BoardSelect board={board} setBoard={setBoard} />
+                    <BoardSelect board={board} setBoard={setBoard} setType={setType} />
                     <Typography>제목</Typography>
                     <BoardTitle placeholder="제목을 입력해 주세요" value={title} onChange={onChangeTitle} />
                 </FormControl>
