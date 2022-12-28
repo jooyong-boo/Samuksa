@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { getRealPosts } from 'api/post';
 
 const useGetPost = (page: number, size: number, type: number) => {
-    const { isLoading, isError, data, error } = useQuery({
+    const { isLoading, isError, data, error, refetch } = useQuery({
         queryKey: ['post', type],
         queryFn: () => getRealPosts(page, size, type),
         keepPreviousData: true,
         select: (data) => data.data,
     });
-    return [data, isLoading];
+    return [data, isLoading, refetch];
 };
 
 export default useGetPost;
