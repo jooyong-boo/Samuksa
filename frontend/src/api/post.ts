@@ -42,11 +42,9 @@ export const getCommentById = async (id: string | undefined) => {
 // 게시물 생성
 export const createPost = (content: string, title: string, type: number) =>
     instanceAuth.post('/board/create', {
-        boardCreateRequest: {
-            content,
-            title,
-            type,
-        },
+        content,
+        title,
+        type,
     });
 
 // 게시물 조회
