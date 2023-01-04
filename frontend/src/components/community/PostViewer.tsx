@@ -12,8 +12,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../../utils/TimeForToday';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { randomNickname } from '../../utils/randomNickname';
-import { getCommentById, getPostsById } from '../../api/post';
+import { getCommentById, getPostComment, getPostContent, getPostsById } from '../../api/post';
 import PostComment from './PostViewer/PostComment';
 import PostRecommendBtn from './PostViewer/PostRecommendBtn';
 import CommentRegister from './PostViewer/CommentRegister';
@@ -26,13 +25,26 @@ interface userInfos {
     profileImage: string;
 }
 
+interface PostData {
+    idx: number;
+    profileImage: string;
+    nickName: string;
+    createdAt: string;
+    modifiedAt: string;
+    title: string;
+    content: string;
+    viewCount: number;
+    commentCount: number;
+    recommendCount: number;
+}
+
 const PostViewer = () => {
-    const { id } = useParams<{ id?: string }>();
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
-    const [data, setData] = useState<any>('');
-    const [comments, setComments] = useState<any[]>([]);
+    const [data, setData] = useState<PostData>();
+    const [comments, setComments] = useState<any>([]);
     const userInfo = useRecoilValue<any>(userInfoState);
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
@@ -42,13 +54,15 @@ const PostViewer = () => {
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
-    async function searchPostsById(id: string | undefined) {
-        const data = await getPostsById(id);
-        setData(data);
+    console.log(data);
+
+    async function searchPostsById(id: number) {
+        const data = await getPostContent(id);
+        setData(data.data);
     }
 
-    async function searchUserComment(id: string | undefined) {
-        const data = await getCommentById(id);
+    async function searchUserComment(id: number, page: number, size: number) {
+        const data = await getPostComment(id, 0, 0);
         setComments(data);
     }
 
@@ -72,8 +86,10 @@ const PostViewer = () => {
     };
 
     useEffect(() => {
-        searchPostsById(id);
-        searchUserComment(id);
+        if (id) {
+            searchPostsById(Number(id));
+            searchUserComment(Number(id), 0, 0);
+        }
     }, [id]);
 
     const goList = () => {
@@ -84,38 +100,33 @@ const PostViewer = () => {
     return (
         <Background>
             <PostViewerPaper elevation={0}>
-                <PostTitle>{data.title}</PostTitle>
+                <PostTitle>{data?.title}</PostTitle>
                 <PostInfoContainer>
                     <PostUserBox>
-                        <UserAvatar src={`https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg`} />
+                        <UserAvatar src={data?.profileImage} />
                         <UserInfoBox>
                             <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
-                                {randomNickname()}
+                                {data?.nickName}
                             </UserInfoTypography>
                             <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
-                                {timeForToday(data.createdAt)}
+                                {data && timeForToday(data.createdAt)}
                             </UserInfoTypography>
                         </UserInfoBox>
                     </PostUserBox>
-                    {/* <UserInfo
-                        userId={userId}
-                        // id={id}
-                        profileImage={profileImage}
-                        nickName={nickName}
-                        createdAt={data.createdAt}
-                    /> */}
-                    <PostInfoBox onClick={moveComment}>
-                        조회
-                        <PostStrong>{comments.length}</PostStrong>
-                        <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                        댓글
-                        <PostStrong>{comments.length}</PostStrong>
-                        <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                        추천
-                        <PostStrong>{comments.length}</PostStrong>
-                    </PostInfoBox>
+                    {data && (
+                        <PostInfoBox onClick={moveComment}>
+                            조회
+                            <PostStrong>{data.viewCount}</PostStrong>
+                            <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                            댓글
+                            <PostStrong>{data.commentCount}</PostStrong>
+                            <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                            추천
+                            <PostStrong>{data.recommendCount}</PostStrong>
+                        </PostInfoBox>
+                    )}
                 </PostInfoContainer>
-                {data !== '' ? (
+                {data ? (
                     <PostContentBox>
                         <PostContent>{parse(DOMPurify.sanitize(data.content))}</PostContent>
                         <PostRecommendBtn />
@@ -145,7 +156,7 @@ const PostViewer = () => {
                         </CommentBox>
                     </UserCommentWrapper>
                     {comments &&
-                        comments.map((comment) => {
+                        comments.map((comment: any) => {
                             const { postId, content } = comment;
                             return (
                                 <PostComment
@@ -283,7 +294,7 @@ const PostContentBox = styled.div`
     border-bottom: 1px solid #eaeaea;
 `;
 
-const PostContent = styled(Typography)`
+const PostContent = styled.div`
     line-height: 170%;
 `;
 
