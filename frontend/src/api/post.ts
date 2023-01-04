@@ -66,10 +66,10 @@ export const getPostComment = (boardTitleIdx: number, page: number, size: number
     });
 
 // 게시물 삭제
-export const deletePost = (titleIdx: number) =>
+export const deletePost = (titleIdx: number | string) =>
     instanceAuth.delete('/board/create', {
         data: {
-            titleIdx,
+            titleIdx: Number(titleIdx),
         },
     });
 

@@ -18,6 +18,11 @@ import { styledTheme } from './styles/styledTheme';
 import { toastTheme } from './styles/toastTheme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { worker } from './mocks/worker';
+
+if (process.env.NODE_ENV === 'development') {
+    worker.start();
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 const queryClient = new QueryClient({

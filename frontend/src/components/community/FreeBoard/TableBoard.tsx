@@ -47,7 +47,8 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                     </TableHead>
                     <TableBody>
                         {usePosts?.slice(offset, offset + limit).map((item: any) => {
-                            const { idx, title, nickName, profileImage, ctime, recommendNumber, read } = item;
+                            const { idx, title, nickName, profileImage, createdAt, recommendCount, read, viewCount } =
+                                item;
 
                             return (
                                 <TableRow
@@ -80,9 +81,9 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                             <NickNameInfo>{nickName}</NickNameInfo>
                                         </PostUserInfoDiv>
                                     </TableCell>
-                                    <TableCell sx={tableTextStyle}>{timeForToday(ctime)}</TableCell>
-                                    <TableCell sx={tableTextStyle}>{recommendNumber}</TableCell>
-                                    <TableCell sx={tableTextStyle}>{recommendNumber}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{recommendCount}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{viewCount}</TableCell>
                                 </TableRow>
                             );
                         })}
