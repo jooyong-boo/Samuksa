@@ -17,6 +17,9 @@ import PostComment from './PostViewer/PostComment';
 import PostRecommendBtn from './PostViewer/PostRecommendBtn';
 import CommentRegister from './PostViewer/CommentRegister';
 import UserInfo from './PostViewer/UserInfo';
+import PostMenu from './PostViewer/PostMenu';
+import { useDeletePost } from 'api/hooks/post/useDeletePost';
+import useGetComments from 'api/hooks/post/useGetComments';
 
 interface userInfos {
     userId: string;
@@ -44,17 +47,19 @@ const PostViewer = () => {
     const location = useLocation();
     const params = useParams();
     const [data, setData] = useState<PostData>();
-    const [comments, setComments] = useState<any>([]);
+    const [comments1, setComments] = useState<any>([]);
     const userInfo = useRecoilValue<any>(userInfoState);
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
+    const { mutate: deletePost } = useDeletePost(id!);
+    const [comments, total, isLoading, refetch] = useGetComments(id!, 0, 0);
+
+    console.log(comments, total);
 
     const { userId, nickName, email, profileImage } = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
-
-    console.log(data);
 
     async function searchPostsById(id: number) {
         const data = await getPostContent(id);
@@ -65,6 +70,12 @@ const PostViewer = () => {
         const data = await getPostComment(id, 0, 0);
         setComments(data);
     }
+
+    const handleDeletePost = (idx: number | string): void => {
+        deletePost();
+    };
+
+    const handleEditPost = () => {};
 
     const moveComment = () => {
         commentRef.current?.scrollIntoView({ block: 'start' });
@@ -100,7 +111,10 @@ const PostViewer = () => {
     return (
         <Background>
             <PostViewerPaper elevation={0}>
-                <PostTitle>{data?.title}</PostTitle>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <PostTitle>{data?.title}</PostTitle>
+                    <PostMenu delete={handleDeletePost} />
+                </div>
                 <PostInfoContainer>
                     <PostUserBox>
                         <UserAvatar src={data?.profileImage} />
@@ -115,13 +129,13 @@ const PostViewer = () => {
                     </PostUserBox>
                     {data && (
                         <PostInfoBox onClick={moveComment}>
-                            조회
+                            <span>조회</span>
                             <PostStrong>{data.viewCount}</PostStrong>
                             <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                            댓글
+                            <span>댓글</span>
                             <PostStrong>{data.commentCount}</PostStrong>
                             <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                            추천
+                            <span>추천</span>
                             <PostStrong>{data.recommendCount}</PostStrong>
                         </PostInfoBox>
                     )}
@@ -129,9 +143,9 @@ const PostViewer = () => {
                 {data ? (
                     <PostContentBox>
                         <PostContent>{parse(DOMPurify.sanitize(data.content))}</PostContent>
-                        <PostRecommendBtn />
                     </PostContentBox>
                 ) : null}
+                <PostRecommendBtn />
 
                 <PostCommentBox ref={commentRef}>
                     <TotalCommentText>{comments.length}개의 댓글</TotalCommentText>
@@ -236,7 +250,7 @@ const PostViewerPaper = styled(Paper)`
 `;
 
 const PostTitle = styled(Typography)`
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 500;
     padding: 0 1rem;
 `;
@@ -296,6 +310,7 @@ const PostContentBox = styled.div`
 
 const PostContent = styled.div`
     line-height: 170%;
+    font-size: 1.5rem;
 `;
 
 const PostCommentBox = styled.div`
