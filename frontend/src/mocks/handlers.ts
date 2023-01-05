@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { post } from './data';
+import { comments, post } from './data';
 
 interface PostReqBody {
     content: string;
@@ -11,9 +11,10 @@ export const handlers = [
     rest.post<PostReqBody>(`${process.env.REACT_APP_SamuksaUser_URL}/board/create`, async (req, res, ctx) => {
         const { content, title, type } = req.body;
         const date = new Date();
+        let idx = post.content.length + 1;
         console.log(content, title, type);
         post.content.push({
-            idx: post.content.length + 1,
+            idx,
             profileImage: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
             nickName: '삼먹사',
             createdAt: date.toString(),
@@ -28,6 +29,7 @@ export const handlers = [
         return res(
             // Respond with a 200 status code
             ctx.status(200),
+            ctx.json(idx),
         );
     }),
 
@@ -43,10 +45,29 @@ export const handlers = [
 
     rest.get(`${process.env.REACT_APP_SamuksaUser_URL}/board/contents`, (req, res, ctx) => {
         const idx = req.url.searchParams.get('idx');
-        console.log(idx);
         let data = post.content.filter((item) => item.idx === Number(idx));
-        console.log(data);
 
         return res(ctx.status(200), ctx.json(data[0]));
+    }),
+
+    rest.delete<{ titleIdx: string | number }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/create`,
+        (req, res, ctx) => {
+            const { titleIdx } = req.body;
+            let data = post.content.filter((item) => item.idx !== Number(titleIdx));
+            post.content = data;
+
+            return res(ctx.status(200), ctx.json(post));
+        },
+    ),
+
+    rest.get(`${process.env.REACT_APP_SamuksaUser_URL}/board/comments`, (req, res, ctx) => {
+        const boardTitleIdx = req.url.searchParams.get('boardTitleIdx');
+        const page = req.url.searchParams.get('page');
+        const size = req.url.searchParams.get('size');
+        // let data = post.content.filter((item) => item.idx === Number(idx));
+        // console.log(data);
+
+        return res(ctx.status(200), ctx.json(comments));
     }),
 ];

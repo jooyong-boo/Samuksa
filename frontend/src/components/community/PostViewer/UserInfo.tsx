@@ -5,18 +5,17 @@ import timeForToday from 'utils/TimeForToday';
 import { getRandomNumber } from '../PostViewer';
 
 interface IProps {
-    userId: string;
-    id: string;
+    infoNickname: string;
     profileImage: string;
     nickName: string;
     createdAt: string;
 }
 
 const UserInfo = ({ ...props }: IProps) => {
-    const { userId, id, profileImage, nickName, createdAt } = props;
+    const { infoNickname, profileImage, nickName, createdAt } = props;
     return (
         <CommentUserInfoDiv>
-            {userId === id ? (
+            {infoNickname === nickName ? (
                 <CommentAvatar src={profileImage} />
             ) : (
                 <CommentAvatar src={`https://randomuser.me/api/portraits/men/${getRandomNumber(1, 98)}.jpg`} />

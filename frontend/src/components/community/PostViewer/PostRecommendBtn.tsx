@@ -39,6 +39,7 @@ const RecommendBtn = styled.button`
     border: none;
     background-color: white;
     margin: 5px;
+    cursor: pointer;
 `;
 
 const RecommendNumberSpan = styled.span`

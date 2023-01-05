@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deletePost } from 'api/post';
+import { patchPost } from 'api/post';
 import { useNavigate } from 'react-router-dom';
 import { notifySuccess } from 'utils/notify';
 
-export const useDeletePost = (idx: string | number) => {
+export const useEditPost = (text: string, title: string, titleIdx: number, type: number) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const { mutate } = useMutation(() => deletePost(idx), {
+    const { mutate } = useMutation(() => patchPost(text, title, titleIdx, type), {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['post'] }).then(() => {
-                navigate(-1);
-                notifySuccess('삭제 완료');
+                // navigate(-1);
+                notifySuccess('수정 완료');
             });
         },
     });

@@ -7,11 +7,23 @@ import Reply from './Reply';
 import UserInfo from './UserInfo';
 
 interface CommentProps {
+    idx: number;
+    avatarUrl: string;
     nickName: string;
-    id: string;
-    createdAt: string;
-    postId: number;
     content: string;
+    createdAt: string;
+    modifiedAt: string;
+    command: ReplyProps[];
+}
+
+interface ReplyProps {
+    idx: number;
+    avatarUrl: string;
+    nickName: string;
+    receiverNickName: string;
+    content: string;
+    createdAt: string;
+    modifiedAt: string;
 }
 
 interface CommentsProps {
@@ -35,8 +47,8 @@ interface CommentsProps {
 const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps) => {
     const [newComment, setNewComment] = useState('');
     const [commentModify, setCommentModify] = useState(false);
-    const { userId, profileImage } = userInfo;
-    const { nickName, id, createdAt, postId, content } = comment;
+    const { userId, profileImage, nickName: infoNickname } = userInfo;
+    const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command } = comment;
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
@@ -63,13 +75,12 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
         <CommentDiv>
             <PostCommentsInfo>
                 <UserInfo
-                    userId={userId}
-                    id={id}
+                    infoNickname={infoNickname}
                     profileImage={profileImage}
                     nickName={nickName}
                     createdAt={createdAt}
                 />
-                {userId === id ? (
+                {infoNickname === nickName ? (
                     <CommentUserEditBox>
                         <CommentEditBtn onClick={changeCommentModify}>
                             <TiEdit />
@@ -93,7 +104,7 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
                     </CommentUserEditBox>
                 )}
             </PostCommentsInfo>
-            {userId === id && commentModify ? (
+            {infoNickname === nickName && commentModify ? (
                 <CommentUserEditTextareaBox>
                     <TextField
                         sx={{
@@ -111,7 +122,7 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
                         variant="contained"
                         margin={'1rem 0 1rem 1rem'}
                         onClick={() => {
-                            handleCommentModify(postId);
+                            handleCommentModify(idx);
                         }}
                     >
                         등록
