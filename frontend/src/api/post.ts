@@ -56,7 +56,7 @@ export const getPostContent = (idx: number) =>
     });
 
 // 게시물별 댓글 조회
-export const getPostComment = (boardTitleIdx: number, page: number, size: number) =>
+export const getPostComment = (boardTitleIdx: number | string, page: number, size: number) =>
     instance.get('/board/comments', {
         params: {
             boardTitleIdx,
@@ -76,14 +76,10 @@ export const deletePost = (titleIdx: number | string) =>
 // 게시물 수정
 export const patchPost = (text: string, title: string, titleIdx: number, type: number) =>
     instanceAuth.patch('/board/create', {
-        data: {
-            patchBoardRequest: {
-                text,
-                title,
-                titleIdx,
-                type,
-            },
-        },
+        text,
+        title,
+        titleIdx,
+        type,
     });
 
 // 댓글 생성
