@@ -15,11 +15,7 @@ const UserInfo = ({ ...props }: IProps) => {
     const { infoNickname, profileImage, nickName, createdAt } = props;
     return (
         <CommentUserInfoDiv>
-            {infoNickname === nickName ? (
-                <CommentAvatar src={profileImage} />
-            ) : (
-                <CommentAvatar src={`https://randomuser.me/api/portraits/men/${getRandomNumber(1, 98)}.jpg`} />
-            )}
+            <CommentAvatar src={profileImage} />
             <CommentUserInfoBox>
                 <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
                     {nickName ? nickName : randomNickname()}
