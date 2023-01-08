@@ -166,6 +166,7 @@ const PostViewer = () => {
                                 comments={comments}
                                 userInfo={userInfo}
                                 loginStatus={loginStatus}
+                                titleIdx={id!}
                             />
                         </CommentBox>
                     </UserCommentWrapper>
