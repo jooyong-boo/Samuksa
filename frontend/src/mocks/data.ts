@@ -38,7 +38,7 @@ export const comments = {
             ],
         },
         {
-            idx: 1,
+            idx: 2,
             avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
             nickName: '사먹사',
             content: '두번째 댓글',

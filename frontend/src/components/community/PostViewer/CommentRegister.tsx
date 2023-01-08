@@ -3,6 +3,7 @@ import { Button, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { notifyError, notifySuccess } from 'utils/notify';
+import { useCreateComment } from 'api/hooks/post/useCreateComment';
 
 interface UserInfoProps {
     userId?: string;
@@ -15,11 +16,13 @@ interface CommentProps {
     setComments: Dispatch<SetStateAction<any>>;
     userInfo: UserInfoProps;
     loginStatus: boolean;
+    titleIdx: string;
 }
 
-const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: CommentProps) => {
+const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleIdx }: CommentProps) => {
     const [newComment, setNewComment] = useState('');
     const { userId, nickName, email } = userInfo;
+    const { mutate: createComment } = useCreateComment(comments.length, newComment, titleIdx);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
@@ -28,17 +31,7 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: Comme
     const commentRegister = (e: React.KeyboardEvent | React.MouseEvent) => {
         if ((e as React.KeyboardEvent).key === 'Enter' || (e as React.MouseEvent).type === 'click') {
             if (userInfo && newComment) {
-                setComments([
-                    ...comments,
-                    {
-                        postId: comments.length + 1,
-                        nickName,
-                        content: newComment,
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString(),
-                        id: userId,
-                    },
-                ]);
+                createComment();
                 setNewComment('');
                 notifySuccess('등록 성공');
             } else if (!userInfo) {

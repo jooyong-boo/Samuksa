@@ -12,10 +12,10 @@ const useGetComments = (boardTitleIdx: number | string, page: number, size: numb
         refetch,
     } = useQuery({
         queryKey: ['comment'],
-        queryFn: () => getPostComment(boardTitleIdx, page, size),
+        queryFn: () => getPostComment(boardTitleIdx, page, size).then((res) => res.data),
         select: (data) => {
             console.log(data);
-            return data.data.data;
+            return data.data;
         },
         onSuccess: (data) => {
             setTotal(data.data.totalCommentCount);

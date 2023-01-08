@@ -7,6 +7,12 @@ interface PostReqBody {
     type: number;
 }
 
+interface CommentReqBody {
+    commendIdx: number;
+    comment: string;
+    titleIdx: number;
+}
+
 export const handlers = [
     rest.post<PostReqBody>(`${process.env.REACT_APP_SamuksaUser_URL}/board/create`, async (req, res, ctx) => {
         const { content, title, type } = req.body;
@@ -67,6 +73,36 @@ export const handlers = [
         const size = req.url.searchParams.get('size');
         // let data = post.content.filter((item) => item.idx === Number(idx));
         // console.log(data);
+
+        return res(ctx.status(200), ctx.json(comments));
+    }),
+
+    rest.post<CommentReqBody>(`${process.env.REACT_APP_SamuksaUser_URL}/board/create/comments`, (req, res, ctx) => {
+        const { commendIdx, comment, titleIdx } = req.body;
+        console.log(req.body);
+        const date = new Date();
+        const newTotal = comments.totalCommentCount + 1;
+        const newComment = {
+            idx: comments.data.length + 1,
+            avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
+            nickName: '삼먹사',
+            content: comment,
+            createdAt: date.toString(),
+            modifiedAt: date.toString(),
+            command: [
+                {
+                    idx: 1,
+                    avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
+                    nickName: '삼먹사2',
+                    receiverNickName: '삼먹사',
+                    content: '첫번째 댓글',
+                    createdAt: date.toString(),
+                    modifiedAt: date.toString(),
+                },
+            ],
+        };
+        comments.totalCommentCount = newTotal;
+        comments.data.push(newComment);
 
         return res(ctx.status(200), ctx.json(comments));
     }),

@@ -83,15 +83,11 @@ export const patchPost = (text: string, title: string, titleIdx: number, type: n
     });
 
 // 댓글 생성
-export const createComment = (commentIdx: number, comment: string, titleIdx: number) =>
+export const createComment = (commentIdx: number | string, comment: string, titleIdx: number | string) =>
     instanceAuth.post('/board/create/comments', {
-        data: {
-            commentCreateRequest: {
-                commentIdx,
-                comment,
-                titleIdx,
-            },
-        },
+        commentIdx: Number(commentIdx),
+        comment,
+        titleIdx: Number(titleIdx),
     });
 
 // 댓글 수정
