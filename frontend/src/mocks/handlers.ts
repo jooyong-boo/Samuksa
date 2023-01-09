@@ -106,4 +106,57 @@ export const handlers = [
 
         return res(ctx.status(200), ctx.json(comments));
     }),
+
+    //댓글 삭제
+    rest.delete<{ commentsIdx: string | number }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/comments`,
+        (req, res, ctx) => {
+            const { commentsIdx } = req.body;
+            let data = comments.data.filter((item) => item.idx !== Number(commentsIdx));
+            let newData = { totalCommentCount: comments.totalCommentCount, data };
+            comments.totalCommentCount = data.length;
+            comments.data = data;
+
+            return res(ctx.status(200), ctx.json(newData));
+        },
+    ),
+
+    //댓글 수정
+    rest.patch<{ comment: string; commentIdx: number | string }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/create/comments`,
+        (req, res, ctx) => {
+            const { comment, commentIdx } = req.body;
+            const idx = comments.data.findIndex((ele) => ele.idx === commentIdx);
+            const newData = { ...comments.data[idx], content: comment };
+            comments.data[idx] = newData;
+            return res(ctx.status(200), ctx.json(comments));
+        },
+    ),
+
+    //답글 생성
+    rest.post<{ commentIdx: number; comment: string; titleIdx: number | string }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/create/reply`,
+        async (req, res, ctx) => {
+            const { commentIdx, comment, titleIdx } = req.body;
+            const date = new Date();
+            const target = comments.data.findIndex((ele) => ele.idx === commentIdx);
+            const idx = comments.data[target].command.length + 1;
+
+            comments.data[target].command.push({
+                idx,
+                avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
+                nickName: '삼먹사2',
+                receiverNickName: '삼먹사',
+                content: comment,
+                createdAt: date.toString(),
+                modifiedAt: date.toString(),
+            });
+
+            return res(
+                // Respond with a 200 status code
+                ctx.status(200),
+                ctx.json(comments),
+            );
+        },
+    ),
 ];
