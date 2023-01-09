@@ -91,20 +91,24 @@ export const createComment = (commentIdx: number | string, comment: string, titl
     });
 
 // 댓글 수정
-export const patchComment = (comment: string, commentIdx: number) =>
+export const patchComment = (comment: string, commentIdx: number | string) =>
     instanceAuth.patch('/board/create/comments', {
-        data: {
-            patchCommentRequest: {
-                comment,
-                commentIdx,
-            },
-        },
+        comment,
+        commentIdx: Number(commentIdx),
     });
 
 // 댓글 삭제
-export const deleteComment = (commentsIdx: number) =>
+export const deleteComment = (commentsIdx: number | string) =>
     instanceAuth.delete('/board/comments', {
         data: {
-            commentsIdx,
+            commentsIdx: Number(commentsIdx),
         },
+    });
+
+// 댓글의 답글 생성
+export const createReply = (commentIdx: number | string, comment: string, titleIdx: number | string) =>
+    instanceAuth.post('/board/create/reply', {
+        commentIdx: Number(commentIdx),
+        comment,
+        titleIdx: Number(titleIdx),
     });

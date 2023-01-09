@@ -14,7 +14,6 @@ const useGetComments = (boardTitleIdx: number | string, page: number, size: numb
         queryKey: ['comment'],
         queryFn: () => getPostComment(boardTitleIdx, page, size).then((res) => res.data),
         select: (data) => {
-            console.log(data);
             return data.data;
         },
         onSuccess: (data) => {

@@ -1,24 +1,21 @@
 import { Avatar, Typography } from '@mui/material';
 import styled from 'styled-components';
-import { randomNickname } from 'utils/randomNickname';
 import timeForToday from 'utils/TimeForToday';
-import { getRandomNumber } from '../PostViewer';
 
 interface IProps {
-    infoNickname: string;
     profileImage: string;
     nickName: string;
     createdAt: string;
 }
 
 const UserInfo = ({ ...props }: IProps) => {
-    const { infoNickname, profileImage, nickName, createdAt } = props;
+    const { profileImage, nickName, createdAt } = props;
     return (
         <CommentUserInfoDiv>
             <CommentAvatar src={profileImage} />
             <CommentUserInfoBox>
                 <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
-                    {nickName ? nickName : randomNickname()}
+                    {nickName}
                 </CommentUserInfoText>
                 <CommentUserInfoText color={'#979797'}>{timeForToday(createdAt)}</CommentUserInfoText>
             </CommentUserInfoBox>

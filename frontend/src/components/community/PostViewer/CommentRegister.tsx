@@ -30,6 +30,10 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleId
 
     const commentRegister = (e: React.KeyboardEvent | React.MouseEvent) => {
         if ((e as React.KeyboardEvent).key === 'Enter' || (e as React.MouseEvent).type === 'click') {
+            e.preventDefault();
+            if (!newComment.length) {
+                return;
+            }
             if (userInfo && newComment) {
                 createComment();
                 setNewComment('');
@@ -61,7 +65,7 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleId
                 ) : null}
             </div>
             <RegisterBtnBox>
-                <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister}>
+                <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister} disabled={!newComment}>
                     등록
                 </CustomBtn>
             </RegisterBtnBox>
