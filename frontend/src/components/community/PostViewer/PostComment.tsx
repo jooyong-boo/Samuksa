@@ -1,8 +1,12 @@
-import { Avatar, Button, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
+import { useCreateReply } from 'api/hooks/post/useCreateReply';
+import { useDeleteComment } from 'api/hooks/post/useDeleteComment';
+import { useEditComment } from 'api/hooks/post/useEditComment';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { TiEdit } from 'react-icons/ti';
 import styled from 'styled-components';
+import { notifyError } from 'utils/notify';
 import Reply from './Reply';
 import UserInfo from './UserInfo';
 
@@ -26,10 +30,6 @@ interface ReplyProps {
     modifiedAt: string;
 }
 
-interface CommentsProps {
-    createdAt?: string;
-}
-
 interface UserInfoProps {
     userId: string;
     nickName: string;
@@ -39,32 +39,57 @@ interface UserInfoProps {
 
 interface CommentsProps {
     comment: CommentProps;
-    comments: CommentsProps[];
+    comments: CommentProps[];
     setComments: Dispatch<SetStateAction<any>>;
     userInfo: UserInfoProps;
+    titleIdx: string;
 }
 
-const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps) => {
+const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: CommentsProps) => {
     const [newComment, setNewComment] = useState('');
     const [commentModify, setCommentModify] = useState(false);
+    const [newReply, setNewReply] = useState('');
+    const [commentReply, setCommentReply] = useState(false);
     const { userId, profileImage, nickName: infoNickname } = userInfo;
     const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command } = comment;
+    const { mutate: deleteComment } = useDeleteComment(idx);
+    const { mutate: modifyComment } = useEditComment(newComment, idx);
+    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
     };
 
-    const commentDelete = (createdAt: string) => {
-        setComments(comments.filter((item) => item.createdAt !== createdAt));
+    const handleCommentDelete = () => {
+        deleteComment();
     };
 
-    const changeCommentModify = () => {
+    const handleChangeCommentModify = () => {
+        setCommentReply(false);
         setCommentModify(!commentModify);
     };
 
-    const handleCommentModify = (id: number) => {
-        console.log(id);
-        changeCommentModify();
+    const handleCommentModify = () => {
+        if (newComment.length > 0) {
+            modifyComment();
+            handleChangeCommentModify();
+        }
+    };
+
+    const handleChangeReply = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewReply(e.target.value);
+    };
+
+    const handleOpenReply = () => {
+        setCommentModify(false);
+        setCommentReply(!commentReply);
+    };
+
+    const handleCreateReply = () => {
+        if (newComment.length > 0) {
+            handleOpenReply();
+            createReply();
+        }
     };
 
     useEffect(() => {
@@ -74,30 +99,29 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
     return (
         <CommentDiv>
             <PostCommentsInfo>
-                <UserInfo
-                    infoNickname={infoNickname}
-                    profileImage={profileImage}
-                    nickName={nickName}
-                    createdAt={createdAt}
-                />
+                <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
                 {infoNickname === nickName ? (
                     <CommentUserEditBox>
-                        <CommentEditBtn onClick={changeCommentModify}>
+                        <CommentEditBtn onClick={handleChangeCommentModify}>
                             <TiEdit />
                             수정하기
                         </CommentEditBtn>
                         <CommentEditBtn
                             onClick={() => {
-                                commentDelete(createdAt);
+                                handleCommentDelete();
                             }}
                         >
                             <HiOutlineTrash />
                             삭제하기
                         </CommentEditBtn>
+                        <CommentEditBtn onClick={handleOpenReply}>
+                            <TiEdit />
+                            답글달기
+                        </CommentEditBtn>
                     </CommentUserEditBox>
                 ) : (
                     <CommentUserEditBox>
-                        <CommentEditBtn onClick={changeCommentModify}>
+                        <CommentEditBtn onClick={handleOpenReply}>
                             <TiEdit />
                             답글달기
                         </CommentEditBtn>
@@ -107,23 +131,21 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
             {infoNickname === nickName && commentModify ? (
                 <CommentUserEditTextareaBox>
                     <TextField
-                        sx={{
-                            width: '100%',
-                        }}
+                        fullWidth
                         multiline
                         inputProps={{ maxLength: 300 }}
                         defaultValue={content}
                         onChange={handleChangeComment}
+                        placeholder="댓글을 적어주세요"
                     />
-                    <CancleBtn variant="outlined" onClick={changeCommentModify}>
+                    <CancleBtn variant="outlined" onClick={handleChangeCommentModify}>
                         취소
                     </CancleBtn>
                     <CustomBtn
                         variant="contained"
                         margin={'1rem 0 1rem 1rem'}
-                        onClick={() => {
-                            handleCommentModify(idx);
-                        }}
+                        onClick={handleCommentModify}
+                        disabled={!newComment}
                     >
                         등록
                     </CustomBtn>
@@ -131,7 +153,30 @@ const PostComment = ({ setComments, comment, comments, userInfo }: CommentsProps
             ) : (
                 <CommentText>{content}</CommentText>
             )}
-            <Reply userInfo={userInfo} />
+            {commentReply ? (
+                <CommentReplyBox>
+                    <TextField
+                        fullWidth
+                        multiline
+                        inputProps={{ maxLength: 300 }}
+                        defaultValue={newReply}
+                        onChange={handleChangeReply}
+                        placeholder="답글을 적어주세요"
+                    />
+                    <CancleBtn variant="outlined" onClick={handleOpenReply}>
+                        취소
+                    </CancleBtn>
+                    <CustomBtn
+                        variant="contained"
+                        margin={'1rem 0 1rem 1rem'}
+                        onClick={handleCreateReply}
+                        disabled={!newReply}
+                    >
+                        등록
+                    </CustomBtn>
+                </CommentReplyBox>
+            ) : null}
+            {command.length ? <Reply command={command} /> : null}
         </CommentDiv>
     );
 };
@@ -150,24 +195,6 @@ const PostCommentsInfo = styled.div`
     width: 100%;
 `;
 
-const CommentUserInfoDiv = styled.div`
-    display: flex;
-    align-items: center;
-`;
-
-const CommentAvatar = styled(Avatar)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    vertical-align: middle;
-    width: 40px;
-    height: 40px;
-    margin-right: 0.5rem;
-`;
-
-const CommentUserInfoBox = styled.div`
-    margin: 1rem 0;
-`;
-
 const CommentUserEditBox = styled.div`
     padding-right: 1rem;
     display: flex;
@@ -180,6 +207,12 @@ const CommentUserEditTextareaBox = styled.div`
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
+`;
+
+const CommentReplyBox = styled(CommentUserEditTextareaBox)`
+    border-left: 2px solid #e5e7eb;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
 `;
 
 const CommentEditBtn = styled.button`
@@ -220,16 +253,6 @@ const CommentDiv = styled.div`
     &:last-child {
         border-bottom: none;
     }
-`;
-
-interface CommentUserInfoTextProps {
-    color: string;
-    fontWeight?: string;
-}
-
-const CommentUserInfoText = styled(Typography)<CommentUserInfoTextProps>`
-    color: ${(props) => `${props.color}`};
-    font-weight: ${(props) => `${props.fontWeight}`};
 `;
 
 const CommentText = styled(Typography)`
