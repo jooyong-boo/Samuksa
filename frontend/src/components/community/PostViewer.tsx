@@ -55,8 +55,6 @@ const PostViewer = () => {
     const { mutate: deletePost } = useDeletePost(id!);
     const [comments, total, isLoading, refetch] = useGetComments(id!, 0, 0);
 
-    console.log(comments, total);
-
     const { userId, nickName, email, profileImage } = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
@@ -157,9 +155,6 @@ const PostViewer = () => {
                                         src={userInfo.profileImage ? userInfo.profileImage : userImage}
                                     />
                                 ) : null}
-                                {/* <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
-                                    {loginStatus && nickName}
-                                </CommentUserInfoText> */}
                             </CommentUserAvatarContainer>
                             <CommentRegister
                                 setComments={setComments}
@@ -170,19 +165,21 @@ const PostViewer = () => {
                             />
                         </CommentBox>
                     </UserCommentWrapper>
-                    {comments &&
-                        comments.map((comment: any) => {
-                            const { postId, content } = comment;
-                            return (
-                                <PostComment
-                                    key={postId + content}
-                                    setComments={setComments}
-                                    comment={comment}
-                                    comments={comments}
-                                    userInfo={userInfo}
-                                />
-                            );
-                        })}
+                    {comments.length
+                        ? comments.map((comment: any) => {
+                              const { idx } = comment;
+                              return (
+                                  <PostComment
+                                      key={idx}
+                                      setComments={setComments}
+                                      comment={comment}
+                                      comments={comments}
+                                      userInfo={userInfo}
+                                      titleIdx={id!}
+                                  />
+                              );
+                          })
+                        : null}
                 </PostCommentBox>
                 <BottomCommentBox>
                     <CustomBtn variant="contained" onClick={goList}>
