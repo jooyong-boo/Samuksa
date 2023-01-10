@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import UserInfo from './PostEditor/UserInfo';
 import BoardSelect from './PostEditor/BoardSelect';
-import { notifySuccess } from 'utils/notify';
+import { notifyError, notifySuccess } from 'utils/notify';
 import { useCreatePost } from 'api/hooks/post/useCreatePost';
 
 const PostEditor = () => {
@@ -81,6 +81,14 @@ const PostEditor = () => {
     };
 
     const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (!title.length) {
+            notifyError('제목을 작성해주세요');
+            return;
+        }
+        if (!content.length) {
+            notifyError('내용을 작성해주세요');
+            return;
+        }
         createPost();
     };
 
