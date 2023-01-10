@@ -7,6 +7,8 @@ import { HiOutlineTrash } from 'react-icons/hi';
 import { TiEdit } from 'react-icons/ti';
 import styled from 'styled-components';
 import { notifyError } from 'utils/notify';
+import CommentMenu from './CommentMenu';
+import EditAndReplyButton from './EditAndReplyButton';
 import Reply from './Reply';
 import UserInfo from './UserInfo';
 
@@ -100,80 +102,36 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
         <CommentDiv>
             <PostCommentsInfo>
                 <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
-                {infoNickname === nickName ? (
-                    <CommentUserEditBox>
-                        <CommentEditBtn onClick={handleChangeCommentModify}>
-                            <TiEdit />
-                            수정하기
-                        </CommentEditBtn>
-                        <CommentEditBtn
-                            onClick={() => {
-                                handleCommentDelete();
-                            }}
-                        >
-                            <HiOutlineTrash />
-                            삭제하기
-                        </CommentEditBtn>
-                        <CommentEditBtn onClick={handleOpenReply}>
-                            <TiEdit />
-                            답글달기
-                        </CommentEditBtn>
-                    </CommentUserEditBox>
-                ) : (
-                    <CommentUserEditBox>
-                        <CommentEditBtn onClick={handleOpenReply}>
-                            <TiEdit />
-                            답글달기
-                        </CommentEditBtn>
-                    </CommentUserEditBox>
-                )}
+                <CommentMenu
+                    infoNickname={infoNickname}
+                    nickName={nickName}
+                    handleEdit={handleChangeCommentModify}
+                    handleDelete={handleCommentDelete}
+                    handleReply={handleOpenReply}
+                />
             </PostCommentsInfo>
             {infoNickname === nickName && commentModify ? (
                 <CommentUserEditTextareaBox>
-                    <TextField
-                        fullWidth
-                        multiline
-                        inputProps={{ maxLength: 300 }}
-                        defaultValue={content}
+                    <EditAndReplyButton
+                        value={content}
                         onChange={handleChangeComment}
-                        placeholder="댓글을 적어주세요"
+                        onClickCancel={handleChangeCommentModify}
+                        onClickRegister={handleCommentModify}
+                        disable={newComment}
                     />
-                    <CancleBtn variant="outlined" onClick={handleChangeCommentModify}>
-                        취소
-                    </CancleBtn>
-                    <CustomBtn
-                        variant="contained"
-                        margin={'1rem 0 1rem 1rem'}
-                        onClick={handleCommentModify}
-                        disabled={!newComment}
-                    >
-                        등록
-                    </CustomBtn>
                 </CommentUserEditTextareaBox>
             ) : (
                 <CommentText>{content}</CommentText>
             )}
             {commentReply ? (
                 <CommentReplyBox>
-                    <TextField
-                        fullWidth
-                        multiline
-                        inputProps={{ maxLength: 300 }}
-                        defaultValue={newReply}
+                    <EditAndReplyButton
+                        value={newReply}
                         onChange={handleChangeReply}
-                        placeholder="답글을 적어주세요"
+                        onClickCancel={handleOpenReply}
+                        onClickRegister={handleCreateReply}
+                        disable={newReply}
                     />
-                    <CancleBtn variant="outlined" onClick={handleOpenReply}>
-                        취소
-                    </CancleBtn>
-                    <CustomBtn
-                        variant="contained"
-                        margin={'1rem 0 1rem 1rem'}
-                        onClick={handleCreateReply}
-                        disabled={!newReply}
-                    >
-                        등록
-                    </CustomBtn>
                 </CommentReplyBox>
             ) : null}
             {command.length ? <Reply command={command} /> : null}
@@ -195,13 +153,6 @@ const PostCommentsInfo = styled.div`
     width: 100%;
 `;
 
-const CommentUserEditBox = styled.div`
-    padding-right: 1rem;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: column;
-`;
-
 const CommentUserEditTextareaBox = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -213,19 +164,6 @@ const CommentReplyBox = styled(CommentUserEditTextareaBox)`
     border-left: 2px solid #e5e7eb;
     padding-left: 1rem;
     margin-bottom: 1rem;
-`;
-
-const CommentEditBtn = styled.button`
-    font-size: 1rem;
-    background-color: white;
-    color: #6b7280;
-    border-radius: 5px;
-    height: 2rem;
-    border: none;
-    cursor: pointer;
-    :hover {
-        color: #374151;
-    }
 `;
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
@@ -258,4 +196,5 @@ const CommentDiv = styled.div`
 const CommentText = styled(Typography)`
     color: rgb(55 65 81);
     margin-bottom: 1rem;
+    font-size: 1.125rem;
 `;
