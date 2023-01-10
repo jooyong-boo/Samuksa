@@ -9,7 +9,7 @@ interface IProps {
     delete: (idx: number | string) => void;
 }
 
-export default function PostMenu({ ...props }: IProps) {
+const PostMenu = ({ ...props }: IProps) => {
     const { id } = useParams<{ id: string }>();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -58,4 +58,6 @@ export default function PostMenu({ ...props }: IProps) {
             </Menu>
         </div>
     );
-}
+};
+
+export default PostMenu;
