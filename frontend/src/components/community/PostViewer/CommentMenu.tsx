@@ -37,37 +37,45 @@ const CommentMenu = (props: Iprops) => {
             >
                 <MoreVertIcon />
             </Button>
-            <Menu
-                id="comment-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'comment-button',
-                }}
-            >
-                {infoNickname === nickName ? (
-                    <>
-                        <MenuItem onClick={handleEdit}>
-                            <TiEdit />
-                            <Text>수정하기</Text>
-                        </MenuItem>
-                        <MenuItem onClick={handleDelete}>
-                            <HiOutlineTrash />
-                            <Text>삭제하기</Text>
-                        </MenuItem>
-                        <MenuItem onClick={handleReply}>
-                            <TiEdit />
-                            <Text>답글달기</Text>
-                        </MenuItem>
-                    </>
-                ) : (
+            {infoNickname === nickName ? (
+                <Menu
+                    id="comment-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'comment-button',
+                    }}
+                >
+                    <MenuItem onClick={handleEdit}>
+                        <TiEdit />
+                        <Text>수정하기</Text>
+                    </MenuItem>
+                    <MenuItem onClick={handleDelete}>
+                        <HiOutlineTrash />
+                        <Text>삭제하기</Text>
+                    </MenuItem>
                     <MenuItem onClick={handleReply}>
                         <TiEdit />
                         <Text>답글달기</Text>
                     </MenuItem>
-                )}
-            </Menu>
+                </Menu>
+            ) : (
+                <Menu
+                    id="comment-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'comment-button',
+                    }}
+                >
+                    <MenuItem onClick={handleReply}>
+                        <TiEdit />
+                        <Text>답글달기</Text>
+                    </MenuItem>
+                </Menu>
+            )}
         </div>
     );
 };
