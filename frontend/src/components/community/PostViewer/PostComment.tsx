@@ -102,13 +102,15 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
         <CommentDiv>
             <PostCommentsInfo>
                 <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
-                <CommentMenu
-                    infoNickname={infoNickname}
-                    nickName={nickName}
-                    handleEdit={handleChangeCommentModify}
-                    handleDelete={handleCommentDelete}
-                    handleReply={handleOpenReply}
-                />
+                {infoNickname ? (
+                    <CommentMenu
+                        infoNickname={infoNickname}
+                        nickName={nickName}
+                        handleEdit={handleChangeCommentModify}
+                        handleDelete={handleCommentDelete}
+                        handleReply={handleOpenReply}
+                    />
+                ) : null}
             </PostCommentsInfo>
             {infoNickname === nickName && commentModify ? (
                 <CommentUserEditTextareaBox>
