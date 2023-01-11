@@ -192,6 +192,7 @@ const PostViewer = () => {
                             onClick={() => {
                                 handleMovePost('prev');
                             }}
+                            disabled={Number(params.id) - 1 <= 0}
                         >
                             이전글
                         </CustomBtn>
