@@ -14,6 +14,7 @@ interface CommentReqBody {
 }
 
 export const handlers = [
+    // 글 생성
     rest.post<PostReqBody>(`${process.env.REACT_APP_SamuksaUser_URL}/board/create`, async (req, res, ctx) => {
         const { content, title, type } = req.body;
         const date = new Date();
@@ -38,7 +39,7 @@ export const handlers = [
             ctx.json(idx),
         );
     }),
-
+    // 글 목록 가져오기
     rest.get(`${process.env.REACT_APP_SamuksaUser_URL}/board`, (req, res, ctx) => {
         // If authenticated, return a mocked user details
         let data = post.content.sort((a, b) => b.idx - a.idx);
@@ -48,14 +49,16 @@ export const handlers = [
 
         return res(ctx.status(200), ctx.json(newData));
     }),
-
+    // 글 내용 가져오기
     rest.get(`${process.env.REACT_APP_SamuksaUser_URL}/board/contents`, (req, res, ctx) => {
         const idx = req.url.searchParams.get('idx');
         let data = post.content.filter((item) => item.idx === Number(idx));
-
-        return res(ctx.status(200), ctx.json(data[0]));
+        let next = post.content.filter((item) => item.idx > Number(idx));
+        let prev = post.content.filter((item) => item.idx < Number(idx));
+        let result = { data: data[0], next: !next.length, prev: !prev.length };
+        return res(ctx.status(200), ctx.json(result));
     }),
-
+    // 글 삭제
     rest.delete<{ titleIdx: string | number }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/create`,
         (req, res, ctx) => {
@@ -66,7 +69,7 @@ export const handlers = [
             return res(ctx.status(200), ctx.json(post));
         },
     ),
-
+    // 댓글 불러오기
     rest.get(`${process.env.REACT_APP_SamuksaUser_URL}/board/comments`, (req, res, ctx) => {
         const boardTitleIdx = req.url.searchParams.get('boardTitleIdx');
         const page = req.url.searchParams.get('page');
@@ -76,7 +79,7 @@ export const handlers = [
 
         return res(ctx.status(200), ctx.json(comments));
     }),
-
+    // 댓글 생성
     rest.post<CommentReqBody>(`${process.env.REACT_APP_SamuksaUser_URL}/board/create/comments`, (req, res, ctx) => {
         const { commendIdx, comment, titleIdx } = req.body;
         console.log(req.body);
