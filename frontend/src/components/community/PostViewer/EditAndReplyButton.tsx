@@ -8,10 +8,11 @@ interface Iprops {
     onClickCancel: () => void;
     onClickRegister: () => void;
     disable: string;
+    placeholder: string;
 }
 
 const EditAndReplyButton = (props: Iprops) => {
-    const { value, onChange, onClickCancel, onClickRegister, disable } = props;
+    const { value, onChange, onClickCancel, onClickRegister, disable, placeholder } = props;
     return (
         <>
             <TextField
@@ -20,7 +21,7 @@ const EditAndReplyButton = (props: Iprops) => {
                 inputProps={{ maxLength: 300 }}
                 defaultValue={value}
                 onChange={onChange}
-                placeholder="댓글을 적어주세요"
+                placeholder={placeholder}
             />
             <CancleBtn variant="outlined" onClick={onClickCancel}>
                 취소
