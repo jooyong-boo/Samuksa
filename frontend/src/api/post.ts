@@ -19,26 +19,6 @@ export const getRealPosts = (page: number, size: number, type: number) =>
         },
     });
 
-// 선택한 게시물 조회
-export const getPostsById = async (id: string | undefined) => {
-    try {
-        const { data } = await instance.get(`https://koreanjson.com/posts/${id}`);
-        return data;
-    } catch (err: any) {
-        console.log(err.response);
-    }
-};
-
-// 게시물 댓글 조회
-export const getCommentById = async (id: string | undefined) => {
-    try {
-        const { data } = await instance.get(`https://koreanjson.com/comments?postId=${id}`);
-        return data;
-    } catch (err: any) {
-        console.log(err.response);
-    }
-};
-
 // 게시물 생성
 export const createPost = (content: string, title: string, type: number) =>
     instanceAuth.post('/board/create', {

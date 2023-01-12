@@ -1,23 +1,23 @@
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import styled from 'styled-components';
 
-const PostRecommendBtn = () => {
+const RecommendBtn = () => {
     return (
         <Container>
             <RecommendBox>
-                <RecommendBtn>
+                <Button>
                     <AiOutlineDown />
-                </RecommendBtn>
+                </Button>
                 <RecommendNumberSpan>0</RecommendNumberSpan>
-                <RecommendBtn>
+                <Button>
                     <AiOutlineUp />
-                </RecommendBtn>
+                </Button>
             </RecommendBox>
         </Container>
     );
 };
 
-export default PostRecommendBtn;
+export default RecommendBtn;
 
 const Container = styled.div`
     display: flex;
@@ -34,12 +34,15 @@ const RecommendBox = styled.div`
     justify-content: center;
 `;
 
-const RecommendBtn = styled.button`
+const Button = styled.button`
     flex-grow: 1;
     border: none;
     background-color: white;
     margin: 5px;
     cursor: pointer;
+    :hover {
+        color: ${(props) => props.theme.colors.main};
+    }
 `;
 
 const RecommendNumberSpan = styled.span`

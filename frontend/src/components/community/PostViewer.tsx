@@ -12,14 +12,15 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../../utils/TimeForToday';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { getCommentById, getPostComment, getPostContent, getPostsById } from '../../api/post';
+import { getPostComment, getPostContent } from '../../api/post';
 import PostComment from './PostViewer/PostComment';
-import PostRecommendBtn from './PostViewer/PostRecommendBtn';
+import RecommendBtn from './PostViewer/RecommendBtn';
 import CommentRegister from './PostViewer/CommentRegister';
 import UserInfo from './PostViewer/UserInfo';
 import PostMenu from './PostViewer/PostMenu';
 import { useDeletePost } from 'api/hooks/post/useDeletePost';
 import useGetComments from 'api/hooks/post/useGetComments';
+import useGetPostContent from 'api/hooks/post/useGetPostContent';
 
 interface userInfos {
     userId: string;
@@ -46,23 +47,18 @@ const PostViewer = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
-    const [data, setData] = useState<PostData>();
     const [comments1, setComments] = useState<any>([]);
     const userInfo = useRecoilValue<any>(userInfoState);
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
     const { mutate: deletePost } = useDeletePost(id!);
-    const [comments, total, isLoading, refetch] = useGetComments(id!, 0, 0);
+    const [comments, total, isLoadingComments, refetchComments] = useGetComments(id!, 0, 0);
+    const [content, isLoadingContent, refetchContent] = useGetPostContent(id!);
 
     const { userId, nickName, email, profileImage } = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
-
-    async function searchPostsById(id: number) {
-        const data = await getPostContent(id);
-        setData(data.data);
-    }
 
     async function searchUserComment(id: number, page: number, size: number) {
         const data = await getPostComment(id, 0, 0);
@@ -96,7 +92,6 @@ const PostViewer = () => {
 
     useEffect(() => {
         if (id) {
-            searchPostsById(Number(id));
             searchUserComment(Number(id), 0, 0);
         }
     }, [id]);
@@ -108,105 +103,108 @@ const PostViewer = () => {
 
     return (
         <Background>
-            <PostViewerPaper elevation={0}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <PostTitle>{data?.title}</PostTitle>
-                    <PostMenu delete={handleDeletePost} />
-                </div>
-                <PostInfoContainer>
-                    <PostUserBox>
-                        <UserAvatar src={data?.profileImage} />
-                        <UserInfoBox>
-                            <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
-                                {data?.nickName}
-                            </UserInfoTypography>
-                            <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
-                                {data && timeForToday(data.createdAt)}
-                            </UserInfoTypography>
-                        </UserInfoBox>
-                    </PostUserBox>
-                    {data && (
-                        <PostInfoBox onClick={moveComment}>
-                            <span>조회</span>
-                            <PostStrong>{data.viewCount}</PostStrong>
-                            <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                            <span>댓글</span>
-                            <PostStrong>{data.commentCount}</PostStrong>
-                            <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                            <span>추천</span>
-                            <PostStrong>{data.recommendCount}</PostStrong>
-                        </PostInfoBox>
-                    )}
-                </PostInfoContainer>
-                {data ? (
-                    <PostContentBox>
-                        <PostContent>{parse(DOMPurify.sanitize(data.content))}</PostContent>
-                    </PostContentBox>
-                ) : null}
-                <PostRecommendBtn />
+            {content ? (
+                <PostViewerPaper elevation={0}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <PostTitle>{content?.data?.title}</PostTitle>
+                        <PostMenu delete={handleDeletePost} />
+                    </div>
+                    <PostInfoContainer>
+                        <PostUserBox>
+                            <UserAvatar src={content?.data?.profileImage} />
+                            <UserInfoBox>
+                                <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
+                                    {content?.data?.nickName}
+                                </UserInfoTypography>
+                                <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
+                                    {content?.data && timeForToday(content.data.createdAt)}
+                                </UserInfoTypography>
+                            </UserInfoBox>
+                        </PostUserBox>
+                        {content.data && (
+                            <PostInfoBox onClick={moveComment}>
+                                <span>조회</span>
+                                <PostStrong>{content.data.viewCount}</PostStrong>
+                                <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                                <span>댓글</span>
+                                <PostStrong>{content.data.commentCount}</PostStrong>
+                                <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                                <span>추천</span>
+                                <PostStrong>{content.data.recommendCount}</PostStrong>
+                            </PostInfoBox>
+                        )}
+                    </PostInfoContainer>
+                    {content.data ? (
+                        <PostContentBox>
+                            <PostContent>{parse(DOMPurify.sanitize(content.data.content))}</PostContent>
+                        </PostContentBox>
+                    ) : null}
+                    <RecommendBtn />
 
-                <PostCommentBox ref={commentRef}>
-                    <TotalCommentText>{comments.length}개의 댓글</TotalCommentText>
-                    <UserCommentWrapper>
-                        <CommentBox>
-                            <CommentUserAvatarContainer>
-                                {loginStatus ? (
-                                    <CommentUserAvatar
-                                        src={userInfo.profileImage ? userInfo.profileImage : userImage}
-                                    />
-                                ) : null}
-                            </CommentUserAvatarContainer>
-                            <CommentRegister
-                                setComments={setComments}
-                                comments={comments}
-                                userInfo={userInfo}
-                                loginStatus={loginStatus}
-                                titleIdx={id!}
-                            />
-                        </CommentBox>
-                    </UserCommentWrapper>
-                    {comments.length
-                        ? comments.map((comment: any) => {
-                              const { idx } = comment;
-                              return (
-                                  <PostComment
-                                      key={idx}
-                                      setComments={setComments}
-                                      comment={comment}
-                                      comments={comments}
-                                      userInfo={userInfo}
-                                      titleIdx={id!}
-                                  />
-                              );
-                          })
-                        : null}
-                </PostCommentBox>
-                <BottomCommentBox>
-                    <CustomBtn variant="contained" onClick={goList}>
-                        목록
-                    </CustomBtn>
-                    <PageMoveBox>
-                        <CustomBtn
-                            variant="contained"
-                            margin={'0 1rem'}
-                            onClick={() => {
-                                handleMovePost('prev');
-                            }}
-                            disabled={Number(params.id) - 1 <= 0}
-                        >
-                            이전글
+                    <PostCommentBox ref={commentRef}>
+                        <TotalCommentText>{comments.length}개의 댓글</TotalCommentText>
+                        <UserCommentWrapper>
+                            <CommentBox>
+                                <CommentUserAvatarContainer>
+                                    {loginStatus ? (
+                                        <CommentUserAvatar
+                                            src={userInfo.profileImage ? userInfo.profileImage : userImage}
+                                        />
+                                    ) : null}
+                                </CommentUserAvatarContainer>
+                                <CommentRegister
+                                    setComments={setComments}
+                                    comments={comments}
+                                    userInfo={userInfo}
+                                    loginStatus={loginStatus}
+                                    titleIdx={id!}
+                                />
+                            </CommentBox>
+                        </UserCommentWrapper>
+                        {comments.length
+                            ? comments.map((comment: any) => {
+                                  const { idx } = comment;
+                                  return (
+                                      <PostComment
+                                          key={idx}
+                                          setComments={setComments}
+                                          comment={comment}
+                                          comments={comments}
+                                          userInfo={userInfo}
+                                          titleIdx={id!}
+                                      />
+                                  );
+                              })
+                            : null}
+                    </PostCommentBox>
+                    <BottomCommentBox>
+                        <CustomBtn variant="contained" onClick={goList}>
+                            목록
                         </CustomBtn>
-                        <CustomBtn
-                            variant="contained"
-                            onClick={() => {
-                                handleMovePost('next');
-                            }}
-                        >
-                            다음글
-                        </CustomBtn>
-                    </PageMoveBox>
-                </BottomCommentBox>
-            </PostViewerPaper>
+                        <PageMoveBox>
+                            <CustomBtn
+                                variant="contained"
+                                margin={'0 1rem'}
+                                onClick={() => {
+                                    handleMovePost('prev');
+                                }}
+                                disabled={content.prev}
+                            >
+                                이전글
+                            </CustomBtn>
+                            <CustomBtn
+                                variant="contained"
+                                onClick={() => {
+                                    handleMovePost('next');
+                                }}
+                                disabled={content.next}
+                            >
+                                다음글
+                            </CustomBtn>
+                        </PageMoveBox>
+                    </BottomCommentBox>
+                </PostViewerPaper>
+            ) : null}
         </Background>
     );
 };
