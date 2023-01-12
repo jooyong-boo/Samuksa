@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { notifyError } from 'utils/notify';
 import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
+import RecommendBtn from './RecommendBtn';
 import Reply from './Reply';
 import UserInfo from './UserInfo';
 
@@ -102,15 +103,18 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
         <CommentDiv>
             <PostCommentsInfo>
                 <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
-                {infoNickname ? (
-                    <CommentMenu
-                        infoNickname={infoNickname}
-                        nickName={nickName}
-                        handleEdit={handleChangeCommentModify}
-                        handleDelete={handleCommentDelete}
-                        handleReply={handleOpenReply}
-                    />
-                ) : null}
+                <FlexBox>
+                    <RecommendBtn />
+                    {infoNickname ? (
+                        <CommentMenu
+                            infoNickname={infoNickname}
+                            nickName={nickName}
+                            handleEdit={handleChangeCommentModify}
+                            handleDelete={handleCommentDelete}
+                            handleReply={handleOpenReply}
+                        />
+                    ) : null}
+                </FlexBox>
             </PostCommentsInfo>
             {infoNickname === nickName && commentModify ? (
                 <CommentUserEditTextareaBox>
@@ -120,6 +124,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
                         onClickCancel={handleChangeCommentModify}
                         onClickRegister={handleCommentModify}
                         disable={newComment}
+                        placeholder="댓글을 적어주세요"
                     />
                 </CommentUserEditTextareaBox>
             ) : (
@@ -133,26 +138,30 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
                         onClickCancel={handleOpenReply}
                         onClickRegister={handleCreateReply}
                         disable={newReply}
+                        placeholder="답글을 적어주세요"
                     />
                 </CommentReplyBox>
             ) : null}
-            {command.length ? <Reply command={command} /> : null}
+            {command.length
+                ? command.map((item) => {
+                      const { idx } = item;
+                      return <Reply userInfo={userInfo} item={item} key={idx} />;
+                  })
+                : null}
         </CommentDiv>
     );
 };
-
-export default PostComment;
-
-interface CustomBtnProps {
-    margin?: string;
-    $marginRight?: string;
-}
 
 const PostCommentsInfo = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+`;
+
+const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const CommentUserEditTextareaBox = styled.div`
@@ -168,26 +177,6 @@ const CommentReplyBox = styled(CommentUserEditTextareaBox)`
     margin-bottom: 1rem;
 `;
 
-const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: ${({ theme }) => theme.colors.main};
-    font-weight: 700;
-    color: white;
-    box-shadow: none;
-    width: 7rem;
-    height: 2.5rem;
-    margin: ${(props) => `${props.margin}`};
-    margin-right: ${(props) => `${props.$marginRight}`};
-    :hover {
-        box-shadow: none;
-    }
-`;
-
-const CancleBtn = styled(CustomBtn)`
-    background-color: white;
-    color: #0098ee;
-    width: 3.5rem;
-`;
-
 const CommentDiv = styled.div`
     border-bottom: 1px solid #eaeaea;
     &:last-child {
@@ -200,3 +189,5 @@ const CommentText = styled(Typography)`
     margin-bottom: 1rem;
     font-size: 1.125rem;
 `;
+
+export default PostComment;
