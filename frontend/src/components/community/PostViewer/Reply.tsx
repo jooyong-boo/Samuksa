@@ -1,5 +1,9 @@
 import { Typography } from '@mui/material';
+import { useState } from 'react';
 import styled from 'styled-components';
+import CommentMenu from './CommentMenu';
+import EditAndReplyButton from './EditAndReplyButton';
+import RecommendBtn from './RecommendBtn';
 import UserInfo from './UserInfo';
 
 interface ReplyProps {
@@ -12,37 +16,117 @@ interface ReplyProps {
     modifiedAt: string;
 }
 
-interface IProps {
-    command: ReplyProps[];
+interface UserInfoProps {
+    userId: string;
+    nickName: string;
+    email: string;
+    profileImage: string;
 }
 
-const Reply = ({ command }: IProps) => {
-    console.log(command);
+interface IProps {
+    userInfo: UserInfoProps;
+    item: ReplyProps;
+}
+
+const Reply = ({ userInfo, item }: IProps) => {
+    const [comment, setComment] = useState('');
+    const [newComment, setNewComment] = useState('');
+    const [newReply, setNewReply] = useState('');
+    const [commentModify, setCommentModify] = useState(false);
+    const [commentReply, setCommentReply] = useState(false);
+    const { nickName: infoNickname } = userInfo;
+    const { idx, avatarUrl, nickName, receiverNickName, content, createdAt, modifiedAt } = item;
+
+    const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setComment(e.target.value);
+    };
+
+    const handleChangeCommentModify = () => {
+        setCommentReply(false);
+        setCommentModify(!commentModify);
+    };
+
+    const handleCommentDelete = () => {
+        // deleteComment();
+    };
+
+    const handleCommentModify = () => {
+        if (newComment.length > 0) {
+            handleChangeCommentModify();
+        }
+    };
+
+    const handleChangeReply = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewReply(e.target.value);
+    };
+
+    const handleOpenReply = () => {
+        setCommentModify(false);
+        setCommentReply(!commentReply);
+    };
+
+    const handleCreateReply = () => {
+        if (newComment.length > 0) {
+            handleOpenReply();
+            // createReply();
+        }
+    };
     return (
-        <>
-            {command.map((item: ReplyProps, i: number) => {
-                const { idx, avatarUrl, nickName, receiverNickName, content, createdAt, modifiedAt } = item;
-                return (
-                    <Container key={idx}>
-                        <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
-                        {receiverNickName ? (
-                            <ReceiverInfoBox>
-                                <ReceiverInfoText>@{receiverNickName}</ReceiverInfoText>
-                            </ReceiverInfoBox>
-                        ) : null}
-                        <CommentText>{content}</CommentText>
-                    </Container>
-                );
-            })}
-        </>
+        <Container key={idx}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
+                <FlexBox>
+                    <RecommendBtn />
+                    <CommentMenu
+                        infoNickname={infoNickname}
+                        nickName={nickName}
+                        handleEdit={handleChangeCommentModify}
+                        handleDelete={handleCommentDelete}
+                        handleReply={handleOpenReply}
+                    />
+                </FlexBox>
+            </div>
+            {receiverNickName ? (
+                <ReceiverInfoBox>
+                    <ReceiverInfoText>@{receiverNickName}</ReceiverInfoText>
+                </ReceiverInfoBox>
+            ) : null}
+            <CommentText>{content}</CommentText>
+            {infoNickname === nickName && commentModify ? (
+                <EditAndReplyButton
+                    value={content}
+                    onChange={handleChangeComment}
+                    onClickCancel={handleChangeCommentModify}
+                    onClickRegister={handleCommentModify}
+                    disable={newComment}
+                    placeholder="댓글을 적어주세요"
+                />
+            ) : null}
+            {commentReply ? (
+                <EditAndReplyButton
+                    value={newReply}
+                    onChange={handleChangeReply}
+                    onClickCancel={handleOpenReply}
+                    onClickRegister={handleCreateReply}
+                    disable={newReply}
+                    placeholder="답글을 적어주세요"
+                />
+            ) : null}
+        </Container>
     );
 };
 
 const Container = styled.div`
+    justify-content: space-between;
     margin-left: 2rem;
     padding-left: 2rem;
     border-left: 2px solid #a7a7a7;
     margin-bottom: 1rem;
+`;
+
+const FlexBox = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 const ReceiverInfoBox = styled.div`
