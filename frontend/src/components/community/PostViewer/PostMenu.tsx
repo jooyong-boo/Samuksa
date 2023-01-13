@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 
 interface IProps {
     delete: (idx: number | string) => void;
+    edit: () => void;
 }
 
 const PostMenu = ({ ...props }: IProps) => {
@@ -43,6 +44,7 @@ const PostMenu = ({ ...props }: IProps) => {
                 <MenuItem
                     onClick={() => {
                         handleClose();
+                        props.edit();
                     }}
                 >
                     수정하기
