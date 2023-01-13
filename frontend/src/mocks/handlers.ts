@@ -25,7 +25,7 @@ export const handlers = [
             profileImage: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
             nickName: '삼먹사',
             createdAt: date.toString(),
-            modifiedAt: date.toString(),
+            modifiedAt: '',
             title,
             content,
             viewCount: 123,
@@ -63,7 +63,10 @@ export const handlers = [
     rest.patch<{ text: string; title: string; titleIdx: number; type: number }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/create`,
         (req, res, ctx) => {
-            console.log(req.body);
+            const { text, title, titleIdx, type } = req.body;
+            const findIdx = post.content.findIndex((item) => item.idx === titleIdx);
+            const date = new Date();
+            post.content[findIdx] = { ...post.content[findIdx], title, content: text, modifiedAt: date.toString() };
             return res(ctx.status(200), ctx.json(post));
         },
     ),
