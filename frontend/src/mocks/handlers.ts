@@ -58,6 +58,16 @@ export const handlers = [
         let result = { data: data[0], next: !next.length, prev: !prev.length };
         return res(ctx.status(200), ctx.json(result));
     }),
+
+    // 글 수정
+    rest.patch<{ text: string; title: string; titleIdx: number; type: number }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/create`,
+        (req, res, ctx) => {
+            console.log(req.body);
+            return res(ctx.status(200), ctx.json(post));
+        },
+    ),
+
     // 글 삭제
     rest.delete<{ titleIdx: string | number }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/create`,
