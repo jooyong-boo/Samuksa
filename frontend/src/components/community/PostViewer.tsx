@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { loginStatusState, userImageState, userInfoState } from '../../store/user';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
@@ -16,31 +16,11 @@ import { getPostComment, getPostContent } from '../../api/post';
 import PostComment from './PostViewer/PostComment';
 import RecommendBtn from './PostViewer/RecommendBtn';
 import CommentRegister from './PostViewer/CommentRegister';
-import UserInfo from './PostViewer/UserInfo';
 import PostMenu from './PostViewer/PostMenu';
 import { useDeletePost } from 'api/hooks/post/useDeletePost';
 import useGetComments from 'api/hooks/post/useGetComments';
 import useGetPostContent from 'api/hooks/post/useGetPostContent';
-
-interface userInfos {
-    userId: string;
-    nickName: string;
-    email: string;
-    profileImage: string;
-}
-
-interface PostData {
-    idx: number;
-    profileImage: string;
-    nickName: string;
-    createdAt: string;
-    modifiedAt: string;
-    title: string;
-    content: string;
-    viewCount: number;
-    commentCount: number;
-    recommendCount: number;
-}
+import { postEditState } from 'store/post';
 
 const PostViewer = () => {
     const { id } = useParams<{ id: string }>();
@@ -52,11 +32,10 @@ const PostViewer = () => {
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
+    const [editPost, setEditPost] = useRecoilState(postEditState);
     const { mutate: deletePost } = useDeletePost(id!);
-    const [comments, total, isLoadingComments, refetchComments] = useGetComments(id!, 0, 0);
+    const [comments, isLoadingComments, refetchComments] = useGetComments(id!, 0, 0);
     const [content, isLoadingContent, refetchContent] = useGetPostContent(id!);
-
-    const { userId, nickName, email, profileImage } = userInfo;
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -69,7 +48,16 @@ const PostViewer = () => {
         deletePost();
     };
 
-    const handleEditPost = () => {};
+    const handleEditPost = () => {
+        const type = location.pathname.split('/').includes('review') ? 0 : 1;
+        setEditPost({
+            content: content.data.content,
+            title: content.data.title,
+            idx: content.data.idx,
+            type,
+        });
+        navigate('/edit', { state: `/${location.pathname.split('/')[2]}` });
+    };
 
     const moveComment = () => {
         commentRef.current?.scrollIntoView({ block: 'start' });
@@ -90,25 +78,25 @@ const PostViewer = () => {
         }
     };
 
+    const goList = () => {
+        const page = location.pathname.split('/')[2];
+        navigate(`/board/${page}`);
+    };
+
     useEffect(() => {
         if (id) {
             searchUserComment(Number(id), 0, 0);
         }
     }, [id]);
 
-    const goList = () => {
-        const page = location.pathname.split('/')[2];
-        navigate(`/board/${page}`);
-    };
-
     return (
         <Background>
             {content ? (
                 <PostViewerPaper elevation={0}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <PostTopBox>
                         <PostTitle>{content?.data?.title}</PostTitle>
-                        <PostMenu delete={handleDeletePost} />
-                    </div>
+                        <PostMenu delete={handleDeletePost} edit={handleEditPost} />
+                    </PostTopBox>
                     <PostInfoContainer>
                         <PostUserBox>
                             <UserAvatar src={content?.data?.profileImage} />
@@ -142,7 +130,7 @@ const PostViewer = () => {
                     <RecommendBtn />
 
                     <PostCommentBox ref={commentRef}>
-                        <TotalCommentText>{comments.length}개의 댓글</TotalCommentText>
+                        <TotalCommentText>{comments.data.length}개의 댓글</TotalCommentText>
                         <UserCommentWrapper>
                             <CommentBox>
                                 <CommentUserAvatarContainer>
@@ -154,22 +142,22 @@ const PostViewer = () => {
                                 </CommentUserAvatarContainer>
                                 <CommentRegister
                                     setComments={setComments}
-                                    comments={comments}
+                                    comments={comments.data}
                                     userInfo={userInfo}
                                     loginStatus={loginStatus}
                                     titleIdx={id!}
                                 />
                             </CommentBox>
                         </UserCommentWrapper>
-                        {comments.length
-                            ? comments.map((comment: any) => {
+                        {comments.data.length
+                            ? comments.data.map((comment: any) => {
                                   const { idx } = comment;
                                   return (
                                       <PostComment
                                           key={idx}
                                           setComments={setComments}
                                           comment={comment}
-                                          comments={comments}
+                                          comments={comments.data}
                                           userInfo={userInfo}
                                           titleIdx={id!}
                                       />
@@ -220,11 +208,6 @@ const Background = styled.div`
     width: 95vw;
     height: 90%;
     padding-top: 1rem;
-    /* display: flex; */
-    /* flex-wrap: wrap; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
-    /* align-items: center; */
     overflow: auto;
     margin: auto;
 `;
@@ -244,6 +227,14 @@ const PostViewerPaper = styled(Paper)`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
+    @media all and (max-width: 1000px) {
+        width: 100%;
+    }
+`;
+
+const PostTopBox = styled.div`
+    display: flex;
+    justify-content: space-between;
 `;
 
 const PostTitle = styled(Typography)`
