@@ -1,7 +1,6 @@
 import { Button, FormControl, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useRef } from 'react';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -121,7 +120,7 @@ const PostEditor = () => {
     return (
         <Background>
             <EditorPaper elevation={0}>
-                <EditorTypography>글작성</EditorTypography>
+                <EditorTypography>글 작성</EditorTypography>
                 <UserInfo />
                 <FormControl fullWidth>
                     <Typography>게시판</Typography>
