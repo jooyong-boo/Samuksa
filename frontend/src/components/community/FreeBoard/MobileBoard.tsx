@@ -23,8 +23,19 @@ const MobileBoard = ({ usePosts, offset, limit }: PostListProps) => {
         <MobileBoardContainer>
             <StyledUl>
                 {usePosts?.slice(offset, offset + limit).map((item: any) => {
-                    const { idx, title, nickName, profileImage, ctime, recommendNumber, read } = item;
-                    const newCreateAt = new Date(ctime);
+                    const {
+                        idx,
+                        title,
+                        nickName,
+                        profileImage,
+                        createdAt,
+                        modifiedAt,
+                        viewCount,
+                        commentCount,
+                        recommendCount,
+                        read,
+                    } = item;
+                    const newCreateAt = new Date(createdAt);
                     const year = newCreateAt.getFullYear();
                     const month = newCreateAt.getMonth();
                     const date = newCreateAt.getDate();
@@ -51,13 +62,14 @@ const MobileBoard = ({ usePosts, offset, limit }: PostListProps) => {
                                 </div>
                                 <MobilePostAdditionalInfoWrapper>
                                     <MobilePostAddInfoLeft>
-                                        <MobilePostAddInfoText>조회: {recommendNumber}</MobilePostAddInfoText>
-                                        <MobilePostAddInfoText>댓글: {recommendNumber}</MobilePostAddInfoText>
-                                        <MobilePostAddInfoText>추천: {recommendNumber}</MobilePostAddInfoText>
+                                        <MobilePostAddInfoText>조회: {viewCount}</MobilePostAddInfoText>
+                                        <MobilePostAddInfoText>댓글: {commentCount}</MobilePostAddInfoText>
+                                        <MobilePostAddInfoText>추천: {recommendCount}</MobilePostAddInfoText>
                                     </MobilePostAddInfoLeft>
-                                    <MobilePostAddInfoRightText>{`${year}년 ${
-                                        month + 1
-                                    }월 ${date}일`}</MobilePostAddInfoRightText>
+                                    <MobilePostAddInfoRightText>
+                                        {`${year}년 ${month + 1}월 ${date}일`}
+                                        {modifiedAt ? ` (수정됨)` : null}
+                                    </MobilePostAddInfoRightText>
                                 </MobilePostAdditionalInfoWrapper>
                             </MobileLi>
                         </div>
