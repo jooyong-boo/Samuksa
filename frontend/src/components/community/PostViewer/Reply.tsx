@@ -77,13 +77,15 @@ const Reply = ({ userInfo, item }: IProps) => {
                 <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
                 <FlexBox>
                     <RecommendBtn />
-                    <CommentMenu
-                        infoNickname={infoNickname}
-                        nickName={nickName}
-                        handleEdit={handleChangeCommentModify}
-                        handleDelete={handleCommentDelete}
-                        handleReply={handleOpenReply}
-                    />
+                    {infoNickname ? (
+                        <CommentMenu
+                            infoNickname={infoNickname}
+                            nickName={nickName}
+                            handleEdit={handleChangeCommentModify}
+                            handleDelete={handleCommentDelete}
+                            handleReply={handleOpenReply}
+                        />
+                    ) : null}
                 </FlexBox>
             </div>
             {receiverNickName ? (
@@ -127,6 +129,9 @@ const Container = styled.div`
 const FlexBox = styled.div`
     display: flex;
     align-items: center;
+    @media all and (max-width: 500px) {
+        flex-direction: column-reverse;
+    }
 `;
 
 const ReceiverInfoBox = styled.div`

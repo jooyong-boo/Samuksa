@@ -8,9 +8,9 @@ export const useEditPost = (text: string, title: string, titleIdx: number, type:
     const navigate = useNavigate();
     const { mutate } = useMutation(() => patchPost(text, title, titleIdx, type), {
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['post'] }).then(() => {
+            queryClient.invalidateQueries({ queryKey: ['post', titleIdx] }).then(() => {
                 // navigate(-1);
-                notifySuccess('수정 완료');
+                // notifySuccess('수정 완료');
             });
         },
     });

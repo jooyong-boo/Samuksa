@@ -17,6 +17,7 @@ const TipPage = lazy(() => import('./pages/board/TipPage'));
 const WritingPage = lazy(() => import('./pages/board/WritingPage'));
 const PostViewPage = lazy(() => import('./pages/board/PostViewPage'));
 const ProfilePage = lazy(() => import('./pages/auth/ProfilePage'));
+const PostEditPage = lazy(() => import('./pages/board/PostEditPage'));
 
 function App() {
     return (
@@ -75,6 +76,14 @@ function App() {
                     element={
                         <RequireAuth>
                             <WritingPage />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/edit"
+                    element={
+                        <RequireAuth>
+                            <PostEditPage />
                         </RequireAuth>
                     }
                 />

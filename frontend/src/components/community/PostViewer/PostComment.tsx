@@ -162,6 +162,9 @@ const PostCommentsInfo = styled.div`
 const FlexBox = styled.div`
     display: flex;
     align-items: center;
+    @media all and (max-width: 500px) {
+        flex-direction: column-reverse;
+    }
 `;
 
 const CommentUserEditTextareaBox = styled.div`
@@ -178,7 +181,7 @@ const CommentReplyBox = styled(CommentUserEditTextareaBox)`
 `;
 
 const CommentDiv = styled.div`
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid #d3d4d8;
     &:last-child {
         border-bottom: none;
     }
@@ -188,6 +191,7 @@ const CommentText = styled(Typography)`
     color: rgb(55 65 81);
     margin-bottom: 1rem;
     font-size: 1.125rem;
+    word-break: break-all;
 `;
 
 export default PostComment;

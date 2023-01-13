@@ -13,22 +13,26 @@ import { useEffect } from 'react';
 import UserInfo from './PostEditor/UserInfo';
 import BoardSelect from './PostEditor/BoardSelect';
 import { notifyError, notifySuccess } from 'utils/notify';
-import { useCreatePost } from 'api/hooks/post/useCreatePost';
+import { useEditPost } from 'api/hooks/post/useEditPost';
+import { useRecoilValue } from 'recoil';
+import { postEditState } from 'store/post';
 
-const PostEditor = () => {
+const PostEditEditor = () => {
     const navigate = useNavigate();
     const editorRef: any = useRef(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [type, setType] = useState(0);
+    const [index, setIndex] = useState(0);
     const [board, setBoard] = useState('');
+    const editState = useRecoilValue(postEditState);
 
     const [transientStorage, setTransientStorage] = useState<any>([]);
 
     const location = useLocation();
     const prevLocation = location.state;
 
-    const { mutate: createPost } = useCreatePost(content, title, type);
+    const { mutate: editPost } = useEditPost(content, title, index, type);
 
     const goBack = () => {
         navigate(-1);
@@ -43,42 +47,6 @@ const PostEditor = () => {
         setContent(data);
     };
 
-    // 임시저장 테스트중
-    const handleTransientStorage = () => {
-        let data = [
-            {
-                title,
-                content,
-                board,
-                type,
-            },
-        ];
-        if (localStorage.getItem('transientStorage')) {
-            if (window.confirm('이미 임시저장한 글이 있습니다, 새로 저장할까요?')) {
-                setTransientStorage(data);
-                localStorage.setItem('transientStorage', JSON.stringify(data));
-                notifySuccess('임시저장 완료');
-                return;
-            } else {
-                return;
-            }
-        } else {
-            localStorage.setItem('transientStorage', JSON.stringify(data));
-            setTransientStorage(data);
-            notifySuccess('임시저장 완료');
-        }
-    };
-
-    const handleDeleteTransientStorage = () => {
-        if (localStorage.getItem('transientStorage')) {
-            if (window.confirm('임시저장 글을 삭제할까요?')) {
-                localStorage.removeItem('transientStorage');
-                setTransientStorage([]);
-                notifySuccess('삭제완료');
-            }
-        }
-    };
-
     const onSave = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (!title.length) {
             notifyError('제목을 작성해주세요');
@@ -88,23 +56,8 @@ const PostEditor = () => {
             notifyError('내용을 작성해주세요');
             return;
         }
-        createPost();
+        editPost();
     };
-
-    useEffect(() => {
-        if (localStorage.getItem('transientStorage')) {
-            const { title, content, board } = JSON.parse(localStorage.getItem('transientStorage') || '{}')[0];
-            if (window.confirm('임시저장된 글이 있습니다. 불러올까요?')) {
-                setTransientStorage(JSON.parse(localStorage.getItem('transientStorage') || '{}'));
-                setTitle(title);
-                setContent(content);
-                editorRef.current.getInstance().setHTML(content);
-                setBoard(board);
-            } else {
-                return;
-            }
-        }
-    }, []);
 
     useEffect(() => {
         if (prevLocation === '/review' && !localStorage.getItem('transientStorage')) {
@@ -117,10 +70,19 @@ const PostEditor = () => {
         }
     }, []);
 
+    useEffect(() => {
+        const { content, title, idx, type } = editState;
+        setTitle(title);
+        setContent(content);
+        setIndex(idx);
+        setType(type);
+        setBoard(prevLocation === '/review' ? '리뷰게시판' : 'TIP게시판');
+    }, [editState]);
+
     return (
         <Background>
             <EditorPaper elevation={0}>
-                <EditorTypography>글 작성</EditorTypography>
+                <EditorTypography>글 수정</EditorTypography>
                 <UserInfo />
                 <FormControl fullWidth>
                     <Typography>게시판</Typography>
@@ -149,15 +111,6 @@ const PostEditor = () => {
                     language="ko-KR"
                 />
                 <ButtonBox>
-                    {transientStorage.length ? (
-                        <CuntomBtn variant="outlined" margin={'0 0.5rem'} onClick={handleDeleteTransientStorage}>
-                            임시저장 삭제
-                        </CuntomBtn>
-                    ) : (
-                        <CuntomBtn variant="outlined" margin={'0 0.5rem'} onClick={handleTransientStorage}>
-                            임시저장
-                        </CuntomBtn>
-                    )}
                     <CuntomBtn variant="outlined" margin={'0 0.5rem 0 0'} onClick={goBack}>
                         취소
                     </CuntomBtn>
@@ -169,8 +122,6 @@ const PostEditor = () => {
         </Background>
     );
 };
-
-export default PostEditor;
 
 const Background = styled.div`
     background-color: #ebecee;
@@ -237,3 +188,5 @@ const CuntomBtn = styled(Button)<CustomBtnProps>`
         box-shadow: none;
     }
 `;
+
+export default PostEditEditor;
