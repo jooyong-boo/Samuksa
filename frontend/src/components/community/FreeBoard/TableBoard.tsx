@@ -47,8 +47,18 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                     </TableHead>
                     <TableBody>
                         {usePosts?.slice(offset, offset + limit).map((item: any) => {
-                            const { idx, title, nickName, profileImage, createdAt, recommendCount, read, viewCount } =
-                                item;
+                            const {
+                                idx,
+                                title,
+                                nickName,
+                                profileImage,
+                                createdAt,
+                                recommendCount,
+                                read,
+                                viewCount,
+                                commentCount,
+                                modifiedAt,
+                            } = item;
 
                             return (
                                 <TableRow
@@ -70,6 +80,7 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                             }}
                                         >
                                             {title}
+                                            {commentCount ? `  (${commentCount})` : null}
                                             {/* <Typography>
                                             {postComment.length > 0 ? postComment[id - 1].length : ''}
                                         </Typography> */}
@@ -81,7 +92,10 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                             <NickNameInfo>{nickName}</NickNameInfo>
                                         </PostUserInfoDiv>
                                     </TableCell>
-                                    <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
+                                    <TableCell sx={tableTextStyle}>
+                                        {timeForToday(createdAt)}
+                                        {modifiedAt ? ` (수정됨)` : null}
+                                    </TableCell>
                                     <TableCell sx={tableTextStyle}>{recommendCount}</TableCell>
                                     <TableCell sx={tableTextStyle}>{viewCount}</TableCell>
                                 </TableRow>

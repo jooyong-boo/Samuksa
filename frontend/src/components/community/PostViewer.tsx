@@ -107,6 +107,11 @@ const PostViewer = () => {
                                 <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
                                     {content?.data && timeForToday(content.data.createdAt)}
                                 </UserInfoTypography>
+                                {content?.data.modifiedAt ? (
+                                    <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
+                                        {timeForToday(content.data.modifiedAt)}에 수정됨
+                                    </UserInfoTypography>
+                                ) : null}
                             </UserInfoBox>
                         </PostUserBox>
                         {content.data && (
@@ -130,7 +135,7 @@ const PostViewer = () => {
                     <RecommendBtn />
 
                     <PostCommentBox ref={commentRef}>
-                        <TotalCommentText>{comments.data.length}개의 댓글</TotalCommentText>
+                        <TotalCommentText>{comments.totalCommentCount}개의 댓글</TotalCommentText>
                         <UserCommentWrapper>
                             <CommentBox>
                                 <CommentUserAvatarContainer>
