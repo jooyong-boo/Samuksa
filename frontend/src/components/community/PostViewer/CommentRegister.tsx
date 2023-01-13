@@ -37,7 +37,6 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleId
             if (userInfo && newComment) {
                 createComment();
                 setNewComment('');
-                notifySuccess('등록 성공');
             } else if (!userInfo) {
                 notifyError('로그인 해주세요');
             } else if (!newComment) {
