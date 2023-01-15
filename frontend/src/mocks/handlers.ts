@@ -28,9 +28,9 @@ export const handlers = [
             modifiedAt: '',
             title,
             content,
-            viewCount: 123,
-            commentCount: 3,
-            recommendCount: 5,
+            viewCount: 0,
+            commentCount: 0,
+            recommendCount: 0,
         });
 
         return res(
@@ -56,6 +56,8 @@ export const handlers = [
         let next = post.content.filter((item) => item.idx > Number(idx));
         let prev = post.content.filter((item) => item.idx < Number(idx));
         let result = { data: data[0], next: !next.length, prev: !prev.length };
+        const postIdx = post.content.findIndex((item) => item.idx === Number(idx));
+        post.content[postIdx].viewCount += 1;
         return res(ctx.status(200), ctx.json(result));
     }),
 
@@ -117,6 +119,8 @@ export const handlers = [
                 },
             ],
         };
+        const postIdx = post.content.findIndex((item) => item.idx === titleIdx);
+        post.content[postIdx].commentCount += 1;
         comments.totalCommentCount = newTotal;
         comments.data.push(newComment);
 
