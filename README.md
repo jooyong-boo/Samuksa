@@ -28,7 +28,8 @@
 ## 사용한 기술
 
 ### FrontEnd
-<img width="1200" alt="사먹사 사용한 기술" src="https://user-images.githubusercontent.com/93763666/212540541-d35956c5-cb11-4e68-a8bf-6f980de6269d.png">
+
+<img width="1200" alt="사용한 기술" src="https://user-images.githubusercontent.com/93763666/212540672-728d19cf-be6d-4a40-ae95-c692b08fb467.png">
 <br/><br/>
 
 ## 기능
