@@ -2,6 +2,7 @@ import { Button, TextField, Typography } from '@mui/material';
 import { useCreateReply } from 'api/hooks/post/useCreateReply';
 import { useDeleteComment } from 'api/hooks/post/useDeleteComment';
 import { useEditComment } from 'api/hooks/post/useEditComment';
+import { useRecommendComment } from 'api/hooks/post/useRecommendComment';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { TiEdit } from 'react-icons/ti';
@@ -20,6 +21,7 @@ interface CommentProps {
     content: string;
     createdAt: string;
     modifiedAt: string;
+    recommendCount: number;
     command: ReplyProps[];
 }
 
@@ -54,10 +56,12 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
     const [newReply, setNewReply] = useState('');
     const [commentReply, setCommentReply] = useState(false);
     const { userId, profileImage, nickName: infoNickname } = userInfo;
-    const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command } = comment;
+    const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command, recommendCount } = comment;
     const { mutate: deleteComment } = useDeleteComment(idx);
     const { mutate: modifyComment } = useEditComment(newComment, idx);
     const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx);
+    const { mutate: recommendComment } = useRecommendComment(titleIdx, idx, true);
+    const { mutate: notRecommendComment } = useRecommendComment(titleIdx, idx, false);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
@@ -104,7 +108,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
             <PostCommentsInfo>
                 <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
                 <FlexBox>
-                    <RecommendBtn />
+                    <RecommendBtn recommendCount={recommendCount} up={recommendComment} down={notRecommendComment} />
                     {infoNickname ? (
                         <CommentMenu
                             infoNickname={infoNickname}
