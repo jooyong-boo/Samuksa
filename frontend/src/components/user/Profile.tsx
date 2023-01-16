@@ -66,7 +66,7 @@ const Profile = () => {
                                 value={currentPassword}
                                 onChange={handleChangePassword}
                                 placeholder="현재 비밀번호"
-                                autoComplete="off"
+                                autoComplete="new-password"
                                 type="password"
                             />
                             <ModifyButton $marginBottom={'0.5rem'} onClick={handleClickPassword}>
@@ -76,6 +76,7 @@ const Profile = () => {
                                 <ProfileInput
                                     $marginBottom={'0.5rem'}
                                     placeholder="새 비밀번호"
+                                    autoComplete="new-password"
                                     value={newPassword}
                                     onChange={handleChangeNewPassword}
                                     type="password"
