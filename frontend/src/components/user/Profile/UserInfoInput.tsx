@@ -70,6 +70,7 @@ const UserInfoInput = ({ label, value, id, placeholder }: UserInfoInputProps) =>
                     value={password}
                     type="password"
                     onChange={handleChangePassword}
+                    autoComplete="off"
                     placeholder="비밀번호를 입력해주세요"
                 />
             ) : null}

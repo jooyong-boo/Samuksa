@@ -21,6 +21,7 @@ import { useDeletePost } from 'api/hooks/post/useDeletePost';
 import useGetComments from 'api/hooks/post/useGetComments';
 import useGetPostContent from 'api/hooks/post/useGetPostContent';
 import { postEditState } from 'store/post';
+import { useRecommendPost } from 'api/hooks/post/useRecommendPost';
 
 const PostViewer = () => {
     const { id } = useParams<{ id: string }>();
@@ -36,6 +37,16 @@ const PostViewer = () => {
     const { mutate: deletePost } = useDeletePost(id!);
     const [comments, isLoadingComments, refetchComments] = useGetComments(id!, 0, 0);
     const [content, isLoadingContent, refetchContent] = useGetPostContent(id!);
+    const { mutate: recommend } = useRecommendPost(id!, true);
+    const { mutate: notRecommend } = useRecommendPost(id!, false);
+
+    const handleRecommend = () => {
+        recommend();
+    };
+
+    const handleNotRecommend = () => {
+        notRecommend();
+    };
 
     const commentRef = useRef<null | HTMLDivElement>(null);
 
@@ -115,24 +126,36 @@ const PostViewer = () => {
                             </UserInfoBox>
                         </PostUserBox>
                         {content.data && (
-                            <PostInfoBox onClick={moveComment}>
-                                <span>조회</span>
-                                <PostStrong>{content.data.viewCount}</PostStrong>
-                                <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                                <span>댓글</span>
-                                <PostStrong>{content.data.commentCount}</PostStrong>
-                                <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
-                                <span>추천</span>
-                                <PostStrong>{content.data.recommendCount}</PostStrong>
+                            <PostInfoBox>
+                                <FlexBox>
+                                    <span>조회</span>
+                                    <PostStrong>{content.data.viewCount}</PostStrong>
+                                </FlexBox>
+                                <FlexBox onClick={moveComment}>
+                                    <CommentIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                                    <span>댓글</span>
+                                    <PostStrong>{content.data.commentCount}</PostStrong>
+                                </FlexBox>
+                                <FlexBox>
+                                    <ThumbUpIcon sx={{ margin: '0 0.5rem', width: '1.125rem', height: '1.125rem' }} />
+                                    <span>추천</span>
+                                    <PostStrong>{content.data.recommendCount}</PostStrong>
+                                </FlexBox>
                             </PostInfoBox>
                         )}
                     </PostInfoContainer>
                     {content.data ? (
                         <PostContentBox>
                             <PostContent>{parse(DOMPurify.sanitize(content.data.content))}</PostContent>
+                            {content.data ? (
+                                <RecommendBtn
+                                    up={handleRecommend}
+                                    down={handleNotRecommend}
+                                    recommendCount={content.data.recommendCount}
+                                />
+                            ) : null}
                         </PostContentBox>
                     ) : null}
-                    <RecommendBtn />
 
                     <PostCommentBox ref={commentRef}>
                         <TotalCommentText>{comments.totalCommentCount}개의 댓글</TotalCommentText>
@@ -243,8 +266,9 @@ const PostTopBox = styled.div`
 `;
 
 const PostTitle = styled(Typography)`
-    font-size: 1.25rem;
-    font-weight: 500;
+    color: #101827;
+    font-size: 1.5rem;
+    font-weight: 600;
     padding: 0 1rem;
 `;
 
@@ -285,10 +309,19 @@ const UserInfoTypography = styled(Typography)<UserInfoTypographyProps>`
     font-weight: ${(props) => `${props.fontWeight}`};
     color: ${(props) => `${props.color}`};
 `;
-const PostInfoBox = styled(Typography)`
+const PostInfoBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: auto 0;
-    cursor: pointer;
     font-size: 0.775rem;
+`;
+
+const FlexBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 `;
 
 const PostStrong = styled.strong`

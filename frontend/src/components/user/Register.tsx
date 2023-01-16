@@ -135,7 +135,7 @@ const Register = () => {
                 setCheckNickName(false);
                 notifySuccess('닉네임 인증완료');
             }
-            if (res.message === 'existence id') {
+            if (res.message === 'existence nickname') {
                 setOverlappingNickName(true);
                 notifyError('이미 존재하는 닉네임입니다.');
             }

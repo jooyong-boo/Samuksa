@@ -28,9 +28,9 @@ export const handlers = [
             modifiedAt: '',
             title,
             content,
-            viewCount: 123,
-            commentCount: 3,
-            recommendCount: 5,
+            viewCount: 0,
+            commentCount: 0,
+            recommendCount: 0,
         });
 
         return res(
@@ -56,6 +56,8 @@ export const handlers = [
         let next = post.content.filter((item) => item.idx > Number(idx));
         let prev = post.content.filter((item) => item.idx < Number(idx));
         let result = { data: data[0], next: !next.length, prev: !prev.length };
+        const postIdx = post.content.findIndex((item) => item.idx === Number(idx));
+        post.content[postIdx].viewCount += 1;
         return res(ctx.status(200), ctx.json(result));
     }),
 
@@ -105,18 +107,11 @@ export const handlers = [
             content: comment,
             createdAt: date.toString(),
             modifiedAt: date.toString(),
-            command: [
-                {
-                    idx: 1,
-                    avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
-                    nickName: '삼먹사2',
-                    receiverNickName: '삼먹사',
-                    content: '첫번째 댓글',
-                    createdAt: date.toString(),
-                    modifiedAt: date.toString(),
-                },
-            ],
+            recommendCount: 0,
+            command: [],
         };
+        const postIdx = post.content.findIndex((item) => item.idx === titleIdx);
+        post.content[postIdx].commentCount += 1;
         comments.totalCommentCount = newTotal;
         comments.data.push(newComment);
 
@@ -166,6 +161,7 @@ export const handlers = [
                 content: comment,
                 createdAt: date.toString(),
                 modifiedAt: date.toString(),
+                recommendCount: 0,
             });
 
             return res(
@@ -173,6 +169,27 @@ export const handlers = [
                 ctx.status(200),
                 ctx.json(comments),
             );
+        },
+    ),
+    //게시글 추천
+    rest.patch<{ titleIdx: number | string; recommend: boolean }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/post/recommend`,
+        (req, res, ctx) => {
+            const { titleIdx, recommend } = req.body;
+            if (recommend) post.content[Number(titleIdx) - 1].recommendCount += 1;
+            if (!recommend) post.content[Number(titleIdx) - 1].recommendCount -= 1;
+            return res(ctx.status(200), ctx.json(post));
+        },
+    ),
+    //댓글 추천
+    rest.patch<{ titleIdx: number | string; commentIdx: number | string; recommend: boolean }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/comment/recommend`,
+        (req, res, ctx) => {
+            const { titleIdx, commentIdx, recommend } = req.body;
+            if (recommend) comments.data[Number(commentIdx) - 1].recommendCount += 1;
+            if (!recommend) comments.data[Number(commentIdx) - 1].recommendCount -= 1;
+
+            return res(ctx.status(200), ctx.json(comments));
         },
     ),
 ];

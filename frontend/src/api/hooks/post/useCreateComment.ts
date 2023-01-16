@@ -7,6 +7,7 @@ export const useCreateComment = (commentIdx: number, comment: string, titleIdx: 
     const { mutate } = useMutation(() => createComment(commentIdx, comment, titleIdx), {
         onSuccess: (res) => {
             queryClient.setQueryData(['comment'], () => res.data);
+            queryClient.invalidateQueries({ queryKey: ['post'] });
             notifySuccess('댓글 등록 완료');
         },
     });

@@ -137,14 +137,12 @@ interface TitleNavLinkProps {
 }
 
 const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
-    color: ${(props) => (props.read ? '#770088' : '#374151')};
+    color: ${(props) => (props.read ? '#770088' : '#101827')};
     text-decoration: none;
-    font-size: 0.875rem;
-    ${({ theme }) => theme.device.tablet} {
-        font-size: 0.95rem;
-    }
-    ${({ theme }) => theme.device.mobile} {
-        font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: 600;
+    :hover {
+        color: ${(props) => props.theme.colors.main};
     }
 `;
 
