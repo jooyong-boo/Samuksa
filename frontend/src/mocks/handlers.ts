@@ -107,6 +107,7 @@ export const handlers = [
             content: comment,
             createdAt: date.toString(),
             modifiedAt: date.toString(),
+            recommendCount: 0,
             command: [
                 {
                     idx: 1,
@@ -170,6 +171,7 @@ export const handlers = [
                 content: comment,
                 createdAt: date.toString(),
                 modifiedAt: date.toString(),
+                recommendCount: 0,
             });
 
             return res(
@@ -177,6 +179,27 @@ export const handlers = [
                 ctx.status(200),
                 ctx.json(comments),
             );
+        },
+    ),
+    //게시글 추천
+    rest.patch<{ titleIdx: number | string; recommend: boolean }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/post/recommend`,
+        (req, res, ctx) => {
+            const { titleIdx, recommend } = req.body;
+            if (recommend) post.content[Number(titleIdx) - 1].recommendCount += 1;
+            if (!recommend) post.content[Number(titleIdx) - 1].recommendCount -= 1;
+            return res(ctx.status(200), ctx.json(post));
+        },
+    ),
+    //댓글 추천
+    rest.patch<{ titleIdx: number | string; commentIdx: number | string; recommend: boolean }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/comment/recommend`,
+        (req, res, ctx) => {
+            const { titleIdx, commentIdx, recommend } = req.body;
+            if (recommend) comments.data[Number(commentIdx) - 1].recommendCount += 1;
+            if (!recommend) comments.data[Number(commentIdx) - 1].recommendCount -= 1;
+
+            return res(ctx.status(200), ctx.json(comments));
         },
     ),
 ];
