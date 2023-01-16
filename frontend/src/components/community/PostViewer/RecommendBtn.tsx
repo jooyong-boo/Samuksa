@@ -1,15 +1,21 @@
-import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import styled from 'styled-components';
+import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 
-const RecommendBtn = () => {
+interface IProps {
+    up: () => void;
+    down: () => void;
+    recommendCount: number;
+}
+
+const RecommendBtn = ({ recommendCount, up, down }: IProps) => {
     return (
         <Container>
             <RecommendBox>
-                <Button>
+                <Button onClick={down}>
                     <AiOutlineDown />
                 </Button>
-                <RecommendNumberSpan>0</RecommendNumberSpan>
-                <Button>
+                <RecommendNumberSpan>{recommendCount}</RecommendNumberSpan>
+                <Button onClick={up}>
                     <AiOutlineUp />
                 </Button>
             </RecommendBox>
