@@ -92,3 +92,18 @@ export const createReply = (commentIdx: number | string, comment: string, titleI
         comment,
         titleIdx: Number(titleIdx),
     });
+
+// 게시글 추천
+export const recommendPost = (titleIdx: number | string, recommend: boolean) =>
+    instanceAuth.patch('/board/post/recommend', {
+        titleIdx: Number(titleIdx),
+        recommend,
+    });
+
+// 댓글 추천
+export const recommendComment = (titleIdx: number | string, commentIdx: number | string, recommend: boolean) =>
+    instanceAuth.patch('/board/comment/recommend', {
+        titleIdx: Number(titleIdx),
+        commentIdx: Number(commentIdx),
+        recommend,
+    });
