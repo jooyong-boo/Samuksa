@@ -108,17 +108,7 @@ export const handlers = [
             createdAt: date.toString(),
             modifiedAt: date.toString(),
             recommendCount: 0,
-            command: [
-                {
-                    idx: 1,
-                    avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
-                    nickName: '삼먹사2',
-                    receiverNickName: '삼먹사',
-                    content: '첫번째 댓글',
-                    createdAt: date.toString(),
-                    modifiedAt: date.toString(),
-                },
-            ],
+            command: [],
         };
         const postIdx = post.content.findIndex((item) => item.idx === titleIdx);
         post.content[postIdx].commentCount += 1;
