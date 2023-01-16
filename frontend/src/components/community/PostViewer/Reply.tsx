@@ -76,7 +76,7 @@ const Reply = ({ userInfo, item }: IProps) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <UserInfo profileImage={avatarUrl} nickName={nickName} createdAt={createdAt} />
                 <FlexBox>
-                    <RecommendBtn />
+                    {/* <RecommendBtn /> */}
                     {infoNickname ? (
                         <CommentMenu
                             infoNickname={infoNickname}
