@@ -121,6 +121,9 @@ const Background = styled.div`
         background: rgba(0, 0, 0, 0.3);
         border-radius: 5px;
     }
+    ${({ theme }) => theme.device.tablet} {
+        align-items: flex-start;
+    }
 `;
 
 const BoardContainer = styled.div`
