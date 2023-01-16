@@ -104,29 +104,7 @@ export const getWithdrawal = async (userId: string, password: string) => {
         return err;
     }
 };
-// // 토큰 재발급
-// export const getTokenReissuance = async (accessToken: string, refreshToken: string) => {
-//     const token = localStorage.getItem('refreshToken');
-//     try {
-//         const result = await instance.post(
-//             '/login/refresh-token',
-//             {
-//                 accessToken,
-//                 refreshToken,
-//             },
-//             {
-//                 headers: {
-//                     'Refresh-Authorization': `Bearer ${token}`,
-//                 },
-//             },
-//         );
-//         if (result.status === 200) {
-//             return result;
-//         }
-//     } catch (err) {
-//         return err;
-//     }
-// };
+
 // 유저 이미지
 export const changeUserImage = async (formData: FormData) => {
     try {
