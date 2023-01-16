@@ -50,10 +50,21 @@
 ![수산물 계산](https://user-images.githubusercontent.com/93763666/208015914-017ad3fe-d76a-4a7f-95d1-e2ede82939e7.gif)
 
 * 회원정보 
+![프로필수정](https://user-images.githubusercontent.com/93763666/212664019-898441ac-730f-4ce6-8d66-d30a4e5f3c5e.gif)
+
 * 글 작성
+![글 작성](https://user-images.githubusercontent.com/93763666/212664071-51e0514d-10c5-47be-b78c-bd604e7235c5.gif)
+
 * 글 수정
+![글 수정](https://user-images.githubusercontent.com/93763666/212664087-5e2f7fbe-b1b8-49b2-a3a6-69641e8fd2fa.gif)
+
 * 댓글 작성
+![댓글작성](https://user-images.githubusercontent.com/93763666/212664098-81ac891e-970d-480f-b35e-05b4e38960e8.gif)
+
 * 댓글 수정
+![댓글수정](https://user-images.githubusercontent.com/93763666/212664111-b12b6c10-0d9f-4e1f-8943-36f1c64b975d.gif)
+
 * 대댓글 작성
+
 * 대댓글 수정
 
