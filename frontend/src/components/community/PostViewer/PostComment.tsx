@@ -80,6 +80,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
         if (newComment.length > 0) {
             modifyComment();
             handleChangeCommentModify();
+            setNewComment('');
         }
     };
 
@@ -93,9 +94,10 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
     };
 
     const handleCreateReply = () => {
-        if (newComment.length > 0) {
+        if (newReply.length > 0) {
             handleOpenReply();
             createReply();
+            setNewReply('');
         }
     };
 
