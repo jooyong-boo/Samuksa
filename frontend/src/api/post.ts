@@ -93,6 +93,14 @@ export const createReply = (commentIdx: number | string, comment: string, titleI
         titleIdx: Number(titleIdx),
     });
 
+// 댓글의 답글 수정
+export const patchReply = (commentIdx: number | string, comment: string, titleIdx: number | string) =>
+    instanceAuth.patch('/board/create/reply', {
+        commentIdx: Number(commentIdx),
+        comment,
+        titleIdx: Number(titleIdx),
+    });
+
 // 게시글 추천
 export const recommendPost = (titleIdx: number | string, recommend: boolean) =>
     instanceAuth.patch('/board/post/recommend', {
