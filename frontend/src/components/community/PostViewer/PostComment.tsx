@@ -1,13 +1,10 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCreateReply } from 'api/hooks/post/useCreateReply';
 import { useDeleteComment } from 'api/hooks/post/useDeleteComment';
 import { useEditComment } from 'api/hooks/post/useEditComment';
 import { useRecommendComment } from 'api/hooks/post/useRecommendComment';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { HiOutlineTrash } from 'react-icons/hi';
-import { TiEdit } from 'react-icons/ti';
 import styled from 'styled-components';
-import { notifyError } from 'utils/notify';
 import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
 import RecommendBtn from './RecommendBtn';
