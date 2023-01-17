@@ -124,7 +124,7 @@ export const handlers = [
         (req, res, ctx) => {
             const { commentsIdx } = req.body;
             let data = comments.data.filter((item) => item.idx !== Number(commentsIdx));
-            let newData = { totalCommentCount: comments.totalCommentCount, data };
+            let newData = { totalCommentCount: data.length, data };
             comments.totalCommentCount = data.length;
             comments.data = data;
 
