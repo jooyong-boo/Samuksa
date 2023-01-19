@@ -47,15 +47,30 @@ const CommentMenu = (props: Iprops) => {
                         'aria-labelledby': 'comment-button',
                     }}
                 >
-                    <MenuItem onClick={handleEdit}>
+                    <MenuItem
+                        onClick={() => {
+                            handleEdit();
+                            handleClose();
+                        }}
+                    >
                         <TiEdit />
                         <Text>수정하기</Text>
                     </MenuItem>
-                    <MenuItem onClick={handleDelete}>
+                    <MenuItem
+                        onClick={() => {
+                            handleDelete();
+                            handleClose();
+                        }}
+                    >
                         <HiOutlineTrash />
                         <Text>삭제하기</Text>
                     </MenuItem>
-                    <MenuItem onClick={handleReply}>
+                    <MenuItem
+                        onClick={() => {
+                            handleReply();
+                            handleClose();
+                        }}
+                    >
                         <TiEdit />
                         <Text>답글달기</Text>
                     </MenuItem>
@@ -70,7 +85,12 @@ const CommentMenu = (props: Iprops) => {
                         'aria-labelledby': 'comment-button',
                     }}
                 >
-                    <MenuItem onClick={handleReply}>
+                    <MenuItem
+                        onClick={() => {
+                            handleReply();
+                            handleClose();
+                        }}
+                    >
                         <TiEdit />
                         <Text>답글달기</Text>
                     </MenuItem>
