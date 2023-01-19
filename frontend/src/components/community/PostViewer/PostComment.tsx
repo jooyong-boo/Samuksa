@@ -56,7 +56,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
     const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command, recommendCount } = comment;
     const { mutate: deleteComment } = useDeleteComment(idx);
     const { mutate: modifyComment } = useEditComment(newComment, idx);
-    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx);
+    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx, nickName);
     const { mutate: recommendComment } = useRecommendComment(titleIdx, idx, true);
     const { mutate: notRecommendComment } = useRecommendComment(titleIdx, idx, false);
 
@@ -147,8 +147,16 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
             ) : null}
             {command.length
                 ? command.map((item) => {
-                      const { idx } = item;
-                      return <Reply userInfo={userInfo} item={item} key={idx} />;
+                      const { idx: commandIdx } = item;
+                      return (
+                          <Reply
+                              userInfo={userInfo}
+                              item={item}
+                              key={commandIdx}
+                              titleIdx={titleIdx}
+                              commentIdx={idx}
+                          />
+                      );
                   })
                 : null}
         </CommentDiv>
