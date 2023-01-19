@@ -1,4 +1,6 @@
 import { Typography } from '@mui/material';
+import { useCreateReply } from 'api/hooks/post/useCreateReply';
+import { useEditReply } from 'api/hooks/post/useEditReply';
 import { useState } from 'react';
 import styled from 'styled-components';
 import CommentMenu from './CommentMenu';
@@ -26,9 +28,11 @@ interface UserInfoProps {
 interface IProps {
     userInfo: UserInfoProps;
     item: ReplyProps;
+    titleIdx: string;
+    commentIdx: number;
 }
 
-const Reply = ({ userInfo, item }: IProps) => {
+const Reply = ({ userInfo, item, titleIdx, commentIdx }: IProps) => {
     const [comment, setComment] = useState('');
     const [newComment, setNewComment] = useState('');
     const [newReply, setNewReply] = useState('');
@@ -36,9 +40,11 @@ const Reply = ({ userInfo, item }: IProps) => {
     const [commentReply, setCommentReply] = useState(false);
     const { nickName: infoNickname } = userInfo;
     const { idx, avatarUrl, nickName, receiverNickName, content, createdAt, modifiedAt } = item;
+    const { mutate: createReply } = useCreateReply(commentIdx, newReply, titleIdx, nickName);
+    const { mutate: modifyReply } = useEditReply(commentIdx, newComment, titleIdx, idx!);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setComment(e.target.value);
+        setNewComment(e.target.value);
     };
 
     const handleChangeCommentModify = () => {
@@ -53,6 +59,7 @@ const Reply = ({ userInfo, item }: IProps) => {
     const handleCommentModify = () => {
         if (newComment.length > 0) {
             handleChangeCommentModify();
+            modifyReply();
         }
     };
 
@@ -66,9 +73,10 @@ const Reply = ({ userInfo, item }: IProps) => {
     };
 
     const handleCreateReply = () => {
-        if (newComment.length > 0) {
+        if (newReply.length > 0) {
             handleOpenReply();
-            // createReply();
+            createReply();
+            setNewReply('');
         }
     };
     return (
@@ -122,8 +130,11 @@ const Container = styled.div`
     justify-content: space-between;
     margin-left: 2rem;
     padding-left: 2rem;
-    border-left: 2px solid #a7a7a7;
-    margin-bottom: 1rem;
+    border-left: 2px solid #e5e7eb;
+    border-bottom: 1px dashed #eaeaea;
+    &:last-child {
+        border-bottom: none;
+    }
 `;
 
 const FlexBox = styled.div`
@@ -149,7 +160,7 @@ const ReceiverInfoText = styled.span`
 
 const CommentText = styled(Typography)`
     color: rgb(55 65 81);
-    margin-bottom: 1rem;
+    padding-bottom: 1rem;
     font-size: 1.125rem;
 `;
 
