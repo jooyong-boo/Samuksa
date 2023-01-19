@@ -86,19 +86,31 @@ export const deleteComment = (commentsIdx: number | string) =>
     });
 
 // 댓글의 답글 생성
-export const createReply = (commentIdx: number | string, comment: string, titleIdx: number | string) =>
+export const createReply = (
+    commentIdx: number | string,
+    comment: string,
+    titleIdx: number | string,
+    nickName: string,
+) =>
     instanceAuth.post('/board/create/reply', {
         commentIdx: Number(commentIdx),
         comment,
         titleIdx: Number(titleIdx),
+        nickName,
     });
 
 // 댓글의 답글 수정
-export const patchReply = (commentIdx: number | string, comment: string, titleIdx: number | string) =>
+export const patchReply = (
+    commentIdx: number | string,
+    comment: string,
+    titleIdx: number | string,
+    commandIdx: number,
+) =>
     instanceAuth.patch('/board/create/reply', {
         commentIdx: Number(commentIdx),
         comment,
         titleIdx: Number(titleIdx),
+        commandIdx,
     });
 
 // 게시글 추천
