@@ -1,13 +1,10 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCreateReply } from 'api/hooks/post/useCreateReply';
 import { useDeleteComment } from 'api/hooks/post/useDeleteComment';
 import { useEditComment } from 'api/hooks/post/useEditComment';
 import { useRecommendComment } from 'api/hooks/post/useRecommendComment';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { HiOutlineTrash } from 'react-icons/hi';
-import { TiEdit } from 'react-icons/ti';
 import styled from 'styled-components';
-import { notifyError } from 'utils/notify';
 import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
 import RecommendBtn from './RecommendBtn';
@@ -59,7 +56,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
     const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command, recommendCount } = comment;
     const { mutate: deleteComment } = useDeleteComment(idx);
     const { mutate: modifyComment } = useEditComment(newComment, idx);
-    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx);
+    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx, nickName);
     const { mutate: recommendComment } = useRecommendComment(titleIdx, idx, true);
     const { mutate: notRecommendComment } = useRecommendComment(titleIdx, idx, false);
 
@@ -150,8 +147,16 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
             ) : null}
             {command.length
                 ? command.map((item) => {
-                      const { idx } = item;
-                      return <Reply userInfo={userInfo} item={item} key={idx} />;
+                      const { idx: commandIdx } = item;
+                      return (
+                          <Reply
+                              userInfo={userInfo}
+                              item={item}
+                              key={commandIdx}
+                              titleIdx={titleIdx}
+                              commentIdx={idx}
+                          />
+                      );
                   })
                 : null}
         </CommentDiv>

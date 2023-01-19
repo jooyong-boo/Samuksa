@@ -145,10 +145,10 @@ export const handlers = [
     ),
 
     //답글 생성
-    rest.post<{ commentIdx: number; comment: string; titleIdx: number | string }>(
+    rest.post<{ commentIdx: number; comment: string; titleIdx: number | string; nickName: string }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/create/reply`,
         async (req, res, ctx) => {
-            const { commentIdx, comment, titleIdx } = req.body;
+            const { commentIdx, comment, titleIdx, nickName } = req.body;
             const date = new Date();
             const target = comments.data.findIndex((ele) => ele.idx === commentIdx);
             const idx = comments.data[target].command.length + 1;
@@ -156,8 +156,8 @@ export const handlers = [
             comments.data[target].command.push({
                 idx,
                 avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
-                nickName: '삼먹사2',
-                receiverNickName: '삼먹사',
+                nickName: '삼먹사',
+                receiverNickName: nickName,
                 content: comment,
                 createdAt: date.toString(),
                 modifiedAt: date.toString(),
@@ -171,6 +171,19 @@ export const handlers = [
             );
         },
     ),
+
+    //답글 수정
+    rest.patch<{ commentIdx: number; comment: string; titleIdx: number | string; commandIdx: number }>(
+        `${process.env.REACT_APP_SamuksaUser_URL}/board/create/reply`,
+        (req, res, ctx) => {
+            const { comment, commentIdx, titleIdx, commandIdx } = req.body;
+            const idx = comments.data.findIndex((ele) => ele.idx === commentIdx);
+            const newData = { ...comments.data[idx].command[commandIdx - 1], content: comment };
+            comments.data[idx].command[commandIdx - 1] = newData;
+            return res(ctx.status(200), ctx.json(comments));
+        },
+    ),
+
     //게시글 추천
     rest.patch<{ titleIdx: number | string; recommend: boolean }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/post/recommend`,
