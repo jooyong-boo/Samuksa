@@ -33,7 +33,6 @@ const ReviewBoard = () => {
 
     const { selectTab } = useOutletContext<OutletProps>();
     const [data, isLoading] = useGetPost(postPage - 1, limit, selectTab);
-    console.log(data);
 
     const openSearch = () => {
         setOpen(!open);
