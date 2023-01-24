@@ -11,6 +11,14 @@ interface CommentReqBody {
     commendIdx: number;
     comment: string;
     titleIdx: number;
+    userInfo: UserInfo;
+}
+
+interface UserInfo {
+    userId: string;
+    nickName: string;
+    email: string;
+    profileImage: string;
 }
 
 export const handlers = [
@@ -96,14 +104,14 @@ export const handlers = [
     }),
     // 댓글 생성
     rest.post<CommentReqBody>(`${process.env.REACT_APP_SamuksaUser_URL}/board/create/comments`, (req, res, ctx) => {
-        const { commendIdx, comment, titleIdx } = req.body;
-        console.log(req.body);
+        const { commendIdx, comment, titleIdx, userInfo } = req.body;
+        console.log(userInfo);
         const date = new Date();
         const newTotal = comments.totalCommentCount + 1;
         const newComment = {
             idx: comments.data.length + 1,
-            avatarUrl: 'http://localhost:8081/user/images/37c025f0-32bc-4f44-be73-5de992acb765.jpg',
-            nickName: '삼먹사',
+            avatarUrl: userInfo.profileImage,
+            nickName: userInfo.nickName,
             content: comment,
             createdAt: date.toString(),
             modifiedAt: date.toString(),
