@@ -23,15 +23,28 @@ const EditAndReplyButton = (props: Iprops) => {
                 onChange={onChange}
                 placeholder={placeholder}
             />
-            <CancleBtn variant="outlined" onClick={onClickCancel}>
-                취소
-            </CancleBtn>
-            <CustomBtn variant="contained" margin={'1rem 0 1rem 1rem'} onClick={onClickRegister} disabled={!disable}>
-                등록
-            </CustomBtn>
+            <ButtonArea>
+                <CancleBtn variant="outlined" onClick={onClickCancel}>
+                    취소
+                </CancleBtn>
+                <CustomBtn
+                    variant="contained"
+                    margin={'1rem 0 1rem 1rem'}
+                    onClick={onClickRegister}
+                    disabled={!disable}
+                >
+                    등록
+                </CustomBtn>
+            </ButtonArea>
         </>
     );
 };
+
+const ButtonArea = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+`;
 
 interface CustomBtnProps {
     margin?: string;
