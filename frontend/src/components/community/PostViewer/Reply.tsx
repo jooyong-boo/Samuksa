@@ -40,7 +40,7 @@ const Reply = ({ userInfo, item, titleIdx, commentIdx }: IProps) => {
     const [commentReply, setCommentReply] = useState(false);
     const { nickName: infoNickname } = userInfo;
     const { idx, avatarUrl, nickName, receiverNickName, content, createdAt, modifiedAt } = item;
-    const { mutate: createReply } = useCreateReply(commentIdx, newReply, titleIdx, nickName);
+    const { mutate: createReply } = useCreateReply(commentIdx, newReply, titleIdx, nickName, userInfo);
     const { mutate: modifyReply } = useEditReply(commentIdx, newComment, titleIdx, idx!);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

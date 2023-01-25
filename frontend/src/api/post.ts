@@ -105,12 +105,14 @@ export const createReply = (
     comment: string,
     titleIdx: number | string,
     nickName: string,
+    userInfo: UserInfo,
 ) =>
     instanceAuth.post('/board/create/reply', {
         commentIdx: Number(commentIdx),
         comment,
         titleIdx: Number(titleIdx),
         nickName,
+        userInfo,
     });
 
 // 댓글의 답글 수정

@@ -56,7 +56,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
     const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command, recommendCount } = comment;
     const { mutate: deleteComment } = useDeleteComment(idx);
     const { mutate: modifyComment } = useEditComment(newComment, idx);
-    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx, nickName);
+    const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx, nickName, userInfo);
     const { mutate: recommendComment } = useRecommendComment(titleIdx, idx, true);
     const { mutate: notRecommendComment } = useRecommendComment(titleIdx, idx, false);
 
