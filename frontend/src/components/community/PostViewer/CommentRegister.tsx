@@ -6,9 +6,10 @@ import { notifyError, notifySuccess } from 'utils/notify';
 import { useCreateComment } from 'api/hooks/post/useCreateComment';
 
 interface UserInfoProps {
-    userId?: string;
-    nickName?: string;
-    email?: string;
+    userId: string;
+    nickName: string;
+    email: string;
+    profileImage: string;
 }
 
 interface CommentProps {
@@ -21,8 +22,7 @@ interface CommentProps {
 
 const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleIdx }: CommentProps) => {
     const [newComment, setNewComment] = useState('');
-    const { userId, nickName, email } = userInfo;
-    const { mutate: createComment } = useCreateComment(comments.length, newComment, titleIdx);
+    const { mutate: createComment } = useCreateComment(comments.length, newComment, titleIdx, userInfo);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);

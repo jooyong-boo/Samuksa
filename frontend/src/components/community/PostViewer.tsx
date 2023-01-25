@@ -12,7 +12,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
 import timeForToday from '../../utils/TimeForToday';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { getPostComment, getPostContent } from '../../api/post';
+import { getPostComment } from '../../api/post';
 import PostComment from './PostViewer/PostComment';
 import RecommendBtn from './PostViewer/RecommendBtn';
 import CommentRegister from './PostViewer/CommentRegister';
