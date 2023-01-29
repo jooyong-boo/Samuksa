@@ -2,7 +2,7 @@ import { atom, selector } from 'recoil';
 import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
 import { getPosts } from '../api/post';
 import { randomNickname } from '../utils/randomNickname';
-import { getRandomNumber } from '../components/community/PostViewer';
+import { getRandomNumber } from 'utils/getRandomNumber';
 import { v1 } from 'uuid';
 
 export const personNumState = atom({
