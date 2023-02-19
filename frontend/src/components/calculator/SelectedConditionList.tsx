@@ -1,28 +1,25 @@
 import { Avatar, Button, CardActions, CardContent, Slide, Typography } from '@mui/material';
-import React, { ReactElement, useRef } from 'react';
+import React, { MutableRefObject } from 'react';
 import styled from 'styled-components';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
-import SearchResults from './SearchResults';
-import { useState } from 'react';
 import { notifyError } from 'utils/notify';
 
 interface amount {
     setTotalAmount: React.Dispatch<React.SetStateAction<number>>;
     totalAmount: number;
     setAmount: React.Dispatch<React.SetStateAction<number>>;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    contactRef: MutableRefObject<HTMLDivElement>;
 }
 
-const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amount) => {
-    const contactRef = useRef<HTMLDivElement>(null);
-
+const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount, setLoading, contactRef }: amount) => {
     const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
     const [recommendList, setRecommendList] = useRecoilState(recommendListState);
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
-    const [loading, setLoading] = useState<boolean>(false);
     // console.log(selectCondition)
 
     const deleteContidion = (id: number, plusAmount: number) => {
@@ -126,11 +123,9 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
                     )}
                 </CombinationSearchBtnDiv>
             </Card>
-            <SearchResults ref={contactRef} loading={loading} setLoading={setLoading} />
         </>
     );
 };
-
 export default SelectedConditionList;
 
 const Card = styled.div`
