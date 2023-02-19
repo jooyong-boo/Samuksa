@@ -26,7 +26,6 @@ import {
     selectState,
     totalAmountState,
 } from '../../store/atom';
-import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../../api/recommend';
 import React from 'react';
 import { notifyError } from 'utils/notify';
@@ -244,7 +243,6 @@ const SearchConditions = () => {
                     </SearchConditionForm>
                 </SearchConditionContainer>
             </Card>
-            <DetailedSearchConditions />
         </>
     );
 };
