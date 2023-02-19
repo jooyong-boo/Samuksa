@@ -1,13 +1,36 @@
 import BackgroundWave from 'components/BackgroundWave';
 import DetailedSearchConditions from 'components/calculator/DetailedSearchConditions';
 import SearchConditions from 'components/calculator/SearchConditions';
+import SearchResults from 'components/calculator/SearchResults';
+import SelectedConditionList from 'components/calculator/SelectedConditionList';
+import { MutableRefObject, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { amountState } from 'store/atom';
 import styled from 'styled-components';
 
 const CalculatorPage = () => {
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [amount, setAmount] = useRecoilState<number>(amountState);
+    const [loading, setLoading] = useState<boolean>(false);
+    const contactRef = useRef() as MutableRefObject<HTMLDivElement>;
+
     return (
         <Background>
             <SearchConditions />
-            <DetailedSearchConditions />
+            <DetailedSearchConditions
+                totalAmount={totalAmount}
+                setTotalAmount={setTotalAmount}
+                amount={amount}
+                setAmount={setAmount}
+            />
+            <SelectedConditionList
+                setTotalAmount={setTotalAmount}
+                totalAmount={totalAmount}
+                setAmount={setAmount}
+                contactRef={contactRef}
+                setLoading={setLoading}
+            />
+            <SearchResults ref={contactRef} loading={loading} setLoading={setLoading} />
             <BackgroundWave />
         </Background>
     );
