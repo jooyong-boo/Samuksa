@@ -1,5 +1,5 @@
 import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
-import React, { forwardRef, ReactElement } from 'react';
+import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';

@@ -12,12 +12,9 @@ import {
     Typography,
 } from '@mui/material';
 import styled from 'styled-components';
-import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
-import SelectedConditionList from './SelectedConditionList';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import {
-    amountState,
     farmState,
     fishDetailRecommendInfo,
     personNumState,
@@ -26,18 +23,16 @@ import {
 } from '../../store/atom';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
-import { useCallback } from 'react';
 import { notifyError } from 'utils/notify';
 
-const DetailedSearchConditions = () => {
+const DetailedSearchConditions = ({ ...props }) => {
+    const { totalAmount, setTotalAmount, amount, setAmount } = props;
     const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
     const [selectFish, setSelectFish] = useRecoilState(selectFishState);
     const resetSelectFish = useResetRecoilState(selectFishState);
     const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
     const [personNum, setPersonNum] = useRecoilState(personNumState);
-    const [totalAmount, setTotalAmount] = useState(0);
     const [fish, setFish] = useState<any[]>(fishList);
-    const [amount, setAmount] = useRecoilState<number>(amountState);
     const [farm, setFarm] = useRecoilState<any[]>(farmState);
     const [farmStatus, setFarmStatus] = useState<string[]>([]);
 
@@ -272,7 +267,6 @@ const DetailedSearchConditions = () => {
                     </CustomConditionSettingDiv>
                 </Container>
             </Card>
-            <SelectedConditionList setTotalAmount={setTotalAmount} totalAmount={totalAmount} setAmount={setAmount} />
         </>
     );
 };
