@@ -294,7 +294,7 @@ const Header = () => {
                                 {loginStatus
                                     ? NAV_ITEMS.map(({ id, name, path }) => (
                                           <StyledMobileMenuItem
-                                              key={name}
+                                              key={id}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -305,7 +305,7 @@ const Header = () => {
                                       ))
                                     : pages.map(({ id, name, path }) => (
                                           <StyledMobileMenuItem
-                                              key={name}
+                                              key={id}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -314,8 +314,8 @@ const Header = () => {
                                               <MenuItemList>{name}</MenuItemList>
                                           </StyledMobileMenuItem>
                                       ))}
-                                {loginStatus ? <Divider /> : null}
-                                {loginStatus ? (
+                                {loginStatus && <Divider />}
+                                {loginStatus && (
                                     <MobileUserBox>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                         <div>
@@ -323,21 +323,20 @@ const Header = () => {
                                             <UserEmailText>{userInfo.email}</UserEmailText>
                                         </div>
                                     </MobileUserBox>
-                                ) : null}
-                                {loginStatus
-                                    ? USERS_ITEMS.map(({ id, name, path }) => (
-                                          <MenuItem
-                                              key={name}
-                                              onClick={() => {
-                                                  handleCloseNavMenu();
-                                                  goNavigate(path);
-                                                  handleLogout(name);
-                                              }}
-                                          >
-                                              <MenuItemList>{name}</MenuItemList>
-                                          </MenuItem>
-                                      ))
-                                    : null}
+                                )}
+                                {loginStatus &&
+                                    USERS_ITEMS.map(({ id, name, path }) => (
+                                        <MenuItem
+                                            key={id}
+                                            onClick={() => {
+                                                handleCloseNavMenu();
+                                                goNavigate(path);
+                                                handleLogout(name);
+                                            }}
+                                        >
+                                            <MenuItemList>{name}</MenuItemList>
+                                        </MenuItem>
+                                    ))}
                             </Menu>
                         </MobileBox>
                         {NAV_ITEMS.map(({ id, name, path, active }) => {
@@ -363,7 +362,7 @@ const Header = () => {
                                         />
                                     </UserIconButton>
                                 </Tooltip>
-                                {userInfo.nickName ? <UserNickNameText>{userInfo.nickName}</UserNickNameText> : null}
+                                {userInfo.nickName && <UserNickNameText>{userInfo.nickName}</UserNickNameText>}
                                 <UserSelectMenu
                                     id="menu"
                                     anchorEl={anchorElUser}
@@ -395,7 +394,7 @@ const Header = () => {
                             </UserBox>
                         ) : (
                             <DesktopBox>
-                                <LoginBtn
+                                <StyledButton
                                     variant="outlined"
                                     rounded
                                     onClick={() => {
@@ -403,8 +402,8 @@ const Header = () => {
                                     }}
                                 >
                                     로그인
-                                </LoginBtn>
-                                <RegisterBtn
+                                </StyledButton>
+                                <StyledButton
                                     variant="contained"
                                     rounded
                                     onClick={() => {
@@ -412,7 +411,7 @@ const Header = () => {
                                     }}
                                 >
                                     회원가입
-                                </RegisterBtn>
+                                </StyledButton>
                             </DesktopBox>
                         )}
                     </MenuWrapper>
@@ -428,9 +427,6 @@ const AppBarContainer = styled(AppBar)`
     position: fixed;
     background-color: #ffffff;
     box-shadow: none;
-    /* ${({ theme }) => theme.device.mobile} {
-        background-color: rgba(255, 255, 255, 0);
-    } */
 `;
 
 const ToolBarWrapper = styled(Toolbar)`
@@ -498,6 +494,9 @@ const DesktopBox = styled(Box)`
     align-items: center;
     ${({ theme }) => theme.device.mobile} {
         display: none;
+    }
+    Button:first-child {
+        margin-right: 0.5rem;
     }
 `;
 
@@ -577,7 +576,7 @@ const StyledMenuitem = styled(MenuItem)`
     width: 10rem;
     text-align: center;
     &:last-child {
-        border-top: 1px solid #eaeaea;
+        border-top: 1px solid ${({ theme }) => theme.colors.gray};
     }
 `;
 
@@ -586,19 +585,12 @@ const MenuItemList = styled(Typography)`
     color: #111827;
     font-size: 1rem;
     font-weight: 500;
-    /* width: 100%; */
     ${({ theme }) => theme.device.mobile} {
         font-size: 1.125rem;
     }
 `;
 
-const LoginBtn = styled(Button)`
-    width: 6rem;
-    height: 2.5rem;
-    margin-right: 0.5rem;
-`;
-
-const RegisterBtn = styled(Button)`
+const StyledButton = styled(Button)`
     width: 6rem;
     height: 2.5rem;
 `;
