@@ -1,5 +1,4 @@
-import { TextField } from '@mui/material';
-import { Button } from 'components/common';
+import { Button, TextField } from 'components/common';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -16,14 +15,7 @@ const EditAndReplyButton = (props: Iprops) => {
     const { value, onChange, onClickCancel, onClickRegister, disable, placeholder } = props;
     return (
         <>
-            <TextField
-                fullWidth
-                multiline
-                inputProps={{ maxLength: 300 }}
-                defaultValue={value}
-                onChange={onChange}
-                placeholder={placeholder}
-            />
+            <TextField multiline value={value} onChange={onChange} placeholder={placeholder} />
             <ButtonArea>
                 <CancleBtn variant="outlined" onClick={onClickCancel}>
                     취소
@@ -62,7 +54,7 @@ const CustomBtn = styled(Button)<CustomBtnProps>`
 
 const CancleBtn = styled(CustomBtn)`
     background-color: white;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
     width: 3.5rem;
 `;
 

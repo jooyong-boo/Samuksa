@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { notifyError } from 'utils/notify';
 import { useCreateComment } from 'api/hooks/post/useCreateComment';
-import { Button } from 'components/common';
+import { Button, TextField } from 'components/common';
 
 interface UserInfoProps {
     userId: string;
@@ -49,9 +48,7 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleId
         <Container>
             <div>
                 <TextField
-                    sx={{ width: '100%' }}
                     multiline
-                    inputProps={{ maxLength: 300 }}
                     value={newComment}
                     placeholder={loginStatus ? '댓글을 남겨보세요' : ''}
                     disabled={!loginStatus}
@@ -89,7 +86,7 @@ const StyledPlaceholder = styled.span`
 
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
 `;
 
 const RegisterBtnBox = styled.div`

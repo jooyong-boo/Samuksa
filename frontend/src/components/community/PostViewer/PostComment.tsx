@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
-import RecommendBtn from './RecommendBtn';
+import RecommendBtn from '../../common/RecommendBtn';
 import Reply from './Reply';
 import UserInfo from './UserInfo';
 
@@ -122,7 +122,7 @@ const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: Com
             {infoNickname === nickName && commentModify ? (
                 <CommentUserEditTextareaBox>
                     <EditAndReplyButton
-                        value={content}
+                        value={newComment}
                         onChange={handleChangeComment}
                         onClickCancel={handleChangeCommentModify}
                         onClickRegister={handleCommentModify}

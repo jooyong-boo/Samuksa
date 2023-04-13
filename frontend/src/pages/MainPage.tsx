@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import image from '../assets/img/mainImage.webp';
-import { Box, FormControl, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Box, FormControl, InputAdornment, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { getAreaTotalFishData } from '../api/recommend';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Introduction from 'components/Introduction';
 import Title from 'components/main/Title';
 import { notifyError } from '../utils/notify';
-import { Button } from 'components/common';
+import { Button, TextField } from 'components/common';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -39,7 +39,7 @@ const MainPage = () => {
     // 검색조건 선택 여부 체크
     const [select, setSelect] = useRecoilState(selectState);
 
-    const handlePersonNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePersonNumChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
@@ -49,7 +49,7 @@ const MainPage = () => {
         }
     };
 
-    const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMoneyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
@@ -93,31 +93,19 @@ const MainPage = () => {
                 <Title />
                 <SearchForm onSubmit={onSubmit}>
                     <CustomBox>
-                        <CustomTextField
-                            id="person"
+                        <TextField
                             placeholder="인원"
-                            title="인원"
-                            type="string"
-                            variant="outlined"
+                            endAdornment="명"
+                            opacity={true}
                             value={personNum}
                             onChange={handlePersonNumChange}
-                            autoComplete="off"
-                            InputProps={{
-                                endAdornment: <InputAdornment position="end">명</InputAdornment>,
-                            }}
                         />
-                        <CustomTextField
-                            id="money"
+                        <TextField
                             placeholder="예산"
-                            title="예산"
-                            type="string"
-                            variant="outlined"
+                            endAdornment="원"
+                            opacity={true}
                             value={money}
                             onChange={handleMoneyChange}
-                            autoComplete="off"
-                            InputProps={{
-                                endAdornment: <InputAdornment position="end">원</InputAdornment>,
-                            }}
                         />
                         <FormControl fullWidth>
                             {/* <InputLabel id="local">지역</InputLabel> */}
@@ -174,12 +162,6 @@ const CustomBox = styled(Box)`
         margin: 0.5rem;
         width: 11rem;
     }
-`;
-
-const CustomTextField = styled(TextField)`
-    background-color: white;
-    border-radius: 5px;
-    opacity: 0.8;
 `;
 
 const AreaSelect = styled(Select)`

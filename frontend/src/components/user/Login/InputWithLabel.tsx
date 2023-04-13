@@ -1,4 +1,5 @@
-import { TextField, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import { TextField } from 'components/common';
 import { useRecoilState } from 'recoil';
 import { userLoginFormState } from 'store/user';
 import styled from 'styled-components';
@@ -8,13 +9,13 @@ interface InputWithLabelProps {
     value: string;
     handleEnterLogin: (e: React.KeyboardEvent) => void;
     id: string;
-    type: string;
+    type: 'string' | 'password';
 }
 
 const InputWithLabel = ({ label, value, handleEnterLogin, id, type }: InputWithLabelProps) => {
     const [userForm, setUserForm] = useRecoilState(userLoginFormState);
 
-    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { id, value } = e.target;
         setUserForm({ ...userForm, [id]: value });
     };
@@ -24,14 +25,12 @@ const InputWithLabel = ({ label, value, handleEnterLogin, id, type }: InputWithL
             <CustomTypography>{label}</CustomTypography>
             <TextField
                 id={id}
-                variant="outlined"
-                size="small"
                 placeholder={`${label} 입력`}
+                size="small"
                 type={type}
-                fullWidth
-                onChange={handleChangeInput}
                 value={value}
                 onKeyPress={handleEnterLogin}
+                onChange={handleChangeInput}
             />
         </>
     );
