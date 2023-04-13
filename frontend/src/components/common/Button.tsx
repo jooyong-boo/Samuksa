@@ -28,6 +28,7 @@ interface StyledButtonProps {
 }
 
 const StyledButton = styled(MuiButton)<StyledButtonProps>`
+    white-space: nowrap;
     :hover {
         box-shadow: none;
     }
