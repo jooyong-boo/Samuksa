@@ -1,4 +1,5 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
+import Button from 'components/common/Button';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -102,10 +103,6 @@ const ButtonBox = styled.div`
 const StyledButton = styled(Button)`
     width: 7rem;
     margin-bottom: 0.5rem;
-    box-shadow: none;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const StyledInput = styled.input`

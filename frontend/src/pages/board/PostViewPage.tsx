@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Avatar, Button, Paper, Typography } from '@mui/material';
+import { Avatar, Paper, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
@@ -22,7 +22,7 @@ import useGetComments from 'api/hooks/post/useGetComments';
 import useGetPostContent from 'api/hooks/post/useGetPostContent';
 import { postEditState } from 'store/post';
 import { useRecommendPost } from 'api/hooks/post/useRecommendPost';
-import { getRandomNumber } from 'utils/getRandomNumber';
+import { Button } from 'components/common';
 
 const PostViewPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -385,21 +385,13 @@ const TotalCommentText = styled(Typography)`
 
 interface CustomBtnProps {
     margin?: string;
-    $marginRight?: string;
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 7rem;
     height: 2.5rem;
     margin: ${(props) => `${props.margin}`};
-    margin-right: ${(props) => `${props.$marginRight}`};
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const PageMoveBox = styled.div`

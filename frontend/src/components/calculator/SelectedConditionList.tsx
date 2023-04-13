@@ -1,10 +1,11 @@
-import { Avatar, Button, CardActions, CardContent, Slide, Typography } from '@mui/material';
+import { Avatar, CardActions, CardContent, Slide, Typography } from '@mui/material';
 import React, { MutableRefObject } from 'react';
 import styled from 'styled-components';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
 import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface amount {
     setTotalAmount: React.Dispatch<React.SetStateAction<number>>;
@@ -113,11 +114,11 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount, setLoad
                 </SelectedConditionLists>
                 <CombinationSearchBtnDiv>
                     {selectCondition.length > 0 ? (
-                        <CombinationSearchBtn variant="contained" disableElevation onClick={onClick}>
+                        <CombinationSearchBtn variant="contained" onClick={onClick}>
                             조합 검색
                         </CombinationSearchBtn>
                     ) : (
-                        <CombinationSearchBtn variant="contained" disableElevation disabled={true} onClick={onClick}>
+                        <CombinationSearchBtn variant="contained" disabled={true} onClick={onClick}>
                             선택한 조합이 없어요
                         </CombinationSearchBtn>
                     )}
@@ -237,9 +238,4 @@ const CombinationSearchBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;

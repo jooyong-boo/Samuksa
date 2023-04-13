@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 import image from '../assets/img/mainImage.webp';
-import {
-    Box,
-    Button,
-    FormControl,
-    InputAdornment,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField,
-} from '@mui/material';
+import { Box, FormControl, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import { getAreaTotalFishData } from '../api/recommend';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -24,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Introduction from 'components/Introduction';
 import Title from 'components/main/Title';
 import { notifyError } from '../utils/notify';
+import { Button } from 'components/common';
 
 const ITEM_HEIGHT = 45;
 const ITEM_PADDING_TOP = 8;
@@ -86,7 +78,6 @@ const MainPage = () => {
 
     const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // getAreaTotalFishData({ area }).then(res => res ? (setFishList(res), setSelect(false)) : notify('해당 가격으론 찾을 수 있는 조합이 없어요!'));
         getAreaTotalFishData({ area }).then((res) =>
             res
                 ? (setFishList(res.map((item: {}) => (item ? { ...item, active: false } : { ...item }))),
@@ -198,12 +189,9 @@ const AreaSelect = styled(Select)`
 `;
 
 const SubmitBtn = styled(Button)`
+    width: 97%;
     margin-top: 1rem;
     opacity: 0.9;
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
-    width: 97%;
 `;
 
 export default MainPage;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
+import { Button } from 'components/common';
 
 interface IProps {
     up: () => void;
@@ -11,13 +12,13 @@ const RecommendBtn = ({ recommendCount, up, down }: IProps) => {
     return (
         <Container>
             <RecommendBox>
-                <Button onClick={down}>
+                <StyledButton onClick={down}>
                     <AiOutlineDown />
-                </Button>
+                </StyledButton>
                 <RecommendNumberSpan>{recommendCount}</RecommendNumberSpan>
-                <Button onClick={up}>
+                <StyledButton onClick={up}>
                     <AiOutlineUp />
-                </Button>
+                </StyledButton>
             </RecommendBox>
         </Container>
     );
@@ -40,7 +41,7 @@ const RecommendBox = styled.div`
     justify-content: center;
 `;
 
-const Button = styled.button`
+const StyledButton = styled(Button)`
     flex-grow: 1;
     border: none;
     background-color: white;

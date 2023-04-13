@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Button,
     Checkbox,
     Grow,
     List,
@@ -24,6 +23,7 @@ import {
 import { useEffect } from 'react';
 import { useMemo } from 'react';
 import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
 const DetailedSearchConditions = ({ ...props }) => {
     const { totalAmount, setTotalAmount, amount, setAmount } = props;
@@ -244,19 +244,13 @@ const DetailedSearchConditions = ({ ...props }) => {
                         </CustomSelectFarmTypeDiv>
                         <CustomConditionAddDiv>
                             {selectFish && amount && farmStatus.length > 0 ? (
-                                <CustomConditionAddBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disableElevation
-                                    onClick={addCondition}
-                                >
+                                <CustomConditionAddBtn variant="contained" type="submit" onClick={addCondition}>
                                     조건 추가하기
                                 </CustomConditionAddBtn>
                             ) : (
                                 <CustomConditionAddBtn
                                     variant="contained"
                                     type="submit"
-                                    disableElevation
                                     disabled={true}
                                     onClick={addCondition}
                                 >
@@ -432,9 +426,4 @@ const CustomConditionAddBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;

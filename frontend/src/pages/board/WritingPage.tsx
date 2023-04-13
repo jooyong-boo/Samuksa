@@ -1,4 +1,4 @@
-import { Button, FormControl, Paper, Typography } from '@mui/material';
+import { FormControl, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRef } from 'react';
@@ -14,6 +14,7 @@ import UserInfo from 'components/community/PostEditor/UserInfo';
 import BoardSelect from 'components/community/PostEditor/BoardSelect';
 import { notifyError, notifySuccess } from 'utils/notify';
 import { useCreatePost } from 'api/hooks/post/useCreatePost';
+import { Button } from 'components/common';
 
 const WritingPage = () => {
     const navigate = useNavigate();
@@ -229,11 +230,7 @@ const CuntomBtn = styled(Button)<CustomBtnProps>`
     width: 7rem;
     height: 3rem;
     margin: ${(props) => `${props.margin}`};
-    box-shadow: none;
     font-weight: 600;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 export default WritingPage;

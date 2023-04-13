@@ -1,4 +1,5 @@
-import { Button, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
+import { Button } from 'components/common';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -52,17 +53,11 @@ interface CustomBtnProps {
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 7rem;
     height: 2.5rem;
     margin: ${(props) => `${props.margin}`};
     margin-right: ${(props) => `${props.$marginRight}`};
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const CancleBtn = styled(CustomBtn)`

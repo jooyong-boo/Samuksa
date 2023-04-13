@@ -1,14 +1,4 @@
-import {
-    Button,
-    FormControl,
-    Grid,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -29,6 +19,7 @@ import {
 import { getAreaTotalFishData } from '../../api/recommend';
 import React from 'react';
 import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
 const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;
@@ -214,7 +205,6 @@ const SearchConditions = () => {
                                 <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
-                                    disableElevation
                                     onClick={searchForFishByRegion}
                                 >
                                     조건 선택
@@ -223,7 +213,6 @@ const SearchConditions = () => {
                                 <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
-                                    disableElevation
                                     disabled={true}
                                     onClick={searchForFishByRegion}
                                 >
@@ -294,16 +283,10 @@ const SearchConditionSelectBtn = styled(Button)`
     width: 274px;
     height: 38px;
     font-weight: 900;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;
 
 const SearchConditionResetBtn = styled(Button)`
     width: 40%;
-    border-radius: 5px;
     border-color: #d8d8d8;
     color: #949494;
 `;

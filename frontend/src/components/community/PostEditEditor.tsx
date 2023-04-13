@@ -1,4 +1,4 @@
-import { Button, FormControl, Paper, Typography } from '@mui/material';
+import { FormControl, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useRef } from 'react';
@@ -16,6 +16,7 @@ import { notifyError, notifySuccess } from 'utils/notify';
 import { useEditPost } from 'api/hooks/post/useEditPost';
 import { useRecoilValue } from 'recoil';
 import { postEditState } from 'store/post';
+import { Button } from 'components/common';
 
 const PostEditEditor = () => {
     const navigate = useNavigate();
@@ -26,8 +27,6 @@ const PostEditEditor = () => {
     const [index, setIndex] = useState(0);
     const [board, setBoard] = useState('');
     const editState = useRecoilValue(postEditState);
-
-    const [transientStorage, setTransientStorage] = useState<any>([]);
 
     const location = useLocation();
     const prevLocation = location.state;
@@ -182,11 +181,7 @@ const CuntomBtn = styled(Button)<CustomBtnProps>`
     width: 7rem;
     height: 3rem;
     margin: ${(props) => `${props.margin}`};
-    box-shadow: none;
     font-weight: 600;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 export default PostEditEditor;

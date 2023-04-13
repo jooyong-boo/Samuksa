@@ -5,7 +5,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
-import RecommendBtn from './RecommendBtn';
 import UserInfo from './UserInfo';
 
 interface ReplyProps {

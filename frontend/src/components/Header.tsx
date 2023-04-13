@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,15 +8,16 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Divider, Tooltip } from '@mui/material';
+import { Avatar, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getUserInfo, logout } from '../api/auth';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import MenuIcon from '@mui/icons-material/Menu';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
 import { notifyError, notifySuccess } from '../utils/notify';
+import { Button } from 'components/common';
 
 interface userInfoProps {
     userId?: string;
@@ -29,8 +30,6 @@ interface userInfoProps {
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
-    const theme = useContext(ThemeContext);
 
     const [loginStatus, setLoginStatus] = useRecoilState(loginStatusState);
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
@@ -398,6 +397,7 @@ const Header = () => {
                             <DesktopBox>
                                 <LoginBtn
                                     variant="outlined"
+                                    rounded
                                     onClick={() => {
                                         goNavigate('/login');
                                     }}
@@ -406,6 +406,7 @@ const Header = () => {
                                 </LoginBtn>
                                 <RegisterBtn
                                     variant="contained"
+                                    rounded
                                     onClick={() => {
                                         goNavigate('/register');
                                     }}
@@ -594,23 +595,10 @@ const MenuItemList = styled(Typography)`
 const LoginBtn = styled(Button)`
     width: 6rem;
     height: 2.5rem;
-    border-radius: 20px;
-    border: 0.5px solid ${({ theme }) => theme.colors.main};
-    color: ${({ theme }) => theme.colors.main};
     margin-right: 0.5rem;
-    :hover {
-        box-shadow: none;
-        background-color: rgb(229, 231, 235);
-    }
 `;
 
 const RegisterBtn = styled(Button)`
     width: 6rem;
     height: 2.5rem;
-    border-radius: 20px;
-    background-color: ${({ theme }) => theme.colors.main};
-    box-shadow: none;
-    :hover {
-        box-shadow: none;
-    }
 `;

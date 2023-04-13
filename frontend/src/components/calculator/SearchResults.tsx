@@ -1,4 +1,4 @@
-import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
+import { Avatar, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
 import React, { forwardRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -12,6 +12,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { NavLink } from 'react-router-dom';
 import { notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface loadingStats {
     loading: boolean;
@@ -120,7 +121,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                     검색 결과{result.length > 0 ? `(${result.length})` : null}
                 </SearchResultsTypography>
                 <BookmarkLink to={'/bookmark'}>
-                    <Button>즐겨찾기 {bookmark.length}</Button>
+                    <Button onClick={() => {}}>즐겨찾기 {bookmark.length}</Button>
                 </BookmarkLink>
             </Container>
             <ResultDiv>

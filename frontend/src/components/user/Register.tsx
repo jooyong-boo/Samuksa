@@ -1,15 +1,16 @@
-import { Button, Link, TextField, Typography } from '@mui/material';
-import React, { ReactElement } from 'react';
+import { TextField, Typography } from '@mui/material';
+import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { signUp, checkDuplicate, requestCheckEmail } from '../../api/auth';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userIdState, userLoginFormState } from '../../store/user';
+import { useRecoilState } from 'recoil';
+import { userLoginFormState } from '../../store/user';
 // import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 import { FcCheckmark } from 'react-icons/fc';
 import { notifyError, notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -459,30 +460,18 @@ const CustomTypography = styled(Typography)`
     margin: auto;
     font-size: 1rem;
     font-weight: bold;
-    margin: 0.5rem 0.1rem 0.3rem 0; ;
+    margin: 0.5rem 0.1rem 0.3rem 0;
 `;
 
 const CustomBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
     margin-left: 0.5rem;
     flex-grow: 1;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const RegisterBtn = styled(Button)`
     width: 100%;
     margin-top: 1rem;
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
     margin-bottom: 0.5rem;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const AskingSpan = styled.span`

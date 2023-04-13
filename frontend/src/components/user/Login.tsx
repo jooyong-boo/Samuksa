@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import { userInfoState, userLoginFormState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
 import { notifyError, notifySuccess } from 'utils/notify';
 import InputWithLabel from './Login/InputWithLabel';
+import { Button } from 'components/common';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -239,14 +240,8 @@ const LoginBtnDiv = styled.div`
 `;
 
 const LoginBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
     width: 100%;
     margin-bottom: 0.5rem;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const AskingSpan = styled.span`

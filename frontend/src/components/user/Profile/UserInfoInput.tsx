@@ -1,10 +1,11 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { changeUserInfoAxios } from 'api/auth';
 import { notifyError } from 'utils/notify';
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userInfoState } from 'store/user';
 import styled from 'styled-components';
+import { Button } from 'components/common';
 
 interface userInfos {
     userId?: string;
@@ -105,7 +106,6 @@ interface ModifyButtonProps {
 const ModifyButton = styled(Button)<ModifyButtonProps>`
     border: 1px solid #eaeaea;
     font-weight: bold;
-    color: black;
     margin-left: 0.5rem;
     margin-bottom: ${(props) => (props.$marginBottom ? `${props.$marginBottom}` : '0')};
 `;

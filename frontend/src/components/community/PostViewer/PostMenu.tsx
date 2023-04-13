@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useParams } from 'react-router-dom';
+import { Button } from 'components/common';
 
 interface IProps {
     delete: (idx: number | string) => void;
@@ -24,7 +24,7 @@ const PostMenu = ({ ...props }: IProps) => {
     return (
         <div>
             <Button
-                id="basic-button"
+                // id="basic-button"
                 aria-controls={open ? 'post-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
