@@ -119,7 +119,7 @@ export default function SearchResultTable({ selectEstimate, totalPrice }: estima
                                           flexDirection: 'column',
                                           justifyContent: 'center',
                                           alignItems: 'center',
-                                          border: '1px solid #eaeaea',
+                                          border: '1px solid ${({theme}) => theme.colors.gray};',
                                       }}
                                       key={i}
                                   >
@@ -301,8 +301,8 @@ const MobileGridBox = styled.div`
     grid-gap: 20px;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-top: 1px solid #eaeaea;
-    border-bottom: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     @media all and (min-width: 851px) {
         display: none;
     }

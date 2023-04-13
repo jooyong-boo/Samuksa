@@ -1,5 +1,9 @@
 const colors = {
     main: '#0098ee',
+    gray: '#eaeaea',
+    grayOne: '#545454',
+    grayTwo: '#373737',
+    grayThree: '#979797',
 };
 
 const size = {

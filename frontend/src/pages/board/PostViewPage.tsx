@@ -1,6 +1,6 @@
-import styled from 'styled-components';
-import { Avatar, Button, Paper, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import styled, { ThemeContext } from 'styled-components';
+import { Avatar, Paper, Typography } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
@@ -14,7 +14,7 @@ import timeForToday from '../../utils/TimeForToday';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 import { getPostComment } from '../../api/post';
 import PostComment from 'components/community/PostViewer/PostComment';
-import RecommendBtn from 'components/community/PostViewer/RecommendBtn';
+import RecommendBtn from 'components/common/RecommendBtn';
 import CommentRegister from 'components/community/PostViewer/CommentRegister';
 import PostMenu from 'components/community/PostViewer/PostMenu';
 import { useDeletePost } from 'api/hooks/post/useDeletePost';
@@ -22,9 +22,10 @@ import useGetComments from 'api/hooks/post/useGetComments';
 import useGetPostContent from 'api/hooks/post/useGetPostContent';
 import { postEditState } from 'store/post';
 import { useRecommendPost } from 'api/hooks/post/useRecommendPost';
-import { getRandomNumber } from 'utils/getRandomNumber';
+import { Button } from 'components/common';
 
 const PostViewPage = () => {
+    const theme = useContext(ThemeContext);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
@@ -116,11 +117,11 @@ const PostViewPage = () => {
                                 <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
                                     {content?.data?.nickName}
                                 </UserInfoTypography>
-                                <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
+                                <UserInfoTypography fontSize={'0.875rem'} color={theme.colors.grayThree}>
                                     {content?.data && timeForToday(content.data.createdAt)}
                                 </UserInfoTypography>
                                 {content?.data.modifiedAt ? (
-                                    <UserInfoTypography fontSize={'0.875rem'} color={'#979797'}>
+                                    <UserInfoTypography fontSize={'0.875rem'} color={theme.colors.grayThree}>
                                         {timeForToday(content.data.modifiedAt)}에 수정됨
                                     </UserInfoTypography>
                                 ) : null}
@@ -149,11 +150,13 @@ const PostViewPage = () => {
                         <PostContentBox>
                             <PostContent>{parse(DOMPurify.sanitize(content.data.content))}</PostContent>
                             {content.data ? (
-                                <RecommendBtn
-                                    up={handleRecommend}
-                                    down={handleNotRecommend}
-                                    recommendCount={content.data.recommendCount}
-                                />
+                                <RecommendBox>
+                                    <RecommendBtn
+                                        up={handleRecommend}
+                                        down={handleNotRecommend}
+                                        recommendCount={content.data.recommendCount}
+                                    />
+                                </RecommendBox>
                             ) : null}
                         </PostContentBox>
                     ) : null}
@@ -272,7 +275,7 @@ const PostInfoContainer = styled.div`
     width: 100%;
     padding: 0.5rem;
     justify-content: space-between;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
 const PostUserBox = styled.div`
@@ -326,12 +329,18 @@ const PostStrong = styled.strong`
 const PostContentBox = styled.div`
     padding: 1rem;
     min-height: 10rem;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
 const PostContent = styled.div`
     line-height: 170%;
     font-size: 1.5rem;
+`;
+
+const RecommendBox = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem 0;
 `;
 
 const PostCommentBox = styled.div`
@@ -343,7 +352,7 @@ const BottomCommentBox = styled.div`
     display: flex;
     width: 100%;
     flex-wrap: wrap;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray};
     padding-top: 1rem;
 `;
 
@@ -385,21 +394,13 @@ const TotalCommentText = styled(Typography)`
 
 interface CustomBtnProps {
     margin?: string;
-    $marginRight?: string;
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 7rem;
     height: 2.5rem;
     margin: ${(props) => `${props.margin}`};
-    margin-right: ${(props) => `${props.$marginRight}`};
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const PageMoveBox = styled.div`

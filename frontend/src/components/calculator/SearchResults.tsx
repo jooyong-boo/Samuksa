@@ -1,9 +1,9 @@
-import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
-import React, { forwardRef } from 'react';
+import { Avatar, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
+import React, { forwardRef, useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import styled from 'styled-components';
+import styled, { ThemeContext } from 'styled-components';
 import image from '../../assets/img/contemplative-reptile.webp';
 import { areaState, recommendListState, selectConditions } from '../../store/atom';
 import Spinner from '../../assets/spinner/Spinner.gif';
@@ -12,6 +12,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { NavLink } from 'react-router-dom';
 import { notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface loadingStats {
     loading: boolean;
@@ -19,6 +20,8 @@ interface loadingStats {
 }
 
 const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const theme = useContext(ThemeContext);
+
     const [result, setResult] = useRecoilState<any[]>(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
     const [selectResult, setSelectResult] = useState<null | any>(null);
@@ -120,7 +123,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                     검색 결과{result.length > 0 ? `(${result.length})` : null}
                 </SearchResultsTypography>
                 <BookmarkLink to={'/bookmark'}>
-                    <Button>즐겨찾기 {bookmark.length}</Button>
+                    <Button onClick={() => {}}>즐겨찾기 {bookmark.length}</Button>
                 </BookmarkLink>
             </Container>
             <ResultDiv>
@@ -205,7 +208,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                                         const { fishName, serving } = item;
                                                         return (
                                                             <CustomListItem key={i}>
-                                                                <CustomListItemTypography color={'#545454'}>
+                                                                <CustomListItemTypography color={theme.colors.grayTwo}>
                                                                     {fishName}
                                                                 </CustomListItemTypography>
                                                                 <CustomListItemTypography color={'#979797'}>
@@ -295,7 +298,7 @@ const Container = styled.div`
     width: 100%;
     justify-content: space-between;
     padding-right: 0.5rem;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
 const SearchResultsTypography = styled(Typography)`
@@ -311,7 +314,7 @@ const BookmarkLink = styled(NavLink)`
 
 const CustomDiv = styled.div`
     border-bottom: 1px solid #f6f6f6;
-    border-right: 1px solid #eaeaea;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
     width: 20%;
     height: 496px;
     position: relative;
@@ -419,7 +422,7 @@ const CustomListDiv = styled.div`
     padding-left: 10px;
     flex-wrap: wrap;
     background-color: white;
-    border-right: 1px solid #eaeaea;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
     min-width: 105px;
     /* position: relative; */
     overflow: overlay;
@@ -506,8 +509,8 @@ const SelectedEstimateContainer = styled.div`
     }
     @media all and (max-width: 730px) {
         width: 100%;
-        border-top: 1px solid #eaeaea;
-        border-bottom: 1px solid #eaeaea;
+        border-top: 1px solid ${({ theme }) => theme.colors.gray};
+        border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
     }

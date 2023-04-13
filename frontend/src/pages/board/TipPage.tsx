@@ -1,4 +1,4 @@
-import { Button, Menu, MenuItem, Stack, Typography } from '@mui/material';
+import { Menu, MenuItem, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -15,6 +15,7 @@ import ListIcon from '@mui/icons-material/List';
 import useGetPost from 'api/hooks/post/useGetPost';
 import TableBoard from 'components/community/FreeBoard/TableBoard';
 import MobileBoard from 'components/community/FreeBoard/MobileBoard';
+import { Button } from 'components/common';
 
 const SortPages = [
     {
@@ -294,22 +295,14 @@ const BoardTopWrapper = styled.div`
 `;
 
 const WriteBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 6rem;
     height: 2.5rem;
     padding: 6px 1rem 6px 0.9rem;
-    border-radius: 7px;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 const SearchBtn = styled(WriteBtn)`
     background-color: white;
-    color: ${({ theme }) => theme.colors.main};
     margin-right: 0.3rem;
     border-color: #a7a7a7;
 `;

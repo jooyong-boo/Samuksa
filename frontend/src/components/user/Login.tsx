@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,6 +9,7 @@ import { userInfoState, userLoginFormState } from '../../store/user';
 import KakaoLogin from './KakaoLogin';
 import { notifyError, notifySuccess } from 'utils/notify';
 import InputWithLabel from './Login/InputWithLabel';
+import { Button } from 'components/common';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -167,7 +168,7 @@ const Card = styled.div`
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
-    border: 1px solid #eaeaea;
+    border: 1px solid ${({ theme }) => theme.colors.gray};
     text-align: center;
     overflow: auto;
 `;
@@ -177,7 +178,7 @@ const LoginTitle = styled(Typography)`
     height: 10%;
     font-size: 1.5rem;
     font-weight: bold;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding-bottom: 24px;
     text-align: center;
 `;
@@ -234,19 +235,13 @@ const CustomNavLink = styled(NavLink)`
 const LoginBtnDiv = styled.div`
     width: 100%;
     margin: 1rem auto;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding-bottom: 0.5rem;
 `;
 
 const LoginBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
     width: 100%;
     margin-bottom: 0.5rem;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const AskingSpan = styled.span`

@@ -22,7 +22,7 @@ const Introduction = () => {
             <StyledGrid container>
                 <Grid item>
                     <Img src={introduce1} alt="생선을 들고있는 어부" loading="lazy" />
-                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
+                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={theme.colors.grayOne}>
                         사용자 대상
                     </CustomTypography>
                     <CustomTypography width={'250px'} color={'#545454'}>
@@ -31,7 +31,7 @@ const Introduction = () => {
                 </Grid>
                 <Grid item>
                     <Img src={introduce2} alt="수산물시장 수조" loading="lazy" />
-                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
+                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={theme.colors.grayOne}>
                         목표
                     </CustomTypography>
                     <CustomTypography width={'250px'} color={'#545454'}>
@@ -40,7 +40,7 @@ const Introduction = () => {
                 </Grid>
                 <Grid item>
                     <Img src={introduce3} alt="접시에 담긴 회" loading="lazy" />
-                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={'#373737'}>
+                    <CustomTypography fontSize={'1.42rem'} fontWeight={'bold'} color={theme.colors.grayOne}>
                         만든 이유
                     </CustomTypography>
                     <CustomTypography width={'250px'} fontSize={'1rem'} color={'#545454'}>

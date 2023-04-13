@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,15 +8,16 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Divider, Tooltip } from '@mui/material';
+import { Avatar, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { getUserInfo, logout } from '../api/auth';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
 import MenuIcon from '@mui/icons-material/Menu';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
 import { notifyError, notifySuccess } from '../utils/notify';
+import { Button } from 'components/common';
 
 interface userInfoProps {
     userId?: string;
@@ -29,8 +30,6 @@ interface userInfoProps {
 const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
-
-    const theme = useContext(ThemeContext);
 
     const [loginStatus, setLoginStatus] = useRecoilState(loginStatusState);
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
@@ -295,7 +294,7 @@ const Header = () => {
                                 {loginStatus
                                     ? NAV_ITEMS.map(({ id, name, path }) => (
                                           <StyledMobileMenuItem
-                                              key={name}
+                                              key={id}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -306,7 +305,7 @@ const Header = () => {
                                       ))
                                     : pages.map(({ id, name, path }) => (
                                           <StyledMobileMenuItem
-                                              key={name}
+                                              key={id}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -315,8 +314,8 @@ const Header = () => {
                                               <MenuItemList>{name}</MenuItemList>
                                           </StyledMobileMenuItem>
                                       ))}
-                                {loginStatus ? <Divider /> : null}
-                                {loginStatus ? (
+                                {loginStatus && <Divider />}
+                                {loginStatus && (
                                     <MobileUserBox>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                         <div>
@@ -324,21 +323,20 @@ const Header = () => {
                                             <UserEmailText>{userInfo.email}</UserEmailText>
                                         </div>
                                     </MobileUserBox>
-                                ) : null}
-                                {loginStatus
-                                    ? USERS_ITEMS.map(({ id, name, path }) => (
-                                          <MenuItem
-                                              key={name}
-                                              onClick={() => {
-                                                  handleCloseNavMenu();
-                                                  goNavigate(path);
-                                                  handleLogout(name);
-                                              }}
-                                          >
-                                              <MenuItemList>{name}</MenuItemList>
-                                          </MenuItem>
-                                      ))
-                                    : null}
+                                )}
+                                {loginStatus &&
+                                    USERS_ITEMS.map(({ id, name, path }) => (
+                                        <MenuItem
+                                            key={id}
+                                            onClick={() => {
+                                                handleCloseNavMenu();
+                                                goNavigate(path);
+                                                handleLogout(name);
+                                            }}
+                                        >
+                                            <MenuItemList>{name}</MenuItemList>
+                                        </MenuItem>
+                                    ))}
                             </Menu>
                         </MobileBox>
                         {NAV_ITEMS.map(({ id, name, path, active }) => {
@@ -364,7 +362,7 @@ const Header = () => {
                                         />
                                     </UserIconButton>
                                 </Tooltip>
-                                {userInfo.nickName ? <UserNickNameText>{userInfo.nickName}</UserNickNameText> : null}
+                                {userInfo.nickName && <UserNickNameText>{userInfo.nickName}</UserNickNameText>}
                                 <UserSelectMenu
                                     id="menu"
                                     anchorEl={anchorElUser}
@@ -396,22 +394,24 @@ const Header = () => {
                             </UserBox>
                         ) : (
                             <DesktopBox>
-                                <LoginBtn
+                                <StyledButton
                                     variant="outlined"
+                                    rounded
                                     onClick={() => {
                                         goNavigate('/login');
                                     }}
                                 >
                                     로그인
-                                </LoginBtn>
-                                <RegisterBtn
+                                </StyledButton>
+                                <StyledButton
                                     variant="contained"
+                                    rounded
                                     onClick={() => {
                                         goNavigate('/register');
                                     }}
                                 >
                                     회원가입
-                                </RegisterBtn>
+                                </StyledButton>
                             </DesktopBox>
                         )}
                     </MenuWrapper>
@@ -427,9 +427,6 @@ const AppBarContainer = styled(AppBar)`
     position: fixed;
     background-color: #ffffff;
     box-shadow: none;
-    /* ${({ theme }) => theme.device.mobile} {
-        background-color: rgba(255, 255, 255, 0);
-    } */
 `;
 
 const ToolBarWrapper = styled(Toolbar)`
@@ -497,6 +494,9 @@ const DesktopBox = styled(Box)`
     align-items: center;
     ${({ theme }) => theme.device.mobile} {
         display: none;
+    }
+    Button:first-child {
+        margin-right: 0.5rem;
     }
 `;
 
@@ -576,7 +576,7 @@ const StyledMenuitem = styled(MenuItem)`
     width: 10rem;
     text-align: center;
     &:last-child {
-        border-top: 1px solid #eaeaea;
+        border-top: 1px solid ${({ theme }) => theme.colors.gray};
     }
 `;
 
@@ -585,32 +585,12 @@ const MenuItemList = styled(Typography)`
     color: #111827;
     font-size: 1rem;
     font-weight: 500;
-    /* width: 100%; */
     ${({ theme }) => theme.device.mobile} {
         font-size: 1.125rem;
     }
 `;
 
-const LoginBtn = styled(Button)`
+const StyledButton = styled(Button)`
     width: 6rem;
     height: 2.5rem;
-    border-radius: 20px;
-    border: 0.5px solid ${({ theme }) => theme.colors.main};
-    color: ${({ theme }) => theme.colors.main};
-    margin-right: 0.5rem;
-    :hover {
-        box-shadow: none;
-        background-color: rgb(229, 231, 235);
-    }
-`;
-
-const RegisterBtn = styled(Button)`
-    width: 6rem;
-    height: 2.5rem;
-    border-radius: 20px;
-    background-color: ${({ theme }) => theme.colors.main};
-    box-shadow: none;
-    :hover {
-        box-shadow: none;
-    }
 `;

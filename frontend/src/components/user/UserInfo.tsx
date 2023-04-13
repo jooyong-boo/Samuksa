@@ -24,7 +24,7 @@ const Card = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    border: 1px solid #eaeaea;
+    border: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
 const UserInfo = () => {

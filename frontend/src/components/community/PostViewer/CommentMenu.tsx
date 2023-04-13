@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import styled from 'styled-components';
 import { HiOutlineTrash } from 'react-icons/hi';
 import { TiEdit } from 'react-icons/ti';
+import { Button } from 'components/common';
 
 interface Iprops {
     infoNickname: string;
@@ -29,7 +29,6 @@ const CommentMenu = (props: Iprops) => {
     return (
         <div>
             <Button
-                id="comment-button"
                 aria-controls={open ? 'comment-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}

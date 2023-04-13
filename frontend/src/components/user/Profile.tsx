@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { changeUserInfoAxios } from '../../api/auth';
@@ -8,6 +8,7 @@ import UserImage from './Profile/UserImage';
 import UserInfoInput from './Profile/UserInfoInput';
 import WithDrawalButton from './Profile/WithDrawalButton';
 import { notifyError, notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface userInfos {
     userId?: string;
@@ -142,7 +143,7 @@ const ProfileContainer = styled.div`
 const TitleTypography = styled(Typography)`
     font-size: 1.5rem;
     font-weight: bold;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding: 24px;
     text-align: center;
 `;
@@ -186,9 +187,8 @@ interface ModifyButtonProps {
 }
 
 const ModifyButton = styled(Button)<ModifyButtonProps>`
-    border: 1px solid #eaeaea;
+    border: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
-    color: black;
     margin-left: 0.5rem;
     margin-bottom: ${(props) => (props.$marginBottom ? `${props.$marginBottom}` : '0')};
 `;

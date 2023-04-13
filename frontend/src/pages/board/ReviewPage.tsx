@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -15,6 +15,7 @@ import WriteBtn from 'components/community/FreeBoard/WriteBtn';
 import { useOutletContext } from 'react-router-dom';
 import useGetPost from 'api/hooks/post/useGetPost';
 import Loading from 'components/common/Loading';
+import { Button } from 'components/common';
 
 interface OutletProps {
     selectTab: number;
@@ -143,19 +144,12 @@ const BoardTopWrapper = styled.div`
 `;
 
 const SearchBtn = styled(Button)`
-    background-color: white;
-    color: ${({ theme }) => theme.colors.main};
     margin-right: 0.3rem;
     border-color: #a7a7a7;
     font-weight: 700;
-    box-shadow: none;
     width: 6rem;
     height: 2.5rem;
-    padding: 6px 1rem 6px 0.9rem;
     border-radius: 7px;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 const SortBtn = styled(SearchBtn)`

@@ -16,7 +16,7 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
     args: {
-        variant: 'contained',
         children: '로그인',
+        rounded: true,
     },
 };

@@ -1,15 +1,16 @@
-import { Button, Link, TextField, Typography } from '@mui/material';
-import React, { ReactElement } from 'react';
+import { Typography } from '@mui/material';
+import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { signUp, checkDuplicate, requestCheckEmail } from '../../api/auth';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { userIdState, userLoginFormState } from '../../store/user';
+import { useRecoilState } from 'recoil';
+import { userLoginFormState } from '../../store/user';
 // import { kakaoLogin, kakaoUserInfo } from '../../api/kakaoAuth';
 import { FcCheckmark } from 'react-icons/fc';
 import { notifyError, notifySuccess } from 'utils/notify';
+import { Button, TextField } from 'components/common';
 
 const Register = () => {
     const navigate = useNavigate();
@@ -36,7 +37,7 @@ const Register = () => {
 
     // 이메일
     const [email, setEmail] = useState('');
-    const [checkEmail, setCheckEmail] = useState(true);
+    const [checkEmail, setCheckEmail] = useState(false);
     const [viewAuthNum, setViewAuthNum] = useState(false);
 
     // 이메일 인증번호
@@ -93,9 +94,9 @@ const Register = () => {
             const emailReg = new RegExp(
                 /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
             );
-            if (emailReg.test(inputChange)) {
+            change(inputChange);
+            if (email && emailReg.test(inputChange)) {
                 setCheckEmail(true);
-                change(inputChange);
             } else {
                 setCheckEmail(false);
                 setCheckAuthNum(false);
@@ -103,9 +104,9 @@ const Register = () => {
         }
         if (check === 'authNum') {
             const emailAuthReg = new RegExp(/^[0-9a-zA-Z]{8}$/);
-            if (emailAuthReg.test(inputChange)) {
+            change(inputChange);
+            if (authNum && emailAuthReg.test(inputChange)) {
                 setCheckAuthNum(true);
-                change(inputChange);
             } else {
                 setCheckAuthNum(false);
             }
@@ -253,13 +254,11 @@ const Register = () => {
                                 {overlappingId ? null : <FcCheckmark />}
                             </div>
                             <InputBox>
-                                <RegisterTextField
-                                    id="id"
-                                    variant="outlined"
-                                    size="small"
+                                <TextField
                                     placeholder="4~12자 영문, 숫자"
-                                    autoComplete="off"
                                     color={checkId ? 'primary' : 'error'}
+                                    value={userId}
+                                    size="small"
                                     onChange={(e) => {
                                         onChange(setUserId, 'id', e);
                                     }}
@@ -273,13 +272,11 @@ const Register = () => {
                                 {overlappingNickName ? null : <FcCheckmark />}
                             </div>
                             <InputBox>
-                                <RegisterTextField
-                                    id="nickName"
-                                    variant="outlined"
-                                    size="small"
+                                <TextField
                                     placeholder="3~12자 한글 또는 영문"
-                                    autoComplete="off"
                                     color={checkNickName ? 'primary' : 'error'}
+                                    value={nickName}
+                                    size="small"
                                     onChange={(e) => {
                                         onChange(setNickName, 'nickName', e);
                                     }}
@@ -297,30 +294,24 @@ const Register = () => {
                                     <CustomTypography>비밀번호</CustomTypography>
                                     {checkPwConfirm ? <FcCheckmark /> : null}
                                 </div>
-                                <RegisterTextField
-                                    id="password"
-                                    variant="outlined"
-                                    size="small"
-                                    type={passwordView ? '' : 'password'}
+                                <TextField
+                                    type={passwordView ? undefined : 'password'}
+                                    value={password}
                                     placeholder="8~16자리 영문, 숫자, 특수문자 조합"
-                                    autoComplete="off"
-                                    fullWidth
                                     color={checkPw ? 'primary' : 'error'}
+                                    size="small"
                                     onChange={(e) => {
                                         onChange(setPassword, 'password', e);
                                     }}
                                 />
                             </InputBox>
                             <InputBox paddingTop={'0.5rem'} display={'block'}>
-                                <RegisterTextField
-                                    id="passwordConfirm"
-                                    variant="outlined"
-                                    size="small"
-                                    type={passwordView ? '' : 'password'}
+                                <TextField
+                                    type={passwordView ? undefined : 'password'}
+                                    value={passwordConfirm}
                                     placeholder="비밀번호 확인"
-                                    autoComplete="off"
-                                    fullWidth
                                     color={checkPwConfirm ? 'primary' : 'error'}
+                                    size="small"
                                     onChange={(e) => {
                                         onChange(setPasswordConfirm, 'passwordConfirm', e);
                                     }}
@@ -334,13 +325,11 @@ const Register = () => {
                                 {successAuth ? <FcCheckmark /> : null}
                             </div>
                             <InputBox>
-                                <RegisterTextField
-                                    id="email"
-                                    variant="outlined"
-                                    size="small"
+                                <TextField
                                     placeholder="이메일 형식을 지켜주세요"
-                                    fullWidth
                                     color={checkEmail ? 'primary' : 'error'}
+                                    value={email}
+                                    size="small"
                                     onChange={(e) => {
                                         onChange(setEmail, 'email', e);
                                     }}
@@ -352,12 +341,10 @@ const Register = () => {
                             <InputBox paddingTop={'0.5rem'} display={'flex'}>
                                 {viewAuthNum ? (
                                     <>
-                                        <RegisterTextField
-                                            id="emailAuth"
-                                            variant="outlined"
-                                            size="small"
-                                            autoComplete="off"
+                                        <TextField
                                             placeholder="인증번호 입력"
+                                            value={authNum}
+                                            size="small"
                                             color={checkAuthNum ? 'primary' : 'error'}
                                             onChange={(e) => {
                                                 onChange(setAuthNum, 'authNum', e);
@@ -381,6 +368,7 @@ const Register = () => {
                                 onClick={() => {
                                     onSignUp();
                                 }}
+                                disabled={!successAuth}
                             >
                                 회원가입
                             </RegisterBtn>
@@ -421,7 +409,7 @@ const Card = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 5px;
-    border: 1px solid #eaeaea;
+    border: 1px solid ${({ theme }) => theme.colors.gray};
     overflow: auto;
 `;
 
@@ -443,14 +431,10 @@ const InputBox = styled.div<InputBoxProps>`
     display: ${(props) => (props.display ? `${props.display}` : 'flex')};
 `;
 
-const RegisterTextField = styled(TextField)`
-    flex-grow: 1;
-`;
-
 const RegisterTitle = styled(Typography)`
     font-size: 1.5rem;
     font-weight: bold;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding-bottom: 1rem;
     text-align: center;
 `;
@@ -459,30 +443,17 @@ const CustomTypography = styled(Typography)`
     margin: auto;
     font-size: 1rem;
     font-weight: bold;
-    margin: 0.5rem 0.1rem 0.3rem 0; ;
+    margin: 0.5rem 0.1rem 0.3rem 0;
 `;
 
 const CustomBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
     margin-left: 0.5rem;
-    flex-grow: 1;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const RegisterBtn = styled(Button)`
     width: 100%;
     margin-top: 1rem;
-    background-color: ${({ theme }) => theme.colors.main};
-    color: white;
-    box-shadow: none;
     margin-bottom: 0.5rem;
-    :hover {
-        box-shadow: none;
-    }
 `;
 
 const AskingSpan = styled.span`
@@ -498,10 +469,4 @@ const CustomNavLink = styled(NavLink)`
     &:hover {
         font-weight: bold;
     }
-`;
-
-const PossibleStatusTypography = styled(Typography)`
-    font-size: 0.9rem;
-    font-weight: medium;
-    color: ${(props) => (props.color ? `${props.color}` : 'black')};
 `;

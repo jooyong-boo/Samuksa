@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Button,
     Checkbox,
     Grow,
     List,
@@ -24,6 +23,7 @@ import {
 import { useEffect } from 'react';
 import { useMemo } from 'react';
 import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
 const DetailedSearchConditions = ({ ...props }) => {
     const { totalAmount, setTotalAmount, amount, setAmount } = props;
@@ -244,19 +244,13 @@ const DetailedSearchConditions = ({ ...props }) => {
                         </CustomSelectFarmTypeDiv>
                         <CustomConditionAddDiv>
                             {selectFish && amount && farmStatus.length > 0 ? (
-                                <CustomConditionAddBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disableElevation
-                                    onClick={addCondition}
-                                >
+                                <CustomConditionAddBtn variant="contained" type="submit" onClick={addCondition}>
                                     조건 추가하기
                                 </CustomConditionAddBtn>
                             ) : (
                                 <CustomConditionAddBtn
                                     variant="contained"
                                     type="submit"
-                                    disableElevation
                                     disabled={true}
                                     onClick={addCondition}
                                 >
@@ -285,7 +279,7 @@ const Card = styled.div`
 const CustomTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 
@@ -297,7 +291,7 @@ const Container = styled.div`
 const CustomFishListDiv = styled.div`
     width: 45%;
     height: 100%;
-    border-right: 1px solid #eaeaea;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
     max-height: 410px;
 `;
 
@@ -393,7 +387,7 @@ const CustomSelectFarmTypeDiv = styled.div`
     height: 225px;
     margin: auto;
     margin-top: 28px;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray};
     padding-top: 24px;
 `;
 
@@ -432,9 +426,4 @@ const CustomConditionAddBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;

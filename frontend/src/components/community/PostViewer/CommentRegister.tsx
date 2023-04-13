@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { Button, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { notifyError, notifySuccess } from 'utils/notify';
+import { notifyError } from 'utils/notify';
 import { useCreateComment } from 'api/hooks/post/useCreateComment';
+import { Button, TextField } from 'components/common';
 
 interface UserInfoProps {
     userId: string;
@@ -48,9 +48,7 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleId
         <Container>
             <div>
                 <TextField
-                    sx={{ width: '100%' }}
                     multiline
-                    inputProps={{ maxLength: 300 }}
                     value={newComment}
                     placeholder={loginStatus ? '댓글을 남겨보세요' : ''}
                     disabled={!loginStatus}
@@ -88,7 +86,7 @@ const StyledPlaceholder = styled.span`
 
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
 `;
 
 const RegisterBtnBox = styled.div`
@@ -103,15 +101,9 @@ interface CustomBtnProps {
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 7rem;
     height: 2.5rem;
     margin: ${(props) => `${props.margin}`};
     margin-right: ${(props) => `${props.$marginRight}`};
-    :hover {
-        box-shadow: none;
-    }
 `;

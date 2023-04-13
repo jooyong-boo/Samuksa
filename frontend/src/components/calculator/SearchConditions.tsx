@@ -1,14 +1,4 @@
-import {
-    Button,
-    FormControl,
-    Grid,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -29,6 +19,7 @@ import {
 import { getAreaTotalFishData } from '../../api/recommend';
 import React from 'react';
 import { notifyError } from 'utils/notify';
+import { Button, TextField } from 'components/common';
 
 const ITEM_HEIGHT = 28;
 const ITEM_PADDING_TOP = 8;
@@ -69,7 +60,7 @@ const SearchConditions = () => {
     // 검색조건 선택 여부 체크
     const [select, setSelect] = useRecoilState(selectState);
 
-    const handlePersonNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePersonNumChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
@@ -79,7 +70,7 @@ const SearchConditions = () => {
         }
     };
 
-    const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMoneyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
@@ -145,43 +136,26 @@ const SearchConditions = () => {
                         <CustomGrid container spacing={5}>
                             <CustomGrid item xs={10}>
                                 <TextField
-                                    id="peopleNumber"
                                     label="인원수"
-                                    type="string"
-                                    variant="outlined"
                                     value={personNum}
                                     onChange={handlePersonNumChange}
-                                    // autoFocus={true}
-                                    fullWidth
-                                    autoComplete="off"
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">명</InputAdornment>,
-                                    }}
+                                    endAdornment="명"
                                     disabled={select ? false : true}
                                     onKeyPress={(e) => {
                                         handleEnterPress(e);
                                     }}
-                                    // size="small"
                                 />
                             </CustomGrid>
                             <CustomGrid item xs={10}>
                                 <TextField
-                                    id="budget"
                                     label="예산"
-                                    type="string"
-                                    variant="outlined"
                                     value={money}
                                     onChange={handleMoneyChange}
-                                    fullWidth
-                                    autoComplete="off"
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">원</InputAdornment>,
-                                    }}
+                                    endAdornment="원"
                                     disabled={select ? false : true}
                                     onKeyPress={(e) => {
                                         handleEnterPress(e);
                                     }}
-                                    // size="small"
                                 />
                             </CustomGrid>
                             <CustomGrid item xs={10}>
@@ -214,7 +188,6 @@ const SearchConditions = () => {
                                 <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
-                                    disableElevation
                                     onClick={searchForFishByRegion}
                                 >
                                     조건 선택
@@ -223,7 +196,6 @@ const SearchConditions = () => {
                                 <SearchConditionSelectBtn
                                     variant="contained"
                                     type="submit"
-                                    disableElevation
                                     disabled={true}
                                     onClick={searchForFishByRegion}
                                 >
@@ -259,7 +231,7 @@ const Card = styled.div`
 const SearchConditionTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 
@@ -294,16 +266,10 @@ const SearchConditionSelectBtn = styled(Button)`
     width: 274px;
     height: 38px;
     font-weight: 900;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;
 
 const SearchConditionResetBtn = styled(Button)`
     width: 40%;
-    border-radius: 5px;
     border-color: #d8d8d8;
     color: #949494;
 `;

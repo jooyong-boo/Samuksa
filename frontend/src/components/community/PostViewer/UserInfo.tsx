@@ -1,5 +1,6 @@
 import { Avatar, Typography } from '@mui/material';
-import styled from 'styled-components';
+import { useContext } from 'react';
+import styled, { ThemeContext } from 'styled-components';
 import timeForToday from 'utils/TimeForToday';
 
 interface IProps {
@@ -9,6 +10,7 @@ interface IProps {
 }
 
 const UserInfo = ({ ...props }: IProps) => {
+    const theme = useContext(ThemeContext);
     const { profileImage, nickName, createdAt } = props;
     return (
         <CommentUserInfoDiv>
@@ -17,7 +19,7 @@ const UserInfo = ({ ...props }: IProps) => {
                 <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
                     {nickName}
                 </CommentUserInfoText>
-                <CommentUserInfoText color={'#979797'}>{timeForToday(createdAt)}</CommentUserInfoText>
+                <CommentUserInfoText color={theme.colors.grayThree}>{timeForToday(createdAt)}</CommentUserInfoText>
             </CommentUserInfoBox>
         </CommentUserInfoDiv>
     );

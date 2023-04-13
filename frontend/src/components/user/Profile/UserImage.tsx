@@ -1,4 +1,4 @@
-import { Avatar, Button } from '@mui/material';
+import { Avatar } from '@mui/material';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import imageCompression from 'browser-image-compression';
@@ -7,6 +7,7 @@ import { userImageState, userInfoState } from 'store/user';
 import { getUserInfo } from 'api/auth';
 import handlingDataForm from 'utils/handlingDataForm';
 import { notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface userInfos {
     userId?: string;
@@ -98,6 +99,7 @@ const UserImage = () => {
                 />
             </div>
             <Button
+                variant="text"
                 onClick={() => {
                     fileInput.current?.click();
                 }}
