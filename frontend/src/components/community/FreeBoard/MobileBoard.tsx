@@ -93,14 +93,14 @@ const MobileBoardContainer = styled.div`
 const StyledUl = styled.ul`
     list-style: none;
     padding-left: 0px;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
 const MobileLi = styled.li`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding: 0.5rem 0;
 `;
 

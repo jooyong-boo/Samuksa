@@ -130,7 +130,7 @@ const Container = styled.div`
     margin-left: 2rem;
     padding-left: 2rem;
     border-left: 2px solid #e5e7eb;
-    border-bottom: 1px dashed #eaeaea;
+    border-bottom: 1px dashed ${({ theme }) => theme.colors.gray};
     &:last-child {
         border-bottom: none;
     }

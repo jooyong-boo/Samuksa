@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useParams } from 'react-router-dom';
 import { Button } from 'components/common';
+import { ThemeContext } from 'styled-components';
 
 interface IProps {
     delete: (idx: number | string) => void;
@@ -11,6 +12,7 @@ interface IProps {
 }
 
 const PostMenu = ({ ...props }: IProps) => {
+    const theme = useContext(ThemeContext);
     const { id } = useParams<{ id: string }>();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -30,7 +32,7 @@ const PostMenu = ({ ...props }: IProps) => {
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <MenuIcon sx={{ color: '#0098ee' }} />
+                <MenuIcon sx={{ color: theme.colors.main }} />
             </Button>
             <Menu
                 id="post-menu"

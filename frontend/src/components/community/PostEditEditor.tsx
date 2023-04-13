@@ -153,7 +153,7 @@ const EditorPaper = styled(Paper)`
 const EditorTypography = styled(Typography)`
     color: #575757;
     padding: 0px 0px 13px 0px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-size: 1.4rem;
     font-weight: 600;
 `;

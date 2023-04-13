@@ -168,7 +168,7 @@ const Card = styled.div`
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
-    border: 1px solid #eaeaea;
+    border: 1px solid ${({ theme }) => theme.colors.gray};
     text-align: center;
     overflow: auto;
 `;
@@ -178,7 +178,7 @@ const LoginTitle = styled(Typography)`
     height: 10%;
     font-size: 1.5rem;
     font-weight: bold;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding-bottom: 24px;
     text-align: center;
 `;
@@ -235,7 +235,7 @@ const CustomNavLink = styled(NavLink)`
 const LoginBtnDiv = styled.div`
     width: 100%;
     margin: 1rem auto;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     padding-bottom: 0.5rem;
 `;
 

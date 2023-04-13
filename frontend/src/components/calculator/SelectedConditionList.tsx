@@ -157,7 +157,7 @@ const Card = styled.div`
 const SelectedConditionListTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 

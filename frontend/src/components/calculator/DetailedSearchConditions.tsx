@@ -279,7 +279,7 @@ const Card = styled.div`
 const CustomTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 
@@ -291,7 +291,7 @@ const Container = styled.div`
 const CustomFishListDiv = styled.div`
     width: 45%;
     height: 100%;
-    border-right: 1px solid #eaeaea;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
     max-height: 410px;
 `;
 
@@ -387,7 +387,7 @@ const CustomSelectFarmTypeDiv = styled.div`
     height: 225px;
     margin: auto;
     margin-top: 28px;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray};
     padding-top: 24px;
 `;
 
