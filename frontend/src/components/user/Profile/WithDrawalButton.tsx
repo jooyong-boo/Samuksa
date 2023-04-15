@@ -3,18 +3,10 @@ import Modal from 'components/common/Modal';
 import { notifySuccess } from 'utils/notify';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { userInfoState } from 'store/user';
 import { Button } from 'components/common';
 
-interface userInfos {
-    userId?: string;
-}
-
 const WithDrawalButton = () => {
-    const [userInfo, setUserInfo] = useRecoilState(userInfoState);
     const [open, setOpen] = useState(false);
-    const { userId }: userInfos = userInfo;
     const navigate = useNavigate();
 
     const showModal = () => {

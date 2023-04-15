@@ -63,9 +63,9 @@ const UserInfoInput = ({ label, value, id, placeholder }: UserInfoInputProps) =>
                 $marginBottom={!modify ? '0.5rem' : ''}
             />
             <ModifyButton onClick={handleModifyUserInfo} $marginBottom={!modify ? '0.5rem' : ''}>
-                {modify ? '수정' : '확인'}{' '}
+                {modify ? '수정' : '확인'}
             </ModifyButton>
-            {!modify ? (
+            {!modify && (
                 <ProfileInput
                     id={password}
                     value={password}
@@ -74,7 +74,7 @@ const UserInfoInput = ({ label, value, id, placeholder }: UserInfoInputProps) =>
                     autoComplete="off"
                     placeholder="비밀번호를 입력해주세요"
                 />
-            ) : null}
+            )}
         </>
     );
 };

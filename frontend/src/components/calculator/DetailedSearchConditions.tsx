@@ -140,23 +140,6 @@ const DetailedSearchConditions = ({ ...props }) => {
                 <CustomTypography>상세 검색 조건</CustomTypography>
                 <Container>
                     <CustomFishListDiv>
-                        {/* <FormControl fullWidth>
-                            <Input
-                                id="input-with-icon-adornment"
-                                startAdornment={
-                                    // <InputAdornment position="start">
-                                    <SearchIcon />
-                                    // </InputAdornment>
-                                }
-                                type="string"
-                                defaultValue=""
-                                placeholder="찾는 어종을 입력하세요"
-                                onChange={onSearch}
-                                autoComplete="off"
-                                readOnly={fishList.length > 0 ? false : true}
-                                disableUnderline={fishList.length > 0 ? false : true}
-                            />
-                        </FormControl> */}
                         <CustomFishListPaper>
                             {fish.length > 0 ? (
                                 <CustomList>
@@ -198,7 +181,6 @@ const DetailedSearchConditions = ({ ...props }) => {
                                 <Slider
                                     aria-labelledby="range-slider"
                                     value={amount}
-                                    // getAriaValueText={valuetext}
                                     valueLabelDisplay="auto"
                                     step={1}
                                     marks
@@ -222,25 +204,25 @@ const DetailedSearchConditions = ({ ...props }) => {
                                     어종 선택이 필요합니다.
                                 </CustomSelectFarmTypography>
                             )}
-                            {farm.length > 0 && selectFish.length > 0
-                                ? farm.map((item, i) => (
-                                      <SelectFarmTypeTypography
-                                          key={i}
-                                          onClick={() => {
-                                              changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
-                                          }}
-                                      >
-                                          <FarmTypeCheckBox
-                                              id={item}
-                                              onChange={(e) => {
-                                                  changeHandler(e.currentTarget.checked, `${item}`);
-                                              }}
-                                              checked={farmStatus.includes(`${item}`) ? true : false}
-                                          />
-                                          {item}
-                                      </SelectFarmTypeTypography>
-                                  ))
-                                : null}
+                            {farm.length > 0 &&
+                                selectFish.length > 0 &&
+                                farm.map((item, i) => (
+                                    <SelectFarmTypeTypography
+                                        key={i}
+                                        onClick={() => {
+                                            changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
+                                        }}
+                                    >
+                                        <FarmTypeCheckBox
+                                            id={item}
+                                            onChange={(e) => {
+                                                changeHandler(e.currentTarget.checked, `${item}`);
+                                            }}
+                                            checked={farmStatus.includes(`${item}`) ? true : false}
+                                        />
+                                        {item}
+                                    </SelectFarmTypeTypography>
+                                ))}
                         </CustomSelectFarmTypeDiv>
                         <CustomConditionAddDiv>
                             {selectFish && amount && farmStatus.length > 0 ? (
@@ -272,7 +254,6 @@ const Card = styled.div`
     width: 570px;
     height: 464px;
     border-radius: 5px;
-    /* border: 1px solid black; */
     margin: 1rem;
 `;
 

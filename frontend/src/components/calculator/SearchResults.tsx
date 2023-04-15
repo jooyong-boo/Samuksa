@@ -193,7 +193,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                 <CustomListDiv>
                     {selectResult
                         ? selectResult.map((item: any, i: number) => {
-                              const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
+                              const { totalPrice, fishRecommendBtDtos, active } = item;
                               return (
                                   <Fade in={true} timeout={300} key={i}>
                                       <CustomListItems
@@ -202,23 +202,22 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                                           }}
                                           active={active ? 'true' : ''}
                                       >
-                                          {fishRecommendBtDtos
-                                              ? fishRecommendBtDtos.map(
-                                                    (item: { fishName: string; serving: number }, i: number) => {
-                                                        const { fishName, serving } = item;
-                                                        return (
-                                                            <CustomListItem key={i}>
-                                                                <CustomListItemTypography color={theme.colors.grayTwo}>
-                                                                    {fishName}
-                                                                </CustomListItemTypography>
-                                                                <CustomListItemTypography color={'#979797'}>
-                                                                    ({serving}인분)
-                                                                </CustomListItemTypography>
-                                                            </CustomListItem>
-                                                        );
-                                                    },
-                                                )
-                                              : null}
+                                          {fishRecommendBtDtos &&
+                                              fishRecommendBtDtos.map(
+                                                  (item: { fishName: string; serving: number }, i: number) => {
+                                                      const { fishName, serving } = item;
+                                                      return (
+                                                          <CustomListItem key={i}>
+                                                              <CustomListItemTypography color={theme.colors.grayTwo}>
+                                                                  {fishName}
+                                                              </CustomListItemTypography>
+                                                              <CustomListItemTypography color={'#979797'}>
+                                                                  ({serving}인분)
+                                                              </CustomListItemTypography>
+                                                          </CustomListItem>
+                                                      );
+                                                  },
+                                              )}
                                           <CustomListItemTypography
                                               fontWeight={'bold'}
                                               marginTop={'0.5rem'}
@@ -232,7 +231,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                           })
                         : null}
                 </CustomListDiv>
-                {selectEstimate ? (
+                {selectEstimate && (
                     <Fade in={true} timeout={300}>
                         <SelectedEstimateContainer>
                             <SelectedEstimateTopMenu>
@@ -266,7 +265,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                             <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
                         </SelectedEstimateContainer>
                     </Fade>
-                ) : null}
+                )}
             </ResultDiv>
         </Card>
     );
@@ -276,7 +275,6 @@ export default React.memo(SearchResults);
 
 const Card = styled.div`
     background-color: white;
-    /* width: 93%; */
     width: 1190px;
     height: 550px;
     min-width: 322px;
@@ -332,7 +330,6 @@ const CustomDiv = styled.div`
     }
     @media all and (max-width: 350px) {
         width: 40%;
-        /* flex-wrap: nowrap; */
     }
 `;
 
@@ -416,18 +413,17 @@ const LoadingSpinner = styled.div`
 const CustomListDiv = styled.div`
     width: 11%;
     height: 100%;
+    min-width: 105px;
+    max-height: 497px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 10px;
     flex-wrap: wrap;
+    padding-left: 10px;
+    padding: 0;
     background-color: white;
     border-right: 1px solid ${({ theme }) => theme.colors.gray};
-    min-width: 105px;
-    /* position: relative; */
     overflow: overlay;
-    max-height: 497px;
-    padding: 0;
     overflow-x: hidden;
     &::-webkit-scrollbar {
         width: 5px;
@@ -451,12 +447,11 @@ interface CustomListItemsProps {
 }
 
 const CustomListItems = styled(ListItem)<CustomListItemsProps>`
+    width: 100%;
+    min-width: 105px;
     display: flex;
     flex-direction: column;
     background-color: ${(props) => (props.active ? '#F8F8F8' : 'white')};
-    width: 100%;
-    min-width: 105px;
-    /* padding-left: 0; */
     cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
     :hover {
@@ -496,7 +491,6 @@ const SelectedEstimateContainer = styled.div`
     width: 68%;
     height: auto;
     max-height: 494px;
-    /* margin: auto; */
     overflow: overlay;
     padding: 0 20px;
     &::-webkit-scrollbar {

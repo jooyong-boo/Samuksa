@@ -9,7 +9,7 @@ import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
 import RecommendBtn from '../../common/RecommendBtn';
 import Reply from './Reply';
-import UserInfo from './UserInfo';
+import UserInfo from '../../common/UserInfo';
 
 interface CommentProps {
     idx: number;
