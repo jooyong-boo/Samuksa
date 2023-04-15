@@ -16,7 +16,7 @@ const UserInfo = ({ ...props }: IProps) => {
         <CommentUserInfoDiv>
             <CommentAvatar src={profileImage} />
             <CommentUserInfoBox>
-                <CommentUserInfoText color={'#4B5563'} fontWeight={'500'}>
+                <CommentUserInfoText color={'#4B5563'} fontWeight={'600'}>
                     {nickName}
                 </CommentUserInfoText>
                 <CommentUserInfoText color={theme.colors.grayThree}>{timeForToday(createdAt)}</CommentUserInfoText>
