@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import image from '../assets/img/mainImage.webp';
-import { Box, FormControl, InputAdornment, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { getAreaTotalFishData } from '../api/recommend';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
