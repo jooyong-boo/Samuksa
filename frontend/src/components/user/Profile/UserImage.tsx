@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/material';
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
 import imageCompression from 'browser-image-compression';
 import { useRecoilState } from 'recoil';

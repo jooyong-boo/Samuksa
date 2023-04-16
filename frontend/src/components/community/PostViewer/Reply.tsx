@@ -5,7 +5,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import CommentMenu from './CommentMenu';
 import EditAndReplyButton from './EditAndReplyButton';
-import UserInfo from './UserInfo';
+import UserInfo from '../../common/UserInfo';
 
 interface ReplyProps {
     idx: number;

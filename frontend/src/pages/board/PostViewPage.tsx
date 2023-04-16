@@ -23,6 +23,7 @@ import useGetPostContent from 'api/hooks/post/useGetPostContent';
 import { postEditState } from 'store/post';
 import { useRecommendPost } from 'api/hooks/post/useRecommendPost';
 import { Button } from 'components/common';
+import UserInfo from 'components/common/UserInfo';
 
 const PostViewPage = () => {
     const theme = useContext(ThemeContext);
@@ -111,22 +112,11 @@ const PostViewPage = () => {
                         <PostMenu delete={handleDeletePost} edit={handleEditPost} />
                     </PostTopBox>
                     <PostInfoContainer>
-                        <PostUserBox>
-                            <UserAvatar src={content?.data?.profileImage} />
-                            <UserInfoBox>
-                                <UserInfoTypography fontSize={'1rem'} fontWeight={'700'}>
-                                    {content?.data?.nickName}
-                                </UserInfoTypography>
-                                <UserInfoTypography fontSize={'0.875rem'} color={theme.colors.grayThree}>
-                                    {content?.data && timeForToday(content.data.createdAt)}
-                                </UserInfoTypography>
-                                {content?.data.modifiedAt ? (
-                                    <UserInfoTypography fontSize={'0.875rem'} color={theme.colors.grayThree}>
-                                        {timeForToday(content.data.modifiedAt)}에 수정됨
-                                    </UserInfoTypography>
-                                ) : null}
-                            </UserInfoBox>
-                        </PostUserBox>
+                        <UserInfo
+                            profileImage={content?.data?.profileImage}
+                            nickName={content?.data?.nickName}
+                            createdAt={content?.data.modifiedAt ? content.data.modifiedAt : content.data.createdAt}
+                        />
                         {content.data && (
                             <PostInfoBox>
                                 <FlexBox>
@@ -278,35 +268,6 @@ const PostInfoContainer = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
-const PostUserBox = styled.div`
-    display: inline-flex;
-    align-items: center;
-`;
-
-const UserAvatar = styled(Avatar)`
-    color: #a2a5a9;
-    vertical-align: middle;
-    width: 3rem;
-    height: 3rem;
-`;
-
-const UserInfoBox = styled.div`
-    display: inline-flex;
-    flex-direction: column;
-    margin-left: 0.5rem;
-`;
-
-interface UserInfoTypographyProps {
-    fontSize: string;
-    fontWeight?: string;
-    color?: string;
-}
-
-const UserInfoTypography = styled(Typography)<UserInfoTypographyProps>`
-    font-size: ${(props) => `${props.fontSize}`};
-    font-weight: ${(props) => `${props.fontWeight}`};
-    color: ${(props) => `${props.color}`};
-`;
 const PostInfoBox = styled.div`
     display: flex;
     justify-content: center;

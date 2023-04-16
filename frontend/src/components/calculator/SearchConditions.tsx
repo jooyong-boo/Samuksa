@@ -1,4 +1,4 @@
-import { FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
@@ -128,94 +128,88 @@ const SearchConditions = () => {
     };
 
     return (
-        <>
-            <Card>
-                <SearchConditionTypography>검색 조건</SearchConditionTypography>
-                <SearchConditionContainer>
-                    <SearchConditionForm onSubmit={onSubmit}>
-                        <CustomGrid container spacing={5}>
-                            <CustomGrid item xs={10}>
-                                <TextField
-                                    label="인원수"
-                                    value={personNum}
-                                    onChange={handlePersonNumChange}
-                                    endAdornment="명"
-                                    disabled={select ? false : true}
-                                    onKeyPress={(e) => {
-                                        handleEnterPress(e);
-                                    }}
-                                />
-                            </CustomGrid>
-                            <CustomGrid item xs={10}>
-                                <TextField
-                                    label="예산"
-                                    value={money}
-                                    onChange={handleMoneyChange}
-                                    endAdornment="원"
-                                    disabled={select ? false : true}
-                                    onKeyPress={(e) => {
-                                        handleEnterPress(e);
-                                    }}
-                                />
-                            </CustomGrid>
-                            <CustomGrid item xs={10}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="local">지역</InputLabel>
-                                    <Select
-                                        labelId="local"
-                                        label="지역"
-                                        // defaultValue={getArea && getArea[0]}
-                                        value={getArea ? area : ''}
-                                        onChange={(e) => {
-                                            setArea(e.target.value);
-                                        }}
-                                        MenuProps={MenuProps}
-                                        fullWidth
-                                        disabled={select ? false : true}
-                                    >
-                                        {getArea &&
-                                            getArea.map((area: string, i: number) => (
-                                                <MenuItem key={i} value={area}>
-                                                    {area}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </CustomGrid>
-                        </CustomGrid>
-                        <SearchConditionBtnArea>
-                            {select ? (
-                                <SearchConditionSelectBtn
-                                    variant="contained"
-                                    type="submit"
-                                    onClick={searchForFishByRegion}
-                                >
-                                    조건 선택
-                                </SearchConditionSelectBtn>
-                            ) : (
-                                <SearchConditionSelectBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disabled={true}
-                                    onClick={searchForFishByRegion}
-                                >
-                                    선택 완료
-                                </SearchConditionSelectBtn>
-                            )}
-                            <SearchConditionResetBtn
-                                variant="outlined"
-                                onClick={() => {
-                                    onReset();
-                                    moveTop();
+        <Card>
+            <SearchConditionTypography>검색 조건</SearchConditionTypography>
+            <SearchConditionContainer>
+                <SearchConditionForm onSubmit={onSubmit}>
+                    <CustomGrid container spacing={5}>
+                        <CustomGrid item xs={10}>
+                            <TextField
+                                label="인원수"
+                                value={personNum}
+                                onChange={handlePersonNumChange}
+                                endAdornment="명"
+                                disabled={select ? false : true}
+                                onKeyPress={(e) => {
+                                    handleEnterPress(e);
                                 }}
+                            />
+                        </CustomGrid>
+                        <CustomGrid item xs={10}>
+                            <TextField
+                                label="예산"
+                                value={money}
+                                onChange={handleMoneyChange}
+                                endAdornment="원"
+                                disabled={select ? false : true}
+                                onKeyPress={(e) => {
+                                    handleEnterPress(e);
+                                }}
+                            />
+                        </CustomGrid>
+                        <CustomGrid item xs={10}>
+                            <FormControl fullWidth>
+                                <InputLabel id="local">지역</InputLabel>
+                                <Select
+                                    labelId="local"
+                                    label="지역"
+                                    // defaultValue={getArea && getArea[0]}
+                                    value={getArea ? area : ''}
+                                    onChange={(e) => {
+                                        setArea(e.target.value);
+                                    }}
+                                    MenuProps={MenuProps}
+                                    fullWidth
+                                    disabled={select ? false : true}
+                                >
+                                    {getArea &&
+                                        getArea.map((area: string, i: number) => (
+                                            <MenuItem key={i} value={area}>
+                                                {area}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </FormControl>
+                        </CustomGrid>
+                    </CustomGrid>
+                    <SearchConditionBtnArea>
+                        {select ? (
+                            <SearchConditionSelectBtn variant="contained" type="submit" onClick={searchForFishByRegion}>
+                                조건 선택
+                            </SearchConditionSelectBtn>
+                        ) : (
+                            <SearchConditionSelectBtn
+                                variant="contained"
+                                type="submit"
+                                disabled={true}
+                                onClick={searchForFishByRegion}
                             >
-                                조건 초기화
-                            </SearchConditionResetBtn>
-                        </SearchConditionBtnArea>
-                    </SearchConditionForm>
-                </SearchConditionContainer>
-            </Card>
-        </>
+                                선택 완료
+                            </SearchConditionSelectBtn>
+                        )}
+                        <SearchConditionResetBtn
+                            variant="outlined"
+                            onClick={() => {
+                                onReset();
+                                moveTop();
+                            }}
+                        >
+                            조건 초기화
+                        </SearchConditionResetBtn>
+                    </SearchConditionBtnArea>
+                </SearchConditionForm>
+            </SearchConditionContainer>
+        </Card>
     );
 };
 
