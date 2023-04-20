@@ -2,7 +2,7 @@ import { Avatar, CardActions, CardContent, Slide, Typography } from '@mui/materi
 import React, { MutableRefObject } from 'react';
 import styled from 'styled-components';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
 import { notifyError } from 'utils/notify';
 import { Button } from 'components/common';
@@ -17,7 +17,7 @@ interface amount {
 
 const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount, setLoading, contactRef }: amount) => {
     const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
-    const [recommendList, setRecommendList] = useRecoilState(recommendListState);
+    const setRecommendList = useSetRecoilState(recommendListState);
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
