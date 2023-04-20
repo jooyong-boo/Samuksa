@@ -34,147 +34,135 @@ interface estimate {
 
 export default function SearchResultTable({ selectEstimate, totalPrice }: estimate) {
     return (
-        <>
-            <ResultTableWrapper>
-                <ThemeProvider theme={theme}>
-                    <CustomTableContainer>
-                        <Table aria-label="조합 상세리스트">
-                            <TableHead>
-                                <TableRow>
-                                    {tableTop.map((item) => (
-                                        <TableCell key={item} sx={tableTextStyle}>
-                                            {item}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {selectEstimate
-                                    ? selectEstimate.map((item: any, i: number) => {
-                                          const {
-                                              fishName,
-                                              weightPerServing,
-                                              totalMoney,
-                                              serving,
-                                              fishRecommendAlgoWeights,
-                                          } = item;
-                                          const [{ areaFrom, farmType, price }] = [...fishRecommendAlgoWeights];
-                                          return (
-                                              <TableRow
-                                                  key={i}
-                                                  sx={{
-                                                      '&:last-child td, &:last-child th': { border: 0 },
-                                                  }}
-                                              >
-                                                  <TableCell sx={tableTextStyle}>
-                                                      <CustomAvatar alt={fishName} src={image} />
-                                                  </TableCell>
-                                                  <TableCell component="th" scope="row" sx={tableTextStyle}>
-                                                      {fishName}
-                                                  </TableCell>
-                                                  <TableCell sx={tableTextStyle}>
-                                                      {areaFrom} ({farmType})
-                                                  </TableCell>
-                                                  <TableCell sx={tableTextStyle}>
-                                                      {(weightPerServing * serving) / 1000}
-                                                      kg
-                                                  </TableCell>
-                                                  <TableCell sx={tableTextStyle}>{serving}</TableCell>
-                                                  <TableCell sx={tableTextStyle}>
-                                                      {(price * 1000).toLocaleString('ko-KR')}원
-                                                  </TableCell>
-                                                  <TableCell sx={tableTextStyle}>
-                                                      {totalMoney.toLocaleString('ko-KR')}원
-                                                  </TableCell>
-                                              </TableRow>
-                                          );
-                                      })
-                                    : null}
-                            </TableBody>
-                        </Table>
-                    </CustomTableContainer>
-                </ThemeProvider>
-                <MobileGridBox>
-                    {selectEstimate &&
-                        selectEstimate.map((item: any, i: number) => {
-                            const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
-                            const [{ areaFrom, farmType, price }] = [...fishRecommendAlgoWeights];
-                            return (
-                                <MobileFishInfoBox key={i}>
-                                    <CustomMobileAvatar alt={fishName} src={image} />
-                                    <Typography>
-                                        {fishName}({farmType})
-                                    </Typography>
-                                    <Typography>{areaFrom}</Typography>
-                                    <Typography>{(weightPerServing * serving) / 1000}kg</Typography>
-                                    <Typography>총 {serving}마리</Typography>
-                                    <Typography>마리당 {(price * 1000).toLocaleString('ko-KR')}원</Typography>
-                                    <Typography>Total: {totalMoney.toLocaleString('ko-KR')}원</Typography>
-                                </MobileFishInfoBox>
-                            );
-                        })}
-                </MobileGridBox>
-                <CombinationInfoContainer>
-                    <CombinationFishDetailInfo>
-                        {selectEstimate
-                            ? selectEstimate.map((item: any, i: number) => {
-                                  const { fishName, serving, weightPerServing } = item;
-                                  return (
-                                      <CombinationDetailDiv key={i}>
-                                          <CombinationDetailTypography
-                                              fontSize={'0.8rem'}
-                                              color={'#707070'}
-                                              marginRight={'0.6rem'}
-                                              minWidth={'2rem'}
-                                              fontWeight={'600'}
+        <ResultTableWrapper>
+            <ThemeProvider theme={theme}>
+                <CustomTableContainer>
+                    <Table aria-label="조합 상세리스트">
+                        <TableHead>
+                            <TableRow>
+                                {tableTop.map((item) => (
+                                    <TableCell key={item} sx={tableTextStyle}>
+                                        {item}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {selectEstimate
+                                ? selectEstimate.map((item: any, i: number) => {
+                                      const {
+                                          fishName,
+                                          weightPerServing,
+                                          totalMoney,
+                                          serving,
+                                          fishRecommendAlgoWeights,
+                                      } = item;
+                                      const [{ areaFrom, farmType, price }] = [...fishRecommendAlgoWeights];
+                                      return (
+                                          <TableRow
+                                              key={i}
+                                              sx={{
+                                                  '&:last-child td, &:last-child th': { border: 0 },
+                                              }}
                                           >
-                                              {fishName}
-                                          </CombinationDetailTypography>
-                                          <CombinationDetailTypography
-                                              fontSize={'0.8rem'}
-                                              color={'#707070'}
-                                              marginRight={'0.5rem'}
-                                          >
-                                              {serving}마리
-                                          </CombinationDetailTypography>
-                                          <CombinationDetailTypography
-                                              fontSize={'0.9rem'}
-                                              fontWeight={'600'}
-                                              color={'#707070'}
-                                          >
-                                              {(((weightPerServing * serving) / 1000) * 0.5 * serving).toFixed(1)}
-                                              kg
-                                          </CombinationDetailTypography>
-                                      </CombinationDetailDiv>
-                                  );
-                              })
-                            : null}
-                    </CombinationFishDetailInfo>
-                    <DetailWeightPriceDiv>
-                        <CombinationDetailTypography fontSize={'1rem'} fontWeight={'medium'} marginRight={'0.5rem'}>
-                            총 금액:{' '}
-                        </CombinationDetailTypography>
-                        <CombinationDetailTypography fontSize={'1.1rem'} fontWeight={'bold'}>
-                            {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
-                        </CombinationDetailTypography>
-                        원
-                    </DetailWeightPriceDiv>
-                </CombinationInfoContainer>
-            </ResultTableWrapper>
-        </>
+                                              <TableCell sx={tableTextStyle}>
+                                                  <CustomAvatar alt={fishName} src={image} />
+                                              </TableCell>
+                                              <TableCell component="th" scope="row" sx={tableTextStyle}>
+                                                  {fishName}
+                                              </TableCell>
+                                              <TableCell sx={tableTextStyle}>
+                                                  {areaFrom} ({farmType})
+                                              </TableCell>
+                                              <TableCell sx={tableTextStyle}>
+                                                  {(weightPerServing * serving) / 1000}
+                                                  kg
+                                              </TableCell>
+                                              <TableCell sx={tableTextStyle}>{serving}</TableCell>
+                                              <TableCell sx={tableTextStyle}>
+                                                  {(price * 1000).toLocaleString('ko-KR')}원
+                                              </TableCell>
+                                              <TableCell sx={tableTextStyle}>
+                                                  {totalMoney.toLocaleString('ko-KR')}원
+                                              </TableCell>
+                                          </TableRow>
+                                      );
+                                  })
+                                : null}
+                        </TableBody>
+                    </Table>
+                </CustomTableContainer>
+            </ThemeProvider>
+            <MobileGridBox>
+                {selectEstimate &&
+                    selectEstimate.map((item: any, i: number) => {
+                        const { fishName, weightPerServing, totalMoney, serving, fishRecommendAlgoWeights } = item;
+                        const [{ areaFrom, farmType, price }] = [...fishRecommendAlgoWeights];
+                        return (
+                            <MobileFishInfoBox key={i}>
+                                <CustomMobileAvatar alt={fishName} src={image} />
+                                <Typography>
+                                    {fishName}({farmType})
+                                </Typography>
+                                <Typography>{areaFrom}</Typography>
+                                <Typography>{(weightPerServing * serving) / 1000}kg</Typography>
+                                <Typography>총 {serving}마리</Typography>
+                                <Typography>마리당 {(price * 1000).toLocaleString('ko-KR')}원</Typography>
+                                <Typography>Total: {totalMoney.toLocaleString('ko-KR')}원</Typography>
+                            </MobileFishInfoBox>
+                        );
+                    })}
+            </MobileGridBox>
+            <CombinationInfoContainer>
+                <CombinationFishDetailInfo>
+                    {selectEstimate
+                        ? selectEstimate.map((item: any) => {
+                              const { fishName, serving, weightPerServing } = item;
+                              return (
+                                  <CombinationDetailDiv key={fishName}>
+                                      <CombinationDetailTypography
+                                          fontSize={'0.8rem'}
+                                          color={'#707070'}
+                                          marginRight={'0.6rem'}
+                                          minWidth={'2rem'}
+                                          fontWeight={'600'}
+                                      >
+                                          {fishName}
+                                      </CombinationDetailTypography>
+                                      <CombinationDetailTypography
+                                          fontSize={'0.8rem'}
+                                          color={'#707070'}
+                                          marginRight={'0.5rem'}
+                                      >
+                                          {serving}마리
+                                      </CombinationDetailTypography>
+                                      <CombinationDetailTypography
+                                          fontSize={'0.9rem'}
+                                          fontWeight={'600'}
+                                          color={'#707070'}
+                                      >
+                                          {(((weightPerServing * serving) / 1000) * 0.5 * serving).toFixed(1)}
+                                          kg
+                                      </CombinationDetailTypography>
+                                  </CombinationDetailDiv>
+                              );
+                          })
+                        : null}
+                </CombinationFishDetailInfo>
+                <DetailWeightPriceDiv>
+                    <CombinationDetailTypography fontSize={'1rem'} fontWeight={'medium'} marginRight={'0.5rem'}>
+                        총 금액:{' '}
+                    </CombinationDetailTypography>
+                    <CombinationDetailTypography fontSize={'1.1rem'} fontWeight={'bold'}>
+                        {totalPrice ? totalPrice.toLocaleString('ko-KR') : null}
+                    </CombinationDetailTypography>
+                    원
+                </DetailWeightPriceDiv>
+            </CombinationInfoContainer>
+        </ResultTableWrapper>
     );
 }
-const ResultTableWrapper = styled.div`
-    /* @media all and (min-width: 951px) {
-        width: 100%;
-    }
-    @media all and (min-width: 731px) and (max-width: 950px) {
-        display: none;
-    }
-    @media all and (max-width: 615px) {
-        display: none;
-    } */
-`;
+const ResultTableWrapper = styled.div``;
 
 const CustomTableContainer = styled(TableContainer)`
     border-top: 2px solid #a7a7a7;
