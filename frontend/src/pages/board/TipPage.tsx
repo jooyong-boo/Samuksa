@@ -13,8 +13,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
 import useGetPost from 'api/hooks/post/useGetPost';
-import TableBoard from 'components/community/FreeBoard/TableBoard';
-import MobileBoard from 'components/community/FreeBoard/MobileBoard';
+import { TableBoard, MobileBoard } from 'components/community/FreeBoard';
 import { Button } from 'components/common';
 
 const SortPages = [
