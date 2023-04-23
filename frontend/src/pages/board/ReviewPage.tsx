@@ -7,11 +7,7 @@ import { getPostState, reviewPostPageState } from '../../store/atom';
 import Pagination from 'components/community/Pagination';
 import SearchIcon from '@mui/icons-material/Search';
 import ListIcon from '@mui/icons-material/List';
-import MobileBoard from 'components/community/FreeBoard/MobileBoard';
-import SearchMenu from 'components/community/FreeBoard/SearchMenu';
-import SortMenu from 'components/community/FreeBoard/SortMenu';
-import TableBoard from 'components/community/FreeBoard/TableBoard';
-import WriteBtn from 'components/community/FreeBoard/WriteBtn';
+import { MobileBoard, SearchMenu, SortMenu, TableBoard, WriteBtn } from 'components/community/FreeBoard';
 import { useOutletContext } from 'react-router-dom';
 import useGetPost from 'api/hooks/post/useGetPost';
 import Loading from 'components/common/Loading';
@@ -30,7 +26,6 @@ const ReviewPage = () => {
     const [usePosts, setUsePosts] = useState<any[]>(postsRecoil);
     const [open, setOpen] = useState(false);
     const [curSort, setCurSort] = useState('최신순');
-    // const [tab, setTab] = useState(0);
 
     const { selectTab } = useOutletContext<OutletProps>();
     const [data, isLoading] = useGetPost(postPage - 1, limit, selectTab);
@@ -50,11 +45,10 @@ const ReviewPage = () => {
         <Background>
             <BoardContainer>
                 <BoardTopWrapper>
-                    {/* <BoardTitleText>리뷰게시판</BoardTitleText> */}
                     <WriteBtn />
                     <div>
                         <SearchBtn variant="outlined" onClick={openSearch}>
-                            <StyleSearchIcon />
+                            <SearchIcon />
                         </SearchBtn>
                         <SortBtn
                             variant="outlined"
@@ -63,7 +57,7 @@ const ReviewPage = () => {
                             aria-expanded={Menuopen ? 'true' : undefined}
                             onClick={handleOpenNavMenu}
                         >
-                            <StyleListIcon />
+                            <ListIcon />
                             <SortTypography>{curSort}</SortTypography>
                         </SortBtn>
                         <SortMenu
@@ -107,7 +101,6 @@ const Background = styled.div`
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
     overflow: auto;
     margin: auto;
     padding: 10px;
@@ -146,6 +139,7 @@ const BoardTopWrapper = styled.div`
 const SearchBtn = styled(Button)`
     margin-right: 0.3rem;
     border-color: #a7a7a7;
+    color: #a7a7a7;
     font-weight: 700;
     width: 6rem;
     height: 2.5rem;
@@ -154,16 +148,6 @@ const SearchBtn = styled(Button)`
 
 const SortBtn = styled(SearchBtn)`
     margin-right: 0;
-    width: auto;
-`;
-
-const StyleSearchIcon = styled(SearchIcon)`
-    color: #a7a7a7;
-`;
-
-const StyleListIcon = styled(ListIcon)`
-    color: #a7a7a7;
-    font-size: 1.6rem;
 `;
 
 const SortTypography = styled(Typography)`

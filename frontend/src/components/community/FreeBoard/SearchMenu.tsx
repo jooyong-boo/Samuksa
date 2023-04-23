@@ -18,36 +18,25 @@ const SearchMenu = ({ posts, setUsePosts }: SearchMenuProps) => {
 
     const handleSearch = (e: React.KeyboardEvent | React.MouseEvent): void => {
         if (e.type === 'click' || (e as React.KeyboardEvent).key === 'Enter') {
+            let result = [];
             if (searchOption === '제목') {
-                let result = posts.filter((post: any) => post.title.includes(searchPosts));
-                if (result.length === 0) {
-                    return notifyError('일치하는 글이 없습니다.');
-                }
-                let writedResult = result.map((post) => {
-                    let readPost: any = localStorage.getItem('reviewReadPost');
-                    if (readPost?.includes(post.id)) {
-                        return { ...post, read: true };
-                    } else {
-                        return post;
-                    }
-                });
-                setUsePosts(writedResult);
+                result = posts.filter((post: any) => post.title.includes(searchPosts));
             }
             if (searchOption === '글쓴이') {
-                let result = posts.filter((post: any) => post.nickName.includes(searchPosts));
-                if (result.length === 0) {
-                    return notifyError('일치하는 글이 없습니다.');
-                }
-                let writedResult = result.map((post) => {
-                    let readPost: any = localStorage.getItem('reviewReadPost');
-                    if (readPost?.includes(post.id)) {
-                        return { ...post, read: true };
-                    } else {
-                        return post;
-                    }
-                });
-                setUsePosts(writedResult);
+                result = posts.filter((post: any) => post.nickName.includes(searchPosts));
             }
+            if (result.length === 0) {
+                return notifyError('일치하는 글이 없습니다.');
+            }
+            let writedResult = result.map((post) => {
+                let readPost: any = localStorage.getItem('reviewReadPost');
+                if (readPost?.includes(post.id)) {
+                    return { ...post, read: true };
+                } else {
+                    return post;
+                }
+            });
+            setUsePosts(writedResult);
         }
     };
 

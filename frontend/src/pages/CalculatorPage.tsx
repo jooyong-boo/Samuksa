@@ -1,8 +1,10 @@
 import BackgroundWave from 'components/BackgroundWave';
-import DetailedSearchConditions from 'components/calculator/DetailedSearchConditions';
-import SearchConditions from 'components/calculator/SearchConditions';
-import SearchResults from 'components/calculator/SearchResults';
-import SelectedConditionList from 'components/calculator/SelectedConditionList';
+import {
+    SearchConditions,
+    DetailedSearchConditions,
+    SearchResults,
+    SelectedConditionList,
+} from 'components/calculator';
 import { MutableRefObject, useRef, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { amountState } from 'store/atom';

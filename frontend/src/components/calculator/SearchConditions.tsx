@@ -1,7 +1,7 @@
-import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { FormControl, Grid, InputLabel, SelectChangeEvent, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
     amountState,
     areaState,
@@ -19,18 +19,7 @@ import {
 import { getAreaTotalFishData } from '../../api/recommend';
 import React from 'react';
 import { notifyError } from 'utils/notify';
-import { Button, TextField } from 'components/common';
-
-const ITEM_HEIGHT = 28;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 100,
-        },
-    },
-};
+import { Button, Select, TextField } from 'components/common';
 
 interface FishInfo {
     farmTypes: string;
@@ -46,7 +35,7 @@ const SearchConditions = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
-    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
+    const setFishList = useSetRecoilState(fishDetailRecommendInfo);
 
     // 리셋
     const resetFishDetailRecommendInfo = useResetRecoilState(fishDetailRecommendInfo);
@@ -58,7 +47,7 @@ const SearchConditions = () => {
     const resetAmount = useResetRecoilState(amountState);
 
     // 검색조건 선택 여부 체크
-    const [select, setSelect] = useRecoilState(selectState);
+    const [isSelected, setIsSelected] = useRecoilState(selectState);
 
     const handlePersonNumChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
@@ -80,16 +69,17 @@ const SearchConditions = () => {
         }
     };
 
+    const handleAreaChange = (e: SelectChangeEvent<unknown>) => {
+        setArea(e.target.value as string);
+    };
+
     const searchForFishByRegion = () => {
         if (Number(money) < 50000) {
-            // alert('가격은 50000이상으로 해주세요');
             notifyError('가격을 50000이상으로 해주세요');
             setMoney(String(50000));
             return;
         } else if (Number(personNum) <= 0) {
-            // alert('인원은 1 이상으로 해주세요');
             notifyError('인원을 입력해주세요');
-            // setPersonNum(1);
             return;
         }
     };
@@ -105,14 +95,15 @@ const SearchConditions = () => {
         resetAmount();
         resetFarm();
         resetRecommendList();
-        setSelect(true);
+        setIsSelected(true);
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (Number(money) < 50000 || Number(personNum) <= 0) return;
         getAreaTotalFishData({ area }).then((res) =>
             res
-                ? (setFishList(res.map((item: FishInfo) => ({ ...item, active: false }))), setSelect(false))
+                ? (setFishList(res.map((item: FishInfo) => ({ ...item, active: false }))), setIsSelected(false))
                 : notifyError('해당 가격으론 찾을 수 있는 조합이 없어요!'),
         );
     };
@@ -138,8 +129,8 @@ const SearchConditions = () => {
                                 label="인원수"
                                 value={personNum}
                                 onChange={handlePersonNumChange}
-                                endAdornment="명"
-                                disabled={select ? false : true}
+                                endadornment="명"
+                                disabled={!isSelected}
                                 onKeyPress={(e) => {
                                     handleEnterPress(e);
                                 }}
@@ -150,8 +141,8 @@ const SearchConditions = () => {
                                 label="예산"
                                 value={money}
                                 onChange={handleMoneyChange}
-                                endAdornment="원"
-                                disabled={select ? false : true}
+                                endadornment="원"
+                                disabled={!isSelected}
                                 onKeyPress={(e) => {
                                     handleEnterPress(e);
                                 }}
@@ -161,42 +152,24 @@ const SearchConditions = () => {
                             <FormControl fullWidth>
                                 <InputLabel id="local">지역</InputLabel>
                                 <Select
-                                    labelId="local"
                                     label="지역"
-                                    // defaultValue={getArea && getArea[0]}
-                                    value={getArea ? area : ''}
-                                    onChange={(e) => {
-                                        setArea(e.target.value);
-                                    }}
-                                    MenuProps={MenuProps}
-                                    fullWidth
-                                    disabled={select ? false : true}
-                                >
-                                    {getArea &&
-                                        getArea.map((area: string, i: number) => (
-                                            <MenuItem key={i} value={area}>
-                                                {area}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
+                                    datas={getArea}
+                                    data={area}
+                                    onChange={handleAreaChange}
+                                    disabled={!isSelected}
+                                />
                             </FormControl>
                         </CustomGrid>
                     </CustomGrid>
                     <SearchConditionBtnArea>
-                        {select ? (
-                            <SearchConditionSelectBtn variant="contained" type="submit" onClick={searchForFishByRegion}>
-                                조건 선택
-                            </SearchConditionSelectBtn>
-                        ) : (
-                            <SearchConditionSelectBtn
-                                variant="contained"
-                                type="submit"
-                                disabled={true}
-                                onClick={searchForFishByRegion}
-                            >
-                                선택 완료
-                            </SearchConditionSelectBtn>
-                        )}
+                        <SearchConditionSelectBtn
+                            variant="contained"
+                            type="submit"
+                            disabled={!isSelected}
+                            onClick={searchForFishByRegion}
+                        >
+                            {isSelected ? '조건 선택' : '선택 완료'}
+                        </SearchConditionSelectBtn>
                         <SearchConditionResetBtn
                             variant="outlined"
                             onClick={() => {

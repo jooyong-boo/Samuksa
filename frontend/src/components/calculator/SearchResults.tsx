@@ -128,108 +128,106 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
             </Container>
             <ResultDiv>
                 <CustomDiv>
-                    {result.length > 0 && loading === false ? (
-                        result.map((item, i) => {
-                            const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
-                            let fontLength = combinationName.length;
-                            return (
-                                <Fade in={true} timeout={200} key={i}>
-                                    <CustomCardContent
-                                        onClick={() => {
-                                            onRecommendClick(fishRecommendCombinations, combinationName, active);
-                                        }}
-                                        active={active ? 'true' : ''}
-                                    >
-                                        <CustomGrid container spacing={0.5} rowSpacing={0.2}>
-                                            {combinationName.length > 1 ? (
-                                                combinationName.map((item: string, i: number) => {
-                                                    if (i > 3) return null;
-
-                                                    return (
-                                                        <Grid item xs={6} key={item}>
-                                                            <CustomAvatar
-                                                                alt={item}
-                                                                src={image}
-                                                                variant="rounded"
-                                                                width={'2.14rem'}
-                                                                height={'2.14rem'}
-                                                            />
-                                                        </Grid>
-                                                    );
-                                                })
-                                            ) : (
-                                                <CustomAvatar
-                                                    alt={combinationName.join(' + ')}
-                                                    src={image}
-                                                    variant="rounded"
-                                                    width={'50px'}
-                                                    height={'50px'}
-                                                    margin={'0'}
-                                                />
-                                            )}
-                                        </CustomGrid>
-                                        <SearchedCombinationsDiv>
-                                            <SearchedCombinationsTypography
-                                                color={'#4A4A4A'}
-                                                fontWeight={'600'}
-                                                fontSize={fontLength}
-                                            >
-                                                {combinationName.join(' + ')}
-                                            </SearchedCombinationsTypography>
-                                            <SearchedCombinationsTypography color={'#A5A5A5'}>
-                                                ({combinationSize})
-                                            </SearchedCombinationsTypography>
-                                        </SearchedCombinationsDiv>
-                                    </CustomCardContent>
-                                </Fade>
-                            );
-                        })
-                    ) : loading === true ? (
-                        <LoadingSpinner>
-                            <img src={Spinner} alt="로딩중" width="30%" />
-                        </LoadingSpinner>
-                    ) : null}
-                </CustomDiv>
-                <CustomListDiv>
-                    {selectResult
-                        ? selectResult.map((item: any, i: number) => {
-                              const { totalPrice, fishRecommendBtDtos, active } = item;
+                    {result.length > 0 && loading === false
+                        ? result.map((item, i) => {
+                              const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
+                              let fontLength = combinationName.length;
                               return (
-                                  <Fade in={true} timeout={300} key={i}>
-                                      <CustomListItems
+                                  <Fade in={true} timeout={200} key={i}>
+                                      <CustomCardContent
                                           onClick={() => {
-                                              onEstimateClick(fishRecommendBtDtos, totalPrice, i, active);
+                                              onRecommendClick(fishRecommendCombinations, combinationName, active);
                                           }}
                                           active={active ? 'true' : ''}
                                       >
-                                          {fishRecommendBtDtos &&
-                                              fishRecommendBtDtos.map(
-                                                  (item: { fishName: string; serving: number }, i: number) => {
-                                                      const { fishName, serving } = item;
+                                          <CustomGrid container spacing={0.5} rowSpacing={0.2}>
+                                              {combinationName.length > 1 ? (
+                                                  combinationName.map((item: string, i: number) => {
+                                                      if (i > 3) return null;
+
                                                       return (
-                                                          <CustomListItem key={i}>
-                                                              <CustomListItemTypography color={theme.colors.grayTwo}>
-                                                                  {fishName}
-                                                              </CustomListItemTypography>
-                                                              <CustomListItemTypography color={'#979797'}>
-                                                                  ({serving}인분)
-                                                              </CustomListItemTypography>
-                                                          </CustomListItem>
+                                                          <Grid item xs={6} key={item}>
+                                                              <CustomAvatar
+                                                                  alt={item}
+                                                                  src={image}
+                                                                  variant="rounded"
+                                                                  width={'2.14rem'}
+                                                                  height={'2.14rem'}
+                                                              />
+                                                          </Grid>
                                                       );
-                                                  },
+                                                  })
+                                              ) : (
+                                                  <CustomAvatar
+                                                      alt={combinationName.join(' + ')}
+                                                      src={image}
+                                                      variant="rounded"
+                                                      width={'50px'}
+                                                      height={'50px'}
+                                                      margin={'0'}
+                                                  />
                                               )}
-                                          <CustomListItemTypography
-                                              fontWeight={'bold'}
-                                              marginTop={'0.5rem'}
-                                              fontSize={'1rem'}
-                                          >
-                                              {totalPrice.toLocaleString('ko-KR')}원
-                                          </CustomListItemTypography>
-                                      </CustomListItems>
+                                          </CustomGrid>
+                                          <SearchedCombinationsDiv>
+                                              <SearchedCombinationsTypography
+                                                  color={'#4A4A4A'}
+                                                  fontWeight={'600'}
+                                                  fontSize={fontLength}
+                                              >
+                                                  {combinationName.join(' + ')}
+                                              </SearchedCombinationsTypography>
+                                              <SearchedCombinationsTypography color={'#A5A5A5'}>
+                                                  ({combinationSize})
+                                              </SearchedCombinationsTypography>
+                                          </SearchedCombinationsDiv>
+                                      </CustomCardContent>
                                   </Fade>
                               );
                           })
-                        : null}
+                        : loading === true && (
+                              <LoadingSpinner>
+                                  <img src={Spinner} alt="로딩중" width="30%" />
+                              </LoadingSpinner>
+                          )}
+                </CustomDiv>
+                <CustomListDiv>
+                    {selectResult?.map((item: any, i: number) => {
+                        const { totalPrice, fishRecommendBtDtos, active } = item;
+                        return (
+                            <Fade in={true} timeout={300} key={i}>
+                                <CustomListItems
+                                    onClick={() => {
+                                        onEstimateClick(fishRecommendBtDtos, totalPrice, i, active);
+                                    }}
+                                    active={active ? 'true' : ''}
+                                >
+                                    {fishRecommendBtDtos &&
+                                        fishRecommendBtDtos.map(
+                                            (item: { fishName: string; serving: number }, i: number) => {
+                                                const { fishName, serving } = item;
+                                                return (
+                                                    <CustomListItem key={i}>
+                                                        <CustomListItemTypography color={theme.colors.grayTwo}>
+                                                            {fishName}
+                                                        </CustomListItemTypography>
+                                                        <CustomListItemTypography color={'#979797'}>
+                                                            ({serving}인분)
+                                                        </CustomListItemTypography>
+                                                    </CustomListItem>
+                                                );
+                                            },
+                                        )}
+                                    <CustomListItemTypography
+                                        fontWeight={'bold'}
+                                        marginTop={'0.5rem'}
+                                        fontSize={'1rem'}
+                                    >
+                                        {totalPrice.toLocaleString('ko-KR')}원
+                                    </CustomListItemTypography>
+                                </CustomListItems>
+                            </Fade>
+                        );
+                    })}
                 </CustomListDiv>
                 {selectEstimate && (
                     <Fade in={true} timeout={300}>
