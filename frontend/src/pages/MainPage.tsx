@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import image from '../assets/img/mainImage.webp';
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Box, SelectChangeEvent } from '@mui/material';
 import { getAreaTotalFishData } from '../api/recommend';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
     areaState,
     fishDetailRecommendInfo,
@@ -15,18 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Introduction from 'components/Introduction';
 import Title from 'components/main/Title';
 import { notifyError } from '../utils/notify';
-import { Button, TextField } from 'components/common';
-
-const ITEM_HEIGHT = 45;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 100,
-        },
-    },
-};
+import { Button, Select, TextField } from 'components/common';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -34,10 +23,10 @@ const MainPage = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
-    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
+    const setFishList = useSetRecoilState(fishDetailRecommendInfo);
 
     // 검색조건 선택 여부 체크
-    const [select, setSelect] = useRecoilState(selectState);
+    const setSelect = useSetRecoilState(selectState);
 
     const handlePersonNumChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
@@ -95,38 +84,12 @@ const MainPage = () => {
                     <CustomBox>
                         <TextField
                             placeholder="인원"
-                            endAdornment="명"
-                            opacity={true}
+                            endadornment="명"
                             value={personNum}
                             onChange={handlePersonNumChange}
                         />
-                        <TextField
-                            placeholder="예산"
-                            endAdornment="원"
-                            opacity={true}
-                            value={money}
-                            onChange={handleMoneyChange}
-                        />
-                        <FormControl fullWidth>
-                            {/* <InputLabel id="local">지역</InputLabel> */}
-                            <AreaSelect
-                                labelId="지역"
-                                title="지역"
-                                value={getArea ? area : ''}
-                                onChange={(e) => {
-                                    handleAreaChange(e);
-                                }}
-                                MenuProps={MenuProps}
-                                fullWidth
-                            >
-                                {getArea &&
-                                    getArea.map((area: string) => (
-                                        <MenuItem key={area} value={area}>
-                                            {area}
-                                        </MenuItem>
-                                    ))}
-                            </AreaSelect>
-                        </FormControl>
+                        <TextField placeholder="예산" endadornment="원" value={money} onChange={handleMoneyChange} />
+                        <Select title="지역" datas={getArea} data={area} onChange={handleAreaChange} />
                     </CustomBox>
                     <SubmitBtn variant="contained" type="submit" onClick={onClick}>
                         검색
@@ -162,12 +125,11 @@ const CustomBox = styled(Box)`
         margin: 0.5rem;
         width: 11rem;
     }
-`;
-
-const AreaSelect = styled(Select)`
-    background-color: white;
-    border-radius: 5px;
-    opacity: 0.8;
+    & > div {
+        background-color: white;
+        border-radius: 5px;
+        opacity: 0.8;
+    }
 `;
 
 const SubmitBtn = styled(Button)`
