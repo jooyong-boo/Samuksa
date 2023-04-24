@@ -1,13 +1,11 @@
 import styled from 'styled-components';
-import Spinner from '../../components/assets/spinner/Spinner.gif';
-import LottieSinner from '../../components/assets/spinner/LottieSpinner.json';
+import LottieSinner from '../../assets/spinner/LottieSpinner.json';
 import Lottie from 'lottie-react';
 
 const Loading = () => {
     return (
         <Background>
             <LottieContainer>
-                {/* <img src={Spinner} alt="로딩중" width="5%" /> */}
                 <Lottie animationData={LottieSinner} loop={true}></Lottie>
                 <LoadingText>잠시만 기다려 주세요.</LoadingText>
             </LottieContainer>

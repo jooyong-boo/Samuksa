@@ -1,10 +1,13 @@
-import { Avatar, Button } from '@mui/material';
-import React, { useRef } from 'react';
+import { Avatar } from '@mui/material';
+import { useRef } from 'react';
 import styled from 'styled-components';
 import imageCompression from 'browser-image-compression';
 import { useRecoilState } from 'recoil';
 import { userImageState, userInfoState } from 'store/user';
-import { changeUserImage } from 'api/auth';
+import { getUserInfo } from 'api/auth';
+import handlingDataForm from 'utils/handlingDataForm';
+import { notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface userInfos {
     userId?: string;
@@ -14,16 +17,14 @@ interface userInfos {
 }
 
 const UserImage = () => {
-    const [image, setImage] = useRecoilState<string | ArrayBuffer | null>(userImageState);
+    const [image, setImage] = useRecoilState<string>(userImageState);
     const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-    const { userId, nickName, email, profileImage }: userInfos = userInfo;
+    const { profileImage }: userInfos = userInfo;
     const fileInput = useRef<HTMLInputElement | null>(null);
 
     // 이미지 업로드
     const onChange = (e: any) => {
         const value = e?.target?.files[0];
-        console.log(e.target.files);
-        console.log(value);
         if (value) {
             setImage(() => value);
         } else {
@@ -31,22 +32,17 @@ const UserImage = () => {
             setImage('/broken-image.jpg');
             return;
         }
-        const formData = new FormData();
-        formData.append('image', value);
-
-        changeUserImage(formData);
         //화면에 프로필 사진 표시
         const reader = new FileReader();
         actionImgCompress(value)
-            .then((result: File) => {
+            .then((result: any) => {
                 reader.readAsDataURL(result);
             })
             .then(() => {
                 reader.onload = () => {
                     const base64data = reader.result;
                     if (reader.readyState === 2) {
-                        setImage(base64data);
-                        // console.log(base64data);
+                        setImage(base64data as any);
                     }
                 };
             });
@@ -54,8 +50,6 @@ const UserImage = () => {
 
     // 이미지 압축
     const actionImgCompress = async (fileSrc: any) => {
-        console.log('압축 시작');
-
         const options = {
             maxSizeMb: 1,
             maxWidthOrHeight: 200,
@@ -63,16 +57,23 @@ const UserImage = () => {
         };
         try {
             const compressedFile = await imageCompression(fileSrc, options);
-            console.log(compressedFile);
             const reader = new FileReader();
             reader.readAsDataURL(compressedFile);
             reader.onloadend = () => {
                 // 변환 완료!
                 const base64data = reader.result;
-                console.log(reader);
 
                 // formData 만드는 함수
-                // handlingDataForm(base64data);
+                handlingDataForm(base64data).then(() => {
+                    getUserInfo().then((res: any) => {
+                        if (res?.data?.userId) {
+                            setUserInfo(res.data);
+                            notifySuccess('이미지 변경 완료');
+                        } else {
+                            throw res;
+                        }
+                    });
+                });
             };
             return compressedFile;
         } catch (error) {
@@ -84,7 +85,7 @@ const UserImage = () => {
         <>
             <div>
                 <ProfileAvatar
-                    src={String(image)}
+                    src={profileImage ? profileImage : String(image)}
                     onClick={() => {
                         fileInput.current?.click();
                     }}
@@ -98,6 +99,7 @@ const UserImage = () => {
                 />
             </div>
             <Button
+                variant="text"
                 onClick={() => {
                     fileInput.current?.click();
                 }}

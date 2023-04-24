@@ -1,6 +1,5 @@
 import {
     Avatar,
-    Button,
     Checkbox,
     Grow,
     List,
@@ -12,12 +11,9 @@ import {
     Typography,
 } from '@mui/material';
 import styled from 'styled-components';
-import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
-import SelectedConditionList from './SelectedConditionList';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import {
-    amountState,
     farmState,
     fishDetailRecommendInfo,
     personNumState,
@@ -26,19 +22,18 @@ import {
 } from '../../store/atom';
 import { useEffect } from 'react';
 import { useMemo } from 'react';
-import { useCallback } from 'react';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
-const DetailedSearchConditions = () => {
-    const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
-    const [selectFish, setSelectFish] = useRecoilState<any[]>(selectFishState);
+const DetailedSearchConditions = ({ ...props }) => {
+    const { totalAmount, setTotalAmount, amount, setAmount } = props;
+    const [selectCondition, setSelectCondition] = useRecoilState(selectConditions);
+    const [selectFish, setSelectFish] = useRecoilState(selectFishState);
     const resetSelectFish = useResetRecoilState(selectFishState);
-    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
-    const [personNum, setPersonNum] = useRecoilState(personNumState);
-    const [totalAmount, setTotalAmount] = useState(0);
+    const fishList = useRecoilValue(fishDetailRecommendInfo);
+    const personNum = useRecoilValue(personNumState);
     const [fish, setFish] = useState<any[]>(fishList);
-    const [amount, setAmount] = useRecoilState(amountState);
-    const [farm, setFarm] = useRecoilState(farmState);
+    const [farm, setFarm] = useRecoilState<any[]>(farmState);
     const [farmStatus, setFarmStatus] = useState<string[]>([]);
 
     useMemo(() => {
@@ -59,9 +54,6 @@ const DetailedSearchConditions = () => {
     }, [selectCondition]);
 
     useEffect(() => {
-        // fish.map(fish =>
-        //     fish.active === true ? (setFarm(fish.farmTypes)) : null
-        //     )
         if (selectFish.length) {
             setFarm(selectFish[0].farmTypes);
         }
@@ -71,17 +63,6 @@ const DetailedSearchConditions = () => {
         setSelectFish(fish.filter((fish) => fish.active === true));
     }, [fish]);
 
-    // const onSearch = (e) => {
-    //     e.preventDefault();
-    //     let searchName = e.target.value;
-    //     if (!searchName) {
-    //         setFish(fishList);
-    //     } else {
-    //         let result = fishList.filter((name) => name.fishName === searchName);
-    //         setFish(result);
-    //     }
-    // };
-
     const onToggle = (id: number) => {
         setFarmStatus([]);
         setAmount(0);
@@ -90,15 +71,11 @@ const DetailedSearchConditions = () => {
                 fish.fishInfoId === id ? { ...fish, active: !fish.active } : { ...fish, active: false },
             ),
         );
-
-        // fish.filter(fish =>  fish.fishInfoId === id ? setFarm(fish.farmTypes) : setFarm([]))
     };
 
-    const changeAmount = useCallback((event: MouseEvent, newAmount: number) => {
-        event.preventDefault();
-        setAmount(newAmount);
-        // console.log(amount)
-    }, []);
+    const changeAmount = (_: Event, newValue: number | number[]) => {
+        setAmount(newValue as number);
+    };
 
     const changeHandler = (checked: boolean, id: string) => {
         if (checked) {
@@ -111,14 +88,12 @@ const DetailedSearchConditions = () => {
 
     const addCondition = () => {
         if (selectFish.length === 0) {
-            // return alert('어종을 선택해주세요');
             return notifyError('어종을 선택해주세요');
         } else if (amount === 0 && totalAmount > 0) {
             return notifyError('분량을 선택해주세요');
         } else if (amount === 0 && selectCondition.length > 0) {
             return notifyError('분량 부족');
         } else if (farmStatus.length === 0) {
-            // return alert('양식 여부를 체크해주세요');
             return notifyError('양식 여부를 체크해주세요');
         } else {
             selectCondition.some((item) => item.id === selectFish[0].fishInfoId)
@@ -139,143 +114,112 @@ const DetailedSearchConditions = () => {
         setFarm([]);
     };
 
-    // console.log(totalAmount)
-
     return (
-        <>
-            <Card>
-                <CustomTypography>상세 검색 조건</CustomTypography>
-                <Container>
-                    <CustomFishListDiv>
-                        {/* <FormControl fullWidth>
-                            <Input
-                                id="input-with-icon-adornment"
-                                startAdornment={
-                                    // <InputAdornment position="start">
-                                    <SearchIcon />
-                                    // </InputAdornment>
-                                }
-                                type="string"
-                                defaultValue=""
-                                placeholder="찾는 어종을 입력하세요"
-                                onChange={onSearch}
-                                autoComplete="off"
-                                readOnly={fishList.length > 0 ? false : true}
-                                disableUnderline={fishList.length > 0 ? false : true}
+        <Card>
+            <CustomTypography>상세 검색 조건</CustomTypography>
+            <Container>
+                <CustomFishListDiv>
+                    <CustomFishListPaper>
+                        {fish.length > 0 ? (
+                            <CustomList>
+                                {fish.map((item, i) => {
+                                    const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
+                                    return (
+                                        <Grow in={true} timeout={i * 200} key={fishInfoId}>
+                                            <ListItemDiv
+                                                onClick={() => {
+                                                    onToggle(fishInfoId);
+                                                }}
+                                                active={active}
+                                            >
+                                                <ListItemAvaterStyled>
+                                                    <AvaterStyled alt={fishName} src={imgUrl} />
+                                                </ListItemAvaterStyled>
+                                                <ListItemStyled>
+                                                    <ListItemText
+                                                        primary={fishName}
+                                                        secondary={`(수율: ${fishYield}%)`}
+                                                    />
+                                                </ListItemStyled>
+                                            </ListItemDiv>
+                                        </Grow>
+                                    );
+                                })}
+                            </CustomList>
+                        ) : (
+                            <CustomSearchConditionSelectInfo>검색 조건을 선택해주세요</CustomSearchConditionSelectInfo>
+                        )}
+                    </CustomFishListPaper>
+                </CustomFishListDiv>
+                <CustomConditionSettingDiv>
+                    <SelectVolumeDiv>
+                        <SelectVolumeTypograhy>분량</SelectVolumeTypograhy>
+                        {selectFish.length > 0 ? (
+                            <Slider
+                                aria-labelledby="range-slider"
+                                value={amount}
+                                valueLabelDisplay="auto"
+                                step={1}
+                                marks
+                                min={0}
+                                max={totalAmount}
+                                onChange={changeAmount}
                             />
-                        </FormControl> */}
-                        <CustomFishListPaper>
-                            {fish.length > 0 ? (
-                                <CustomList>
-                                    {fish.map((item, i) => {
-                                        const { fishName, fishYield, fishInfoId, active, imgUrl } = item;
-                                        return (
-                                            <Grow in={true} timeout={i * 200} key={fishInfoId}>
-                                                <ListItemDiv
-                                                    onClick={() => {
-                                                        onToggle(fishInfoId);
-                                                    }}
-                                                    active={active}
-                                                >
-                                                    <ListItemAvaterStyled>
-                                                        <AvaterStyled alt={fishName} src={imgUrl} />
-                                                    </ListItemAvaterStyled>
-                                                    <ListItemStyled>
-                                                        <ListItemText
-                                                            primary={fishName}
-                                                            secondary={`(수율: ${fishYield}%)`}
-                                                        />
-                                                    </ListItemStyled>
-                                                </ListItemDiv>
-                                            </Grow>
-                                        );
-                                    })}
-                                </CustomList>
-                            ) : (
-                                <CustomSearchConditionSelectInfo>
-                                    검색 조건을 선택해주세요
-                                </CustomSearchConditionSelectInfo>
-                            )}
-                        </CustomFishListPaper>
-                    </CustomFishListDiv>
-                    <CustomConditionSettingDiv>
-                        <SelectVolumeDiv>
-                            <SelectVolumeTypograhy>분량</SelectVolumeTypograhy>
-                            {selectFish.length > 0 ? (
-                                <Slider
-                                    aria-labelledby="range-slider"
-                                    value={amount}
-                                    // getAriaValueText={valuetext}
-                                    valueLabelDisplay="auto"
-                                    step={1}
-                                    marks
-                                    min={0}
-                                    max={totalAmount}
-                                    onChange={changeAmount}
-                                />
-                            ) : (
-                                <Slider disabled value={0} />
-                            )}
-                            <SelectVolumeTypograhy>{amount}인</SelectVolumeTypograhy>
-                        </SelectVolumeDiv>
-                        <CustomSelectFarmTypeDiv>
-                            <Typography variant="subtitle1">양식 여부</Typography>
-                            {farm.length > 0 && selectFish.length > 0 ? (
-                                <CustomSelectFarmTypography color={'#737373'}>
-                                    중복 선택이 가능합니다.
-                                </CustomSelectFarmTypography>
-                            ) : (
-                                <CustomSelectFarmTypography color={'#AEAEAE'}>
-                                    어종 선택이 필요합니다.
-                                </CustomSelectFarmTypography>
-                            )}
-                            {farm.length > 0 && selectFish.length > 0
-                                ? farm.map((item, i) => (
-                                      <SelectFarmTypeTypography
-                                          key={i}
-                                          onClick={() => {
-                                              changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
-                                          }}
-                                      >
-                                          <FarmTypeCheckBox
-                                              id={item}
-                                              onChange={(e) => {
-                                                  changeHandler(e.currentTarget.checked, `${item}`);
-                                              }}
-                                              checked={farmStatus.includes(`${item}`) ? true : false}
-                                          />
-                                          {item}
-                                      </SelectFarmTypeTypography>
-                                  ))
-                                : null}
-                        </CustomSelectFarmTypeDiv>
-                        <CustomConditionAddDiv>
-                            {selectFish && amount && farmStatus.length > 0 ? (
-                                <CustomConditionAddBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disableElevation
-                                    onClick={addCondition}
+                        ) : (
+                            <Slider disabled value={0} />
+                        )}
+                        <SelectVolumeTypograhy>{amount}인</SelectVolumeTypograhy>
+                    </SelectVolumeDiv>
+                    <CustomSelectFarmTypeDiv>
+                        <Typography variant="subtitle1">양식 여부</Typography>
+                        {farm.length > 0 && selectFish.length > 0 ? (
+                            <CustomSelectFarmTypography color={'#737373'}>
+                                중복 선택이 가능합니다.
+                            </CustomSelectFarmTypography>
+                        ) : (
+                            <CustomSelectFarmTypography color={'#AEAEAE'}>
+                                어종 선택이 필요합니다.
+                            </CustomSelectFarmTypography>
+                        )}
+                        {farm.length > 0 &&
+                            selectFish.length > 0 &&
+                            farm.map((item, i) => (
+                                <SelectFarmTypeTypography
+                                    key={i}
+                                    onClick={() => {
+                                        changeHandler(farmStatus.includes(`${item}`) ? false : true, `${item}`);
+                                    }}
                                 >
-                                    조건 추가하기
-                                </CustomConditionAddBtn>
-                            ) : (
-                                <CustomConditionAddBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disableElevation
-                                    disabled={true}
-                                    onClick={addCondition}
-                                >
-                                    {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
-                                </CustomConditionAddBtn>
-                            )}
-                        </CustomConditionAddDiv>
-                    </CustomConditionSettingDiv>
-                </Container>
-            </Card>
-            <SelectedConditionList setTotalAmount={setTotalAmount} totalAmount={totalAmount} setAmount={setAmount} />
-        </>
+                                    <FarmTypeCheckBox
+                                        id={item}
+                                        onChange={(e) => {
+                                            changeHandler(e.currentTarget.checked, `${item}`);
+                                        }}
+                                        checked={farmStatus.includes(`${item}`) ? true : false}
+                                    />
+                                    {item}
+                                </SelectFarmTypeTypography>
+                            ))}
+                    </CustomSelectFarmTypeDiv>
+                    <CustomConditionAddDiv>
+                        {selectFish && amount && farmStatus.length > 0 ? (
+                            <CustomConditionAddBtn variant="contained" type="submit" onClick={addCondition}>
+                                조건 추가하기
+                            </CustomConditionAddBtn>
+                        ) : (
+                            <CustomConditionAddBtn
+                                variant="contained"
+                                type="submit"
+                                disabled={true}
+                                onClick={addCondition}
+                            >
+                                {totalAmount > 0 ? `조건을 선택해주세요` : `선택할 분량이 없어요`}
+                            </CustomConditionAddBtn>
+                        )}
+                    </CustomConditionAddDiv>
+                </CustomConditionSettingDiv>
+            </Container>
+        </Card>
     );
 };
 
@@ -286,14 +230,13 @@ const Card = styled.div`
     width: 570px;
     height: 464px;
     border-radius: 5px;
-    /* border: 1px solid black; */
     margin: 1rem;
 `;
 
 const CustomTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 
@@ -305,7 +248,7 @@ const Container = styled.div`
 const CustomFishListDiv = styled.div`
     width: 45%;
     height: 100%;
-    border-right: 1px solid #eaeaea;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
     max-height: 410px;
 `;
 
@@ -401,7 +344,7 @@ const CustomSelectFarmTypeDiv = styled.div`
     height: 225px;
     margin: auto;
     margin-top: 28px;
-    border-top: 1px solid #eaeaea;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray};
     padding-top: 24px;
 `;
 
@@ -440,9 +383,4 @@ const CustomConditionAddBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;

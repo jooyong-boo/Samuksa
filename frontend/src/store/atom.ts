@@ -1,8 +1,8 @@
 import { atom, selector } from 'recoil';
-import { getAreaTotalFishData, getFishRecommendData, getArea, getFarmType } from '../api/recommend';
-import { getPosts, getPostsById } from '../api/post';
-import { RandomNickname } from '../components/utils/RandomNickname';
-import { getRandomNumber } from '../components/community/PostViewer';
+import {  getArea} from '../api/recommend';
+import { getPosts } from '../api/post';
+import { randomNickname } from 'utils/RandomNickname';
+import { getRandomNumber } from 'utils/getRandomNumber';
 import { v1 } from 'uuid';
 
 export const personNumState = atom({
@@ -27,7 +27,14 @@ export const selectState = atom({
 });
 
 // 선택 조건목록
-export const selectConditions = atom({
+type Condition = {
+    id: number;
+    selectFish: string;
+    amount: number;
+    imgUrl: string;
+    farmStatus: string[];
+};
+export const selectConditions = atom<Condition[]>({
     key: `selectConditions/${v1()}`,
     default: [],
 });
@@ -39,7 +46,15 @@ export const fishDetailRecommendInfo = atom({
 });
 
 // 선택한 어종
-export const selectFishState = atom({
+type SelectFish = {
+    active?: boolean;
+    imgUrl: string;
+    farmTypes: string[];
+    fishInfoId: number;
+    fishYield: number;
+    fishName: string;
+};
+export const selectFishState = atom<SelectFish[]>({
     key: `selectFishState/${v1()}`,
     default: [],
 });
@@ -57,13 +72,23 @@ export const totalAmountState = atom({
 });
 
 // 양식 여부
-export const farmState = atom({
+type Farm = {
+    farmTypes: string[];
+};
+export const farmState = atom<Farm[]>({
     key: `farmState/${v1()}`,
     default: [],
 });
 
 //추천 수산물
-export const recommendListState = atom({
+type RecommendLists = {
+    active: boolean;
+    combinationName: string[];
+    conbinationSize: number;
+    fishRecommendCombinations: any;
+    maxPrice: number;
+};
+export const recommendListState = atom<RecommendLists[]>({
     key: `recommendListState/${v1()}`,
     default: [],
 });
@@ -105,14 +130,14 @@ export const getPostState = selector({
                     {},
                     item,
                     { read: true },
-                    { nickName: RandomNickname() },
+                    { nickName: randomNickname() },
                     { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
                 );
             } else {
                 return Object.assign(
                     {},
                     item,
-                    { nickName: RandomNickname() },
+                    { nickName: randomNickname() },
                     { avatar: `https://randomuser.me/api/portraits/women/${getRandomNumber(1, 98)}.jpg` },
                 );
             }

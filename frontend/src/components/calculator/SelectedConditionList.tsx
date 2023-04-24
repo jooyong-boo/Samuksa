@@ -1,28 +1,26 @@
-import { Avatar, Button, CardActions, CardContent, Slide, Typography } from '@mui/material';
-import React, { ReactElement, useRef } from 'react';
+import { Avatar, CardActions, CardContent, Slide, Typography } from '@mui/material';
+import React, { MutableRefObject } from 'react';
 import styled from 'styled-components';
 import { areaState, moneyState, personNumState, recommendListState, selectConditions } from '../../store/atom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getFishRecommendData } from '../../api/recommend';
-import SearchResults from './SearchResults';
-import { useState } from 'react';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface amount {
     setTotalAmount: React.Dispatch<React.SetStateAction<number>>;
     totalAmount: number;
     setAmount: React.Dispatch<React.SetStateAction<number>>;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    contactRef: MutableRefObject<HTMLDivElement>;
 }
 
-const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amount) => {
-    const contactRef = useRef<HTMLDivElement>(null);
-
+const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount, setLoading, contactRef }: amount) => {
     const [selectCondition, setSelectCondition] = useRecoilState<any[]>(selectConditions);
-    const [recommendList, setRecommendList] = useRecoilState(recommendListState);
+    const setRecommendList = useSetRecoilState(recommendListState);
     const personNum = useRecoilValue(personNumState);
     const money = useRecoilValue(moneyState);
     const area = useRecoilValue(areaState);
-    const [loading, setLoading] = useState<boolean>(false);
     // console.log(selectCondition)
 
     const deleteContidion = (id: number, plusAmount: number) => {
@@ -64,73 +62,64 @@ const SelectedConditionList = ({ setTotalAmount, totalAmount, setAmount }: amoun
     };
 
     return (
-        <>
-            <Card>
-                <SelectedConditionListTypography>선택한 조건 목록</SelectedConditionListTypography>
-                <SelectedConditionLists>
-                    {selectCondition.map((select) => {
-                        const { id, selectFish, amount, farmStatus, imgUrl } = select;
-                        return (
-                            <Slide key={id} direction="right" in={true} timeout={400}>
-                                <ListItem>
-                                    {/* <Img alt="complex" src={image} sx={{ borderRadius: '3px' }} /> */}
-                                    <CustomAvatar alt={selectFish} src={imgUrl} />
-                                    <SelectedConditionListBox>
-                                        <CustomCardContent>
-                                            <SelectedItemsBox>
-                                                <SelectedItemInfo color={'#4A4A4A'} fontWeight={'600'}>
-                                                    {selectFish}
-                                                </SelectedItemInfo>
-                                                <SelectedItemInfo
-                                                    fontSize={'0.9rem'}
-                                                    color={'#A5A5A5'}
-                                                    fontWeight={'medium'}
-                                                    marginLeft={'0.5rem'}
-                                                >
-                                                    ({amount}인)
-                                                </SelectedItemInfo>
-                                            </SelectedItemsBox>
+        <Card>
+            <SelectedConditionListTypography>선택한 조건 목록</SelectedConditionListTypography>
+            <SelectedConditionLists>
+                {selectCondition.map((select) => {
+                    const { id, selectFish, amount, farmStatus, imgUrl } = select;
+                    return (
+                        <Slide key={id} direction="right" in={true} timeout={400}>
+                            <ListItem>
+                                <CustomAvatar alt={selectFish} src={imgUrl} />
+                                <SelectedConditionListBox>
+                                    <CustomCardContent>
+                                        <SelectedItemsBox>
+                                            <SelectedItemInfo color={'#4A4A4A'} fontWeight={'600'}>
+                                                {selectFish}
+                                            </SelectedItemInfo>
                                             <SelectedItemInfo
                                                 fontSize={'0.9rem'}
                                                 color={'#A5A5A5'}
                                                 fontWeight={'medium'}
+                                                marginLeft={'0.5rem'}
                                             >
-                                                {farmStatus.join(', ')}
+                                                ({amount}인)
                                             </SelectedItemInfo>
-                                        </CustomCardContent>
-                                        <CardActions>
-                                            <DeleteConditionBtn
-                                                variant="outlined"
-                                                onClick={() => {
-                                                    deleteContidion(id, amount);
-                                                }}
-                                            >
-                                                조건 삭제
-                                            </DeleteConditionBtn>
-                                        </CardActions>
-                                    </SelectedConditionListBox>
-                                </ListItem>
-                            </Slide>
-                        );
-                    })}
-                </SelectedConditionLists>
-                <CombinationSearchBtnDiv>
-                    {selectCondition.length > 0 ? (
-                        <CombinationSearchBtn variant="contained" disableElevation onClick={onClick}>
-                            조합 검색
-                        </CombinationSearchBtn>
-                    ) : (
-                        <CombinationSearchBtn variant="contained" disableElevation disabled={true} onClick={onClick}>
-                            선택한 조합이 없어요
-                        </CombinationSearchBtn>
-                    )}
-                </CombinationSearchBtnDiv>
-            </Card>
-            <SearchResults ref={contactRef} loading={loading} setLoading={setLoading} />
-        </>
+                                        </SelectedItemsBox>
+                                        <SelectedItemInfo fontSize={'0.9rem'} color={'#A5A5A5'} fontWeight={'medium'}>
+                                            {farmStatus.join(', ')}
+                                        </SelectedItemInfo>
+                                    </CustomCardContent>
+                                    <CardActions>
+                                        <DeleteConditionBtn
+                                            variant="outlined"
+                                            onClick={() => {
+                                                deleteContidion(id, amount);
+                                            }}
+                                        >
+                                            조건 삭제
+                                        </DeleteConditionBtn>
+                                    </CardActions>
+                                </SelectedConditionListBox>
+                            </ListItem>
+                        </Slide>
+                    );
+                })}
+            </SelectedConditionLists>
+            <CombinationSearchBtnDiv>
+                {selectCondition.length > 0 ? (
+                    <CombinationSearchBtn variant="contained" onClick={onClick}>
+                        조합 검색
+                    </CombinationSearchBtn>
+                ) : (
+                    <CombinationSearchBtn variant="contained" disabled={true} onClick={onClick}>
+                        선택한 조합이 없어요
+                    </CombinationSearchBtn>
+                )}
+            </CombinationSearchBtnDiv>
+        </Card>
     );
 };
-
 export default SelectedConditionList;
 
 const Card = styled.div`
@@ -138,22 +127,8 @@ const Card = styled.div`
     width: 295px;
     height: 464px;
     border-radius: 5px;
-    /* margin: 30px 100px; */
     position: relative;
-    /* 테블릿 세로 (해상도 768px ~ 1023px)*/
-    @media all and (min-width: 768px) and (max-width: 1185px) {
-        margin-bottom: 1rem;
-    }
-
-    /* 모바일 가로, 테블릿 세로 (해상도 480px ~ 767px)*/
-    @media all and (min-width: 480px) and (max-width: 767px) {
-        /* width: 95%; */
-        margin-bottom: 1rem;
-    }
-
-    /* 모바일 가로, 테블릿 세로 (해상도 ~ 479px)*/
-    @media all and (max-width: 479px) {
-        /* width: 95%; */
+    @media all and (min-width: 479px) and (max-width: 1185px) {
         margin-bottom: 1rem;
     }
 `;
@@ -161,7 +136,7 @@ const Card = styled.div`
 const SelectedConditionListTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 
@@ -242,9 +217,4 @@ const CombinationSearchBtn = styled(Button)`
     height: 38px;
     font-weight: 900;
     margin: auto;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;

@@ -1,17 +1,18 @@
-import { Avatar, Button, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
-import React, { forwardRef, ReactElement } from 'react';
+import { Avatar, CardContent, Fade, Grid, ListItem, Typography } from '@mui/material';
+import React, { forwardRef, useContext } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import styled from 'styled-components';
-import image from '../../components/assets/img/contemplative-reptile.webp';
+import styled, { ThemeContext } from 'styled-components';
+import image from '../../assets/img/contemplative-reptile.webp';
 import { areaState, recommendListState, selectConditions } from '../../store/atom';
-import Spinner from '../../components/assets/spinner/Spinner.gif';
+import Spinner from '../../assets/spinner/Spinner.gif';
 import SearchResultTable from './SearchResultTable';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import { NavLink } from 'react-router-dom';
-import { notifySuccess } from 'components/utils/notify';
+import { notifySuccess } from 'utils/notify';
+import { Button } from 'components/common';
 
 interface loadingStats {
     loading: boolean;
@@ -19,6 +20,8 @@ interface loadingStats {
 }
 
 const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: React.ForwardedRef<HTMLDivElement>) => {
+    const theme = useContext(ThemeContext);
+
     const [result, setResult] = useRecoilState<any[]>(recommendListState);
     const selectCondition = useRecoilValue(selectConditions);
     const [selectResult, setSelectResult] = useState<null | any>(null);
@@ -120,116 +123,113 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                     검색 결과{result.length > 0 ? `(${result.length})` : null}
                 </SearchResultsTypography>
                 <BookmarkLink to={'/bookmark'}>
-                    <Button>즐겨찾기 {bookmark.length}</Button>
+                    <Button onClick={() => {}}>즐겨찾기 {bookmark.length}</Button>
                 </BookmarkLink>
             </Container>
             <ResultDiv>
                 <CustomDiv>
-                    {result.length > 0 && loading === false ? (
-                        result.map((item, i) => {
-                            const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
-                            let fontLength = combinationName.length;
-                            return (
-                                <Fade in={true} timeout={200} key={i}>
-                                    <CustomCardContent
-                                        onClick={() => {
-                                            onRecommendClick(fishRecommendCombinations, combinationName, active);
-                                        }}
-                                        active={active ? 'true' : ''}
-                                    >
-                                        <CustomGrid container spacing={0.5} rowSpacing={0.2}>
-                                            {combinationName.length > 1 ? (
-                                                combinationName.map((item: string, i: number) => {
-                                                    if (i > 3) return null;
-
-                                                    return (
-                                                        <Grid item xs={6} key={item}>
-                                                            <CustomAvatar
-                                                                alt={item}
-                                                                src={image}
-                                                                variant="rounded"
-                                                                width={'2.14rem'}
-                                                                height={'2.14rem'}
-                                                            />
-                                                        </Grid>
-                                                    );
-                                                })
-                                            ) : (
-                                                <CustomAvatar
-                                                    alt={combinationName.join(' + ')}
-                                                    src={image}
-                                                    variant="rounded"
-                                                    width={'50px'}
-                                                    height={'50px'}
-                                                    margin={'0'}
-                                                />
-                                            )}
-                                        </CustomGrid>
-                                        <SearchedCombinationsDiv>
-                                            <SearchedCombinationsTypography
-                                                color={'#4A4A4A'}
-                                                fontWeight={'600'}
-                                                fontSize={fontLength}
-                                            >
-                                                {combinationName.join(' + ')}
-                                            </SearchedCombinationsTypography>
-                                            <SearchedCombinationsTypography color={'#A5A5A5'}>
-                                                ({combinationSize})
-                                            </SearchedCombinationsTypography>
-                                        </SearchedCombinationsDiv>
-                                    </CustomCardContent>
-                                </Fade>
-                            );
-                        })
-                    ) : loading === true ? (
-                        <LoadingSpinner>
-                            <img src={Spinner} alt="로딩중" width="30%" />
-                        </LoadingSpinner>
-                    ) : null}
-                </CustomDiv>
-                <CustomListDiv>
-                    {selectResult
-                        ? selectResult.map((item: any, i: number) => {
-                              const { totalPrice, combinationName, fishRecommendBtDtos, serving, active } = item;
+                    {result.length > 0 && loading === false
+                        ? result.map((item, i) => {
+                              const { combinationName, combinationSize, fishRecommendCombinations, active } = item;
+                              let fontLength = combinationName.length;
                               return (
-                                  <Fade in={true} timeout={300} key={i}>
-                                      <CustomListItems
+                                  <Fade in={true} timeout={200} key={i}>
+                                      <CustomCardContent
                                           onClick={() => {
-                                              onEstimateClick(fishRecommendBtDtos, totalPrice, i, active);
+                                              onRecommendClick(fishRecommendCombinations, combinationName, active);
                                           }}
                                           active={active ? 'true' : ''}
                                       >
-                                          {fishRecommendBtDtos
-                                              ? fishRecommendBtDtos.map(
-                                                    (item: { fishName: string; serving: number }, i: number) => {
-                                                        const { fishName, serving } = item;
-                                                        return (
-                                                            <CustomListItem key={i}>
-                                                                <CustomListItemTypography color={'#545454'}>
-                                                                    {fishName}
-                                                                </CustomListItemTypography>
-                                                                <CustomListItemTypography color={'#979797'}>
-                                                                    ({serving}인분)
-                                                                </CustomListItemTypography>
-                                                            </CustomListItem>
-                                                        );
-                                                    },
-                                                )
-                                              : null}
-                                          <CustomListItemTypography
-                                              fontWeight={'bold'}
-                                              marginTop={'0.5rem'}
-                                              fontSize={'1rem'}
-                                          >
-                                              {totalPrice.toLocaleString('ko-KR')}원
-                                          </CustomListItemTypography>
-                                      </CustomListItems>
+                                          <CustomGrid container spacing={0.5} rowSpacing={0.2}>
+                                              {combinationName.length > 1 ? (
+                                                  combinationName.map((item: string, i: number) => {
+                                                      if (i > 3) return null;
+
+                                                      return (
+                                                          <Grid item xs={6} key={item}>
+                                                              <CustomAvatar
+                                                                  alt={item}
+                                                                  src={image}
+                                                                  variant="rounded"
+                                                                  width={'2.14rem'}
+                                                                  height={'2.14rem'}
+                                                              />
+                                                          </Grid>
+                                                      );
+                                                  })
+                                              ) : (
+                                                  <CustomAvatar
+                                                      alt={combinationName.join(' + ')}
+                                                      src={image}
+                                                      variant="rounded"
+                                                      width={'50px'}
+                                                      height={'50px'}
+                                                      margin={'0'}
+                                                  />
+                                              )}
+                                          </CustomGrid>
+                                          <SearchedCombinationsDiv>
+                                              <SearchedCombinationsTypography
+                                                  color={'#4A4A4A'}
+                                                  fontWeight={'600'}
+                                                  fontSize={fontLength}
+                                              >
+                                                  {combinationName.join(' + ')}
+                                              </SearchedCombinationsTypography>
+                                              <SearchedCombinationsTypography color={'#A5A5A5'}>
+                                                  ({combinationSize})
+                                              </SearchedCombinationsTypography>
+                                          </SearchedCombinationsDiv>
+                                      </CustomCardContent>
                                   </Fade>
                               );
                           })
-                        : null}
+                        : loading === true && (
+                              <LoadingSpinner>
+                                  <img src={Spinner} alt="로딩중" width="30%" />
+                              </LoadingSpinner>
+                          )}
+                </CustomDiv>
+                <CustomListDiv>
+                    {selectResult?.map((item: any, i: number) => {
+                        const { totalPrice, fishRecommendBtDtos, active } = item;
+                        return (
+                            <Fade in={true} timeout={300} key={i}>
+                                <CustomListItems
+                                    onClick={() => {
+                                        onEstimateClick(fishRecommendBtDtos, totalPrice, i, active);
+                                    }}
+                                    active={active ? 'true' : ''}
+                                >
+                                    {fishRecommendBtDtos &&
+                                        fishRecommendBtDtos.map(
+                                            (item: { fishName: string; serving: number }, i: number) => {
+                                                const { fishName, serving } = item;
+                                                return (
+                                                    <CustomListItem key={i}>
+                                                        <CustomListItemTypography color={theme.colors.grayTwo}>
+                                                            {fishName}
+                                                        </CustomListItemTypography>
+                                                        <CustomListItemTypography color={'#979797'}>
+                                                            ({serving}인분)
+                                                        </CustomListItemTypography>
+                                                    </CustomListItem>
+                                                );
+                                            },
+                                        )}
+                                    <CustomListItemTypography
+                                        fontWeight={'bold'}
+                                        marginTop={'0.5rem'}
+                                        fontSize={'1rem'}
+                                    >
+                                        {totalPrice.toLocaleString('ko-KR')}원
+                                    </CustomListItemTypography>
+                                </CustomListItems>
+                            </Fade>
+                        );
+                    })}
                 </CustomListDiv>
-                {selectEstimate ? (
+                {selectEstimate && (
                     <Fade in={true} timeout={300}>
                         <SelectedEstimateContainer>
                             <SelectedEstimateTopMenu>
@@ -263,7 +263,7 @@ const SearchResults = forwardRef(({ loading, setLoading }: loadingStats, ref: Re
                             <SearchResultTable selectEstimate={selectEstimate} totalPrice={totalPrice} />
                         </SelectedEstimateContainer>
                     </Fade>
-                ) : null}
+                )}
             </ResultDiv>
         </Card>
     );
@@ -273,7 +273,6 @@ export default React.memo(SearchResults);
 
 const Card = styled.div`
     background-color: white;
-    /* width: 93%; */
     width: 1190px;
     height: 550px;
     min-width: 322px;
@@ -295,7 +294,7 @@ const Container = styled.div`
     width: 100%;
     justify-content: space-between;
     padding-right: 0.5rem;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 `;
 
 const SearchResultsTypography = styled(Typography)`
@@ -311,7 +310,7 @@ const BookmarkLink = styled(NavLink)`
 
 const CustomDiv = styled.div`
     border-bottom: 1px solid #f6f6f6;
-    border-right: 1px solid #eaeaea;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
     width: 20%;
     height: 496px;
     position: relative;
@@ -329,7 +328,6 @@ const CustomDiv = styled.div`
     }
     @media all and (max-width: 350px) {
         width: 40%;
-        /* flex-wrap: nowrap; */
     }
 `;
 
@@ -413,18 +411,17 @@ const LoadingSpinner = styled.div`
 const CustomListDiv = styled.div`
     width: 11%;
     height: 100%;
+    min-width: 105px;
+    max-height: 497px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 10px;
     flex-wrap: wrap;
-    background-color: white;
-    border-right: 1px solid #eaeaea;
-    min-width: 105px;
-    /* position: relative; */
-    overflow: overlay;
-    max-height: 497px;
+    padding-left: 10px;
     padding: 0;
+    background-color: white;
+    border-right: 1px solid ${({ theme }) => theme.colors.gray};
+    overflow: overlay;
     overflow-x: hidden;
     &::-webkit-scrollbar {
         width: 5px;
@@ -448,12 +445,11 @@ interface CustomListItemsProps {
 }
 
 const CustomListItems = styled(ListItem)<CustomListItemsProps>`
+    width: 100%;
+    min-width: 105px;
     display: flex;
     flex-direction: column;
     background-color: ${(props) => (props.active ? '#F8F8F8' : 'white')};
-    width: 100%;
-    min-width: 105px;
-    /* padding-left: 0; */
     cursor: pointer;
     border-bottom: 1px solid #f6f6f6;
     :hover {
@@ -493,7 +489,6 @@ const SelectedEstimateContainer = styled.div`
     width: 68%;
     height: auto;
     max-height: 494px;
-    /* margin: auto; */
     overflow: overlay;
     padding: 0 20px;
     &::-webkit-scrollbar {
@@ -506,8 +501,8 @@ const SelectedEstimateContainer = styled.div`
     }
     @media all and (max-width: 730px) {
         width: 100%;
-        border-top: 1px solid #eaeaea;
-        border-bottom: 1px solid #eaeaea;
+        border-top: 1px solid ${({ theme }) => theme.colors.gray};
+        border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
     }

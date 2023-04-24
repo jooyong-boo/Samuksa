@@ -1,13 +1,15 @@
 import styled from 'styled-components';
-import { Button, TextField } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { notifyError, notifySuccess } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
+import { useCreateComment } from 'api/hooks/post/useCreateComment';
+import { Button, TextField } from 'components/common';
 
 interface UserInfoProps {
-    userId?: string;
-    nickName?: string;
-    email?: string;
+    userId: string;
+    nickName: string;
+    email: string;
+    profileImage: string;
 }
 
 interface CommentProps {
@@ -15,11 +17,12 @@ interface CommentProps {
     setComments: Dispatch<SetStateAction<any>>;
     userInfo: UserInfoProps;
     loginStatus: boolean;
+    titleIdx: string;
 }
 
-const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: CommentProps) => {
+const CommentRegister = ({ comments, setComments, userInfo, loginStatus, titleIdx }: CommentProps) => {
     const [newComment, setNewComment] = useState('');
-    const { userId, nickName, email } = userInfo;
+    const { mutate: createComment } = useCreateComment(comments.length, newComment, titleIdx, userInfo);
 
     const handleChangeComment = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewComment(e.target.value);
@@ -27,20 +30,13 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: Comme
 
     const commentRegister = (e: React.KeyboardEvent | React.MouseEvent) => {
         if ((e as React.KeyboardEvent).key === 'Enter' || (e as React.MouseEvent).type === 'click') {
+            e.preventDefault();
+            if (!newComment.length) {
+                return;
+            }
             if (userInfo && newComment) {
-                setComments([
-                    ...comments,
-                    {
-                        postId: comments.length + 1,
-                        nickName,
-                        content: newComment,
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString(),
-                        id: userId,
-                    },
-                ]);
+                createComment();
                 setNewComment('');
-                notifySuccess('등록 성공');
             } else if (!userInfo) {
                 notifyError('로그인 해주세요');
             } else if (!newComment) {
@@ -52,9 +48,7 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: Comme
         <Container>
             <div>
                 <TextField
-                    sx={{ width: '100%' }}
                     multiline
-                    inputProps={{ maxLength: 300 }}
                     value={newComment}
                     placeholder={loginStatus ? '댓글을 남겨보세요' : ''}
                     disabled={!loginStatus}
@@ -68,7 +62,7 @@ const CommentRegister = ({ comments, setComments, userInfo, loginStatus }: Comme
                 ) : null}
             </div>
             <RegisterBtnBox>
-                <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister}>
+                <CustomBtn variant="contained" margin={'1rem 0'} onClick={commentRegister} disabled={!newComment}>
                     등록
                 </CustomBtn>
             </RegisterBtnBox>
@@ -92,7 +86,7 @@ const StyledPlaceholder = styled.span`
 
 const CustomNavLink = styled(NavLink)`
     text-decoration: none;
-    color: #0098ee;
+    color: ${({ theme }) => theme.colors.main};
 `;
 
 const RegisterBtnBox = styled.div`
@@ -107,15 +101,9 @@ interface CustomBtnProps {
 }
 
 const CustomBtn = styled(Button)<CustomBtnProps>`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 7rem;
     height: 2.5rem;
     margin: ${(props) => `${props.margin}`};
     margin-right: ${(props) => `${props.$marginRight}`};
-    :hover {
-        box-shadow: none;
-    }
 `;

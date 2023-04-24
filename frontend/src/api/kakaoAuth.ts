@@ -1,4 +1,20 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+
+const axiosConfig: AxiosRequestConfig = {
+    baseURL: process.env.REACT_APP_SamuksaUser_URL,
+};
+
+const instance = axios.create(axiosConfig);
+
+export const kakaoAuth = async () => {
+    try {
+        let data = await instance.post('/oauth2/authorization/kakao');
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.log(err);
+    }
+};
 
 const CLIENT_ID = process.env.REACT_APP_Kakao_Client_Id;
 const REDIRECT_URI = 'http://localhost:3000/register';

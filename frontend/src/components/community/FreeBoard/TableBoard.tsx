@@ -10,8 +10,7 @@ import {
     ThemeProvider,
     Typography,
 } from '@mui/material';
-import timeForToday from 'components/utils/TimeForToday';
-import React from 'react';
+import timeForToday from 'utils/TimeForToday';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -47,16 +46,23 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {usePosts.slice(offset, offset + limit).map((item: any) => {
-                            const { id, title, UserId, createdAt, read, nickName, avatar } = item;
-                            const newCreateAt = new Date(createdAt);
-                            const year = newCreateAt.getFullYear();
-                            const month = newCreateAt.getMonth();
-                            const date = newCreateAt.getDate();
+                        {usePosts?.slice(offset, offset + limit).map((item: any) => {
+                            const {
+                                idx,
+                                title,
+                                nickName,
+                                profileImage,
+                                createdAt,
+                                recommendCount,
+                                read,
+                                viewCount,
+                                commentCount,
+                                modifiedAt,
+                            } = item;
 
                             return (
                                 <TableRow
-                                    key={id}
+                                    key={idx}
                                     sx={{
                                         '&:last-child td, &:last-child th': { border: 0 },
                                         ':hover': {
@@ -64,16 +70,17 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                         },
                                     }}
                                 >
-                                    <TableCell sx={tableTextStyle}>{id}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{idx}</TableCell>
                                     <TableCell component="th" scope="row" sx={titleTextStyle}>
                                         <TitleNavLink
-                                            to={`post/${id}`}
+                                            to={`post/${idx}`}
                                             read={read ? 'true' : ''}
                                             onClick={() => {
-                                                AddReadPost(id);
+                                                AddReadPost(idx);
                                             }}
                                         >
                                             {title}
+                                            {commentCount ? `  (${commentCount})` : null}
                                             {/* <Typography>
                                             {postComment.length > 0 ? postComment[id - 1].length : ''}
                                         </Typography> */}
@@ -81,13 +88,16 @@ const TableBoard = ({ usePosts, offset, limit }: TalbeBoardProps) => {
                                     </TableCell>
                                     <TableCell sx={tableTextStyle}>
                                         <PostUserInfoDiv>
-                                            <StyledAvatar src={avatar} />
+                                            <StyledAvatar src={profileImage} />
                                             <NickNameInfo>{nickName}</NickNameInfo>
                                         </PostUserInfoDiv>
                                     </TableCell>
-                                    <TableCell sx={tableTextStyle}>{timeForToday(createdAt)}</TableCell>
-                                    <TableCell sx={tableTextStyle}>{UserId}</TableCell>
-                                    <TableCell sx={tableTextStyle}>{UserId}</TableCell>
+                                    <TableCell sx={tableTextStyle}>
+                                        {timeForToday(createdAt)}
+                                        {modifiedAt ? ` (수정됨)` : null}
+                                    </TableCell>
+                                    <TableCell sx={tableTextStyle}>{recommendCount}</TableCell>
+                                    <TableCell sx={tableTextStyle}>{viewCount}</TableCell>
                                 </TableRow>
                             );
                         })}
@@ -115,21 +125,19 @@ interface TitleNavLinkProps {
 }
 
 const TitleNavLink = styled(NavLink)<TitleNavLinkProps>`
-    color: ${(props) => (props.read ? '#770088' : '#374151')};
+    color: ${(props) => (props.read ? '#770088' : '#101827')};
     text-decoration: none;
-    font-size: 0.875rem;
-    ${({ theme }) => theme.device.tablet} {
-        font-size: 0.95rem;
-    }
-    ${({ theme }) => theme.device.mobile} {
-        font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: 600;
+    :hover {
+        color: ${(props) => props.theme.colors.main};
     }
 `;
 
 const PostUserInfoDiv = styled.div`
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     margin: auto;
 `;
 

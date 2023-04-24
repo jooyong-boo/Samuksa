@@ -3,8 +3,8 @@ import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
 import UserInfoPage from './pages/auth/UserInfoPage';
-import RequireAuth from './components/utils/RequireAuth';
-import PublicAuth from './components/utils/PublicAuth';
+import RequireAuth from './utils/RequireAuth';
+import PublicAuth from './utils/PublicAuth';
 import BookmarkPage from './pages/BookmarkPage';
 
 const MainPage = lazy(() => import('./pages/MainPage'));
@@ -17,6 +17,7 @@ const TipPage = lazy(() => import('./pages/board/TipPage'));
 const WritingPage = lazy(() => import('./pages/board/WritingPage'));
 const PostViewPage = lazy(() => import('./pages/board/PostViewPage'));
 const ProfilePage = lazy(() => import('./pages/auth/ProfilePage'));
+const PostEditPage = lazy(() => import('./pages/board/PostEditPage'));
 
 function App() {
     return (
@@ -75,6 +76,14 @@ function App() {
                     element={
                         <RequireAuth>
                             <WritingPage />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="/edit"
+                    element={
+                        <RequireAuth>
+                            <PostEditPage />
                         </RequireAuth>
                     }
                 />

@@ -7,18 +7,19 @@ interface userInfos {
     userId?: string;
     nickName?: string;
     email?: string;
+    profileImage?: string;
 }
 
 const UserInfo = () => {
     const userInfo = useRecoilValue(userInfoState);
     const userImage = useRecoilValue(userImageState);
-    const { nickName }: userInfos = userInfo;
+    const { nickName, profileImage }: userInfos = userInfo;
 
     return (
         <EditorUserInfoBox>
             {userInfo && (
                 <>
-                    <UserAvatar src={userImage} />
+                    <UserAvatar src={profileImage ? profileImage : userImage} />
                     <UserTypography>{nickName}</UserTypography>
                 </>
             )}

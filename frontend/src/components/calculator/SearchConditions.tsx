@@ -1,17 +1,7 @@
-import {
-    Button,
-    FormControl,
-    Grid,
-    InputAdornment,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { FormControl, Grid, InputLabel, SelectChangeEvent, Typography } from '@mui/material';
 import styled from 'styled-components';
 import { Container } from '@mui/system';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 import {
     amountState,
     areaState,
@@ -26,21 +16,10 @@ import {
     selectState,
     totalAmountState,
 } from '../../store/atom';
-import DetailedSearchConditions from './DetailedSearchConditions';
 import { getAreaTotalFishData } from '../../api/recommend';
 import React from 'react';
-import { notifyError } from 'components/utils/notify';
-
-const ITEM_HEIGHT = 28;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 100,
-        },
-    },
-};
+import { notifyError } from 'utils/notify';
+import { Button, Select, TextField } from 'components/common';
 
 interface FishInfo {
     farmTypes: string;
@@ -56,7 +35,7 @@ const SearchConditions = () => {
     const [personNum, setPersonNum] = useRecoilState(personNumState);
     const [money, setMoney] = useRecoilState(moneyState);
     const [area, setArea] = useRecoilState(areaState);
-    const [fishList, setFishList] = useRecoilState(fishDetailRecommendInfo);
+    const setFishList = useSetRecoilState(fishDetailRecommendInfo);
 
     // 리셋
     const resetFishDetailRecommendInfo = useResetRecoilState(fishDetailRecommendInfo);
@@ -68,9 +47,9 @@ const SearchConditions = () => {
     const resetAmount = useResetRecoilState(amountState);
 
     // 검색조건 선택 여부 체크
-    const [select, setSelect] = useRecoilState(selectState);
+    const [isSelected, setIsSelected] = useRecoilState(selectState);
 
-    const handlePersonNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePersonNumChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         const onlyNumberPersonValue = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
         setPersonNum(onlyNumberPersonValue);
@@ -80,7 +59,7 @@ const SearchConditions = () => {
         }
     };
 
-    const handleMoneyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMoneyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { value } = e.target;
         const onlyNumberMoney = value.replace(/[^0-9]/g, '');
         setMoney(onlyNumberMoney);
@@ -90,16 +69,17 @@ const SearchConditions = () => {
         }
     };
 
+    const handleAreaChange = (e: SelectChangeEvent<unknown>) => {
+        setArea(e.target.value as string);
+    };
+
     const searchForFishByRegion = () => {
         if (Number(money) < 50000) {
-            // alert('가격은 50000이상으로 해주세요');
             notifyError('가격을 50000이상으로 해주세요');
             setMoney(String(50000));
             return;
         } else if (Number(personNum) <= 0) {
-            // alert('인원은 1 이상으로 해주세요');
             notifyError('인원을 입력해주세요');
-            // setPersonNum(1);
             return;
         }
     };
@@ -115,14 +95,15 @@ const SearchConditions = () => {
         resetAmount();
         resetFarm();
         resetRecommendList();
-        setSelect(true);
+        setIsSelected(true);
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (Number(money) < 50000 || Number(personNum) <= 0) return;
         getAreaTotalFishData({ area }).then((res) =>
             res
-                ? (setFishList(res.map((item: FishInfo) => ({ ...item, active: false }))), setSelect(false))
+                ? (setFishList(res.map((item: FishInfo) => ({ ...item, active: false }))), setIsSelected(false))
                 : notifyError('해당 가격으론 찾을 수 있는 조합이 없어요!'),
         );
     };
@@ -138,114 +119,70 @@ const SearchConditions = () => {
     };
 
     return (
-        <>
-            <Card>
-                <SearchConditionTypography>검색 조건</SearchConditionTypography>
-                <SearchConditionContainer>
-                    <SearchConditionForm onSubmit={onSubmit}>
-                        <CustomGrid container spacing={5}>
-                            <CustomGrid item xs={10}>
-                                <TextField
-                                    id="peopleNumber"
-                                    label="인원수"
-                                    type="string"
-                                    variant="outlined"
-                                    value={personNum}
-                                    onChange={handlePersonNumChange}
-                                    // autoFocus={true}
-                                    fullWidth
-                                    autoComplete="off"
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">명</InputAdornment>,
-                                    }}
-                                    disabled={select ? false : true}
-                                    onKeyPress={(e) => {
-                                        handleEnterPress(e);
-                                    }}
-                                    // size="small"
-                                />
-                            </CustomGrid>
-                            <CustomGrid item xs={10}>
-                                <TextField
-                                    id="budget"
-                                    label="예산"
-                                    type="string"
-                                    variant="outlined"
-                                    value={money}
-                                    onChange={handleMoneyChange}
-                                    fullWidth
-                                    autoComplete="off"
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">원</InputAdornment>,
-                                    }}
-                                    disabled={select ? false : true}
-                                    onKeyPress={(e) => {
-                                        handleEnterPress(e);
-                                    }}
-                                    // size="small"
-                                />
-                            </CustomGrid>
-                            <CustomGrid item xs={10}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="local">지역</InputLabel>
-                                    <Select
-                                        labelId="local"
-                                        label="지역"
-                                        // defaultValue={getArea && getArea[0]}
-                                        value={getArea ? area : ''}
-                                        onChange={(e) => {
-                                            setArea(e.target.value);
-                                        }}
-                                        MenuProps={MenuProps}
-                                        fullWidth
-                                        disabled={select ? false : true}
-                                    >
-                                        {getArea &&
-                                            getArea.map((area: string, i: number) => (
-                                                <MenuItem key={i} value={area}>
-                                                    {area}
-                                                </MenuItem>
-                                            ))}
-                                    </Select>
-                                </FormControl>
-                            </CustomGrid>
-                        </CustomGrid>
-                        <SearchConditionBtnArea>
-                            {select ? (
-                                <SearchConditionSelectBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disableElevation
-                                    onClick={searchForFishByRegion}
-                                >
-                                    조건 선택
-                                </SearchConditionSelectBtn>
-                            ) : (
-                                <SearchConditionSelectBtn
-                                    variant="contained"
-                                    type="submit"
-                                    disableElevation
-                                    disabled={true}
-                                    onClick={searchForFishByRegion}
-                                >
-                                    선택 완료
-                                </SearchConditionSelectBtn>
-                            )}
-                            <SearchConditionResetBtn
-                                variant="outlined"
-                                onClick={() => {
-                                    onReset();
-                                    moveTop();
+        <Card>
+            <SearchConditionTypography>검색 조건</SearchConditionTypography>
+            <SearchConditionContainer>
+                <SearchConditionForm onSubmit={onSubmit}>
+                    <CustomGrid container spacing={5}>
+                        <CustomGrid item xs={10}>
+                            <TextField
+                                label="인원수"
+                                value={personNum}
+                                onChange={handlePersonNumChange}
+                                endadornment="명"
+                                disabled={!isSelected}
+                                onKeyPress={(e) => {
+                                    handleEnterPress(e);
                                 }}
-                            >
-                                조건 초기화
-                            </SearchConditionResetBtn>
-                        </SearchConditionBtnArea>
-                    </SearchConditionForm>
-                </SearchConditionContainer>
-            </Card>
-            <DetailedSearchConditions />
-        </>
+                            />
+                        </CustomGrid>
+                        <CustomGrid item xs={10}>
+                            <TextField
+                                label="예산"
+                                value={money}
+                                onChange={handleMoneyChange}
+                                endadornment="원"
+                                disabled={!isSelected}
+                                onKeyPress={(e) => {
+                                    handleEnterPress(e);
+                                }}
+                            />
+                        </CustomGrid>
+                        <CustomGrid item xs={10}>
+                            <FormControl fullWidth>
+                                <InputLabel id="local">지역</InputLabel>
+                                <Select
+                                    label="지역"
+                                    datas={getArea}
+                                    data={area}
+                                    onChange={handleAreaChange}
+                                    disabled={!isSelected}
+                                />
+                            </FormControl>
+                        </CustomGrid>
+                    </CustomGrid>
+                    <SearchConditionBtnArea>
+                        <SearchConditionSelectBtn
+                            variant="contained"
+                            type="submit"
+                            disabled={!isSelected}
+                            onClick={searchForFishByRegion}
+                        >
+                            {isSelected ? '조건 선택' : '선택 완료'}
+                        </SearchConditionSelectBtn>
+                        <SearchConditionResetBtn
+                            variant="outlined"
+                            onClick={() => {
+                                onReset();
+                                moveTop();
+                            }}
+                        >
+                            조건 초기화
+                        </SearchConditionResetBtn>
+                    </SearchConditionBtnArea>
+                </SearchConditionForm>
+            </SearchConditionContainer>
+        </Card>
     );
 };
 
@@ -261,7 +198,7 @@ const Card = styled.div`
 const SearchConditionTypography = styled(Typography)`
     color: #575757;
     padding: 18px 0px 13px 19px;
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     font-weight: bold;
 `;
 
@@ -296,16 +233,10 @@ const SearchConditionSelectBtn = styled(Button)`
     width: 274px;
     height: 38px;
     font-weight: 900;
-    background-color: ${({ theme }) => theme.colors.main};
-    &:disabled {
-        background-color: rgba(0, 152, 238, 0.3);
-        color: #ffffff;
-    }
 `;
 
 const SearchConditionResetBtn = styled(Button)`
     width: 40%;
-    border-radius: 5px;
     border-color: #d8d8d8;
     color: #949494;
 `;

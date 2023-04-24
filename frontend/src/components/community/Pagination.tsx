@@ -3,14 +3,14 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-interface pagination {
+interface IProps {
     total: number;
     limit: number;
     postPage: number;
     setPostPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Pagination = ({ total, limit, postPage, setPostPage }: pagination) => {
+const Pagination = ({ total, limit, postPage, setPostPage }: IProps) => {
     const numPages = Math.ceil(total / limit);
     const [totalPage, setTotalPage] = useState<any>([]);
     const [currentGroup, setCurrentGroup] = useState<any>([]);
@@ -114,7 +114,6 @@ const PaginationList = styled(List)`
 const Button = styled.button`
     border: none;
     padding: 0px 0.5rem;
-    /* margin: 0 0.4rem; */
     background: white;
     color: #5a5a5a;
     font-size: 1.1rem;

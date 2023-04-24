@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,17 +7,17 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SetMealIcon from '@mui/icons-material/SetMeal';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Avatar, Button, Divider, Tooltip } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Avatar, Divider, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
-import { getTokenReissuance, getUserInfo, logout } from '../api/auth';
+import { getUserInfo, logout } from '../api/auth';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { loginStatusState, userIdState, userImageState, userInfoState } from '../store/user';
-import { ReactElement } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import { reviewPostPageState, tipPostPageState } from '../store/atom';
-import { notifyError, notifySuccess } from './utils/notify';
+import { notifyError, notifySuccess } from '../utils/notify';
+import { Button } from 'components/common';
 
 interface userInfoProps {
     userId?: string;
@@ -31,11 +31,9 @@ const Header = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const theme = useContext(ThemeContext);
-
     const [loginStatus, setLoginStatus] = useRecoilState(loginStatusState);
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
-    const [image, setImage] = useRecoilState<string | null>(userImageState);
+    const [image, setImage] = useRecoilState<string>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
     const [reviewPostPage, setReviewPostPage] = useRecoilState<number>(reviewPostPageState);
     const [tioPostPage, setTipPostPage] = useRecoilState<number>(tipPostPageState);
@@ -122,26 +120,24 @@ const Header = () => {
     const handleLogout = (name: string) => {
         if (name === '로그아웃') {
             const AToken = localStorage.getItem('jwtToken') || '';
-            logout(AToken).then((res) => {
-                if (res.status === 200) {
+            logout(AToken).then((res: any) => {
+                if (res.status === 201) {
                     localStorage.removeItem('jwtToken');
-                    localStorage.removeItem('refreshToken');
                     localStorage.removeItem('kakaoAuth');
                     navigate('/');
                     setUserInfo({});
                     setUserIdState('');
                     setImage('/broken-image.jpg');
                     notifySuccess('다음에 또 만나요!');
+                } else {
+                    localStorage.removeItem('jwtToken');
+                    localStorage.removeItem('kakaoAuth');
+                    navigate('/');
+                    setUserInfo({});
+                    setUserIdState('');
+                    setImage('/broken-image.jpg');
                 }
             });
-            localStorage.removeItem('jwtToken');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('kakaoAuth');
-            navigate('/');
-            setUserInfo({});
-            setUserIdState('');
-            setImage('/broken-image.jpg');
-            notifySuccess('다음에 또 만나요!');
         }
     };
 
@@ -177,7 +173,7 @@ const Header = () => {
     useEffect(() => {
         if (loginStatus) {
             getUserInfo()
-                .then((res) => {
+                .then((res: any) => {
                     if (res?.data?.userId) {
                         setUserInfo(res.data);
                     } else {
@@ -187,7 +183,6 @@ const Header = () => {
                 .catch((e) => {
                     if (e.code === 'ERR_NETWORK') {
                         localStorage.removeItem('jwtToken');
-                        localStorage.removeItem('refreshToken');
                         localStorage.removeItem('kakaoAuth');
                         setLoginStatus(false);
                         setUserInfo({});
@@ -200,77 +195,14 @@ const Header = () => {
                                 <br /> 인터넷 연결을 확인해주세요.
                             </p>,
                         );
-                    } else {
-                        const AToken = localStorage.getItem('jwtToken') || '';
-                        const RToken = localStorage.getItem('refreshToken') || '';
-                        getTokenReissuance(AToken, RToken)
-                            .then((res) => {
-                                if (res?.data?.accessToken && res.data.refreshToken) {
-                                    localStorage.setItem('jwtToken', res.data.accessToken);
-                                    localStorage.setItem('refreshToken', res.data.refreshToken);
-                                }
-                            })
-                            .then(() => {
-                                getUserInfo()
-                                    .then((res) => {
-                                        if (res?.data?.userId) {
-                                            setUserInfo(res.data);
-                                        } else {
-                                            throw res;
-                                        }
-                                    })
-                                    .catch((e) => {
-                                        if (e.code === 'ERR_NETWORK') {
-                                            localStorage.removeItem('jwtToken');
-                                            localStorage.removeItem('refreshToken');
-                                            localStorage.removeItem('kakaoAuth');
-                                            setLoginStatus(false);
-                                            setUserInfo({});
-                                            setUserIdState('');
-                                            setImage('/broken-image.jpg');
-                                            return notifyError(
-                                                <p>
-                                                    서버와의 연결이 원활하지 않습니다.
-                                                    <br /> 새로고침을 하거나
-                                                    <br /> 인터넷 연결을 확인해주세요.
-                                                </p>,
-                                            );
-                                        }
-                                    });
-                            })
-                            .catch((e) => {
-                                console.log(e);
-                                if (e.response.data.code === 401 && e.response.data.message === 'INVALID_TOKEN') {
-                                    localStorage.removeItem('jwtToken');
-                                    localStorage.removeItem('refreshToken');
-                                    localStorage.removeItem('kakaoAuth');
-                                    setLoginStatus(false);
-                                    setUserInfo({});
-                                    setUserIdState('');
-                                    setImage('/broken-image.jpg');
-                                    return notifyError(
-                                        <p>
-                                            아이디 인증시간이 만료되었습니다.
-                                            <br /> 재로그인 해주세요
-                                        </p>,
-                                    );
-                                } else if (e.code === 'ERR_NETWORK') {
-                                    localStorage.removeItem('jwtToken');
-                                    localStorage.removeItem('refreshToken');
-                                    localStorage.removeItem('kakaoAuth');
-                                    setLoginStatus(false);
-                                    setUserInfo({});
-                                    setUserIdState('');
-                                    setImage('/broken-image.jpg');
-                                    return notifyError(
-                                        <p>
-                                            서버와의 연결이 원활하지 않습니다.
-                                            <br /> 새로고침을 하거나
-                                            <br /> 인터넷 연결을 확인해주세요.
-                                        </p>,
-                                    );
-                                }
-                            });
+                    }
+                    if (e.status === 401) {
+                        localStorage.removeItem('jwtToken');
+                        localStorage.removeItem('kakaoAuth');
+                        setLoginStatus(false);
+                        setUserInfo({});
+                        setUserIdState('');
+                        setImage('/broken-image.jpg');
                     }
                 });
         }
@@ -362,7 +294,7 @@ const Header = () => {
                                 {loginStatus
                                     ? NAV_ITEMS.map(({ id, name, path }) => (
                                           <StyledMobileMenuItem
-                                              key={name}
+                                              key={id}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -373,7 +305,7 @@ const Header = () => {
                                       ))
                                     : pages.map(({ id, name, path }) => (
                                           <StyledMobileMenuItem
-                                              key={name}
+                                              key={id}
                                               onClick={() => {
                                                   handleCloseNavMenu();
                                                   goNavigate(path);
@@ -382,8 +314,8 @@ const Header = () => {
                                               <MenuItemList>{name}</MenuItemList>
                                           </StyledMobileMenuItem>
                                       ))}
-                                {loginStatus ? <Divider /> : null}
-                                {loginStatus ? (
+                                {loginStatus && <Divider />}
+                                {loginStatus && (
                                     <MobileUserBox>
                                         <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
                                         <div>
@@ -391,21 +323,20 @@ const Header = () => {
                                             <UserEmailText>{userInfo.email}</UserEmailText>
                                         </div>
                                     </MobileUserBox>
-                                ) : null}
-                                {loginStatus
-                                    ? USERS_ITEMS.map(({ id, name, path }) => (
-                                          <MenuItem
-                                              key={name}
-                                              onClick={() => {
-                                                  handleCloseNavMenu();
-                                                  goNavigate(path);
-                                                  handleLogout(name);
-                                              }}
-                                          >
-                                              <MenuItemList>{name}</MenuItemList>
-                                          </MenuItem>
-                                      ))
-                                    : null}
+                                )}
+                                {loginStatus &&
+                                    USERS_ITEMS.map(({ id, name, path }) => (
+                                        <MenuItem
+                                            key={id}
+                                            onClick={() => {
+                                                handleCloseNavMenu();
+                                                goNavigate(path);
+                                                handleLogout(name);
+                                            }}
+                                        >
+                                            <MenuItemList>{name}</MenuItemList>
+                                        </MenuItem>
+                                    ))}
                             </Menu>
                         </MobileBox>
                         {NAV_ITEMS.map(({ id, name, path, active }) => {
@@ -423,12 +354,15 @@ const Header = () => {
                         })}
                         {loginStatus ? (
                             <UserBox>
-                                <Tooltip title="사용자 메뉴">
+                                <Tooltip title="메뉴">
                                     <UserIconButton onClick={handleOpenUserMenu}>
-                                        <UserAvatar src={String(image)} $loginStatus={loginStatus ? 'true' : ''} />
+                                        <UserAvatar
+                                            src={userInfo.profileImage ? userInfo.profileImage : String(image)}
+                                            $loginStatus={loginStatus ? 'true' : ''}
+                                        />
                                     </UserIconButton>
                                 </Tooltip>
-                                {userInfo.nickName ? <UserNickNameText>{userInfo.nickName}</UserNickNameText> : null}
+                                {userInfo.nickName && <UserNickNameText>{userInfo.nickName}</UserNickNameText>}
                                 <UserSelectMenu
                                     id="menu"
                                     anchorEl={anchorElUser}
@@ -460,22 +394,24 @@ const Header = () => {
                             </UserBox>
                         ) : (
                             <DesktopBox>
-                                <LoginBtn
+                                <StyledButton
                                     variant="outlined"
+                                    rounded
                                     onClick={() => {
                                         goNavigate('/login');
                                     }}
                                 >
                                     로그인
-                                </LoginBtn>
-                                <RegisterBtn
+                                </StyledButton>
+                                <StyledButton
                                     variant="contained"
+                                    rounded
                                     onClick={() => {
                                         goNavigate('/register');
                                     }}
                                 >
                                     회원가입
-                                </RegisterBtn>
+                                </StyledButton>
                             </DesktopBox>
                         )}
                     </MenuWrapper>
@@ -491,9 +427,6 @@ const AppBarContainer = styled(AppBar)`
     position: fixed;
     background-color: #ffffff;
     box-shadow: none;
-    /* ${({ theme }) => theme.device.mobile} {
-        background-color: rgba(255, 255, 255, 0);
-    } */
 `;
 
 const ToolBarWrapper = styled(Toolbar)`
@@ -561,6 +494,9 @@ const DesktopBox = styled(Box)`
     align-items: center;
     ${({ theme }) => theme.device.mobile} {
         display: none;
+    }
+    Button:first-child {
+        margin-right: 0.5rem;
     }
 `;
 
@@ -640,7 +576,7 @@ const StyledMenuitem = styled(MenuItem)`
     width: 10rem;
     text-align: center;
     &:last-child {
-        border-top: 1px solid #eaeaea;
+        border-top: 1px solid ${({ theme }) => theme.colors.gray};
     }
 `;
 
@@ -649,32 +585,12 @@ const MenuItemList = styled(Typography)`
     color: #111827;
     font-size: 1rem;
     font-weight: 500;
-    /* width: 100%; */
     ${({ theme }) => theme.device.mobile} {
         font-size: 1.125rem;
     }
 `;
 
-const LoginBtn = styled(Button)`
+const StyledButton = styled(Button)`
     width: 6rem;
     height: 2.5rem;
-    border-radius: 20px;
-    border: 0.5px solid ${({ theme }) => theme.colors.main};
-    color: ${({ theme }) => theme.colors.main};
-    margin-right: 0.5rem;
-    :hover {
-        box-shadow: none;
-        background-color: rgb(229, 231, 235);
-    }
-`;
-
-const RegisterBtn = styled(Button)`
-    width: 6rem;
-    height: 2.5rem;
-    border-radius: 20px;
-    background-color: ${({ theme }) => theme.colors.main};
-    box-shadow: none;
-    :hover {
-        box-shadow: none;
-    }
 `;

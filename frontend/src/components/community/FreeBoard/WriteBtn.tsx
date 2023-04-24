@@ -1,10 +1,10 @@
-import { Button } from '@mui/material';
 import styled from 'styled-components';
 import CreateIcon from '@mui/icons-material/Create';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userInfoState } from 'store/user';
-import { notifyError } from 'components/utils/notify';
+import { notifyError } from 'utils/notify';
+import { Button } from 'components/common';
 
 const WriteBtn = () => {
     const userInfo = useRecoilValue<any>(userInfoState);
@@ -29,17 +29,11 @@ const WriteBtn = () => {
 export default WriteBtn;
 
 const StyledBtn = styled(Button)`
-    background-color: ${({ theme }) => theme.colors.main};
     font-weight: 700;
-    color: white;
-    box-shadow: none;
     width: 6rem;
     height: 2.5rem;
     padding: 6px 1rem 6px 0.9rem;
     border-radius: 7px;
-    &:hover {
-        box-shadow: none;
-    }
 `;
 
 const StyleCreateIcon = styled(CreateIcon)`
