@@ -173,7 +173,6 @@ const PostViewPage = () => {
                                   return (
                                       <PostComment
                                           key={idx}
-                                          setComments={setComments}
                                           comment={comment}
                                           comments={comments.data}
                                           userInfo={userInfo}

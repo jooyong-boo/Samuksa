@@ -32,13 +32,12 @@ interface IProps {
 }
 
 const Reply = ({ userInfo, item, titleIdx, commentIdx }: IProps) => {
-    const [comment, setComment] = useState('');
     const [newComment, setNewComment] = useState('');
     const [newReply, setNewReply] = useState('');
     const [commentModify, setCommentModify] = useState(false);
     const [commentReply, setCommentReply] = useState(false);
     const { nickName: infoNickname } = userInfo;
-    const { idx, avatarUrl, nickName, receiverNickName, content, createdAt, modifiedAt } = item;
+    const { idx, avatarUrl, nickName, receiverNickName, content, createdAt } = item;
     const { mutate: createReply } = useCreateReply(commentIdx, newReply, titleIdx, nickName, userInfo);
     const { mutate: modifyReply } = useEditReply(commentIdx, newComment, titleIdx, idx!);
 

@@ -97,8 +97,6 @@ export const handlers = [
         const boardTitleIdx = req.url.searchParams.get('boardTitleIdx');
         const page = req.url.searchParams.get('page');
         const size = req.url.searchParams.get('size');
-        // let data = post.content.filter((item) => item.idx === Number(idx));
-        // console.log(data);
 
         return res(ctx.status(200), ctx.json(comments));
     }),
@@ -156,7 +154,7 @@ export const handlers = [
     rest.post<{ commentIdx: number; comment: string; titleIdx: number | string; nickName: string; userInfo: UserInfo }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/create/reply`,
         async (req, res, ctx) => {
-            const { commentIdx, comment, titleIdx, nickName, userInfo } = req.body;
+            const { commentIdx, comment, nickName, userInfo } = req.body;
             const date = new Date();
             const target = comments.data.findIndex((ele) => ele.idx === commentIdx);
             const idx = comments.data[target].command.length + 1;
@@ -184,7 +182,7 @@ export const handlers = [
     rest.patch<{ commentIdx: number; comment: string; titleIdx: number | string; commandIdx: number }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/create/reply`,
         (req, res, ctx) => {
-            const { comment, commentIdx, titleIdx, commandIdx } = req.body;
+            const { comment, commentIdx, commandIdx } = req.body;
             const idx = comments.data.findIndex((ele) => ele.idx === commentIdx);
             const newData = { ...comments.data[idx].command[commandIdx - 1], content: comment };
             comments.data[idx].command[commandIdx - 1] = newData;
@@ -206,7 +204,7 @@ export const handlers = [
     rest.patch<{ titleIdx: number | string; commentIdx: number | string; recommend: boolean }>(
         `${process.env.REACT_APP_SamuksaUser_URL}/board/comment/recommend`,
         (req, res, ctx) => {
-            const { titleIdx, commentIdx, recommend } = req.body;
+            const { commentIdx, recommend } = req.body;
             if (recommend) comments.data[Number(commentIdx) - 1].recommendCount += 1;
             if (!recommend) comments.data[Number(commentIdx) - 1].recommendCount -= 1;
 
