@@ -26,7 +26,6 @@ const PostMenu = ({ ...props }: IProps) => {
     return (
         <div>
             <Button
-                // id="basic-button"
                 aria-controls={open ? 'post-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}

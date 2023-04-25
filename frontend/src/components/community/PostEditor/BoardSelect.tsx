@@ -35,7 +35,6 @@ const BoardSelect = ({ board, setBoard, setType }: BoardSelectProps) => {
     return (
         <StyledSelect
             labelId="board"
-            // defaultValue="게시판을 선택해주세요"
             value={board}
             MenuProps={MenuProps}
             displayEmpty

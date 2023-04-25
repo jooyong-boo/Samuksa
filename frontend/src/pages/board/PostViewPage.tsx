@@ -1,4 +1,4 @@
-import styled, { ThemeContext } from 'styled-components';
+import styled from 'styled-components';
 import { Avatar, Paper, Typography } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -6,7 +6,7 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import CommentIcon from '@mui/icons-material/Comment';
 import { useRef } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { loginStatusState, userImageState, userInfoState } from '../../store/user';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { getPostState } from '../../store/atom';
@@ -23,7 +23,6 @@ import { Button } from 'components/common';
 import UserInfo from 'components/common/UserInfo';
 
 const PostViewPage = () => {
-    const theme = useContext(ThemeContext);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
@@ -33,10 +32,10 @@ const PostViewPage = () => {
     const loginStatus = useRecoilValue(loginStatusState);
     const postList = useRecoilValue(getPostState);
     const userImage = useRecoilValue(userImageState);
-    const [editPost, setEditPost] = useRecoilState(postEditState);
+    const setEditPost = useSetRecoilState(postEditState);
     const { mutate: deletePost } = useDeletePost(id!);
-    const [comments, isLoadingComments, refetchComments] = useGetComments(id!, 0, 0);
-    const [content, isLoadingContent, refetchContent] = useGetPostContent(id!);
+    const [comments] = useGetComments(id!, 0, 0);
+    const [content] = useGetPostContent(id!);
     const { mutate: recommend } = useRecommendPost(id!, true);
     const { mutate: notRecommend } = useRecommendPost(id!, false);
 
@@ -174,7 +173,6 @@ const PostViewPage = () => {
                                   return (
                                       <PostComment
                                           key={idx}
-                                          setComments={setComments}
                                           comment={comment}
                                           comments={comments.data}
                                           userInfo={userInfo}

@@ -42,18 +42,17 @@ interface UserInfoProps {
 interface CommentsProps {
     comment: CommentProps;
     comments: CommentProps[];
-    setComments: Dispatch<SetStateAction<any>>;
     userInfo: UserInfoProps;
     titleIdx: string;
 }
 
-const PostComment = ({ setComments, comment, comments, userInfo, titleIdx }: CommentsProps) => {
+const PostComment = ({ comment, comments, userInfo, titleIdx }: CommentsProps) => {
     const [newComment, setNewComment] = useState('');
     const [commentModify, setCommentModify] = useState(false);
     const [newReply, setNewReply] = useState('');
     const [commentReply, setCommentReply] = useState(false);
-    const { userId, profileImage, nickName: infoNickname } = userInfo;
-    const { idx, avatarUrl, nickName, content, createdAt, modifiedAt, command, recommendCount } = comment;
+    const { nickName: infoNickname } = userInfo;
+    const { idx, avatarUrl, nickName, content, createdAt, command, recommendCount } = comment;
     const { mutate: deleteComment } = useDeleteComment(idx);
     const { mutate: modifyComment } = useEditComment(newComment, idx);
     const { mutate: createReply } = useCreateReply(idx, newReply, titleIdx, nickName, userInfo);
