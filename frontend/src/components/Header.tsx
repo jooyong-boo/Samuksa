@@ -35,8 +35,8 @@ const Header = () => {
     const [userInfo, setUserInfo] = useRecoilState<userInfoProps>(userInfoState);
     const [image, setImage] = useRecoilState<string>(userImageState);
     const setUserIdState = useSetRecoilState(userIdState);
-    const [reviewPostPage, setReviewPostPage] = useRecoilState<number>(reviewPostPageState);
-    const [tioPostPage, setTipPostPage] = useRecoilState<number>(tipPostPageState);
+    const setReviewPostPage = useSetRecoilState<number>(reviewPostPageState);
+    const setTipPostPage = useSetRecoilState<number>(tipPostPageState);
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
     let loginConfirm = localStorage.getItem('jwtToken');
@@ -65,18 +65,12 @@ const Header = () => {
         },
         {
             id: 2,
-            name: '회원 정보',
-            path: '/myinfo',
-            active: false,
-        },
-        {
-            id: 3,
             name: '즐겨찾기',
             path: '/bookmark',
             active: false,
         },
         {
-            id: 4,
+            id: 3,
             name: '로그아웃',
             path: '/',
             active: false,

@@ -2,7 +2,6 @@ import './App.css';
 import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from './components/common/Loading';
-import UserInfoPage from './pages/auth/UserInfoPage';
 import RequireAuth from './utils/RequireAuth';
 import PublicAuth from './utils/PublicAuth';
 import BookmarkPage from './pages/BookmarkPage';
@@ -40,14 +39,7 @@ function App() {
                         </PublicAuth>
                     }
                 />
-                <Route
-                    path="/myinfo"
-                    element={
-                        <RequireAuth>
-                            <UserInfoPage />
-                        </RequireAuth>
-                    }
-                />
+
                 <Route
                     path="/myinfo/profile"
                     element={
